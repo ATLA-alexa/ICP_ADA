@@ -8,12 +8,15 @@ export interface OrnamentProps {
    * headers and menu covers.
    */
   variant?: 'star' | 'diamond' | 'lattice';
-  /** Rendered size. `lattice` ignores this for width and fills its container. */
+  /** Rendered size. `lattice` takes the full width of its container and uses this for band height. */
   size?: 'sm' | 'md' | 'lg';
   /** Accent colour. */
   tone?: 'brass' | 'ink' | 'muted' | 'clay' | 'sage' | 'sun' | 'rose' | 'sea';
   className?: string;
 }
+
+/** Band height in px per size — also the lattice tile size, so exactly one row of tiles shows. */
+const LATTICE_TILE = { sm: 10, md: 16, lg: 24 } as const;
 
 /**
  * The Moroccan geometric motif, drawn as inline SVG.
@@ -35,19 +38,30 @@ export function Ornament({
   const patternId = `ci-lattice-${useId().replace(/:/g, '')}`;
 
   if (variant === 'lattice') {
+    const t = LATTICE_TILE[size];
+    const mid = t / 2;
+    const inset = 0.75;
     return (
-      <svg className={classes} aria-hidden="true" focusable="false" preserveAspectRatio="none" viewBox="0 0 96 16">
+      // No viewBox: the pattern tiles in real pixels, so the motif keeps its
+      // proportions at any container width. A stretched viewBox flattens it.
+      <svg className={classes} aria-hidden="true" focusable="false" width="100%" height={t}>
         <defs>
-          <pattern id={patternId} width="16" height="16" patternUnits="userSpaceOnUse">
+          <pattern id={patternId} width={t} height={t} patternUnits="userSpaceOnUse">
             <path
-              d="M8 0 L16 8 L8 16 L0 8 Z M8 4.5 L11.5 8 L8 11.5 L4.5 8 Z"
+              d={`M${mid} ${inset} L${t - inset} ${mid} L${mid} ${t - inset} L${inset} ${mid} Z`}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1"
+              opacity="0.75"
+            />
+            <path
+              d={`M${mid} ${t * 0.34} L${t * 0.66} ${mid} L${mid} ${t * 0.66} L${t * 0.34} ${mid} Z`}
               fill="currentColor"
-              fillRule="evenodd"
-              opacity="0.55"
+              opacity="0.5"
             />
           </pattern>
         </defs>
-        <rect width="96" height="16" fill={`url(#${patternId})`} />
+        <rect width="100%" height={t} fill={`url(#${patternId})`} />
       </svg>
     );
   }
@@ -55,18 +69,26 @@ export function Ornament({
   if (variant === 'diamond') {
     return (
       <svg className={classes} aria-hidden="true" focusable="false" viewBox="0 0 24 24">
-        <path d="M12 2 L22 12 L12 22 L2 12 Z" fill="none" stroke="currentColor" strokeWidth="1.25" />
-        <path d="M12 7.5 L16.5 12 L12 16.5 L7.5 12 Z" fill="currentColor" opacity="0.5" />
+        <path
+          d="M12 2 L22 12 L12 22 L2 12 Z M12 7.5 L16.5 12 L12 16.5 L7.5 12 Z"
+          fill="currentColor"
+          fillRule="evenodd"
+        />
       </svg>
     );
   }
 
-  // Two squares, one rotated 45° — the eight-point star of zellige tilework.
+  // The eight-point zellige star: alternating outer and inner radii, with a
+  // small diamond knocked out of the centre. The points are deep (inner radius
+  // half the outer) — the shallower two-squares construction reads as a cog
+  // once it is filled, and turns to mush below 24px.
   return (
     <svg className={classes} aria-hidden="true" focusable="false" viewBox="0 0 24 24">
-      <rect x="4.5" y="4.5" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.1" />
-      <path d="M12 1.4 L22.6 12 L12 22.6 L1.4 12 Z" fill="none" stroke="currentColor" strokeWidth="1.1" />
-      <circle cx="12" cy="12" r="2.1" fill="currentColor" opacity="0.55" />
+      <path
+        d="M12 1.5 L14.01 7.15 L19.42 4.58 L16.85 9.99 L22.5 12 L16.85 14.01 L19.42 19.42 L14.01 16.85 L12 22.5 L9.99 16.85 L4.58 19.42 L7.15 14.01 L1.5 12 L7.15 9.99 L4.58 4.58 L9.99 7.15 Z M12 9.4 L14.6 12 L12 14.6 L9.4 12 Z"
+        fill="currentColor"
+        fillRule="evenodd"
+      />
     </svg>
   );
 }

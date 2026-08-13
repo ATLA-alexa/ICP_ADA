@@ -13,7 +13,11 @@ export interface MenuHeaderProps {
   intro?: string;
   /** `cover` is the full-page treatment; `banner` is the compact version for continuation pages. */
   variant?: 'cover' | 'banner';
-  /** Render on the inverse surface for evening menus. */
+  /**
+   * Render the header on the inverse surface — a dark panel under the day
+   * theme, a light one under evening. It paints its own background, so do not
+   * also flip the theme around it.
+   */
   inverse?: boolean;
   className?: string;
 }

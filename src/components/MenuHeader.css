@@ -50,8 +50,15 @@
   color: var(--ci-ink-muted);
 }
 
+/* `inverse` paints the opposite surface as well as the ink. Setting only the
+ * ink made it a foot-gun: combined with the evening theme it resolved to dark
+ * ink on a dark canvas, because --ci-ink-inverse is *dark* in that theme by
+ * definition. Owning both means the pair is always self-consistent. */
 .ci-menu-header--inverse {
+  background-color: var(--ci-surface-inverse);
   color: var(--ci-ink-inverse);
+  padding-inline: var(--ci-space-xl);
+  border-radius: var(--ci-radius-md);
 }
 
 .ci-menu-header--inverse .ci-menu-header__title { color: var(--ci-ink-inverse); }

@@ -13,11 +13,9 @@
 .ci-ornament--star.ci-ornament--lg,
 .ci-ornament--diamond.ci-ornament--lg { width: 40px; height: 40px; }
 
-/* The lattice is a band: it takes the width it is given. */
+/* The lattice is a band: full width, with its height set on the element by the
+ * component so the tile size and the band height cannot drift apart. */
 .ci-ornament--lattice { width: 100%; }
-.ci-ornament--lattice.ci-ornament--sm { height: 8px; }
-.ci-ornament--lattice.ci-ornament--md { height: 14px; }
-.ci-ornament--lattice.ci-ornament--lg { height: 22px; }
 
 .ci-ornament--brass { color: var(--ci-brass); }
 .ci-ornament--ink   { color: var(--ci-ink); }
