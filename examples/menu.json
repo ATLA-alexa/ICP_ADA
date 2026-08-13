@@ -1,0 +1,93 @@
+{
+  "_comment": "The live menu content. Edit this file and re-run `npm run menu` to regenerate examples/menu.html. Drink names, descriptions and prices below are PLACEHOLDERS written to exercise the components — replace them with the real Car-Ibiza menu. Valid tones: clay (barista), sage (matcha/tea), sun (lemonades), rose (tea-monades), sea (mocktails), brass (house).",
+
+  "house": {
+    "name": "Car-Ibiza",
+    "tagline": "Ibiza",
+    "title": "Drinks",
+    "intro": "The room is a calm canvas. The drinks are the paint."
+  },
+
+  "sections": [
+    {
+      "title": "Barista",
+      "eyebrow": "Coffee",
+      "tone": "clay",
+      "description": "Single origin from Ibiza roasters, pulled to order.",
+      "columns": 2,
+      "items": [
+        { "name": "Espresso", "description": "Short, dense, citrus finish.", "price": 2.4 },
+        { "name": "Americano", "description": "Espresso lengthened with hot water.", "price": 3.0 },
+        { "name": "Cortado", "description": "Double espresso, equal warm milk.", "price": 3.2 },
+        { "name": "Cappuccino", "description": "Double espresso, steamed milk, fine foam.", "price": 3.4 },
+        { "name": "Flat White", "description": "Double ristretto under silk microfoam.", "price": 3.6 },
+        { "name": "Latte", "description": "Long, milk-forward, gentle.", "price": 3.6 }
+      ],
+      "options": [
+        {
+          "label": "Milk",
+          "options": ["Full fat", "Oat", "Almond", "Coconut"],
+          "defaultOption": "Full fat",
+          "note": "+€0.50 for plant milks"
+        }
+      ]
+    },
+    {
+      "title": "Matcha",
+      "eyebrow": "Ceremonial grade",
+      "tone": "sage",
+      "description": "Whisked to order. Available with any milk.",
+      "items": [
+        { "name": "Matcha Latte", "description": "Ceremonial matcha, warm milk.", "price": 4.8 },
+        { "name": "Iced Matcha", "description": "Over ice, lightly sweetened.", "price": 5.0 }
+      ]
+    },
+    {
+      "title": "Lemonades",
+      "eyebrow": "Pressed daily",
+      "tone": "sun",
+      "items": [
+        { "name": "Still Lemonade", "description": "Pressed lemon, cane sugar, sea salt.", "price": 4.2, "altPrice": 6.4, "priceNote": "Tall" },
+        { "name": "Sparkling Lemonade", "description": "The same, lengthened with soda.", "price": 4.4, "altPrice": 6.6, "priceNote": "Tall", "badges": [{ "tone": "sun", "label": "Sparkling" }] },
+        { "name": "Rosemary Lemonade", "description": "Lemon, rosemary syrup, still.", "price": 4.6, "altPrice": 6.8, "priceNote": "Tall" }
+      ]
+    },
+    {
+      "title": "Tea-monades",
+      "eyebrow": "Cold brewed",
+      "tone": "rose",
+      "columns": 2,
+      "items": [
+        { "name": "Oolong & Peach", "description": "Lightly oxidised, stone fruit.", "price": 5.5 },
+        { "name": "Jasmine & Lime", "description": "Green tea, cold pressed lime.", "price": 5.5 },
+        { "name": "White Tea & Pear", "description": "Delicate, barely sweet.", "price": 5.8 },
+        { "name": "Chai & Orange", "description": "Cardamom, clove, bitter orange.", "price": 5.8 }
+      ]
+    },
+    {
+      "title": "Mocktails",
+      "eyebrow": "Tall glass, over ice",
+      "tone": "sea",
+      "description": "Eight, all built from what is made here each morning.",
+      "layout": "cards",
+      "drinks": [
+        { "name": "Cala Blanca", "description": "Cucumber, elderflower, lime, a pinch of sea salt.", "price": 8.5, "tone": "sea", "signature": true, "serve": "Tall glass, over ice" },
+        { "name": "Salt & Citrus", "description": "Grapefruit, lime, saline. Sharp and dry.", "price": 8.0, "tone": "sea", "serve": "Tall glass, over ice" },
+        { "name": "Golden Hour", "description": "Apricot, orange blossom, soda.", "price": 8.5, "tone": "sun", "serve": "Tall glass, over ice" },
+        { "name": "Green Shade", "description": "Matcha, mint, lime, coconut water.", "price": 9.0, "tone": "sage", "serve": "Tall glass, over ice" },
+        { "name": "Rose & Cardamom", "description": "Rosewater, cardamom, pressed grape.", "price": 8.5, "tone": "rose", "serve": "Tall glass, over ice" },
+        { "name": "Figuera", "description": "Fig leaf, almond, lemon. Soft and nutty.", "price": 9.0, "tone": "clay", "serve": "Tall glass, over ice" },
+        { "name": "Almond Orgeat", "description": "House orgeat, lemon, soda.", "price": 7.5, "tone": "clay", "serve": "Tall glass, over ice" },
+        { "name": "Sunset Cooler", "description": "Blood orange, rosemary, bitters, soda.", "price": 8.5, "tone": "sun", "serve": "Tall glass, over ice" }
+      ]
+    }
+  ],
+
+  "notes": [
+    {
+      "title": "Allergens",
+      "tone": "brass",
+      "body": "Full allergen information on request. Everything is made to order — if something is missing from the menu, ask."
+    }
+  ]
+}

@@ -24,6 +24,7 @@
   ],
   "scripts": {
     "build": "node scripts/build.mjs",
+    "menu": "node examples/render-menu.mjs",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {

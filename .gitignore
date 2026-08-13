@@ -11,3 +11,6 @@ ds-bundle/
 # misc
 *.log
 .DS_Store
+
+# generated menu output (regenerate with `npm run menu`)
+examples/menu.html

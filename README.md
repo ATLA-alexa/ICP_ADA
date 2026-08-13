@@ -36,6 +36,26 @@ between the `day` and `evening` token sets. Components render without it
 because the tokens live on `:root`, but text falls back to the host page's
 font, so wrap your tree.
 
+## The menu
+
+The live drinks menu is data, not markup. Edit
+[`examples/menu.json`](examples/menu.json) and regenerate:
+
+```sh
+npm run build && npm run menu     # → examples/menu.html
+```
+
+The output is one self-contained file — stylesheet and both typefaces inlined —
+so it can be emailed, opened offline, or sent to a printer with nothing
+alongside it. It has a print stylesheet. Because every element is rendered by
+the real components, the menu can never drift from the design system.
+
+Set `MENU_THEME=evening` to render the after-dark version.
+
+> The drink names, descriptions and prices currently in `menu.json` are
+> **placeholders** written to exercise the components. Replace them with the
+> real menu.
+
 ## What's in it
 
 | Group | Components |
