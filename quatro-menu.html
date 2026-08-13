@@ -1,0 +1,1463 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>Quatro, Amsterdam</title>
+<style>
+/* ==========================================================================
+   QUATRO. One file, no network, works offline behind the bar.
+   Warm limestone, ink, gold hairlines. The arch (20px 20px 6px 6px) is the
+   brand, taken from the backlit limestone niches.
+   ========================================================================== */
+
+:root {
+  --limestone: #FAF6EF;
+  --limestone-deep: #F2EBDF;
+  --ink: #23201C;
+  --ink-soft: #6B6459;
+  --gold: #A8863C;
+  --gold-pale: #D9C79A;
+
+  --amber: #B26A05;
+  --amber-bg: #FBF0DC;
+
+  --arch: 20px 20px 6px 6px;
+  --arch-sm: 12px 12px 4px 4px;
+
+  --display: 'Marcellus', Georgia, 'Times New Roman', serif;
+  --body: 'Jost', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px; --s8: 64px;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--limestone);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 { font-family: var(--display); font-weight: 400; margin: 0; line-height: 1.15; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 3px; }
+
+.wrap { max-width: 780px; margin: 0 auto; padding: 0 var(--s4) var(--s8); }
+.smallcaps { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; color: var(--gold); }
+
+/* ---- header + view toggle ------------------------------------------------ */
+
+.topbar {
+  position: sticky; top: 0; z-index: 40;
+  background: color-mix(in srgb, var(--limestone) 92%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--gold-pale);
+}
+.topbar-inner {
+  max-width: 780px; margin: 0 auto; padding: var(--s3) var(--s4);
+  display: flex; align-items: center; justify-content: space-between; gap: var(--s3);
+}
+.brand { display: flex; align-items: baseline; gap: var(--s2); min-width: 0; }
+.brand-name { font-family: var(--display); font-size: 22px; letter-spacing: 0.02em; }
+.brand-city { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-soft); }
+
+.views { display: flex; gap: 2px; background: var(--limestone-deep); border-radius: 999px; padding: 3px; }
+.views button {
+  border: 0; background: transparent; border-radius: 999px;
+  padding: 6px 12px; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ink-soft); transition: background 140ms ease, color 140ms ease;
+}
+.views button[aria-pressed="true"] { background: var(--ink); color: var(--limestone); }
+
+/* ---- masthead ------------------------------------------------------------ */
+
+.masthead { text-align: center; padding: var(--s7) 0 var(--s5); }
+.masthead h1 { font-size: 40px; letter-spacing: 0.03em; }
+.masthead .rule { display: block; width: 120px; height: 1px; background: var(--gold-pale); margin: var(--s4) auto; }
+.masthead p { margin: 0; color: var(--ink-soft); font-size: 15px; font-style: italic; }
+
+/* ---- section ------------------------------------------------------------- */
+
+.section { margin-top: var(--s7); }
+.section-head { border-bottom: 1px solid var(--gold-pale); padding-bottom: var(--s2); margin-bottom: var(--s4); }
+.section-head h2 { font-size: 26px; margin-top: var(--s1); }
+.section-note { margin: var(--s2) 0 0; font-size: 14px; color: var(--ink-soft); font-style: italic; }
+
+/* ---- drink cards --------------------------------------------------------- */
+
+.cards { display: grid; grid-template-columns: 1fr; gap: var(--s3); }
+@media (min-width: 620px) { .cards { grid-template-columns: 1fr 1fr; } }
+
+.card {
+  position: relative; display: block; width: 100%; text-align: left;
+  background: #fff; border: 1px solid var(--limestone-deep);
+  border-radius: var(--arch); padding: var(--s4);
+  transition: border-color 140ms ease, transform 140ms ease;
+}
+.card:hover { border-color: var(--gold-pale); }
+.card:active { transform: scale(0.995); }
+
+.card-top { display: flex; align-items: baseline; gap: var(--s2); }
+/* The ring keeps pale swatches (cloud white) legible on the limestone. */
+.swatch {
+  width: 12px; height: 12px; border-radius: 999px; flex: 0 0 auto;
+  transform: translateY(1px); box-shadow: inset 0 0 0 1px rgba(35,32,28,0.22);
+}
+.card-name { font-family: var(--display); font-size: 19px; flex: 1 1 auto; min-width: 0; }
+.card-desc { display: block; margin: var(--s2) 0 0; font-size: 14px; color: var(--ink-soft); }
+.card-tag {
+  display: inline-block; margin-top: var(--s3); font-size: 11.5px; color: var(--gold);
+  border: 1px solid var(--gold-pale); border-radius: 999px; padding: 3px 9px;
+}
+
+/* ---- rows (coffee, bottled) ---------------------------------------------- */
+
+.rows { display: flex; flex-direction: column; }
+.row {
+  display: flex; align-items: baseline; gap: var(--s3); width: 100%; text-align: left;
+  border-bottom: 1px solid var(--limestone-deep); padding: var(--s3) 0;
+}
+.row-name { font-family: var(--display); font-size: 17px; flex: 0 0 auto; }
+.row-comp { font-size: 13px; color: var(--ink-soft); flex: 1 1 auto; min-width: 0; }
+
+.panel { margin-top: var(--s4); background: var(--limestone-deep); border-radius: var(--arch); padding: var(--s4) var(--s5); }
+.panel h3 { font-size: 18px; margin-bottom: var(--s1); }
+.panel p { margin: 0; font-size: 14px; color: var(--ink-soft); }
+
+.altlist { margin: var(--s3) 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--s2); }
+.altlist li { font-size: 14px; color: var(--ink-soft); }
+.altlist b { color: var(--ink); font-weight: 600; }
+
+/* ---- todo ---------------------------------------------------------------- */
+
+.todo {
+  display: inline-block; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase;
+  background: var(--amber-bg); color: var(--amber); border: 1px solid currentColor;
+  border-radius: 4px; padding: 1px 6px; margin-left: 6px; vertical-align: middle; font-weight: 600;
+}
+.todo-block {
+  margin-top: var(--s3); background: var(--amber-bg); border: 1px dashed var(--amber);
+  border-radius: var(--arch-sm); padding: var(--s3); font-size: 13px; color: var(--amber);
+}
+.todo-block ul { margin: var(--s2) 0 0; padding-left: 18px; }
+.todo-panel {
+  margin-top: var(--s7); background: var(--amber-bg); border: 1px solid var(--amber);
+  border-radius: var(--arch); padding: var(--s5);
+}
+.todo-panel h2 { font-size: 22px; color: var(--amber); }
+.todo-panel ol { margin: var(--s3) 0 0; padding-left: 20px; color: var(--amber); font-size: 14px; }
+.todo-panel li { margin-bottom: var(--s2); }
+body.view-guest .todo, body.view-guest .todo-block, body.view-guest .todo-panel { display: none !important; }
+
+/* ---- detail sheet -------------------------------------------------------- */
+
+.scrim { position: fixed; inset: 0; z-index: 50; background: rgba(35,32,28,0.42); opacity: 0; pointer-events: none; transition: opacity 180ms ease; }
+.scrim.open { opacity: 1; pointer-events: auto; }
+
+.sheet {
+  position: fixed; z-index: 60; left: 0; right: 0; bottom: 0;
+  max-height: 88vh; display: flex; flex-direction: column;
+  background: var(--limestone); border-radius: var(--arch);
+  transform: translateY(102%); transition: transform 220ms cubic-bezier(0.2,0,0.2,1);
+  box-shadow: 0 -8px 40px rgba(35,32,28,0.18);
+}
+.sheet.open { transform: translateY(0); }
+/* display:flex above beats the browser default for [hidden], so say it here.
+   Without this the sheet stays in the hit test and swallows every tap. */
+.sheet[hidden], .drawer[hidden] { display: none; }
+@media (min-width: 720px) {
+  .sheet { left: 50%; right: auto; width: 680px; transform: translate(-50%, 102%); bottom: 3vh; max-height: 90vh; }
+  .sheet.open { transform: translate(-50%, 0); }
+}
+
+.sheet-head { padding: var(--s5) var(--s5) var(--s3); border-bottom: 1px solid var(--gold-pale); }
+.sheet-title { display: flex; align-items: baseline; gap: var(--s2); padding-right: 40px; }
+.sheet-title h3 { font-size: 24px; flex: 1 1 auto; }
+.sheet-meta { margin: var(--s2) 0 0; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); }
+.sheet-colour { margin: var(--s1) 0 0; font-size: 12px; color: var(--gold); font-style: italic; }
+
+.sheet-close {
+  position: absolute; top: var(--s3); right: var(--s3);
+  width: 34px; height: 34px; border-radius: 999px; border: 1px solid var(--limestone-deep);
+  background: #fff; color: var(--ink-soft); font-size: 18px; line-height: 1;
+  display: grid; place-items: center;
+}
+
+.tabs { display: flex; gap: var(--s1); padding: var(--s3) var(--s5) 0; flex-wrap: wrap; }
+.tabs button { border: 0; background: none; padding: 6px 10px; border-radius: 999px; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); }
+.tabs button[aria-selected="true"] { background: var(--limestone-deep); color: var(--ink); }
+.tabs:has(button:only-child) { display: none; }
+
+.sheet-body { overflow-y: auto; padding: var(--s4) var(--s5) var(--s7); -webkit-overflow-scrolling: touch; }
+.story { font-size: 16px; line-height: 1.65; margin: 0; }
+
+.spec { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s5); margin: 0 0 var(--s4); padding: 0; list-style: none; }
+.spec div { font-size: 13px; }
+.spec dt { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
+.spec dd { margin: 2px 0 0; }
+
+.ing { display: flex; flex-direction: column; gap: 0; margin: 0; padding: 0; list-style: none; }
+.ing button { display: flex; width: 100%; align-items: baseline; gap: var(--s3); text-align: left; background: none; border: 0; border-bottom: 1px solid var(--limestone-deep); padding: 10px 0; }
+.ing .ml { font-variant-numeric: tabular-nums; color: var(--gold); font-size: 13px; min-width: 52px; }
+.ing .nm { flex: 1 1 auto; font-size: 15px; }
+.ing .nm small { display: block; color: var(--ink-soft); font-size: 12.5px; }
+.ing .chev { color: var(--gold-pale); font-size: 14px; }
+
+.steps { margin: 0; padding-left: 20px; }
+.steps li { margin-bottom: var(--s2); font-size: 14.5px; }
+.substack { margin-bottom: var(--s5); }
+.substack h4 { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: var(--s2); }
+
+blockquote.say {
+  margin: 0 0 var(--s3); padding: var(--s3) var(--s4);
+  border-left: 2px solid var(--gold); background: #fff; border-radius: 0 var(--arch-sm) var(--arch-sm) 0;
+  font-family: var(--display); font-size: 17px; line-height: 1.5;
+}
+blockquote.say .cue { display: block; font-family: var(--body); font-size: 12px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.1em; margin-top: var(--s2); }
+
+/* ---- quiz ---------------------------------------------------------------- */
+
+.quiz-btn { margin-bottom: var(--s4); border: 1px solid var(--gold); background: none; color: var(--gold); border-radius: 999px; padding: 7px 14px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+.quiz-btn[aria-pressed="true"] { background: var(--gold); color: #fff; }
+.quiz-hidden { filter: blur(7px); opacity: 0.55; pointer-events: none; user-select: none; }
+.quiz-prompt { background: #fff; border: 1px dashed var(--gold-pale); border-radius: var(--arch-sm); padding: var(--s4); margin-bottom: var(--s4); text-align: center; }
+.quiz-prompt strong { font-family: var(--display); font-size: 20px; display: block; }
+.quiz-prompt span { font-size: 13px; color: var(--ink-soft); }
+
+/* ---- inventory drawer ---------------------------------------------------- */
+
+.drawer {
+  position: fixed; z-index: 70; left: 0; right: 0; bottom: 0; max-height: 70vh; overflow-y: auto;
+  background: #fff; border-radius: var(--arch); padding: var(--s5);
+  transform: translateY(102%); transition: transform 200ms cubic-bezier(0.2,0,0.2,1);
+  box-shadow: 0 -8px 40px rgba(35,32,28,0.22);
+}
+.drawer.open { transform: translateY(0); }
+@media (min-width: 720px) {
+  .drawer { left: 50%; right: auto; width: 520px; transform: translate(-50%, 102%); bottom: 6vh; }
+  .drawer.open { transform: translate(-50%, 0); }
+}
+.drawer h4 { font-size: 20px; margin-bottom: var(--s3); }
+.drawer dl { display: grid; grid-template-columns: auto 1fr; gap: var(--s2) var(--s4); margin: 0; font-size: 14px; }
+.drawer dt { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); padding-top: 4px; }
+.drawer dd { margin: 0; }
+
+/* ---- owner --------------------------------------------------------------- */
+
+.owner-controls { display: flex; flex-wrap: wrap; gap: var(--s3); align-items: end; margin-bottom: var(--s4); }
+.field { display: flex; flex-direction: column; gap: 4px; }
+.field label { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
+.field select { font: inherit; font-size: 14px; padding: 8px 10px; border: 1px solid var(--gold-pale); border-radius: var(--arch-sm); background: #fff; color: var(--ink); }
+.owner-summary { font-size: 13px; color: var(--ink-soft); margin: 0 0 var(--s4); }
+
+.tablewrap { overflow-x: auto; border: 1px solid var(--limestone-deep); border-radius: var(--arch); background: #fff; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; min-width: 820px; }
+th, td { padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--limestone-deep); white-space: nowrap; }
+th { position: sticky; top: 0; background: var(--limestone-deep); z-index: 1; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); cursor: pointer; user-select: none; }
+th[aria-sort="ascending"], th[aria-sort="descending"] { color: var(--gold); }
+th .arrow { opacity: 0.4; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; }
+td.tbd { color: var(--amber); font-size: 11px; letter-spacing: 0.08em; }
+tbody tr:hover { background: var(--limestone); }
+
+.pill { font-size: 11px; border-radius: 999px; padding: 2px 8px; border: 1px solid; }
+.pill.full { color: #2F6B3A; border-color: #A9C9B0; background: #EEF6F0; }
+.pill.base { color: var(--amber); border-color: var(--gold-pale); background: var(--amber-bg); }
+.pill.no   { color: #8C3A2E; border-color: #E0B3AA; background: #FBEEEB; }
+
+.bar { display: flex; align-items: center; gap: var(--s2); }
+.bar-track { width: 62px; height: 6px; background: var(--limestone-deep); border-radius: 999px; overflow: hidden; }
+.bar-fill { height: 100%; background: var(--gold); border-radius: 999px; }
+.legend { font-size: 12px; color: var(--ink-soft); margin-top: var(--s3); line-height: 1.6; }
+
+/* ---- footer -------------------------------------------------------------- */
+
+.footer { margin-top: var(--s8); border-top: 1px solid var(--gold-pale); padding-top: var(--s4); text-align: center; }
+.footer .claim { font-family: var(--display); font-size: 18px; }
+.footer .fine { font-size: 12px; color: var(--ink-soft); margin-top: var(--s2); }
+
+body:not(.view-owner) .owner-only { display: none; }
+body.view-owner .guest-only { display: none; }
+
+/* ---- print --------------------------------------------------------------- */
+
+@media print {
+  /* Target is a 2 to 3 page paper menu, tuned tight. */
+  @page { margin: 10mm 11mm; }
+  body { background: #fff; font-size: 9pt; line-height: 1.4; }
+  .topbar, .views, .owner-only, .todo, .todo-block, .todo-panel,
+  .scrim, .sheet, .drawer, .quiz-btn, .print-hide { display: none !important; }
+  .wrap { max-width: none; padding: 0; }
+
+  .masthead { padding: 0 0 4mm; }
+  .masthead h1 { font-size: 22pt; }
+  .masthead .rule { margin: 2mm auto; width: 70px; }
+  .masthead p { font-size: 9pt; }
+
+  .section { margin-top: 5mm; break-inside: auto; }
+  .section-head { break-after: avoid; padding-bottom: 1mm; margin-bottom: 2.5mm; }
+  .section-head h2 { font-size: 14pt; }
+  .section-head .smallcaps { display: none; }
+  .section-note { font-size: 8pt; margin-top: 0.5mm; }
+
+  .cards { grid-template-columns: 1fr 1fr; gap: 2mm 6mm; }
+  .card { border: 0; padding: 0 0 2mm; background: none !important; break-inside: avoid; border-radius: 0; }
+  .card-name { font-size: 11pt; }
+  .card-desc { font-size: 8pt; margin-top: 0.5mm; }
+  .card-tag { border: 0; padding: 0; color: var(--ink-soft); font-style: italic; margin-top: 0.5mm; font-size: 7.5pt; display: block; }
+
+  .rows { display: block; column-count: 3; column-gap: 6mm; }
+  .row { display: flex; padding: 0.8mm 0; break-inside: avoid; border-bottom: 0; }
+  .row-name { font-size: 8.5pt; }
+  .row-comp { font-size: 7.5pt; }
+
+  .panel { background: none; border: 0; border-top: 1px solid #ccc; padding: 2mm 0 0; margin-top: 2mm; break-inside: avoid; }
+  .panel h3 { font-size: 10pt; }
+  .panel p, .altlist li { font-size: 8pt; }
+
+  .footer { margin-top: 5mm; padding-top: 2mm; }
+  .footer .claim { font-size: 11pt; }
+  .footer .fine { font-size: 7pt; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body class="view-guest">
+
+<header class="topbar print-hide">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="brand-name">Quatro</span>
+      <span class="brand-city">Amsterdam</span>
+    </div>
+    <div class="views" role="group" aria-label="Choose view">
+      <button type="button" data-view="guest"  aria-pressed="true">Guest</button>
+      <button type="button" data-view="staff"  aria-pressed="false">Staff</button>
+      <button type="button" data-view="owner"  aria-pressed="false">Owner</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="masthead">
+    <h1>Quatro</h1>
+    <span class="rule"></span>
+    <p>The venue is the calm campus. The drinks are the paint.</p>
+  </div>
+
+  <div id="guest-root" class="guest-only"></div>
+  <div id="owner-root" class="owner-only"></div>
+  <!-- Not guest-only: the open items belong to Staff AND Owner. The
+       body.view-guest rule is what keeps them away from guests and print. -->
+  <div id="todo-root"></div>
+
+  <footer class="footer">
+    <div class="claim">Everything on this menu is alcohol-free</div>
+    <p class="fine">Naturally fermented drinks are non-alcoholic by law and may contain traces below 0.5%, as ripe fruit does. Please tell us about any allergies. We build around them.</p>
+  </footer>
+</main>
+
+<div class="scrim" id="scrim"></div>
+
+<section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-name" hidden>
+  <div class="sheet-head">
+    <button class="sheet-close" id="sheet-close" type="button" aria-label="Close">&times;</button>
+    <div class="sheet-title">
+      <span class="swatch" id="sheet-swatch"></span>
+      <h3 id="sheet-name"></h3>
+    </div>
+    <p class="sheet-meta" id="sheet-meta"></p>
+    <p class="sheet-colour" id="sheet-colour"></p>
+  </div>
+  <div class="tabs" id="sheet-tabs" role="tablist"></div>
+  <div class="sheet-body" id="sheet-body"></div>
+</section>
+
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-name" hidden>
+  <h4 id="drawer-name"></h4>
+  <dl id="drawer-body"></dl>
+</aside>
+
+<script>
+"use strict";
+
+/* ==========================================================================
+   MENU_DATA
+   Everything a non-developer needs to change lives in this object.
+
+   PRICES ARE DELIBERATELY ABSENT. Every drink carries price: null, and every
+   ingredient carries cost: null. Nothing renders a price while they are null.
+   Fill a drink's price and its ops.cost and the owner table unlocks the cost
+   and GP columns for that row automatically. No price is invented anywhere.
+
+   swatch = { name, hex }. The name is the real thing being described; the hex
+   is a muted reading of it so the limestone canvas stays calm.
+   ops.prebatch = "full" | "base" | "no"
+   ops.steps    = to-order steps at the bar
+   ops.seconds  = estimated time to serve, drives the "under 60 seconds" filter
+   ops.profile  = "single" | "layered"
+   ========================================================================== */
+
+var RESET = [
+  "Rinse tin and strainer.",
+  "Wipe the surface.",
+  "Reset bottles to their marks.",
+  "Glance at the next garnish.",
+  "One breath."
+];
+
+/* The eight open items. Amber, staff and owner only, never guest or print. */
+var OPEN_ITEMS = [
+  "Butterfly pea flowers: find a supplier.",
+  "Amsterdam Sunrise: decide the garnish. Proposal is orange half-wheel plus a cocktail cherry.",
+  "Elderflower Sour: confirm the Tajin rim, confirm the coupe, and choose ONE house foaming standard (40 ml aquafaba against Fee Foam drops) for every foamed drink.",
+  "Tropical Velvet: confirm the coconut cream sidecar against shaking it in.",
+  "Shirley Temple and Orange Mint Sparkle: specs drafted from shopping lists. Confirm with Kaykay before training.",
+  "Blue Lagoon (curacao syrup, on a colleague's list): presumed redundant now that Ocean No-jito carries the blue with a flower. Confirm the kill.",
+  "Vendors still open: taro, black sesame, hojicha, Sanbitter, house foamer, peaches or peach syrup.",
+  "All prices: pending the inventory discussion with the owner."
+];
+
+var MENU_DATA = {
+
+  /* ---------------- ingredient inventory ---------------- */
+  /* cost stays null until real invoices land. Nothing shows a cost before then. */
+  ingredients: {
+    lychee:      { name: "Lychee juice", pack: "1 L carton", cost: null, prebatch: "Batched as the Siren base with coconut water and salt, 2 L at a time. Keeps 3 days.", supplier: "TODO: supplier", todo: true },
+    coconutw:    { name: "Coconut water", pack: "1 L carton", cost: null, prebatch: "Goes into the Siren base. Keeps 3 days batched.", supplier: "TODO: supplier", todo: true },
+    peatea:      { name: "Butterfly pea flowers", pack: "50 g", cost: null, prebatch: "Tea brewed 500 ml at a time. Keeps 5 days.", supplier: "TODO: supplier", todo: true },
+    lime:        { name: "Limes", pack: "Case, fresh", cost: null, prebatch: "Juiced fresh daily. Never batched overnight.", supplier: "Market, daily" },
+    salt:        { name: "Sea salt", pack: "1 kg", cost: null, prebatch: "Goes into the Siren base.", supplier: "Kitchen stock" },
+    lemon:       { name: "Lemons", pack: "Case, fresh", cost: null, prebatch: "Juiced fresh daily.", supplier: "Market, daily" },
+    cordial:     { name: "Rosemary thyme maple cordial", pack: "Batched in house", cost: null, prebatch: "200 ml water simmered, off heat add 150 ml maple syrup, 4 rosemary, 6 thyme. Steep exactly 30 minutes, strain. Keeps 2 weeks.", supplier: "In house" },
+    rosemary:    { name: "Rosemary", pack: "Bunch", cost: null, prebatch: "Fresh daily. Smoked to order, never in advance.", supplier: "Market, daily" },
+    thyme:       { name: "Thyme", pack: "Bunch", cost: null, prebatch: "Fresh daily, stays raw.", supplier: "Market, daily" },
+    soda:        { name: "Sparkling water", pack: "1 L bottle", cost: null, prebatch: "No. Opened to order so it stays lively.", supplier: "TODO: supplier", todo: true },
+    grapes:      { name: "Green grapes", pack: "500 g", cost: null, prebatch: "No. Muddled to order.", supplier: "Market, daily" },
+    basil:       { name: "Basil", pack: "Bunch", cost: null, prebatch: "No, to order only. Pressed exactly once or it turns bitter.", supplier: "Market, daily" },
+    applepear:   { name: "Apple pear juice", pack: "1 L carton", cost: null, prebatch: "Pours straight from the carton.", supplier: "TODO: supplier", todo: true },
+    simple:      { name: "Simple syrup", pack: "Batched in house", cost: null, prebatch: "1:1 sugar and water. Keeps 3 weeks refrigerated.", supplier: "In house" },
+    pear_gar:    { name: "Caramelised pear", pack: "Prepped daily", cost: null, prebatch: "5 mm slices, dry pan, pinch of sugar, 45 seconds a side. Same day only.", supplier: "In house" },
+    hibiscus:    { name: "Dried hibiscus", pack: "250 g", cost: null, prebatch: "Brewed strong, 2 L at a time. Keeps 5 days.", supplier: "TODO: supplier", todo: true },
+    strawpuree:  { name: "Strawberry puree", pack: "Prepped daily", cost: null, prebatch: "Same day only. Blended fresh each morning.", supplier: "Market, daily" },
+    strawberry:  { name: "Strawberries", pack: "Punnet, fresh", cost: null, prebatch: "No. Halved or muddled to order.", supplier: "Market, daily" },
+    orange:      { name: "Oranges", pack: "Case, fresh", cost: null, prebatch: "Juiced fresh. Holds 4 hours at most before it flattens.", supplier: "Market, daily" },
+    vanilla:     { name: "Vanilla syrup", pack: "700 ml bottle", cost: null, prebatch: "Shelf-stable.", supplier: "CHECK LABEL: must be alcohol-free", todo: true },
+    foamer:      { name: "House foamer", pack: "To be decided", cost: null, prebatch: "Fee Brothers Fee Foam, 6 to 8 drops then dry shake, against 40 ml aquafaba. One standard must be chosen for every foamed drink. Never Ms Better's: 40% ABV carrier, banned here.", supplier: "TODO: choose the standard, then order", todo: true },
+    jalapeno:    { name: "Jalapeno", pack: "Fresh", cost: null, prebatch: "No. Sliced and muddled to order. Seeds out as standard.", supplier: "Market, daily" },
+    gingerbeer:  { name: "Three Cents ginger beer", pack: "200 ml bottle", cost: null, prebatch: "Bottled, opened to order.", supplier: "Three Cents" },
+    gingerale:   { name: "Ginger ale", pack: "Bottle", cost: null, prebatch: "Bottled, opened to order.", supplier: "TODO: supplier", todo: true },
+    mint:        { name: "Mint", pack: "Bunch", cost: null, prebatch: "No, to order. Pressed or bashed once, never shredded.", supplier: "Market, daily" },
+    cranberry:   { name: "Cranberry juice", pack: "1 L carton", cost: null, prebatch: "Can be premixed with lime and orange as the Cosmo base. Keeps 2 days.", supplier: "TODO: supplier", todo: true },
+    rooibos_hib: { name: "Rooibos hibiscus tea", pack: "Batched in house", cost: null, prebatch: "Brewed strong and dark, 2 L at a time. Keeps 5 days.", supplier: "In house" },
+    sanbitter:   { name: "Sanbitter", pack: "98 ml bottle", cost: null, prebatch: "Bottled, opened to order.", supplier: "TODO: supplier", todo: true },
+    grenadine:   { name: "Grenadine", pack: "700 ml bottle", cost: null, prebatch: "Shelf-stable. Poured down the inside so it sinks.", supplier: "TODO: supplier", todo: true },
+    passionjuice:{ name: "Passion fruit juice", pack: "1 L carton", cost: null, prebatch: "Can be premixed with apple, lime and vanilla. Keeps 2 days.", supplier: "TODO: supplier", todo: true },
+    passionpuree:{ name: "Passion fruit puree, real", pack: "1 kg", cost: null, prebatch: "Keeps 2 days once opened.", supplier: "TODO: supplier", todo: true },
+    passionfresh:{ name: "Fresh passion fruit", pack: "Each", cost: null, prebatch: "No. Halved to order for the float.", supplier: "Market, daily" },
+    cloudyapple: { name: "Cloudy apple juice", pack: "1 L carton", cost: null, prebatch: "Pours straight from the carton.", supplier: "TODO: supplier", todo: true },
+    coconutcream:{ name: "Coconut cream", pack: "400 ml tin", cost: null, prebatch: "No. Poured to order.", supplier: "TODO: supplier", todo: true },
+    coconutmilk: { name: "Coconut milk", pack: "1 L carton", cost: null, prebatch: "Shake the carton before every pour.", supplier: "TODO: supplier", todo: true },
+    pineapple:   { name: "Pineapple juice", pack: "1 L carton", cost: null, prebatch: "Pours straight from the carton.", supplier: "TODO: supplier", todo: true },
+    cherries:    { name: "Cocktail cherries", pack: "Jar", cost: null, prebatch: "Shelf-stable.", supplier: "TODO: supplier", todo: true },
+    jasmine:     { name: "Jasmine tea", pack: "250 g", cost: null, prebatch: "Cold-brewed 12 g per litre for 12 hours. Keeps 3 days.", supplier: "TODO: supplier", todo: true },
+    elderflower: { name: "Elderflower syrup", pack: "700 ml bottle", cost: null, prebatch: "Shelf-stable.", supplier: "TODO: supplier", todo: true },
+    tajin:       { name: "Chili-lime salt", pack: "160 g", cost: null, prebatch: "Shelf-stable. Recipe card says Tajine.", supplier: "CONFIRM: Tajin, not Tajine", todo: true },
+    oleo:        { name: "Lemon oleo saccharum syrup", pack: "Batched in house", cost: null, prebatch: "Peels of 8 lemons with 200 g sugar, rest 12 to 24 hours, dissolve with 200 ml warm water, strain. Keeps 2 weeks.", supplier: "In house" },
+    lavender:    { name: "Lavender syrup", pack: "700 ml bottle", cost: null, prebatch: "Shelf-stable.", supplier: "TODO: supplier", todo: true },
+    lemongrass:  { name: "Lemongrass syrup", pack: "700 ml bottle", cost: null, prebatch: "Shelf-stable.", supplier: "TODO: supplier", todo: true },
+    peachsyrup:  { name: "Peach syrup", pack: "700 ml bottle", cost: null, prebatch: "Shelf-stable.", supplier: "TODO: peaches or peach syrup, decide then source", todo: true },
+    matcha:      { name: "Matcha, Uji Kyoto", pack: "100 g tin", cost: null, prebatch: "No. Whisked to order, always.", supplier: "TODO: supplier", todo: true },
+    milk:        { name: "Milk", pack: "1 L", cost: null, prebatch: "No.", supplier: "Dairy, weekly" },
+    whitechoc:   { name: "White chocolate sauce", pack: "1 kg", cost: null, prebatch: "Shelf-stable.", supplier: "TODO: supplier", todo: true },
+    strawcrush:  { name: "Crushed strawberry", pack: "Prepped daily", cost: null, prebatch: "Same day only.", supplier: "Market, daily" },
+    sparklemon:  { name: "Sparkling lemonade", pack: "1 L", cost: null, prebatch: "Bottled, opened to order.", supplier: "TODO: supplier", todo: true }
+  },
+
+  sections: [
+
+    /* ============ SIGNATURES ============ */
+    {
+      id: "signatures", title: "Signatures", kind: "cards",
+      note: "House builds. Every one of them is made here, from tea we brew and syrups we press.",
+      drinks: [
+
+        {
+          id: "lychee-siren", name: "Lychee Siren", price: null,
+          swatch: { name: "Indigo dusk over pale pearl", hex: "#4C4C9D" },
+          glass: "Highball", ice: "Crushed", method: "Build and float",
+          story: "Lychee and coconut water beneath a deep indigo crown of butterfly pea flower. In Taipei, lychee is what you drink because it is hot outside. Ask your server about the lime.",
+          tag: "Not a fan of coconut water? We swap in cloudy apple",
+          build: [
+            { ref: "lychee", ml: 70 },
+            { ref: "coconutw", ml: 70 },
+            { ref: "salt", ml: 0, note: "A pinch" },
+            { ref: "peatea", ml: 40, note: "Floated last" },
+            { ref: "lime", ml: 20, note: "Carried separately in a small jug" }
+          ],
+          bar: [
+            "Fill the highball with crushed ice.",
+            "Pour lychee, then coconut water.",
+            "Add the pinch of salt, stir 3 turns.",
+            "Re-mound the ice to the rim.",
+            "Float the pea tea over the back of a spoon.",
+            "Lime wheel, straw.",
+            "Put the 20 ml of lime in a small jug on the tray."
+          ],
+          table: [
+            "Set the glass down in front of the guest.",
+            "Pour the lime slowly over the indigo.",
+            "Hand the guest the barspoon. They stir."
+          ],
+          say: [
+            { line: "There is no colouring in this, the blue is butterfly pea flower. I have kept the lime out on purpose. Watch." },
+            { line: "That is just acid meeting the flower. Stir it and the whole glass follows.", cue: "After pouring the lime" }
+          ],
+          ops: { cost: null, prebatch: "base", steps: 5, seconds: 75, complexity: 4, profile: "layered" }
+        },
+
+        {
+          id: "forest-fairy", name: "Forest Fairy", price: null,
+          swatch: { name: "Deep forest green, smoke-dimmed", hex: "#3E5140" },
+          glass: "Highball", ice: "Cubed", method: "Stir in glass",
+          story: "Rosemary is smoked before it goes in, thyme stays raw and green, lemon cuts the dark maple so it drinks dry rather than sweet. Herbal, smoky, quietly bitter at the edges.",
+          tag: "Want it extra herby? We bash in more thyme",
+          build: [
+            { ref: "lemon", ml: 25 },
+            { ref: "cordial", ml: 60 },
+            { ref: "soda", ml: 155, note: "Top, roughly" },
+            { ref: "rosemary", ml: 0, note: "1 sprig, smoked" },
+            { ref: "thyme", ml: 0, note: "1 sprig, raw" }
+          ],
+          bar: [
+            "Smoke the rosemary sprig first: 2 to 3 seconds of flame, then blow it out.",
+            "Fill the highball with cubed ice.",
+            "Lemon, then cordial.",
+            "Stir 5 seconds.",
+            "Top with sparkling water down the barspoon.",
+            "One stir from the bottom.",
+            "Drop in the smoked rosemary and the raw thyme."
+          ],
+          table: [],
+          say: [ { line: "This is the one for someone who does not want anything sweet. Maple instead of sugar, two herbs, nothing else." } ],
+          ops: { cost: null, prebatch: "base", steps: 5, seconds: 70, complexity: 3, profile: "single" }
+        },
+
+        {
+          id: "the-hulk", name: "The Hulk", price: null,
+          swatch: { name: "Bright leaf green", hex: "#6E8C3A" },
+          glass: "Highball", ice: "Cubed", method: "Shake and double strain",
+          story: "Basil pressed once releases its peppery anise oils into the sugar of green grapes; apple and pear give it body, lime lifts it. The green is the leaf itself, no colouring.",
+          tag: "On the sour side, very refreshing",
+          build: [
+            { ref: "grapes", ml: 0, note: "8 grapes, 6 presses" },
+            { ref: "basil", ml: 0, note: "10 leaves, pressed ONCE" },
+            { ref: "applepear", ml: 120 },
+            { ref: "lime", ml: 20 },
+            { ref: "simple", ml: 15 },
+            { ref: "soda", ml: 85, note: "Top, roughly" },
+            { ref: "pear_gar", ml: 0, note: "Garnish, with a basil leaf" }
+          ],
+          bar: [
+            "Muddle 8 grapes with 6 presses.",
+            "Add 10 basil leaves and press exactly ONCE.",
+            "Apple pear juice, lime, simple syrup.",
+            "Shake 12 seconds.",
+            "Double strain over fresh cubed ice.",
+            "Top with roughly 85 ml sparkling water.",
+            "Basil leaf and a caramelised pear slice."
+          ],
+          table: [],
+          say: [ { line: "The trick is you press the basil exactly once. Any more and it turns bitter on you." } ],
+          ops: { cost: null, prebatch: "no", steps: 7, seconds: 105, complexity: 5, profile: "single" }
+        },
+
+        {
+          id: "hibiscus-princess", name: "Hibiscus Princess", price: null,
+          swatch: { name: "Hibiscus red under cream silk", hex: "#9E2B3B" },
+          glass: "Coppa", ice: "Cubed", method: "Dry shake then wet shake, fine strain",
+          story: "Hibiscus steeps deep red and properly tart; strawberry rounds that acid with sweetness and body. Shaken above it, orange, lemon and vanilla settle into a pale silk that holds as its own layer. Sharp below, soft on top.",
+          tag: "Layered: tart red under a citrus-vanilla silk",
+          build: [
+            { ref: "hibiscus", ml: 120, note: "GLASS FIRST, over ice and strawberries" },
+            { ref: "strawberry", ml: 0, note: "4 halved, tucked visibly against the glass" },
+            { ref: "foamer", ml: 0, note: "House standard, in the shaker" },
+            { ref: "strawpuree", ml: 30, note: "In the shaker" },
+            { ref: "orange", ml: 60, note: "In the shaker" },
+            { ref: "lemon", ml: 30, note: "In the shaker" },
+            { ref: "vanilla", ml: 30, note: "In the shaker" }
+          ],
+          bar: [
+            "GLASS FIRST: ice, then 4 halved strawberries tucked visibly against the wall.",
+            "Add roughly 120 ml hibiscus tea. Set the glass down.",
+            "SHAKER: house foamer, 30 strawberry puree, 60 orange, 30 lemon, 30 vanilla syrup.",
+            "Dry shake 15 seconds, no ice.",
+            "Add ice, wet shake 12 seconds.",
+            "Strain slowly onto the surface so the silk sits as its own layer."
+          ],
+          table: [],
+          say: [ { line: "Red at the bottom, cream on top, and they do not mix until you drink. The foam is plant-based, no egg anywhere." } ],
+          todos: ["House foaming standard not yet chosen. See the open items list."],
+          ops: { cost: null, prebatch: "base", steps: 7, seconds: 120, complexity: 5, profile: "layered" }
+        },
+
+        {
+          id: "orange-mint-sparkle", name: "Orange Mint Sparkle", price: null,
+          swatch: { name: "Sun orange, mint-flecked", hex: "#D98236" },
+          glass: "Highball", ice: "Cubed", method: "Press and churn",
+          story: "Fresh orange juice pressed over mint and lengthened with sparkle, so the citrus stays bright and the herb sits just underneath it.",
+          tag: "Bright and simple, mint pressed not shredded",
+          build: [
+            { ref: "mint", ml: 0, note: "8 leaves, pressed once in the glass" },
+            { ref: "orange", ml: 120, note: "Fresh" },
+            { ref: "soda", ml: 120, note: "Fill, roughly" },
+            { ref: "simple", ml: 10, note: "Optional, only if the oranges run sharp" }
+          ],
+          bar: [
+            "Press 8 mint leaves once in the glass.",
+            "Add 120 ml fresh orange juice.",
+            "Fill with cubed ice.",
+            "Fill with roughly 120 ml sparkling water.",
+            "One churn from the bottom.",
+            "Orange half-wheel and a mint sprig.",
+            "If the oranges are running sharp, 10 ml simple syrup before the ice."
+          ],
+          table: [],
+          say: [ { line: "Mint is pressed, not shredded, so it stays sweet rather than green and bitter.", draft: true } ],
+          todos: ["Drafted from Kaykay's shopping list (orange juice, sparkling water, fresh mint, oranges). Confirm with Kaykay before training."],
+          ops: { cost: null, prebatch: "no", steps: 5, seconds: 55, complexity: 2, profile: "single" }
+        }
+      ]
+    },
+
+    /* ============ CLASSICS ============ */
+    {
+      id: "classics", title: "Classics", kind: "cards",
+      note: "The drinks you may already know. Without the hangover, but more sophisticated.",
+      drinks: [
+
+        {
+          id: "jalapeno-mule", name: "Spicy Jalapeno Mule", price: null,
+          swatch: { name: "Pale jade fizz", hex: "#86A177" },
+          glass: "Highball", ice: "Crushed", method: "Build",
+          story: "Fresh jalapeno, half a lime, proper ginger beer over crushed ice. The heat arrives first, the ginger finishes it.",
+          tag: "Not a jalapeno fan? Feel free to ask without",
+          build: [
+            { ref: "jalapeno", ml: 0, note: "3 slices, seeds out as standard" },
+            { ref: "lime", ml: 20 },
+            { ref: "simple", ml: 10, note: "Optional" },
+            { ref: "gingerbeer", ml: 200, note: "Three Cents, top" },
+            { ref: "mint", ml: 0, note: "Sprig, garnish" }
+          ],
+          bar: [
+            "Muddle 3 jalapeno slices with the lime and the optional simple syrup.",
+            "Fill with crushed ice.",
+            "Top with 200 ml Three Cents ginger beer.",
+            "Jalapeno wheel and a mint sprig."
+          ],
+          table: [],
+          say: [ { line: "Seeds are out as standard, so it is warm rather than hot. Say the word and we leave them in.", draft: true } ],
+          ops: { cost: null, prebatch: "no", steps: 4, seconds: 55, complexity: 2, profile: "single" }
+        },
+
+        {
+          id: "ocean-nojito", name: "Ocean No-jito", price: null,
+          swatch: { name: "Ocean violet-blue", hex: "#4A66A8" },
+          glass: "Highball", ice: "Crushed", method: "Muddle, bash, build and churn",
+          story: "Mint pressed once with lime and cane sugar, lengthened with soda. The blue is butterfly pea flower; where it reaches the lime it turns violet.",
+          tag: "Want it fruitier? Swap the ocean for a strawberry no-jito",
+          build: [
+            { ref: "lime", ml: 0, note: "4 wedges" },
+            { ref: "simple", ml: 20 },
+            { ref: "mint", ml: 0, note: "8 to 12 leaves, bashed once" },
+            { ref: "peatea", ml: 60 },
+            { ref: "soda", ml: 0, note: "Fill" }
+          ],
+          bar: [
+            "Muddle the lime wedges with the simple syrup in the glass.",
+            "Add the mint and bash once with the muddler. Press, do not shred.",
+            "Fill with crushed ice.",
+            "Pour the pea tea.",
+            "Fill with soda.",
+            "Churn from the bottom with the barspoon until violet-blue runs through the whole glass.",
+            "Cap with crushed ice, slap the mint sprig, in."
+          ],
+          table: [],
+          say: [ { line: "The blue is a flower, not a syrup. Watch it turn violet where it meets the lime.", draft: true } ],
+          ops: { cost: null, prebatch: "base", steps: 6, seconds: 80, complexity: 3, profile: "layered" }
+        },
+
+        {
+          id: "strawberry-nojito", name: "Strawberry No-jito", price: null,
+          swatch: { name: "Crushed-strawberry rose", hex: "#C4707E" },
+          glass: "Highball", ice: "Crushed", method: "Muddle, bash, build and churn",
+          story: "The same build as the ocean, with strawberries muddled in from the start so the fruit runs the whole length of the glass instead of sitting on top.",
+          tag: "The fruitier half of the no-jito pair",
+          build: [
+            { ref: "strawberry", ml: 0, note: "4, muddled" },
+            { ref: "lime", ml: 0, note: "2 wedges" },
+            { ref: "simple", ml: 20 },
+            { ref: "mint", ml: 0, note: "8 to 12 leaves, bashed once" },
+            { ref: "strawpuree", ml: 40 },
+            { ref: "soda", ml: 0, note: "Fill" }
+          ],
+          bar: [
+            "Muddle the strawberries and lime wedges with the simple syrup.",
+            "Add the mint and bash once.",
+            "Fill with crushed ice.",
+            "Add the strawberry puree.",
+            "Fill with soda.",
+            "Churn from the bottom.",
+            "Cap with crushed ice, half a strawberry on the rim."
+          ],
+          table: [],
+          say: [ { line: "Same build as the ocean one, but the fruit goes in at the bottom so it runs all the way through.", draft: true } ],
+          ops: { cost: null, prebatch: "base", steps: 6, seconds: 85, complexity: 3, profile: "single" }
+        },
+
+        {
+          id: "cosmo-nolitan", name: "Cosmo-Nolitan", price: null,
+          swatch: { name: "Cosmopolitan pink", hex: "#C24D66" },
+          glass: "Coupe, served up", ice: "Shaken with ice, none in glass", method: "Shake and fine strain",
+          story: "Dry cranberry against fresh lime, orange juice rounding the middle, a short top of soda to finish. Served up in a chilled coupe.",
+          build: [
+            { ref: "cranberry", ml: 60 },
+            { ref: "lime", ml: 30 },
+            { ref: "orange", ml: 30 },
+            { ref: "soda", ml: 60, note: "Top" }
+          ],
+          bar: [
+            "Chill the coupe.",
+            "Shake cranberry, lime and orange with ice for 12 seconds.",
+            "Fine strain into the chilled coupe.",
+            "Top with 60 ml soda.",
+            "Express an orange peel over the surface."
+          ],
+          table: [],
+          say: [ { line: "Cranberry and lime do the work here, the orange just rounds the middle.", draft: true } ],
+          ops: { cost: null, prebatch: "full", steps: 4, seconds: 60, complexity: 3, profile: "single" }
+        },
+
+        {
+          id: "milano", name: "Milano", price: null,
+          swatch: { name: "Burnt sienna, bitter red", hex: "#B4471C" },
+          glass: "Coppa", ice: "Cubed", method: "Build",
+          story: "Negroni's innocent brother: rooibos and hibiscus brewed strong and dark, topped with Sanbitter and fresh orange. Fruity, bitter, refreshing.",
+          tag: "For the bitter lovers",
+          build: [
+            { ref: "rooibos_hib", ml: 100, note: "Cold, brewed strong" },
+            { ref: "orange", ml: 60, note: "Fresh" },
+            { ref: "sanbitter", ml: 100, note: "Top" }
+          ],
+          bar: [
+            "Pour 100 ml cold rooibos hibiscus tea into the coppa.",
+            "Add 60 ml fresh orange juice.",
+            "Fill with cubed ice.",
+            "Top with 100 ml Sanbitter.",
+            "One gentle stir. Orange half-wheel."
+          ],
+          table: [],
+          say: [ { line: "If you drink Negroni, this is the one. Bitter first, orange behind it.", draft: true } ],
+          ops: { cost: null, prebatch: "base", steps: 4, seconds: 50, complexity: 2, profile: "single" }
+        },
+
+        {
+          id: "amsterdam-sunrise", name: "Amsterdam Sunrise", price: null,
+          swatch: { name: "Sunrise gradient, amber into grenadine red", hex: "#E07B2C" },
+          glass: "Highball", ice: "Cubed", method: "Build and sink",
+          story: "Orange juice over ice, then grenadine poured down the inside of the glass so it sinks and settles at the bottom as the sun. Left alone it holds the gradient; one stir pulls the red up through the amber and the whole glass goes to sunset.",
+          tag: "Stir it when you are ready for sunset",
+          build: [
+            { ref: "orange", ml: 200, note: "Fill" },
+            { ref: "grenadine", ml: 10, note: "Sink, poured down the inside" }
+          ],
+          bar: [
+            "Fill the highball with cubed ice.",
+            "Fill with fresh orange juice.",
+            "Pour 10 ml grenadine down the inside of the glass so it settles at the bottom.",
+            "Do not stir."
+          ],
+          table: [],
+          say: [ { line: "Leave it as it is for the sunrise. When you are ready for sunset, stir it once.", draft: true } ],
+          todos: ["Garnish undecided. Proposal is orange half-wheel plus a cocktail cherry."],
+          ops: { cost: null, prebatch: "full", steps: 3, seconds: 40, complexity: 1, profile: "layered" }
+        },
+
+        {
+          id: "tropical-velvet", name: "Tropical Velvet", price: null,
+          swatch: { name: "Passionfruit gold", hex: "#D8A32E" },
+          glass: "Chilled martini or coupe", ice: "No ice in glass", method: "Shake and fine strain",
+          story: "Passion fruit brings a sharp tropical acidity that cloudy apple rounds without dulling, and vanilla sits underneath holding the two together. Served clean and cold, with coconut cream alongside if you want it silk rather than sharp.",
+          tag: "Add coconut cream for extra silk",
+          build: [
+            { ref: "passionjuice", ml: 40 },
+            { ref: "passionpuree", ml: 20, note: "Real puree" },
+            { ref: "cloudyapple", ml: 30 },
+            { ref: "lime", ml: 20, note: "Fresh" },
+            { ref: "vanilla", ml: 10 },
+            { ref: "coconutcream", ml: 15, note: "Sidecar shot, served alongside" },
+            { ref: "passionfresh", ml: 0, note: "Half, floated" }
+          ],
+          bar: [
+            "Shake passion fruit juice, puree, cloudy apple, lime and vanilla hard with ice for 12 seconds.",
+            "Fine strain into the chilled glass.",
+            "Float half a passion fruit on top.",
+            "Pour 15 ml coconut cream as a sidecar shot and set it alongside."
+          ],
+          table: [],
+          say: [ { line: "The coconut cream comes on the side. Pour it in when you want it silkier, or leave it sharp.", draft: true } ],
+          todos: ["The sidecar, rather than shaking the cream in, is an assumption. Confirm."],
+          ops: { cost: null, prebatch: "full", steps: 4, seconds: 65, complexity: 3, profile: "layered" }
+        },
+
+        {
+          id: "virgin-pina-colada", name: "Virgin Pina Colada", price: null,
+          swatch: { name: "Cloud white", hex: "#E7E0D2" },
+          glass: "Highball or hurricane", ice: "Cubed", method: "Shake and strain",
+          story: "Coconut milk and cream shaken silky against pineapple, a squeeze of lime keeping it honest.",
+          tag: "The soft one, thick and cold",
+          build: [
+            { ref: "coconutmilk", ml: 100 },
+            { ref: "lime", ml: 10, note: "Fresh" },
+            { ref: "pineapple", ml: 60 },
+            { ref: "coconutcream", ml: 40 },
+            { ref: "cherries", ml: 0, note: "1, with a pineapple wedge" }
+          ],
+          bar: [
+            "Shake coconut milk, lime, pineapple juice and coconut cream hard with ice.",
+            "Strain into the glass over cubed ice.",
+            "Pineapple wedge and one cherry."
+          ],
+          table: [],
+          say: [ { line: "It is coconut milk and cream, so it is properly thick. The lime is what stops it going cloying.", draft: true } ],
+          ops: { cost: null, prebatch: "full", steps: 3, seconds: 55, complexity: 2, profile: "single" }
+        },
+
+        {
+          id: "shirley-temple", name: "Shirley Temple", price: null,
+          swatch: { name: "Cherry-lit rose gold", hex: "#C86A72" },
+          glass: "Highball", ice: "Cubed", method: "Build and gentle churn",
+          story: "The one you were given as a child, built properly: grenadine at the bottom, ginger ale poured slowly over it so the colour blushes upward instead of muddying.",
+          tag: "The childhood classic, done properly",
+          build: [
+            { ref: "grenadine", ml: 15 },
+            { ref: "gingerale", ml: 200, note: "Fill, down the barspoon" },
+            { ref: "cherries", ml: 0, note: "2 on a pick, with an orange wheel" }
+          ],
+          bar: [
+            "15 ml grenadine into the glass.",
+            "Fill with cubed ice.",
+            "Fill with roughly 200 ml ginger ale poured down the barspoon.",
+            "One gentle lift so it blushes rather than mixes flat.",
+            "Two cocktail cherries on a pick and an orange wheel."
+          ],
+          table: [],
+          say: [ { line: "One gentle lift only. Stir it hard and you lose the blush.", draft: true } ],
+          todos: ["Drafted from Kaykay's shopping list (ginger ale, grenadine, cocktail cherries, oranges). Confirm with Kaykay before training."],
+          ops: { cost: null, prebatch: "full", steps: 4, seconds: 45, complexity: 1, profile: "layered" }
+        },
+
+        {
+          id: "elderflower-sour", name: "Elderflower Sour", price: null,
+          swatch: { name: "Pale gold under white foam", hex: "#DCC98A" },
+          glass: "Coupe, confirm", ice: "No ice in glass", method: "Dry shake then wet shake, fine strain",
+          credit: "By Nadine and Jade",
+          story: "Elderflower florals pressed against fresh lemon acid, with jasmine tea underneath to keep it dry rather than perfumed. Double shaken to a silky foam, finished with a chili-lime salt rim that catches on the first sip.",
+          tag: "Sweet, sour and a little salty at the edge",
+          build: [
+            { ref: "foamer", ml: 40, note: "Written as 40 ml aquafaba. House standard not yet chosen" },
+            { ref: "lemon", ml: 30, note: "Fresh" },
+            { ref: "jasmine", ml: 30 },
+            { ref: "simple", ml: 20 },
+            { ref: "elderflower", ml: 40 },
+            { ref: "tajin", ml: 0, note: "Rim, with sugar syrup" }
+          ],
+          bar: [
+            "Rim the coupe: sugar syrup, then chili-lime salt.",
+            "Combine the foamer, lemon, jasmine tea, simple syrup and elderflower syrup.",
+            "Dry shake, no ice.",
+            "Add ice, wet shake.",
+            "Fine strain into the rimmed coupe."
+          ],
+          table: [],
+          say: [ { line: "The rim is chili and lime salt. Take the first sip through it, then turn the glass if you would rather not.", draft: true } ],
+          todos: [
+            "Confirm the rim product is Tajin. The recipe card says Tajine.",
+            "Confirm the glass is a coupe.",
+            "Choose ONE house foaming standard: 40 ml aquafaba as written, against Fee Foam drops."
+          ],
+          ops: { cost: null, prebatch: "base", steps: 6, seconds: 95, complexity: 4, profile: "layered" }
+        }
+      ]
+    },
+
+    /* ============ COFFEE ============ */
+    {
+      id: "coffee", title: "Coffee", kind: "rows",
+      note: "Every coffee is available as decaf.",
+      rows: [
+        { name: "Espresso", comp: "30 ml, short and dense" },
+        { name: "Americano", comp: "Espresso lengthened with hot water" },
+        { name: "Cortado", comp: "Espresso to warm milk, 1:1" },
+        { name: "Cappuccino", comp: "Espresso, steamed milk, fine foam, in thirds" },
+        { name: "Flat white", comp: "Double ristretto under silk microfoam" },
+        { name: "Latte", comp: "Milk-forward, roughly 1:4" },
+        { name: "Latte macchiato", comp: "Milk first, espresso poured through" },
+        { name: "Mocha", comp: "Milk or white chocolate" },
+        { name: "Golden latte", comp: "Turmeric" },
+        { name: "Chai latte", comp: "Spiced, steamed" }
+      ],
+      addons: "Oat, almond or coconut milk on any of the above.",
+      bridge: {
+        title: "Not a coffee person?",
+        body: "Matcha carries roughly half the caffeine of an espresso and releases it more slowly. Whisked to order, hot or over ice."
+      }
+    },
+
+    /* ============ MATCHA ============ */
+    {
+      id: "matcha", title: "Matcha", kind: "cards",
+      note: "Uji, Kyoto heritage matcha. Whisked to order, never in advance.",
+      drinks: [
+        {
+          id: "matcha-latte", name: "Matcha Latte", price: null,
+          swatch: { name: "Whisked jade", hex: "#7B9A4E" },
+          glass: "Latte glass or cup", ice: "Hot, or over ice", method: "Whisk and build",
+          story: "Uji, Kyoto heritage matcha whisked to order and poured under steamed milk. Also available as a cappuccino, flat white or cortado.",
+          tag: "Also as cappuccino, flat white or cortado",
+          build: [ { ref: "matcha", ml: 60, note: "Whisked" }, { ref: "milk", ml: 180 } ],
+          bar: [ "Whisk the matcha to order.", "Steam the milk to texture.", "Pour the milk under the matcha." ],
+          table: [], say: [ { line: "It is Uji matcha, whisked when you order it. About half the caffeine of an espresso.", draft: true } ],
+          ops: { cost: null, prebatch: "no", steps: 3, seconds: 70, complexity: 2, profile: "single" }
+        },
+        {
+          id: "matcha-mojito", name: "Eminence Matcha Mojito", price: null,
+          swatch: { name: "Cold green, mint-shot", hex: "#5F8F5A" },
+          glass: "Highball", ice: "Crushed", method: "Build",
+          story: "Ceremonial matcha with mint, lime and apple juice, lengthened with sparkling lemonade and served cold. Green and grassy underneath, sharp on top.",
+          tag: "Can't decide between mocktail and matcha? We got you",
+          build: [
+            { ref: "mint", ml: 0, note: "6 leaves, pressed once" },
+            { ref: "lime", ml: 20 },
+            { ref: "cloudyapple", ml: 80 },
+            { ref: "matcha", ml: 60, note: "Whisked" },
+            { ref: "sparklemon", ml: 100, note: "Top, roughly" }
+          ],
+          bar: [ "Press 6 mint leaves once.", "Lime, then apple juice.", "Fill with crushed ice.", "Add 60 ml whisked matcha.", "Top with roughly 100 ml sparkling lemonade." ],
+          table: [], say: [ { line: "This is the one when you cannot choose. It is a proper matcha, just cold and long.", draft: true } ],
+          ops: { cost: null, prebatch: "base", steps: 5, seconds: 85, complexity: 4, profile: "layered" }
+        },
+        {
+          id: "white-choc-matcha", name: "White Chocolate Matcha", price: null,
+          swatch: { name: "Pale jade over cream", hex: "#BFCE96" },
+          glass: "Latte glass", ice: "Hot or cold", method: "Build",
+          story: "White chocolate sauce under milk, with matcha poured over the top so the first sip is grassy and the last is sweet.",
+          tag: "Hot or cold",
+          build: [ { ref: "whitechoc", ml: 30 }, { ref: "milk", ml: 140 }, { ref: "matcha", ml: 60, note: "On top" } ],
+          bar: [ "White chocolate sauce into the glass.", "Milk, hot or cold.", "Pour 60 ml whisked matcha over the top." ],
+          table: [], say: [ { line: "Sweet at the bottom, green on top. Stir it if you want them to meet.", draft: true } ],
+          ops: { cost: null, prebatch: "no", steps: 3, seconds: 65, complexity: 2, profile: "layered" }
+        },
+        {
+          id: "strawberry-matcha", name: "Iced Strawberry Matcha", price: null,
+          swatch: { name: "Strawberry under jade", hex: "#C9748C" },
+          glass: "Highball", ice: "Cubed", method: "Build",
+          story: "Strawberry and matcha have been long-time lovers: crushed fruit at the bottom, cold milk, matcha poured over the top.",
+          tag: "Three clean layers, stir when you like",
+          build: [ { ref: "strawcrush", ml: 60 }, { ref: "milk", ml: 140 }, { ref: "matcha", ml: 60, note: "Over the top" } ],
+          bar: [ "Crushed strawberry into the bottom of the glass.", "Fill with cubed ice.", "Cold milk.", "Pour 60 ml whisked matcha over the top." ],
+          table: [], say: [ { line: "Three layers. Strawberry, milk, matcha. Stir it whenever you are ready.", draft: true } ],
+          ops: { cost: null, prebatch: "base", steps: 4, seconds: 60, complexity: 2, profile: "layered" }
+        }
+      ],
+      altPanel: {
+        title: "Not a matcha enthusiast? Maybe the next ones will convince you",
+        note: "Any of the above on a different base.",
+        items: [
+          { name: "Taro", cjk: "芋頭", desc: "Creamy, soft, violet.", todo: "TODO: vendor" },
+          { name: "Black sesame", cjk: "黑芝麻", desc: "Toasted, nutty, thicker on the tongue.", todo: "TODO: vendor" },
+          { name: "Hojicha", cjk: "焙茶", desc: "Roasted green tea, caramel edges, low caffeine.", todo: "TODO: vendor" }
+        ]
+      }
+    },
+
+    /* ============ LEMONADES ============ */
+    {
+      id: "lemonades", title: "Lemonades", kind: "cards",
+      note: "Sparkling or still, your choice.",
+      drinks: [
+        {
+          id: "grandmas-lemonade", name: "Grandma's Lemonade", price: null,
+          swatch: { name: "Lemon peel yellow", hex: "#D9BC4E" },
+          glass: "Highball", ice: "Cubed", method: "Build",
+          story: "The syrup is pressed from lemon peels and sugar before any juice goes in, so the citrus oils carry the flavour: sharper nose, rounder taste.",
+          tag: "Sparkling or still",
+          build: [ { ref: "oleo", ml: 40 }, { ref: "lemon", ml: 30 }, { ref: "soda", ml: 180, note: "Top, sparkling or still" } ],
+          bar: [ "Oleo saccharum syrup into the glass.", "Fresh lemon juice.", "Fill with cubed ice.", "Top with sparkling or still water." ],
+          table: [], say: [ { line: "The syrup is made from the peels, not the juice. That is where the smell comes from.", draft: true } ],
+          ops: { cost: null, prebatch: "full", steps: 3, seconds: 35, complexity: 1, profile: "single" }
+        },
+        {
+          id: "lavender-lychee", name: "Lavender Lychee Lemongrass", price: null,
+          swatch: { name: "Lavender over pale lychee", hex: "#A98FC0" },
+          glass: "Highball", ice: "Cubed", method: "Build",
+          story: "Lavender florals over lychee sweetness, with lemongrass underneath for a green, citric edge.",
+          tag: "Sparkling or still",
+          build: [ { ref: "lavender", ml: 20 }, { ref: "lychee", ml: 50 }, { ref: "lemongrass", ml: 10 }, { ref: "lemon", ml: 20 }, { ref: "soda", ml: 160, note: "Top" } ],
+          bar: [ "Lavender syrup, lychee juice, lemongrass syrup, lemon.", "Fill with cubed ice.", "Top with sparkling or still water.", "Stir once from the bottom." ],
+          table: [], say: [ { line: "Lavender can go soapy if you overdo it. This one sits under the lychee on purpose.", draft: true } ],
+          ops: { cost: null, prebatch: "full", steps: 3, seconds: 40, complexity: 2, profile: "single" }
+        },
+        {
+          id: "peach-jasmine", name: "Peach Jasmine Tea Lemonade", price: null,
+          swatch: { name: "Jasmine amber, peach blush", hex: "#DFA274" },
+          glass: "Highball", ice: "Cubed", method: "Build",
+          story: "Freshly brewed jasmine tea, real peach syrup, squeezed lemon. Three things, nothing else.",
+          tag: "Sparkling or still",
+          build: [ { ref: "jasmine", ml: 140, note: "Cold-brewed, 12 g per litre, 12 hours" }, { ref: "peachsyrup", ml: 30 }, { ref: "lemon", ml: 20 } ],
+          bar: [ "Cold-brewed jasmine tea into the glass.", "Peach syrup, then lemon.", "Fill with cubed ice.", "Stir once." ],
+          table: [], say: [ { line: "The tea is cold-brewed overnight, so it is floral without going bitter.", draft: true } ],
+          ops: { cost: null, prebatch: "full", steps: 3, seconds: 35, complexity: 1, profile: "single" }
+        }
+      ]
+    },
+
+    /* ============ BOTTLED ============ */
+    {
+      id: "bottled", title: "Bottled and Chilled", kind: "rows",
+      rows: [
+        { name: "Fritz-Kola", comp: "" },
+        { name: "Fritz-Limo", comp: "Lemon" },
+        { name: "Fritz-Limo", comp: "Apple, cherry, elderberry" },
+        { name: "Three Cents", comp: "Tonic" },
+        { name: "Three Cents", comp: "Aegean tonic" },
+        { name: "Three Cents", comp: "Ginger beer" },
+        { name: "Three Cents", comp: "Pink grapefruit soda" },
+        { name: "Living Things", comp: "Watermelon and lime" },
+        { name: "Living Things", comp: "Peach and blood orange" },
+        { name: "Passion Mama", comp: "Orange passionfruit" },
+        { name: "Moody Hydration", comp: "Peach mango" }
+      ],
+      sub: {
+        title: "Fermented *",
+        rows: [
+          { name: "Cult-cha kombucha", comp: "Hibiscus and citrus" },
+          { name: "Cult-cha kombucha", comp: "Apple and ginger" },
+          { name: "Kefir del Sol", comp: "Grapefruit lime" },
+          { name: "Kefir del Sol", comp: "Pineapple hibiscus" },
+          { name: "Kefir del Sol", comp: "Orange lemon" },
+          { name: "ISH Spritz", comp: "" }
+        ]
+      },
+      water: [
+        { name: "Water", comp: "500 ml" },
+        { name: "Water", comp: "1 L" }
+      ]
+    }
+  ]
+};
+
+/* ==========================================================================
+   Below here is machinery. Editing the menu does not require touching it.
+   ========================================================================== */
+
+var ING = MENU_DATA.ingredients;
+var $ = function (sel) { return document.querySelector(sel); };
+var esc = function (s) {
+  return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+};
+var money = function (n) { return n.toFixed(2); };
+
+var ALL_DRINKS = [];
+MENU_DATA.sections.forEach(function (sec) {
+  (sec.drinks || []).forEach(function (d) { d._section = sec.title; ALL_DRINKS.push(d); });
+});
+var byId = {};
+ALL_DRINKS.forEach(function (d) { byId[d.id] = d; });
+
+/* Scalability Score = 5 minus 0.5 x to-order steps, plus 1 if fully
+   prebatchable. Clamped to the range 1 to 5. */
+function scalability(ops) {
+  if (!ops) return null;
+  return Math.max(1, Math.min(5, 5 - 0.5 * ops.steps + (ops.prebatch === "full" ? 1 : 0)));
+}
+/* Returns null whenever either half of the sum is still missing, which is what
+   keeps the owner table honest while prices are undecided. */
+function gp(ops, price) {
+  if (!ops || ops.cost == null || price == null) return null;
+  return ((price - ops.cost) / price) * 100;
+}
+
+/* ---------------- view state ---------------- */
+
+var VIEW = "guest";
+try { VIEW = localStorage.getItem("quatro-view") || "guest"; } catch (e) { VIEW = "guest"; }
+if (["guest", "staff", "owner"].indexOf(VIEW) === -1) VIEW = "guest";
+
+function setView(v) {
+  VIEW = v;
+  document.body.className = "view-" + v;
+  Array.prototype.forEach.call(document.querySelectorAll(".views button"), function (b) {
+    b.setAttribute("aria-pressed", String(b.dataset.view === v));
+  });
+  try { localStorage.setItem("quatro-view", v); } catch (e) {}
+  if (v === "owner") renderOwner();
+  if (sheetDrink) openSheet(sheetDrink.id, activeTab);
+}
+
+document.querySelector(".views").addEventListener("click", function (e) {
+  var b = e.target.closest("button[data-view]");
+  if (b) setView(b.dataset.view);
+});
+
+/* ---------------- guest and staff rendering ---------------- */
+
+function todoBadge(n) { return '<span class="todo">' + (n > 1 ? n + " todo" : "todo") + "</span>"; }
+
+function cardHTML(d) {
+  var n = (d.todos || []).length;
+  return '' +
+    '<button class="card" data-drink="' + esc(d.id) + '" type="button">' +
+      '<span class="card-top">' +
+        '<span class="swatch" style="background:' + esc(d.swatch.hex) + '"></span>' +
+        '<span class="card-name">' + esc(d.name) + (n ? todoBadge(n) : "") + "</span>" +
+        /* Price slot is omitted entirely while price is null, so the row reads
+           as a finished name rather than a name with a gap after it. */
+        (d.price != null ? '<span class="card-price">' + money(d.price) + "</span>" : "") +
+      "</span>" +
+      '<span class="card-desc">' + esc(d.story) + "</span>" +
+      (d.tag ? '<span class="card-tag">' + esc(d.tag) + "</span>" : "") +
+    "</button>";
+}
+
+function rowHTML(r) {
+  return '<div class="row">' +
+    '<span class="row-name">' + esc(r.name) + "</span>" +
+    '<span class="row-comp">' + esc(r.comp || "") + "</span>" +
+    (r.price != null ? '<span class="row-price">' + money(r.price) + "</span>" : "") +
+  "</div>";
+}
+
+function sectionHTML(sec) {
+  var h = '<section class="section" id="sec-' + esc(sec.id) + '">' +
+    '<div class="section-head"><div class="smallcaps">Quatro</div><h2>' + esc(sec.title) + "</h2>" +
+    (sec.note ? '<p class="section-note">' + esc(sec.note) + "</p>" : "") + "</div>";
+
+  if (sec.kind === "cards") {
+    h += '<div class="cards">' + sec.drinks.map(cardHTML).join("") + "</div>";
+  } else {
+    h += '<div class="rows">' + sec.rows.map(rowHTML).join("") + "</div>";
+    if (sec.addons) h += '<p class="section-note">' + esc(sec.addons) + "</p>";
+    if (sec.sub) {
+      h += '<div class="section-head" style="margin-top:24px"><h2 style="font-size:20px">' + esc(sec.sub.title) + "</h2></div>";
+      h += '<div class="rows">' + sec.sub.rows.map(rowHTML).join("") + "</div>";
+    }
+    if (sec.water) h += '<div class="rows">' + sec.water.map(rowHTML).join("") + "</div>";
+  }
+
+  if (sec.bridge) h += '<div class="panel"><h3>' + esc(sec.bridge.title) + "</h3><p>" + esc(sec.bridge.body) + "</p></div>";
+  if (sec.altPanel) {
+    h += '<div class="panel"><h3>' + esc(sec.altPanel.title) + "</h3><p>" + esc(sec.altPanel.note) + '</p><ul class="altlist">' +
+      sec.altPanel.items.map(function (it) {
+        return "<li><b>" + esc(it.name) + "</b> " + esc(it.cjk) + ". " + esc(it.desc) +
+          (it.todo ? '<span class="todo">' + esc(it.todo) + "</span>" : "") + "</li>";
+      }).join("") + "</ul></div>";
+  }
+  return h + "</section>";
+}
+
+$("#guest-root").innerHTML = MENU_DATA.sections.map(sectionHTML).join("");
+
+$("#todo-root").innerHTML =
+  '<section class="todo-panel"><h2>Open items</h2><ol>' +
+  OPEN_ITEMS.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") +
+  "</ol></section>";
+
+/* ---------------- detail sheet ---------------- */
+
+var sheet = $("#sheet"), scrim = $("#scrim"), drawer = $("#drawer");
+var sheetDrink = null, activeTab = "story", quizOn = false, lastFocus = null;
+/* Hiding is deferred so the exit transition can play. Hold the timers so a
+   fast reopen can cancel them, otherwise a stale timeout hides a sheet that
+   has just been opened again. */
+var sheetTimer = null, drawerTimer = null;
+
+var TABS = [
+  { id: "story",   label: "The Story" },
+  { id: "build",   label: "The Build" },
+  { id: "service", label: "Service" },
+  { id: "say",     label: "Say This" }
+];
+function tabsFor() { return VIEW === "guest" ? TABS.slice(0, 1) : TABS; }
+
+function ingRow(item) {
+  var ing = ING[item.ref];
+  if (!ing) return "";
+  return '<li><button type="button" data-ing="' + esc(item.ref) + '">' +
+      '<span class="ml">' + esc(item.ml ? item.ml + " ml" : "") + "</span>" +
+      '<span class="nm">' + esc(ing.name) +
+        (item.note ? "<small>" + esc(item.note) + "</small>" : "") +
+        (ing.todo ? '<span class="todo">todo</span>' : "") +
+      "</span><span class=\"chev\">&rsaquo;</span></button></li>";
+}
+
+function todoBlock(d) {
+  var items = (d.todos || []);
+  if (!items.length) return "";
+  return '<div class="todo-block"><strong>Open items</strong><ul>' +
+    items.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") + "</ul></div>";
+}
+
+function tabBody(d, tab) {
+  if (tab === "story") {
+    var h = '<p class="story">' + esc(d.story) + "</p>";
+    if (d.credit) h += '<p class="sheet-meta" style="margin-top:16px">' + esc(d.credit) + "</p>";
+    if (d.tag) h += '<p style="margin-top:20px"><span class="card-tag">' + esc(d.tag) + "</span></p>";
+    return h + todoBlock(d);
+  }
+
+  if (tab === "build") {
+    var quiz = '<button class="quiz-btn" id="quiz-toggle" type="button" aria-pressed="' + (quizOn ? "true" : "false") + '">' +
+      (quizOn ? "Show the build" : "Quiz me") + "</button>";
+    var prompt = quizOn
+      ? '<div class="quiz-prompt"><strong>' + esc(d.name) + "</strong><span>" + esc(d.glass) + ". Tap to reveal.</span></div>"
+      : "";
+    var spec = '<dl class="spec">' +
+      "<div><dt>Glass</dt><dd>" + esc(d.glass) + "</dd></div>" +
+      "<div><dt>Ice</dt><dd>" + esc(d.ice) + "</dd></div>" +
+      "<div><dt>Method</dt><dd>" + esc(d.method) + "</dd></div></dl>";
+    var list = '<ul class="ing' + (quizOn ? " quiz-hidden" : "") + '">' + d.build.map(ingRow).join("") + "</ul>";
+    return quiz + prompt + (quizOn ? "" : spec) + list + todoBlock(d);
+  }
+
+  if (tab === "service") {
+    var h2 = '<div class="substack"><h4>At the bar</h4><ol class="steps">' +
+      d.bar.map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ol></div>";
+    if (d.table && d.table.length) {
+      h2 += '<div class="substack"><h4>At the table</h4><ol class="steps">' +
+        d.table.map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ol></div>";
+    }
+    return h2 + '<div class="substack"><h4>Between drinks, 30 seconds</h4><ol class="steps">' +
+      RESET.map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ol></div>";
+  }
+
+  return d.say.map(function (s) {
+    return '<blockquote class="say">' + esc(s.line) +
+      (s.cue ? '<span class="cue">' + esc(s.cue) + "</span>" : "") +
+      (s.draft ? '<span class="todo">draft, confirm wording</span>' : "") + "</blockquote>";
+  }).join("") + todoBlock(d);
+}
+
+function openSheet(id, tab) {
+  var d = byId[id];
+  if (!d) return;
+  if (sheetDrink !== d) quizOn = false;
+  sheetDrink = d;
+  var allowed = tabsFor().map(function (t) { return t.id; });
+  activeTab = allowed.indexOf(tab) === -1 ? "story" : tab;
+
+  $("#sheet-swatch").style.background = d.swatch.hex;
+  $("#sheet-name").textContent = d.name;
+  $("#sheet-meta").textContent = [d.glass, d.ice, d.method].filter(Boolean).join("  /  ");
+  $("#sheet-colour").textContent = VIEW === "guest" ? "" : d.swatch.name;
+
+  $("#sheet-tabs").innerHTML = tabsFor().map(function (t) {
+    return '<button type="button" role="tab" data-tab="' + t.id + '" aria-selected="' + (t.id === activeTab) + '">' + t.label + "</button>";
+  }).join("");
+  $("#sheet-body").innerHTML = tabBody(d, activeTab);
+  $("#sheet-body").scrollTop = 0;
+
+  if (sheetTimer) { clearTimeout(sheetTimer); sheetTimer = null; }
+  sheet.hidden = false;
+  requestAnimationFrame(function () { sheet.classList.add("open"); scrim.classList.add("open"); });
+  $("#sheet-close").focus();
+}
+
+function closeSheet() {
+  sheet.classList.remove("open");
+  scrim.classList.remove("open");
+  closeDrawer();
+  if (sheetTimer) clearTimeout(sheetTimer);
+  sheetTimer = setTimeout(function () { sheet.hidden = true; sheetTimer = null; }, 220);
+  sheetDrink = null; quizOn = false;
+  if (lastFocus && lastFocus.focus) lastFocus.focus();
+}
+
+document.addEventListener("click", function (e) {
+  var card = e.target.closest("[data-drink]");
+  if (card) { lastFocus = card; openSheet(card.dataset.drink, "story"); return; }
+
+  var tab = e.target.closest("[data-tab]");
+  if (tab && sheetDrink) {
+    activeTab = tab.dataset.tab;
+    $("#sheet-tabs").querySelectorAll("button").forEach(function (b) {
+      b.setAttribute("aria-selected", String(b.dataset.tab === activeTab));
+    });
+    $("#sheet-body").innerHTML = tabBody(sheetDrink, activeTab);
+    $("#sheet-body").scrollTop = 0;
+    return;
+  }
+
+  if (e.target.closest("#quiz-toggle") && sheetDrink) {
+    quizOn = !quizOn; $("#sheet-body").innerHTML = tabBody(sheetDrink, "build"); return;
+  }
+  if (e.target.closest(".quiz-prompt") && quizOn && sheetDrink) {
+    quizOn = false; $("#sheet-body").innerHTML = tabBody(sheetDrink, "build"); return;
+  }
+
+  var ingBtn = e.target.closest("[data-ing]");
+  if (ingBtn) { openDrawer(ingBtn.dataset.ing); return; }
+
+  if (e.target.id === "sheet-close" || e.target.id === "scrim") { closeSheet(); }
+});
+
+document.addEventListener("keydown", function (e) {
+  if (e.key !== "Escape") return;
+  /* Read the class, not the hidden attribute: hidden is set on a timeout so
+     the exit transition can play, and a quick second Escape would otherwise
+     close the drawer twice and leave the sheet open. */
+  if (drawer.classList.contains("open")) closeDrawer();
+  else if (sheet.classList.contains("open")) closeSheet();
+});
+
+/* ---------------- inventory drawer ---------------- */
+
+function openDrawer(key) {
+  var ing = ING[key];
+  if (!ing) return;
+  $("#drawer-name").textContent = ing.name;
+  $("#drawer-body").innerHTML =
+    "<dt>Pack</dt><dd>" + esc(ing.pack) + "</dd>" +
+    /* No cost line at all until a real figure exists. */
+    (ing.cost != null ? "<dt>Cost</dt><dd>EUR " + money(ing.cost) + " per pack</dd>" : "") +
+    "<dt>Prebatch</dt><dd>" + esc(ing.prebatch) + "</dd>" +
+    "<dt>Supplier</dt><dd>" + esc(ing.supplier) + (ing.todo ? '<span class="todo">open</span>' : "") + "</dd>";
+  if (drawerTimer) { clearTimeout(drawerTimer); drawerTimer = null; }
+  drawer.hidden = false;
+  requestAnimationFrame(function () { drawer.classList.add("open"); });
+}
+function closeDrawer() {
+  drawer.classList.remove("open");
+  if (drawerTimer) clearTimeout(drawerTimer);
+  drawerTimer = setTimeout(function () { drawer.hidden = true; drawerTimer = null; }, 200);
+}
+drawer.addEventListener("click", function (e) { if (e.target === drawer) closeDrawer(); });
+
+/* ---------------- owner view ---------------- */
+
+var COLS = [
+  { key: "name",       label: "Drink" },
+  { key: "_section",   label: "Category" },
+  { key: "cost",       label: "Est. cost" },
+  { key: "gp",         label: "GP%" },
+  { key: "prebatch",   label: "Prebatch" },
+  { key: "steps",      label: "To-order steps" },
+  { key: "complexity", label: "Complexity" },
+  { key: "profile",    label: "Profile" },
+  { key: "scal",       label: "Scalability" }
+];
+
+var FILTERS = {
+  all:     { label: "All drinks",                fn: function () { return true; } },
+  full:    { label: "Fully prebatchable",        fn: function (r) { return r.prebatch === "full"; } },
+  fast:    { label: "Under 60 seconds to serve", fn: function (r) { return r.seconds < 60; } },
+  fresh:   { label: "Needs to-order fresh prep", fn: function (r) { return r.prebatch === "no"; } },
+  layered: { label: "Layered theatre drinks",    fn: function (r) { return r.profile === "layered"; } }
+};
+
+var ownerSort = { key: "scal", dir: -1 };
+var ownerFilter = "all";
+var PREBATCH_LABEL = { full: "Fully", base: "Base only", no: "No" };
+
+function ownerRows() {
+  return ALL_DRINKS.filter(function (d) { return d.ops; }).map(function (d) {
+    return {
+      name: d.name, _section: d._section, price: d.price,
+      cost: d.ops.cost, gp: gp(d.ops, d.price),
+      prebatch: d.ops.prebatch, steps: d.ops.steps, seconds: d.ops.seconds,
+      complexity: d.ops.complexity, profile: d.ops.profile, scal: scalability(d.ops)
+    };
+  });
+}
+
+function renderOwner() {
+  var rows = ownerRows().filter(FILTERS[ownerFilter].fn);
+  rows.sort(function (a, b) {
+    var k = ownerSort.key, av = a[k], bv = b[k];
+    /* Nulls (unpriced rows) always sort to the bottom rather than winning. */
+    if (av == null && bv == null) return 0;
+    if (av == null) return 1;
+    if (bv == null) return -1;
+    if (typeof av === "string") return av.localeCompare(bv) * ownerSort.dir;
+    return (av - bv) * ownerSort.dir;
+  });
+
+  var priced = rows.filter(function (r) { return r.cost != null && r.price != null; }).length;
+
+  var head = COLS.map(function (c) {
+    var sorted = ownerSort.key === c.key;
+    return '<th data-col="' + c.key + '" aria-sort="' +
+      (sorted ? (ownerSort.dir === 1 ? "ascending" : "descending") : "none") + '">' + c.label +
+      (sorted ? ' <span class="arrow">' + (ownerSort.dir === 1 ? "&uarr;" : "&darr;") + "</span>" : "") + "</th>";
+  }).join("");
+
+  var body = rows.map(function (r) {
+    var pct = ((r.scal - 1) / 4) * 100;
+    return "<tr>" +
+      "<td>" + esc(r.name) + "</td>" +
+      "<td>" + esc(r._section) + "</td>" +
+      (r.cost != null ? '<td class="num">' + money(r.cost) + "</td>" : '<td class="tbd">TBD</td>') +
+      (r.gp != null ? '<td class="num">' + r.gp.toFixed(1) + "%</td>" : '<td class="tbd">TBD</td>') +
+      '<td><span class="pill ' + r.prebatch + '">' + PREBATCH_LABEL[r.prebatch] + "</span></td>" +
+      '<td class="num">' + r.steps + "</td>" +
+      '<td class="num">' + r.complexity + "</td>" +
+      "<td>" + (r.profile === "layered" ? "Layered" : "Single flavour") + "</td>" +
+      '<td><span class="bar"><span class="bar-track"><span class="bar-fill" style="width:' +
+        pct.toFixed(0) + '%"></span></span>' + r.scal.toFixed(1) + "</span></td></tr>";
+  }).join("");
+
+  $("#owner-root").innerHTML =
+    '<section class="section" style="margin-top:24px">' +
+      '<div class="section-head"><div class="smallcaps">Operations</div><h2>Economies of scale</h2>' +
+      '<p class="section-note">Where the minutes go. Cost and GP stay TBD until prices and pack costs are agreed, then they fill in on their own.</p></div>' +
+      '<div class="owner-controls"><div class="field"><label for="owner-filter">Filter</label>' +
+      '<select id="owner-filter">' +
+        Object.keys(FILTERS).map(function (k) {
+          return '<option value="' + k + '"' + (k === ownerFilter ? " selected" : "") + ">" + FILTERS[k].label + "</option>";
+        }).join("") +
+      "</select></div></div>" +
+      '<p class="owner-summary">' + rows.length + " drink" + (rows.length === 1 ? "" : "s") + " shown. " +
+        (priced === 0
+          ? "None are costed yet: fill price and ops.cost in MENU_DATA and the cost and GP columns unlock."
+          : priced + " of them are costed.") + "</p>" +
+      '<div class="tablewrap"><table><thead><tr>' + head + "</tr></thead><tbody>" + body + "</tbody></table></div>" +
+      '<p class="legend"><b>Scalability Score</b> = 5 minus 0.5 x to-order steps, plus 1 if fully prebatchable, clamped to 1 through 5. ' +
+      "A high score means the drink survives a full room. A low score means it needs a person standing still.</p></section>";
+
+  $("#owner-filter").addEventListener("change", function (e) { ownerFilter = e.target.value; renderOwner(); });
+  $("#owner-root").querySelectorAll("th[data-col]").forEach(function (th) {
+    th.addEventListener("click", function () {
+      var k = th.dataset.col;
+      if (ownerSort.key === k) ownerSort.dir *= -1;
+      else { ownerSort.key = k; ownerSort.dir = (k === "name" || k === "_section" || k === "prebatch" || k === "profile") ? 1 : -1; }
+      renderOwner();
+    });
+  });
+}
+
+setView(VIEW);
+</script>
+</body>
+</html>
