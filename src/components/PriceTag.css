@@ -1,0 +1,41 @@
+.ci-price {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--ci-space-3xs);
+  white-space: nowrap;
+}
+
+.ci-price__amount {
+  font-family: var(--ci-font-display);
+  font-weight: var(--ci-weight-medium);
+  line-height: var(--ci-leading-tight);
+  font-variant-numeric: lining-nums tabular-nums;
+  color: var(--ci-ink);
+}
+
+.ci-price__currency {
+  margin-inline-end: 0.1em;
+  font-size: 0.8em;
+  color: var(--ci-ink-muted);
+}
+
+.ci-price__sep {
+  color: var(--ci-ink-subtle);
+}
+
+.ci-price__note {
+  font-family: var(--ci-font-text);
+  font-size: var(--ci-text-2xs);
+  letter-spacing: var(--ci-tracking-wide);
+  text-transform: uppercase;
+  color: var(--ci-ink-subtle);
+}
+
+.ci-price--sm .ci-price__amount { font-size: var(--ci-text-md); }
+.ci-price--md .ci-price__amount { font-size: var(--ci-text-lg); }
+.ci-price--lg .ci-price__amount { font-size: var(--ci-text-xl); }
+
+.ci-price--muted .ci-price__amount { color: var(--ci-ink-muted); }
+.ci-price--brass .ci-price__amount { color: var(--ci-brass-deep); }
+.ci-price--brass .ci-price__currency { color: var(--ci-brass); }

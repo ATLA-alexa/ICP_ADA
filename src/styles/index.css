@@ -1,0 +1,28 @@
+/* The single stylesheet consumers import:
+ *
+ *   import '@car-ibiza/ui/styles.css';
+ *
+ * Order matters — fonts and tokens must land before anything that uses them. */
+
+@import './fonts.css';
+@import '../tokens/tokens.css';
+@import './base.css';
+
+@import '../components/ThemeProvider.css';
+@import '../components/Stack.css';
+@import '../components/Heading.css';
+@import '../components/Text.css';
+@import '../components/Eyebrow.css';
+@import '../components/Ornament.css';
+@import '../components/Divider.css';
+@import '../components/Wordmark.css';
+@import '../components/Card.css';
+@import '../components/Button.css';
+@import '../components/Badge.css';
+@import '../components/Callout.css';
+@import '../components/PriceTag.css';
+@import '../components/MenuItem.css';
+@import '../components/MenuSection.css';
+@import '../components/MenuHeader.css';
+@import '../components/OptionRow.css';
+@import '../components/DrinkCard.css';

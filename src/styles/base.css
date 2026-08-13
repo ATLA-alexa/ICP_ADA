@@ -1,0 +1,49 @@
+/* Baseline applied to any element inside the design system.
+ *
+ * Scoped to .ci-root (set by <ThemeProvider>) plus a bare :where() fallback on
+ * the components themselves, so dropping a single component into a host page
+ * still inherits sane type without the design system seizing control of the
+ * host's global styles. */
+
+.ci-root {
+  background-color: var(--ci-canvas);
+  color: var(--ci-ink);
+  font-family: var(--ci-font-text);
+  font-size: var(--ci-text-md);
+  line-height: var(--ci-leading-normal);
+  font-weight: var(--ci-weight-regular);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Every component gets border-box without touching the host page's reset. */
+[class^='ci-'],
+[class*=' ci-'] {
+  box-sizing: border-box;
+}
+
+[class^='ci-'] *,
+[class*=' ci-'] * {
+  box-sizing: border-box;
+}
+
+/* A single visible focus treatment across the system. Brass, offset, never
+ * removed — the menu is read in a bright room and often on a tablet. */
+:where([class^='ci-'], [class*=' ci-']) :focus-visible,
+:where([class^='ci-'], [class*=' ci-']):focus-visible {
+  outline: 2px solid var(--ci-focus);
+  outline-offset: 2px;
+  border-radius: var(--ci-radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [class^='ci-'],
+  [class*=' ci-'],
+  [class^='ci-'] *,
+  [class*=' ci-'] * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

@@ -1,0 +1,46 @@
+.ci-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-sm);
+  font-family: var(--ci-font-text);
+  font-size: var(--ci-text-2xs);
+  font-weight: var(--ci-weight-semibold);
+  letter-spacing: var(--ci-tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--ci-brass-deep);
+}
+
+.ci-eyebrow__label {
+  flex: 0 0 auto;
+}
+
+/* The rule fills whatever space the label leaves. */
+.ci-eyebrow--rule::after {
+  content: '';
+  flex: 1 1 auto;
+  height: 1px;
+  background-color: currentColor;
+  opacity: 0.35;
+}
+
+.ci-eyebrow--align-center {
+  justify-content: center;
+  text-align: center;
+}
+
+.ci-eyebrow--align-center.ci-eyebrow--rule::before {
+  content: '';
+  flex: 1 1 auto;
+  height: 1px;
+  background-color: currentColor;
+  opacity: 0.35;
+}
+
+.ci-eyebrow--default { color: var(--ci-ink); }
+.ci-eyebrow--muted   { color: var(--ci-ink-muted); }
+.ci-eyebrow--brass   { color: var(--ci-brass-deep); }
+.ci-eyebrow--clay    { color: var(--ci-clay); }
+.ci-eyebrow--sage    { color: var(--ci-sage); }
+.ci-eyebrow--sun     { color: var(--ci-sun); }
+.ci-eyebrow--rose    { color: var(--ci-rose); }
+.ci-eyebrow--sea     { color: var(--ci-sea); }

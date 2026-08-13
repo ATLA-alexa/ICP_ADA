@@ -1,0 +1,183 @@
+/* ============================================================================
+ * Car-Ibiza design tokens
+ *
+ * The brand rule this palette encodes: the room is a calm canvas, the drinks
+ * are the paint. Surfaces stay warm and quiet (limestone, plaster, sand), ink
+ * is a warm near-black rather than pure black, and brass carries the premium
+ * note. The five accents are the only saturated colour in the system and are
+ * meant to be used one at a time, at small size — a section rule, a drink
+ * marker, a tag. Nothing here is "sunset orange at full volume": think sunset,
+ * not rave.
+ *
+ * Every token is a CSS custom property under the --ci- prefix, defined on
+ * :root. There is no JS theme object — styling is CSS, so tokens work in any
+ * consumer whether or not it renders our React components.
+ * ========================================================================= */
+
+:root {
+  /* --- Canvas & surfaces ------------------------------------------------ */
+  /* Warm limestone plaster. --ci-canvas is the page; surfaces sit on it. */
+  --ci-canvas: #fbf8f2;
+  --ci-surface: #ffffff;
+  --ci-surface-raised: #fffdf9;
+  --ci-surface-sunk: #f4eee4;
+  --ci-surface-inverse: #2b2721;
+
+  /* --- Ink -------------------------------------------------------------- */
+  /* Warm near-black; pure #000 reads cold against the plaster canvas. */
+  --ci-ink: #2b2721;
+  --ci-ink-muted: #6b6257;
+  --ci-ink-subtle: #9a9084;
+  --ci-ink-inverse: #fbf8f2;
+
+  /* --- Line ------------------------------------------------------------- */
+  --ci-line: #e6dccc;
+  --ci-line-strong: #d3c4ac;
+  --ci-line-inverse: #4a443b;
+
+  /* --- Brass -------------------------------------------------------------
+   * The premium accent. Muted antique brass, not yellow gold — it should read
+   * as metal catching low light, and it is the one colour allowed to appear
+   * on every surface without competing with the drinks. */
+  --ci-brass: #b69154;
+  --ci-brass-soft: #d9c094;
+  --ci-brass-tint: #f5eddc;
+  --ci-brass-deep: #8c6d3a;
+
+  /* --- The paint ---------------------------------------------------------
+   * Five desaturated accents, each tied to a menu family. Used as markers and
+   * rules, never as large fills. Each has a -tint for quiet backgrounds. */
+  --ci-clay: #a9673f;          /* barista — coffee, roast          */
+  --ci-clay-tint: #f4e7de;
+  --ci-sage: #7f9068;          /* matcha, tea                      */
+  --ci-sage-tint: #eaeee3;
+  --ci-sun: #d9a441;           /* lemonades                        */
+  --ci-sun-tint: #faf0da;
+  --ci-rose: #c08d86;          /* tea-monades                      */
+  --ci-rose-tint: #f7e9e7;
+  --ci-sea: #6f93a6;           /* mocktails                        */
+  --ci-sea-tint: #e6eef2;
+
+  /* --- Status ------------------------------------------------------------ */
+  --ci-danger: #a6412f;
+  --ci-danger-tint: #f7e5e1;
+  --ci-focus: #8c6d3a;
+
+  /* --- Typography --------------------------------------------------------
+   * Cormorant Garamond carries the voice (headings, drink names, prices).
+   * Inter carries everything that has to be read fast at small size. */
+  --ci-font-display: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
+  --ci-font-text: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+
+  /* Modular scale, 1.25 ratio, rounded to whole px. */
+  --ci-text-2xs: 0.6875rem;   /* 11px — eyebrows, fine print       */
+  --ci-text-xs: 0.75rem;      /* 12px                              */
+  --ci-text-sm: 0.875rem;     /* 14px                              */
+  --ci-text-md: 1rem;         /* 16px — body                       */
+  --ci-text-lg: 1.25rem;      /* 20px                              */
+  --ci-text-xl: 1.5rem;       /* 24px                              */
+  --ci-text-2xl: 2rem;        /* 32px                              */
+  --ci-text-3xl: 2.75rem;     /* 44px                              */
+  --ci-text-4xl: 3.75rem;     /* 60px — menu covers                */
+
+  --ci-leading-tight: 1.15;
+  --ci-leading-snug: 1.35;
+  --ci-leading-normal: 1.6;
+
+  --ci-weight-regular: 400;
+  --ci-weight-medium: 500;
+  --ci-weight-semibold: 600;
+
+  /* Generous tracking is what makes small caps read as "menu" not "label". */
+  --ci-tracking-eyebrow: 0.18em;
+  --ci-tracking-wide: 0.06em;
+  --ci-tracking-normal: 0;
+  --ci-tracking-display: -0.01em;
+
+  /* --- Space -------------------------------------------------------------
+   * 4px base. Menus need generous vertical rhythm — the whitespace is the
+   * "calm" in calm canvas, so the upper end of the scale is roomy. */
+  --ci-space-3xs: 0.125rem;   /* 2px  */
+  --ci-space-2xs: 0.25rem;    /* 4px  */
+  --ci-space-xs: 0.5rem;      /* 8px  */
+  --ci-space-sm: 0.75rem;     /* 12px */
+  --ci-space-md: 1rem;        /* 16px */
+  --ci-space-lg: 1.5rem;      /* 24px */
+  --ci-space-xl: 2rem;        /* 32px */
+  --ci-space-2xl: 3rem;       /* 48px */
+  --ci-space-3xl: 4rem;       /* 64px */
+  --ci-space-4xl: 6rem;       /* 96px */
+
+  /* --- Radius ------------------------------------------------------------
+   * Deliberately tight. Heavily rounded corners read casual; this brand is
+   * classy-calm, so corners are barely softened. */
+  --ci-radius-sm: 2px;
+  --ci-radius-md: 4px;
+  --ci-radius-lg: 8px;
+  --ci-radius-pill: 999px;
+
+  /* --- Elevation ---------------------------------------------------------
+   * Warm-tinted shadows. Neutral grey shadows go muddy over the plaster. */
+  --ci-shadow-sm: 0 1px 2px rgba(43, 39, 33, 0.06);
+  --ci-shadow-md: 0 2px 8px rgba(43, 39, 33, 0.08);
+  --ci-shadow-lg: 0 8px 28px rgba(43, 39, 33, 0.12);
+
+  /* --- Motion ------------------------------------------------------------ */
+  --ci-duration-fast: 120ms;
+  --ci-duration-base: 200ms;
+  --ci-ease: cubic-bezier(0.2, 0, 0.2, 1);
+
+  /* --- Layout ------------------------------------------------------------ */
+  --ci-measure: 62ch;          /* comfortable reading width          */
+  --ci-menu-width: 46rem;      /* a printed menu column              */
+}
+
+/* ============================================================================
+ * Evening theme
+ *
+ * Not a generic "dark mode" — it is the same room after sunset. Deep warm
+ * night surfaces, brass lifted to carry more of the hierarchy, accents pulled
+ * up in lightness so they still read as themselves against the dark.
+ * Applied via [data-theme="evening"], which <ThemeProvider> sets.
+ * ========================================================================= */
+
+[data-theme='evening'] {
+  --ci-canvas: #1c1915;
+  --ci-surface: #241f1a;
+  --ci-surface-raised: #2b2620;
+  --ci-surface-sunk: #171410;
+  --ci-surface-inverse: #fbf8f2;
+
+  --ci-ink: #f2ece1;
+  --ci-ink-muted: #b8ac9b;
+  --ci-ink-subtle: #8a7f70;
+  --ci-ink-inverse: #2b2721;
+
+  --ci-line: #3a342c;
+  --ci-line-strong: #4f4739;
+  --ci-line-inverse: #e6dccc;
+
+  --ci-brass: #d3ab68;
+  --ci-brass-soft: #e8d3a8;
+  --ci-brass-tint: #322a1d;
+  --ci-brass-deep: #b69154;
+
+  --ci-clay: #cd8a60;
+  --ci-clay-tint: #33241b;
+  --ci-sage: #9db084;
+  --ci-sage-tint: #232a1e;
+  --ci-sun: #e6bd68;
+  --ci-sun-tint: #33290f;
+  --ci-rose: #d6a9a2;
+  --ci-rose-tint: #322320;
+  --ci-sea: #8fb3c6;
+  --ci-sea-tint: #1d282e;
+
+  --ci-danger: #d2705b;
+  --ci-danger-tint: #331d18;
+  --ci-focus: #d3ab68;
+
+  --ci-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --ci-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.45);
+  --ci-shadow-lg: 0 8px 28px rgba(0, 0, 0, 0.55);
+}

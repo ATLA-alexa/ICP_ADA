@@ -1,0 +1,41 @@
+.ci-option-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--ci-space-xs);
+  font-family: var(--ci-font-text);
+  line-height: var(--ci-leading-snug);
+}
+
+.ci-option-row--sm { font-size: var(--ci-text-xs); }
+.ci-option-row--md { font-size: var(--ci-text-sm); }
+
+.ci-option-row__label {
+  flex: 0 0 auto;
+  font-size: var(--ci-text-2xs);
+  font-weight: var(--ci-weight-semibold);
+  letter-spacing: var(--ci-tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--ci-ink-subtle);
+}
+
+.ci-option-row__options {
+  flex: 1 1 auto;
+  color: var(--ci-ink-muted);
+}
+
+.ci-option-row__option--default {
+  font-weight: var(--ci-weight-medium);
+  color: var(--ci-brass-deep);
+}
+
+.ci-option-row__sep {
+  color: var(--ci-line-strong);
+}
+
+.ci-option-row__note {
+  flex: 0 0 auto;
+  font-size: var(--ci-text-2xs);
+  font-style: italic;
+  color: var(--ci-ink-subtle);
+}

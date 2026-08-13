@@ -1,0 +1,4 @@
+.ci-root--full-bleed {
+  min-height: 100%;
+  padding: var(--ci-space-2xl) var(--ci-space-xl);
+}

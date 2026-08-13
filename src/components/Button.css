@@ -1,0 +1,100 @@
+.ci-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ci-space-xs);
+  margin: 0;
+  border: 1px solid transparent;
+  border-radius: var(--ci-radius-md);
+  font-family: var(--ci-font-text);
+  font-weight: var(--ci-weight-medium);
+  letter-spacing: var(--ci-tracking-wide);
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--ci-duration-fast) var(--ci-ease),
+    border-color var(--ci-duration-fast) var(--ci-ease),
+    color var(--ci-duration-fast) var(--ci-ease);
+}
+
+.ci-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.ci-button__label {
+  display: inline-block;
+}
+
+.ci-button__icon {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.ci-button--sm { padding: var(--ci-space-xs) var(--ci-space-sm); font-size: var(--ci-text-xs); }
+.ci-button--md { padding: var(--ci-space-sm) var(--ci-space-md); font-size: var(--ci-text-sm); }
+.ci-button--lg { padding: var(--ci-space-md) var(--ci-space-lg); font-size: var(--ci-text-md); }
+
+.ci-button--full { width: 100%; }
+
+.ci-button--primary {
+  background-color: var(--ci-brass);
+  border-color: var(--ci-brass);
+  color: #fff;
+}
+
+.ci-button--primary:hover:not(:disabled) {
+  background-color: var(--ci-brass-deep);
+  border-color: var(--ci-brass-deep);
+}
+
+.ci-button--secondary {
+  background-color: transparent;
+  border-color: var(--ci-line-strong);
+  color: var(--ci-ink);
+}
+
+.ci-button--secondary:hover:not(:disabled) {
+  border-color: var(--ci-brass);
+  color: var(--ci-brass-deep);
+}
+
+.ci-button--ghost {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--ci-ink-muted);
+}
+
+.ci-button--ghost:hover:not(:disabled) {
+  background-color: var(--ci-surface-sunk);
+  color: var(--ci-ink);
+}
+
+.ci-button--link {
+  padding-inline: 0;
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--ci-brass-deep);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  text-decoration-thickness: 1px;
+}
+
+.ci-button--link:hover:not(:disabled) {
+  color: var(--ci-ink);
+}
+
+.ci-button__spinner {
+  width: 0.85em;
+  height: 0.85em;
+  border: 1.5px solid currentColor;
+  border-top-color: transparent;
+  border-radius: var(--ci-radius-pill);
+  animation: ci-button-spin 700ms linear infinite;
+}
+
+@keyframes ci-button-spin {
+  to { transform: rotate(360deg); }
+}

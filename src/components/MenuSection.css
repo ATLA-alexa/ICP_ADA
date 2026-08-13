@@ -1,0 +1,59 @@
+.ci-menu-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-lg);
+}
+
+.ci-menu-section__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-xs);
+  padding-bottom: var(--ci-space-sm);
+  border-bottom: 1px solid var(--ci-line);
+}
+
+/* The family colour reaches the section rule, not just the eyebrow. */
+.ci-menu-section--clay .ci-menu-section__header { border-bottom-color: var(--ci-clay); }
+.ci-menu-section--sage .ci-menu-section__header { border-bottom-color: var(--ci-sage); }
+.ci-menu-section--sun .ci-menu-section__header  { border-bottom-color: var(--ci-sun); }
+.ci-menu-section--rose .ci-menu-section__header { border-bottom-color: var(--ci-rose); }
+.ci-menu-section--sea .ci-menu-section__header  { border-bottom-color: var(--ci-sea); }
+.ci-menu-section--brass .ci-menu-section__header { border-bottom-color: var(--ci-brass-soft); }
+
+.ci-menu-section__description {
+  margin: 0;
+  max-width: var(--ci-measure);
+  font-family: var(--ci-font-text);
+  font-size: var(--ci-text-sm);
+  font-style: italic;
+  line-height: var(--ci-leading-normal);
+  color: var(--ci-ink-muted);
+}
+
+.ci-menu-section--align-center .ci-menu-section__header {
+  align-items: center;
+  text-align: center;
+}
+
+.ci-menu-section--align-center .ci-menu-section__description {
+  margin-inline: auto;
+}
+
+.ci-menu-section__items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-xs);
+}
+
+.ci-menu-section__items--two-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  column-gap: var(--ci-space-2xl);
+  row-gap: var(--ci-space-xs);
+}
+
+@media (min-width: 44rem) {
+  .ci-menu-section__items--two-col {
+    grid-template-columns: 1fr 1fr;
+  }
+}

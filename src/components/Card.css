@@ -1,0 +1,48 @@
+.ci-card {
+  position: relative;
+  border-radius: var(--ci-radius-md);
+  background-color: var(--ci-surface);
+  color: var(--ci-ink);
+}
+
+.ci-card--bordered {
+  border: 1px solid var(--ci-line);
+}
+
+.ci-card--raised {
+  border: 1px solid var(--ci-line);
+  background-color: var(--ci-surface-raised);
+  box-shadow: var(--ci-shadow-md);
+}
+
+.ci-card--sunk {
+  background-color: var(--ci-surface-sunk);
+}
+
+.ci-card--plain {
+  background-color: transparent;
+}
+
+.ci-card--padding-none { padding: 0; }
+.ci-card--padding-sm   { padding: var(--ci-space-sm); }
+.ci-card--padding-md   { padding: var(--ci-space-md); }
+.ci-card--padding-lg   { padding: var(--ci-space-lg); }
+.ci-card--padding-xl   { padding: var(--ci-space-xl); }
+
+/* Leading-edge accent rule. Uses a pseudo-element so it survives any padding. */
+.ci-card[class*='ci-card--accent-']::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block: 0;
+  width: 3px;
+  border-start-start-radius: var(--ci-radius-md);
+  border-end-start-radius: var(--ci-radius-md);
+}
+
+.ci-card--accent-brass::before { background-color: var(--ci-brass); }
+.ci-card--accent-clay::before  { background-color: var(--ci-clay); }
+.ci-card--accent-sage::before  { background-color: var(--ci-sage); }
+.ci-card--accent-sun::before   { background-color: var(--ci-sun); }
+.ci-card--accent-rose::before  { background-color: var(--ci-rose); }
+.ci-card--accent-sea::before   { background-color: var(--ci-sea); }

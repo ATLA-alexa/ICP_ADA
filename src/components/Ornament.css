@@ -1,0 +1,29 @@
+.ci-ornament {
+  display: block;
+  flex: 0 0 auto;
+  color: var(--ci-brass);
+}
+
+.ci-ornament--star.ci-ornament--sm,
+.ci-ornament--diamond.ci-ornament--sm { width: 16px; height: 16px; }
+
+.ci-ornament--star.ci-ornament--md,
+.ci-ornament--diamond.ci-ornament--md { width: 24px; height: 24px; }
+
+.ci-ornament--star.ci-ornament--lg,
+.ci-ornament--diamond.ci-ornament--lg { width: 40px; height: 40px; }
+
+/* The lattice is a band: it takes the width it is given. */
+.ci-ornament--lattice { width: 100%; }
+.ci-ornament--lattice.ci-ornament--sm { height: 8px; }
+.ci-ornament--lattice.ci-ornament--md { height: 14px; }
+.ci-ornament--lattice.ci-ornament--lg { height: 22px; }
+
+.ci-ornament--brass { color: var(--ci-brass); }
+.ci-ornament--ink   { color: var(--ci-ink); }
+.ci-ornament--muted { color: var(--ci-ink-subtle); }
+.ci-ornament--clay  { color: var(--ci-clay); }
+.ci-ornament--sage  { color: var(--ci-sage); }
+.ci-ornament--sun   { color: var(--ci-sun); }
+.ci-ornament--rose  { color: var(--ci-rose); }
+.ci-ornament--sea   { color: var(--ci-sea); }

@@ -1,0 +1,48 @@
+.ci-wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ci-space-sm);
+  color: var(--ci-ink);
+}
+
+.ci-wordmark--stacked {
+  flex-direction: column;
+  gap: var(--ci-space-xs);
+  text-align: center;
+}
+
+.ci-wordmark__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-3xs);
+  min-width: 0;
+}
+
+.ci-wordmark--stacked .ci-wordmark__text {
+  align-items: center;
+}
+
+.ci-wordmark__name {
+  font-family: var(--ci-font-display);
+  font-weight: var(--ci-weight-medium);
+  line-height: var(--ci-leading-tight);
+  letter-spacing: var(--ci-tracking-display);
+  color: inherit;
+}
+
+.ci-wordmark__tagline {
+  font-family: var(--ci-font-text);
+  font-size: var(--ci-text-2xs);
+  font-weight: var(--ci-weight-medium);
+  letter-spacing: var(--ci-tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--ci-ink-subtle);
+}
+
+.ci-wordmark--sm .ci-wordmark__name { font-size: var(--ci-text-lg); }
+.ci-wordmark--md .ci-wordmark__name { font-size: var(--ci-text-2xl); }
+.ci-wordmark--lg .ci-wordmark__name { font-size: var(--ci-text-4xl); }
+
+.ci-wordmark--brass   { color: var(--ci-brass-deep); }
+.ci-wordmark--inverse { color: var(--ci-ink-inverse); }
+.ci-wordmark--inverse .ci-wordmark__tagline { color: var(--ci-brass-soft); }

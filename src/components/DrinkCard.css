@@ -1,0 +1,106 @@
+.ci-drink-card {
+  display: flex;
+  border: 1px solid var(--ci-line);
+  border-radius: var(--ci-radius-md);
+  background-color: var(--ci-surface);
+  overflow: hidden;
+}
+
+.ci-drink-card--stacked {
+  flex-direction: column;
+}
+
+.ci-drink-card--inline {
+  flex-direction: row;
+  align-items: stretch;
+}
+
+/* The swatch stands in for the drink: a band of its own colour. */
+.ci-drink-card__swatch {
+  flex: 0 0 auto;
+  background-color: var(--ci-sea);
+}
+
+.ci-drink-card--stacked > .ci-drink-card__swatch {
+  height: 6px;
+  width: 100%;
+}
+
+.ci-drink-card--inline > .ci-drink-card__swatch {
+  width: 6px;
+  align-self: stretch;
+}
+
+.ci-drink-card--clay  .ci-drink-card__swatch { background-color: var(--ci-clay); }
+.ci-drink-card--sage  .ci-drink-card__swatch { background-color: var(--ci-sage); }
+.ci-drink-card--sun   .ci-drink-card__swatch { background-color: var(--ci-sun); }
+.ci-drink-card--rose  .ci-drink-card__swatch { background-color: var(--ci-rose); }
+.ci-drink-card--sea   .ci-drink-card__swatch { background-color: var(--ci-sea); }
+.ci-drink-card--brass .ci-drink-card__swatch { background-color: var(--ci-brass); }
+
+.ci-drink-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-xs);
+  padding: var(--ci-space-lg);
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.ci-drink-card__flag {
+  font-family: var(--ci-font-text);
+  font-size: var(--ci-text-2xs);
+  font-weight: var(--ci-weight-semibold);
+  letter-spacing: var(--ci-tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--ci-brass-deep);
+}
+
+.ci-drink-card__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--ci-space-md);
+}
+
+.ci-drink-card__name {
+  margin: 0;
+  font-family: var(--ci-font-display);
+  font-size: var(--ci-text-xl);
+  font-weight: var(--ci-weight-medium);
+  line-height: var(--ci-leading-tight);
+  color: var(--ci-ink);
+}
+
+.ci-drink-card__price {
+  flex: 0 0 auto;
+}
+
+.ci-drink-card__description {
+  margin: 0;
+  font-family: var(--ci-font-text);
+  font-size: var(--ci-text-sm);
+  line-height: var(--ci-leading-normal);
+  color: var(--ci-ink-muted);
+}
+
+.ci-drink-card__serve {
+  margin: 0;
+  font-family: var(--ci-font-text);
+  font-size: var(--ci-text-2xs);
+  letter-spacing: var(--ci-tracking-wide);
+  text-transform: uppercase;
+  color: var(--ci-ink-subtle);
+}
+
+.ci-drink-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ci-space-2xs);
+  margin-top: var(--ci-space-2xs);
+}
+
+.ci-drink-card--signature {
+  border-color: var(--ci-brass-soft);
+  background-color: var(--ci-surface-raised);
+}

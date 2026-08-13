@@ -1,0 +1,62 @@
+.ci-menu-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-2xs);
+  padding-block: var(--ci-space-xs);
+}
+
+.ci-menu-item__head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ci-space-xs);
+  min-width: 0;
+}
+
+.ci-menu-item__name {
+  flex: 0 1 auto;
+  font-family: var(--ci-font-display);
+  font-size: var(--ci-text-lg);
+  font-weight: var(--ci-weight-medium);
+  line-height: var(--ci-leading-tight);
+  color: var(--ci-ink);
+}
+
+.ci-menu-item__badges {
+  display: inline-flex;
+  gap: var(--ci-space-2xs);
+  flex: 0 0 auto;
+}
+
+/* The leader eats the remaining space between name and price. */
+.ci-menu-item__leader {
+  flex: 1 1 auto;
+  min-width: var(--ci-space-md);
+  align-self: flex-end;
+  margin-bottom: 0.28em;
+  border-bottom: 1px dotted var(--ci-line-strong);
+}
+
+.ci-menu-item__price {
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+}
+
+/* Without a leader, the price still needs pushing to the end. */
+.ci-menu-item__description {
+  margin: 0;
+  max-width: var(--ci-measure);
+  font-family: var(--ci-font-text);
+  font-size: var(--ci-text-sm);
+  line-height: var(--ci-leading-normal);
+  color: var(--ci-ink-muted);
+}
+
+.ci-menu-item--unavailable .ci-menu-item__name,
+.ci-menu-item--unavailable .ci-menu-item__description {
+  color: var(--ci-ink-subtle);
+}
+
+.ci-menu-item--unavailable .ci-menu-item__name {
+  text-decoration: line-through;
+  text-decoration-color: var(--ci-line-strong);
+}
