@@ -112,7 +112,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .card-desc { display: block; margin: var(--s2) 0 0; font-size: 14px; color: var(--ink-soft); }
 .card-tag { display: inline-block; margin-top: var(--s3); font-size: 11.5px; color: var(--gold); border: 1px solid var(--gold-pale); border-radius: 999px; padding: 3px 9px; }
 
-/* ---- rows (coffee, bottled) ---------------------------------------------- */
+/* ---- rows (coffee, bottled, children) ------------------------------------ */
 
 .rows { display: flex; flex-direction: column; }
 .row { display: flex; align-items: baseline; gap: var(--s3); width: 100%; text-align: left; border-bottom: 1px solid var(--limestone-deep); padding: var(--s3) 0; }
@@ -123,6 +123,17 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .panel { margin-top: var(--s4); background: var(--limestone-deep); border-radius: var(--arch); padding: var(--s4) var(--s5); }
 .panel h3 { font-size: 18px; margin-bottom: var(--s1); }
 .panel p { margin: 0; font-size: 14px; color: var(--ink-soft); }
+
+/* The syrup upsell carries more weight than a normal panel: gold hairline,
+   paper surface, wider padding. Weight without shouting. */
+.panel--upsell {
+  background: #fff; border: 1px solid var(--gold-pale);
+  padding: var(--s5); text-align: center;
+}
+.panel--upsell .smallcaps { display: block; margin-bottom: var(--s2); }
+.panel--upsell h3 { font-size: 24px; margin-bottom: var(--s2); }
+.panel--upsell p { font-size: 15px; color: var(--ink); }
+.panel--upsell .sub { display: block; margin-top: var(--s2); font-size: 13px; color: var(--ink-soft); }
 
 .altlist { margin: var(--s3) 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--s2); }
 .altlist li { font-size: 14px; color: var(--ink-soft); }
@@ -139,10 +150,20 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .todo-panel li { margin-bottom: var(--s2); }
 body.view-guest .todo, body.view-guest .todo-block, body.view-guest .todo-panel { display: none !important; }
 
-/* ---- FIFO standing rule -------------------------------------------------- */
+/* ---- consolidated prep panel --------------------------------------------- */
 
-.fifo { margin-top: var(--s4); border: 1px solid var(--red); background: var(--red-bg); color: var(--red); border-radius: var(--arch-sm); padding: var(--s3) var(--s4); font-size: 13px; line-height: 1.5; }
+.prep { margin-top: var(--s7); background: #fff; border: 1px solid var(--gold-pale); border-radius: var(--arch); padding: var(--s5); }
+.prep h2 { font-size: 24px; }
+.prep-group { margin-top: var(--s5); }
+.prep-group h3 { font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: var(--s2); }
+.prep-list { margin: 0; padding: 0; list-style: none; }
+.prep-list li { display: flex; flex-wrap: wrap; gap: 2px var(--s3); align-items: baseline; padding: var(--s2) 0; border-bottom: 1px solid var(--limestone-deep); font-size: 14px; }
+.prep-name { font-weight: 600; flex: 0 0 auto; }
+.prep-yield { color: var(--gold); font-size: 12.5px; flex: 0 0 auto; font-variant-numeric: tabular-nums; }
+.prep-for { color: var(--ink-soft); font-size: 12.5px; flex: 1 1 100%; }
+.fifo { margin-top: var(--s5); border: 1px solid var(--red); background: var(--red-bg); color: var(--red); border-radius: var(--arch-sm); padding: var(--s3) var(--s4); font-size: 13px; line-height: 1.5; }
 .fifo strong { display: block; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 4px; }
+body.view-guest .prep { display: none !important; }
 
 /* ---- detail sheet -------------------------------------------------------- */
 
@@ -169,6 +190,8 @@ body.view-guest .todo, body.view-guest .todo-block, body.view-guest .todo-panel 
 .sheet-title h3 { font-size: 24px; flex: 1 1 auto; }
 .sheet-meta { margin: var(--s2) 0 0; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); }
 .sheet-colour { margin: var(--s1) 0 0; font-size: 12px; color: var(--gold); font-style: italic; }
+/* Guests do not need the glass, the ice or the method code. */
+body.view-guest .sheet-meta, body.view-guest .sheet-colour { display: none !important; }
 
 .sheet-close { position: absolute; top: var(--s3); right: var(--s3); width: 34px; height: 34px; border-radius: 999px; border: 1px solid var(--limestone-deep); background: #fff; color: var(--ink-soft); font-size: 18px; line-height: 1; display: grid; place-items: center; }
 
@@ -178,7 +201,7 @@ body.view-guest .todo, body.view-guest .todo-block, body.view-guest .todo-panel 
 .tabs:has(button:only-child) { display: none; }
 
 .sheet-body { overflow-y: auto; padding: var(--s4) var(--s5) var(--s7); -webkit-overflow-scrolling: touch; }
-.story { font-size: 16px; line-height: 1.65; margin: 0; }
+.story { font-size: 16px; line-height: 1.7; margin: 0; }
 
 .spec { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s5); margin: 0 0 var(--s4); padding: 0; list-style: none; }
 .spec div { font-size: 13px; }
@@ -200,7 +223,6 @@ body.view-guest .todo, body.view-guest .todo-block, body.view-guest .todo-panel 
 blockquote.say { margin: 0 0 var(--s3); padding: var(--s3) var(--s4); border-left: 2px solid var(--gold); background: #fff; border-radius: 0 var(--arch-sm) var(--arch-sm) 0; font-family: var(--display); font-size: 17px; line-height: 1.5; }
 blockquote.say .cue { display: block; font-family: var(--body); font-size: 12px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.1em; margin-top: var(--s2); }
 
-/* per drink economics strip inside the sheet, staff and owner only */
 .econ { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s5); background: #fff; border: 1px solid var(--limestone-deep); border-radius: var(--arch-sm); padding: var(--s3) var(--s4); margin-bottom: var(--s4); }
 .econ div { font-size: 13px; }
 .econ dt { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
@@ -259,8 +281,6 @@ tbody tr:hover { background: var(--limestone); }
 .bar-fill { height: 100%; background: var(--gold); border-radius: 999px; }
 .legend { font-size: 12px; color: var(--ink-soft); margin-top: var(--s3); line-height: 1.6; }
 
-/* ---- economics blocks ---------------------------------------------------- */
-
 .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--s3); margin-bottom: var(--s4); }
 .kpi { background: #fff; border: 1px solid var(--limestone-deep); border-radius: var(--arch-sm); padding: var(--s3) var(--s4); }
 .kpi dt { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
@@ -289,7 +309,7 @@ body.view-owner .guest-only { display: none; }
   /* Target is a 2 to 3 page paper menu, tuned tight. */
   @page { margin: 10mm 11mm; }
   body { background: #fff; font-size: 9pt; line-height: 1.4; }
-  .topbar, .views, .owner-only, .todo, .todo-block, .todo-panel, .fifo,
+  .topbar, .views, .owner-only, .todo, .todo-block, .todo-panel, .prep, .fifo,
   .scrim, .sheet, .drawer, .quiz-btn, .print-hide { display: none !important; }
   .wrap { max-width: none; padding: 0; }
 
@@ -307,7 +327,6 @@ body.view-owner .guest-only { display: none; }
   .cards { grid-template-columns: 1fr 1fr; gap: 2mm 6mm; }
   .card { border: 0; padding: 0 0 2mm; background: none !important; break-inside: avoid; border-radius: 0; }
   .card-name { font-size: 11pt; }
-  .card-price { font-size: 9.5pt; }
   .card-desc { font-size: 8pt; margin-top: 0.5mm; }
   .card-tag { border: 0; padding: 0; color: var(--ink-soft); font-style: italic; margin-top: 0.5mm; font-size: 7.5pt; display: block; }
 
@@ -315,11 +334,12 @@ body.view-owner .guest-only { display: none; }
   .row { display: flex; padding: 0.8mm 0; break-inside: avoid; border-bottom: 0; }
   .row-name { font-size: 8.5pt; }
   .row-comp { font-size: 7.5pt; }
-  .row-price { font-size: 8.5pt; }
 
   .panel { background: none; border: 0; border-top: 1px solid #ccc; padding: 2mm 0 0; margin-top: 2mm; break-inside: avoid; }
   .panel h3 { font-size: 10pt; }
   .panel p, .altlist li { font-size: 8pt; }
+  .panel--upsell { border: 1px solid #999; padding: 2.5mm; text-align: center; }
+  .panel--upsell h3 { font-size: 11pt; }
 
   .footer { margin-top: 5mm; padding-top: 2mm; }
   .footer .claim { font-size: 11pt; }
@@ -356,8 +376,9 @@ body.view-owner .guest-only { display: none; }
 
   <div id="guest-root" class="guest-only"></div>
   <div id="owner-root" class="owner-only"></div>
-  <!-- Not guest-only: the open items belong to Staff AND Owner. The
-       body.view-guest rule is what keeps them away from guests and print. -->
+  <!-- Prep and open items belong to Staff AND Owner. The body.view-guest
+       rules are what keep them away from guests and print. -->
+  <div id="prep-root"></div>
   <div id="todo-root"></div>
 
   <footer class="footer">
@@ -393,42 +414,35 @@ body.view-owner .guest-only { display: none; }
 
 /* ==========================================================================
    MENU_DATA
-   Everything a non-developer needs to change lives in this object.
 
-   PRICES come from CarIbiza_Drinks_Menu_Pricing_v2.xlsx, tab "Pricing and
-   Margin", VAT inclusive at 9%. Net of VAT, gross profit and GP percent are
-   NOT stored: they are computed from sell and cost so they cannot drift.
-   That matters, because ten rows in the source sheet carried broken margin
-   arithmetic (Kefir del Sol showed 154.2 percent GP, ISH Spritz showed a
-   loss). Those rows are flagged in OPEN_ITEMS.
+   TWO TEXTS PER DRINK, never the same words twice:
+     desc  = the card. What it is, sensory, under 15 words.
+     story = revealed on tap. Mechanism first: why this ingredient needs that
+             one, what would go wrong without it, what happens in the glass.
 
-   cost values marked estimate:true are derived from ingredient rates, not
-   from an invoice. Replace them as invoices land.
+   PRICING. price is null on every drink and nothing renders it. sheetPrice
+   carries the figure proposed in CarIbiza_Drinks_Menu_Pricing_v2.xlsx and is
+   NOT a live price: it appears only in the Owner margin table, labelled as a
+   proposal, so the costing work survives until Achraf signs off. Set
+   PRICES_LIVE to true and the proposals become real prices menu wide.
    ========================================================================== */
 
+var PRICES_LIVE = false;
 var VAT = 0.09;
 
-/* ---- volume model, the basis for every monthly figure below --------------- */
 var VOLUME = {
-  seats: 30, seatsIndoor: 20, seatsOutdoor: 10,
-  coversPerDay: 30,
-  conversion: 0.60,
-  draftsPerDay: 18,
-  daysPerWeek: 7, weeksPerMonth: 4,
-  craftedPerMonth: 504,
+  seats: 30, coversPerDay: 30, conversion: 0.60, draftsPerDay: 18,
+  daysPerWeek: 7, weeksPerMonth: 4, craftedPerMonth: 504,
   note: "30 covers a day, 60 percent take a crafted drink, so 18 a day. 18 x 7 x 4 = 504, rounded to 500 for planning."
 };
 
-/* ---- exotic powder model, from the opening order table -------------------- */
-/* costPerG marked estimate:true where no staffel quote exists yet. */
 var POWDERS = [
-  { key: "taro_powder",   label: "Taro powder",    drink: "Taro latte",        share: 0.10, drinks: 50,  gPerDrink: 12, monthlyG: 600, buy: "3 kg", costPerKg: 20, estimate: false },
-  { key: "hojicha",       label: "Hojicha powder", drink: "Hojicha latte",     share: 0.05, drinks: 25,  gPerDrink: 8,  monthlyG: 200, buy: "1 kg", costPerKg: 45, estimate: true },
-  { key: "black_sesame",  label: "Black sesame",   drink: "Black sesame latte", share: 0.05, drinks: 25, gPerDrink: 8,  monthlyG: 200, buy: "1 kg", costPerKg: 30, estimate: true },
-  { key: "peatea",        label: "Butterfly pea",  drink: "Lychee Siren, Ocean No-jito", share: 0.20, drinks: 100, gPerDrink: 3, monthlyG: 300, buy: "1 kg", costPerKg: 35, estimate: false }
+  { key: "taro_powder",  label: "Taro powder",    drink: "Taro latte",         share: 0.10, drinks: 50,  gPerDrink: 12, monthlyG: 600, buy: "3 kg", costPerKg: 20, estimate: false },
+  { key: "hojicha",      label: "Hojicha powder", drink: "Hojicha latte",      share: 0.05, drinks: 25,  gPerDrink: 8,  monthlyG: 200, buy: "1 kg", costPerKg: 45, estimate: true },
+  { key: "black_sesame", label: "Black sesame",   drink: "Black sesame latte", share: 0.05, drinks: 25,  gPerDrink: 8,  monthlyG: 200, buy: "1 kg", costPerKg: 30, estimate: true },
+  { key: "peatea",       label: "Butterfly pea",  drink: "Lychee Siren, Ocean No-jito", share: 0.20, drinks: 100, gPerDrink: 3, monthlyG: 300, buy: "1 kg", costPerKg: 35, estimate: false }
 ];
 
-/* ---- glassware, quote pending from Kokkerell ------------------------------ */
 var GLASSWARE = [
   { item: "Highball", volume: "400 ml", qty: 25, unitEur: 3.50, estimate: true },
   { item: "Coppa",    volume: "620 ml", qty: 15, unitEur: 6.50, estimate: true },
@@ -436,22 +450,35 @@ var GLASSWARE = [
 ];
 var GLASSWARE_NOTE = "Buy locally: Kokkerell Amsterdam or HorecaTotaal. No rocks glasses exist in the venue. Unit prices are estimates until the Kokkerell quote lands.";
 
-/* ---- prebatch schedule ---------------------------------------------------- */
-var PREBATCH = [
-  { item: "Taro syrup",         method: "Make 1 L.",                                        keeps: "2 weeks" },
-  { item: "Butterfly pea tea",  method: "Cold steep 2 L.",                                  keeps: "5 days" },
-  { item: "Oleo saccharum",     method: "Peels of 8 lemons plus 200 g sugar, rest 12 to 24 h, dissolve with 200 ml warm water, strain.", keeps: "2 weeks" },
-  { item: "Peach syrup",        method: "500 g ripe peaches, 500 g sugar, 200 ml water, simmer 10 min, strain.", keeps: "1 week" },
-  { item: "Jasmine cold brew",  method: "12 g leaf per litre cold water, fridge 12 h, strain.", keeps: "3 days" },
-  { item: "Rooibos hibiscus",   method: "8 tbsp rooibos plus 4 tbsp hibiscus per 2 L just-boiled water, 10 min, strain, chill.", keeps: "5 days" },
-  { item: "Lemongrass syrup",   method: "1:1 sugar and water plus 8 crushed stalks, steep 20 min, strain.", keeps: "3 weeks" },
-  { item: "White chocolate sauce", method: "200 g white chocolate melted into 200 ml hot milk, whisk smooth, bottle.", keeps: "5 days" },
-  { item: "Vanilla syrup, grenadine", method: "Bought in. Store ambient.",                   keeps: "3 months" }
+/* ---- consolidated prep, one entry per item, grouped by type --------------- */
+var PREP = [
+  { group: "Teas and infusions", items: [
+    { name: "Butterfly pea tea",        yield: "500 ml", keeps: "5 days",  forDrinks: "Lychee Siren, Ocean No-jito" },
+    { name: "Hibiscus tea, strong",     yield: "2 L",    keeps: "5 days",  forDrinks: "Hibiscus Princess" },
+    { name: "Rooibos and hibiscus tea", yield: "2 L",    keeps: "5 days",  forDrinks: "Milano" },
+    { name: "Jasmine tea cold brew",    yield: "1 L",    keeps: "3 days",  forDrinks: "Peach Jasmine Lemonade, Elderflower Sour" },
+    { name: "Chamomile cold brew",      yield: "2 L",    keeps: "4 days",  forDrinks: "Held for future use" }
+  ]},
+  { group: "Syrups and cordials", items: [
+    { name: "Rosemary-thyme maple cordial", yield: "1 L", keeps: "2 weeks", forDrinks: "Forest Fairy" },
+    { name: "Oleo saccharum lemon syrup",   yield: "",    keeps: "2 weeks", forDrinks: "Grandma's Lemonade" },
+    { name: "Lavender syrup",               yield: "1 L", keeps: "3 weeks", forDrinks: "Lavender Lychee Lemongrass" },
+    { name: "Lemongrass syrup",             yield: "1 L", keeps: "3 weeks", forDrinks: "Lavender Lychee Lemongrass" },
+    { name: "Peach syrup",                  yield: "",    keeps: "1 week",  forDrinks: "Peach Jasmine Lemonade" },
+    { name: "Simple syrup",                 yield: "2 L", keeps: "1 month", forDrinks: "Most drinks" },
+    { name: "Vanilla, caramel, hazelnut and sugar-free syrups", yield: "Bought in", keeps: "", forDrinks: "Coffee and matcha" }
+  ]},
+  { group: "Purees and fresh, daily", items: [
+    { name: "Strawberry puree", yield: "", keeps: "Daily", forDrinks: "Hibiscus Princess, Strawberry No-jito, Iced Strawberry Matcha" },
+    { name: "Mango puree",      yield: "", keeps: "Daily", forDrinks: "Iced Mango Matcha" },
+    { name: "Citrus",           yield: "", keeps: "Daily", forDrinks: "Juiced at open, never mid-service" },
+    { name: "Caramelised pear", yield: "", keeps: "Daily", forDrinks: "The Hulk" },
+    { name: "Jalapeno",         yield: "", keeps: "Daily", forDrinks: "Sliced at open, seeds separated" }
+  ]}
 ];
 
 var FIFO = "Always label batches with the date. Use oldest first. Discard hibiscus and any tea after 5 days.";
 
-/* ---- standing service reset ---------------------------------------------- */
 var RESET = [
   "Rinse tin and strainer.",
   "Wipe the surface.",
@@ -461,70 +488,59 @@ var RESET = [
 ];
 
 var OPEN_ITEMS = [
-  "Ten rows in the pricing sheet carry broken margin arithmetic (all Bottled, Fermented and Water rows: Kefir del Sol showed 154.2 percent GP, ISH Spritz showed a loss, Water 500 ml showed a negative). This tool ignores those stored figures and recomputes GP from sell and cost. Fix the sheet or drop the stored columns.",
+  "Prices are not set. Every drink carries price null and nothing renders one. The Owner table shows the figures proposed in the pricing sheet, labelled as proposals. Set PRICES_LIVE to true once Achraf signs off.",
+  "Ten rows in the pricing sheet carry broken margin arithmetic (all Bottled, Fermented and Water rows: Kefir del Sol showed 154.2 percent GP, ISH Spritz showed a loss). This tool recomputes GP from sell and cost and ignores those stored figures.",
   "FOAMER: Ms Better's Miraculous Foamer is 40 percent ABV, wrong for this venue. Order Fee Brothers Fee Foam instead, alcohol-free, 6 to 8 drops, dry shake. Verify the label on arrival.",
   "Vanilla syrup: confirm alcohol-free before launch.",
   "Fermented drinks: get written ABV confirmation from Cult-cha and Kefir del Sol before launch.",
-  "ISH Spritz imitates an Aperol spritz, the same principle Achraf applied to 0.0 gins. Listed but flagged, his call.",
-  "Coffee prices sit below Amsterdam specialty norms (espresso 2.40 against a typical 2.80 to 3.20). Deliberate value positioning or an opening promo? Repricing later is harder than starting right.",
+  "Coffee prices sit below Amsterdam specialty norms. Deliberate value positioning or an opening promo? Repricing later is harder than starting right.",
   "Amsterdam Sunrise: decide the garnish. Proposal is orange half-wheel plus a cocktail cherry.",
   "Elderflower Sour: confirm the Tajin rim, confirm the coupe, and choose ONE house foaming standard for every foamed drink.",
   "Tropical Velvet: confirm the coconut cream sidecar against shaking it in.",
   "Shirley Temple and Orange Mint Sparkle: drafted from shopping lists. Confirm with Kaykay before training.",
-  "Blue Lagoon (curacao syrup): presumed redundant now that Ocean No-jito carries the blue with a flower. Confirm the kill.",
-  "Vendors still open: taro, hojicha, black sesame, Sanbitter, Fee Foam, peaches or peach syrup. Three quotation emails are drafted in the Owner view.",
-  "Orange Mint Sparkle has no price or costing yet. It shows TBD until one is set."
+  "Iced Strawberry Matcha: its desc and story are the only drink copy not supplied verbatim. Written here to match the mango pair. Review the wording.",
+  "Vendors still open: taro, hojicha, black sesame, Sanbitter, Fee Foam, peaches or peach syrup. Three quotation emails are drafted in the Owner view."
 ];
 
 var MENU_DATA = {
 
-  /* ---------------- inventory ----------------
-     Doubles as the ingredient reference behind every tappable build row and
-     as the economic model. cost_per_pack_eur null means no quote yet, and
-     nothing downstream will pretend otherwise. */
   inventory: {
-    taro_powder:  { name: "Taro powder", pack: "1 kg", pack_size: "1kg", cost_per_pack_eur: 20.00, prebatchable_days: 14, supplier: "BobaSupply", estimate: false,
-                    prebatch: "Taro syrup, make 1 L, keeps 2 weeks.", notes: "Buy 3 kg for the staffel break. 12 g a drink, so 1 kg makes 83 drinks and 3 kg makes 250." },
-    hojicha:      { name: "Hojicha powder", pack: "1 kg", pack_size: "1kg", cost_per_pack_eur: 45.00, prebatchable_days: 14, supplier: "BobaSupply", estimate: true,
-                    prebatch: "Whisked to order. Syrup base keeps 2 weeks.", notes: "Price is an NL wholesale estimate pending the staffel quote. 8 g a drink, 1 kg makes 125 drinks." },
-    black_sesame: { name: "Black sesame powder", pack: "1 kg", pack_size: "1kg", cost_per_pack_eur: 30.00, prebatchable_days: 14, supplier: "BobaSupply", estimate: true,
-                    prebatch: "Whisked to order.", notes: "Price is an NL wholesale estimate pending quote. 8 g a drink, 1 kg makes 125 drinks. ALLERGEN: sesame." },
-    peatea:       { name: "Butterfly pea flowers", pack: "1 kg", pack_size: "1kg", cost_per_pack_eur: 35.00, prebatchable_days: 5, supplier: "Van de Ven Thee", estimate: false,
-                    prebatch: "Cold steep 2 L, keeps 5 days.", notes: "3 g a drink, 1 kg makes 333 drinks. Used in Lychee Siren and Ocean No-jito." },
-    foamer:       { name: "Fee Brothers Fee Foam", pack: "250 ml", pack_size: "250ml", cost_per_pack_eur: 12.00, prebatchable_days: 365, supplier: "Kokkerell Amsterdam", estimate: false,
-                    prebatch: "Shelf stable, ambient.", notes: "6 to 8 drops a drink, about 0.4 ml, so EUR 0.019 a drink. Alcohol-free, glycerin and quillaja bark. NEVER Ms Better's, 40 percent ABV carrier." },
+    taro_powder:  { name: "Taro powder", pack: "1 kg", pack_size: "1kg", cost_per_pack_eur: 20.00, prebatchable_days: 14, supplier: "BobaSupply", estimate: false, prebatch: "Taro syrup, make 1 L, keeps 2 weeks.", notes: "Buy 3 kg for the staffel break. 12 g a drink, so 1 kg makes 83 drinks and 3 kg makes 250." },
+    hojicha:      { name: "Hojicha powder", pack: "1 kg", pack_size: "1kg", cost_per_pack_eur: 45.00, prebatchable_days: 14, supplier: "BobaSupply", estimate: true, prebatch: "Whisked to order.", notes: "NL wholesale estimate pending the staffel quote. 8 g a drink, 1 kg makes 125 drinks." },
+    black_sesame: { name: "Black sesame powder", pack: "1 kg", pack_size: "1kg", cost_per_pack_eur: 30.00, prebatchable_days: 14, supplier: "BobaSupply", estimate: true, prebatch: "Whisked to order.", notes: "Estimate pending quote. 8 g a drink. ALLERGEN: sesame." },
+    peatea:       { name: "Butterfly pea flowers", pack: "1 kg", pack_size: "1kg", cost_per_pack_eur: 35.00, prebatchable_days: 5, supplier: "Van de Ven Thee", estimate: false, prebatch: "Cold steep 500 ml, keeps 5 days.", notes: "3 g a drink, 1 kg makes 333 drinks. Lychee Siren and Ocean No-jito." },
+    foamer:       { name: "Fee Brothers Fee Foam", pack: "250 ml", pack_size: "250ml", cost_per_pack_eur: 12.00, prebatchable_days: 365, supplier: "Kokkerell Amsterdam", estimate: false, prebatch: "Shelf stable, ambient.", notes: "6 to 8 drops a drink, about 0.4 ml, so EUR 0.019 a drink. NEVER Ms Better's, 40 percent ABV carrier." },
 
-    lychee:       { name: "Lychee juice", pack: "1 L carton", pack_size: "1L", cost_per_pack_eur: 2.60, prebatchable_days: 3, supplier: "TODO: supplier", estimate: true,
-                    prebatch: "Batched as the Siren base with coconut water and salt, 2 L. Keeps 3 days.", notes: "" },
+    lychee:       { name: "Lychee juice", pack: "1 L carton", pack_size: "1L", cost_per_pack_eur: 2.60, prebatchable_days: 3, supplier: "TODO: supplier", estimate: true, prebatch: "Batched as the Siren base with coconut water and salt, 2 L. Keeps 3 days.", notes: "" },
     coconutw:     { name: "Coconut water", pack: "1 L carton", pack_size: "1L", cost_per_pack_eur: 2.90, prebatchable_days: 3, supplier: "TODO: supplier", estimate: true, prebatch: "Goes into the Siren base.", notes: "" },
-    lime:         { name: "Limes", pack: "1 kg, fresh", pack_size: "1kg", cost_per_pack_eur: 2.50, prebatchable_days: 0, supplier: "Market, daily", estimate: true,
-                    prebatch: "Juiced fresh daily. Never batched overnight.", notes: "Standard NL wholesale rate." },
-    lemon:        { name: "Lemons", pack: "1 kg, fresh", pack_size: "1kg", cost_per_pack_eur: 2.20, prebatchable_days: 0, supplier: "Market, daily", estimate: true, prebatch: "Juiced fresh daily.", notes: "" },
-    orange:       { name: "Oranges", pack: "1 kg, fresh", pack_size: "1kg", cost_per_pack_eur: 1.90, prebatchable_days: 0, supplier: "Market, daily", estimate: true,
-                    prebatch: "Juiced fresh. Holds 4 hours at most before it flattens.", notes: "" },
+    lime:         { name: "Limes", pack: "1 kg, fresh", pack_size: "1kg", cost_per_pack_eur: 2.50, prebatchable_days: 0, supplier: "Market, daily", estimate: true, prebatch: "Juiced at open, never mid-service.", notes: "Standard NL wholesale rate." },
+    lemon:        { name: "Lemons", pack: "1 kg, fresh", pack_size: "1kg", cost_per_pack_eur: 2.20, prebatchable_days: 0, supplier: "Market, daily", estimate: true, prebatch: "Juiced at open.", notes: "" },
+    orange:       { name: "Oranges", pack: "1 kg, fresh", pack_size: "1kg", cost_per_pack_eur: 1.90, prebatchable_days: 0, supplier: "Market, daily", estimate: true, prebatch: "Juiced at open. Holds 4 hours at most before it flattens.", notes: "" },
     salt:         { name: "Sea salt", pack: "1 kg", pack_size: "1kg", cost_per_pack_eur: 2.00, prebatchable_days: 365, supplier: "Kitchen stock", estimate: true, prebatch: "Goes into the Siren base.", notes: "" },
-    cordial:      { name: "Rosemary thyme maple cordial", pack: "Batched in house", pack_size: "1L", cost_per_pack_eur: 8.40, prebatchable_days: 14, supplier: "In house", estimate: true,
-                    prebatch: "200 ml water simmered, off heat add 150 ml maple, 4 rosemary, 6 thyme. Steep exactly 30 min, strain. Keeps 2 weeks.", notes: "" },
+    cordial:      { name: "Rosemary-thyme maple cordial", pack: "1 L, in house", pack_size: "1L", cost_per_pack_eur: 8.40, prebatchable_days: 14, supplier: "In house", estimate: true, prebatch: "200 ml water simmered, off heat add 150 ml maple, 4 rosemary, 6 thyme. Steep exactly 30 min, strain. Keeps 2 weeks.", notes: "" },
     rosemary:     { name: "Rosemary", pack: "Bunch", pack_size: "bunch", cost_per_pack_eur: 1.20, prebatchable_days: 0, supplier: "Market, daily", estimate: true, prebatch: "Smoked to order, never in advance.", notes: "" },
     thyme:        { name: "Thyme", pack: "Bunch", pack_size: "bunch", cost_per_pack_eur: 1.20, prebatchable_days: 0, supplier: "Market, daily", estimate: true, prebatch: "Fresh daily, stays raw.", notes: "" },
     soda:         { name: "Sparkling water", pack: "1 L bottle", pack_size: "1L", cost_per_pack_eur: 0.70, prebatchable_days: 0, supplier: "TODO: supplier", estimate: true, prebatch: "Opened to order so it stays lively.", notes: "" },
     grapes:       { name: "Green grapes", pack: "500 g", pack_size: "500g", cost_per_pack_eur: 2.80, prebatchable_days: 0, supplier: "Market, daily", estimate: true, prebatch: "Muddled to order.", notes: "" },
-    basil:        { name: "Basil", pack: "Bunch", pack_size: "bunch", cost_per_pack_eur: 1.60, prebatchable_days: 0, supplier: "Market, daily", estimate: true, prebatch: "To order only. Pressed exactly once or it turns bitter.", notes: "" },
+    basil:        { name: "Basil", pack: "Bunch", pack_size: "bunch", cost_per_pack_eur: 1.60, prebatchable_days: 0, supplier: "Market, daily", estimate: true, prebatch: "To order only. Pressed exactly once or it turns bitter and browns.", notes: "" },
     applepear:    { name: "Apple pear juice", pack: "1 L carton", pack_size: "1L", cost_per_pack_eur: 2.40, prebatchable_days: 3, supplier: "TODO: supplier", estimate: true, prebatch: "Pours straight from the carton.", notes: "" },
-    simple:       { name: "Simple syrup", pack: "1 L, in house", pack_size: "1L", cost_per_pack_eur: 1.20, prebatchable_days: 21, supplier: "In house", estimate: true, prebatch: "1:1 sugar and water. Keeps 3 weeks refrigerated.", notes: "" },
+    simple:       { name: "Simple syrup", pack: "2 L, in house", pack_size: "2L", cost_per_pack_eur: 2.40, prebatchable_days: 30, supplier: "In house", estimate: true, prebatch: "1:1 sugar and water. Keeps 1 month.", notes: "" },
     pear_gar:     { name: "Caramelised pear", pack: "Prepped daily", pack_size: "daily", cost_per_pack_eur: 0.40, prebatchable_days: 0, supplier: "In house", estimate: true, prebatch: "5 mm slices, dry pan, pinch of sugar, 45 s a side. Same day only.", notes: "" },
     hibiscus:     { name: "Dried hibiscus", pack: "250 g", pack_size: "250g", cost_per_pack_eur: 6.50, prebatchable_days: 5, supplier: "TODO: supplier", estimate: true, prebatch: "Brewed strong, 2 L. Keeps 5 days.", notes: "" },
-    strawpuree:   { name: "Strawberry puree", pack: "Prepped daily", pack_size: "daily", cost_per_pack_eur: 1.10, prebatchable_days: 0, supplier: "Market, daily", estimate: true, prebatch: "Same day only. Blended fresh each morning.", notes: "" },
+    strawpuree:   { name: "Strawberry puree", pack: "Prepped daily", pack_size: "daily", cost_per_pack_eur: 1.10, prebatchable_days: 0, supplier: "Market, daily", estimate: true, prebatch: "Same day only.", notes: "" },
+    mangopuree:   { name: "Mango puree", pack: "Prepped daily", pack_size: "daily", cost_per_pack_eur: 1.30, prebatchable_days: 0, supplier: "Market, daily", estimate: true, prebatch: "Same day only.", notes: "" },
     strawberry:   { name: "Strawberries", pack: "Punnet", pack_size: "500g", cost_per_pack_eur: 3.20, prebatchable_days: 0, supplier: "Market, daily", estimate: true, prebatch: "Halved or muddled to order.", notes: "" },
-    vanilla:      { name: "Vanilla syrup", pack: "700 ml", pack_size: "700ml", cost_per_pack_eur: 8.00, prebatchable_days: 90, supplier: "CHECK LABEL: must be alcohol-free", estimate: true, prebatch: "Store ambient, 3 months.", notes: "Flag 5 on the review sheet: confirm alcohol-free before launch." },
-    jalapeno:     { name: "Jalapeno", pack: "Fresh", pack_size: "each", cost_per_pack_eur: 0.35, prebatchable_days: 0, supplier: "Market, daily", estimate: true, prebatch: "Sliced at open, seeds separated for heat control. Same day.", notes: "" },
+    vanilla:      { name: "Vanilla syrup", pack: "700 ml", pack_size: "700ml", cost_per_pack_eur: 8.00, prebatchable_days: 90, supplier: "CHECK LABEL: must be alcohol-free", estimate: true, prebatch: "Bought in. Store ambient.", notes: "Confirm alcohol-free before launch." },
+    caramel:      { name: "Caramel syrup", pack: "700 ml", pack_size: "700ml", cost_per_pack_eur: 7.50, prebatchable_days: 90, supplier: "TODO: supplier", estimate: true, prebatch: "Bought in. Store ambient.", notes: "Upsell syrup, coffee and matcha." },
+    hazelnut:     { name: "Hazelnut syrup", pack: "700 ml", pack_size: "700ml", cost_per_pack_eur: 7.50, prebatchable_days: 90, supplier: "TODO: supplier", estimate: true, prebatch: "Bought in. Store ambient.", notes: "Upsell syrup. ALLERGEN: nuts." },
+    jalapeno:     { name: "Jalapeno", pack: "Fresh", pack_size: "each", cost_per_pack_eur: 0.35, prebatchable_days: 0, supplier: "Market, daily", estimate: true, prebatch: "Sliced at open, seeds separated for heat control.", notes: "" },
     gingerbeer:   { name: "Three Cents ginger beer", pack: "200 ml bottle", pack_size: "200ml", cost_per_pack_eur: 1.10, prebatchable_days: 365, supplier: "Three Cents", estimate: false, prebatch: "Bottled, opened to order.", notes: "" },
     gingerale:    { name: "Ginger ale", pack: "Bottle", pack_size: "200ml", cost_per_pack_eur: 0.95, prebatchable_days: 365, supplier: "TODO: supplier", estimate: true, prebatch: "Bottled, opened to order.", notes: "" },
-    mint:         { name: "Mint", pack: "Bunch", pack_size: "bunch", cost_per_pack_eur: 1.40, prebatchable_days: 0, supplier: "Market, daily", estimate: true, prebatch: "To order. Pressed or bashed once, never shredded.", notes: "" },
+    mint:         { name: "Mint", pack: "Bunch", pack_size: "bunch", cost_per_pack_eur: 1.40, prebatchable_days: 0, supplier: "Market, daily", estimate: true, prebatch: "To order. Bashed once, never shredded, or it goes black and bitter.", notes: "" },
     cranberry:    { name: "Cranberry juice", pack: "1 L carton", pack_size: "1L", cost_per_pack_eur: 2.20, prebatchable_days: 2, supplier: "TODO: supplier", estimate: true, prebatch: "Premix with lime and orange as the Cosmo base. Keeps 2 days.", notes: "" },
-    rooibos_hib:  { name: "Rooibos hibiscus tea", pack: "2 L, in house", pack_size: "2L", cost_per_pack_eur: 1.80, prebatchable_days: 5, supplier: "In house", estimate: true, prebatch: "8 tbsp rooibos plus 4 tbsp hibiscus per 2 L, 10 min, strain, chill. Keeps 5 days.", notes: "" },
+    rooibos_hib:  { name: "Rooibos and hibiscus tea", pack: "2 L, in house", pack_size: "2L", cost_per_pack_eur: 1.80, prebatchable_days: 5, supplier: "In house", estimate: true, prebatch: "8 tbsp rooibos plus 4 tbsp hibiscus per 2 L, 10 min, strain, chill. Keeps 5 days.", notes: "" },
     sanbitter:    { name: "Sanbitter", pack: "98 ml bottle", pack_size: "98ml", cost_per_pack_eur: 1.20, prebatchable_days: 365, supplier: "TODO: supplier", estimate: true, prebatch: "Bottled, opened to order.", notes: "Sanpellegrino red bitter soda, 0.0 percent." },
-    grenadine:    { name: "Grenadine", pack: "700 ml", pack_size: "700ml", cost_per_pack_eur: 7.00, prebatchable_days: 90, supplier: "TODO: supplier", estimate: true, prebatch: "Store ambient, 3 months.", notes: "" },
+    grenadine:    { name: "Grenadine", pack: "700 ml", pack_size: "700ml", cost_per_pack_eur: 7.00, prebatchable_days: 90, supplier: "TODO: supplier", estimate: true, prebatch: "Store ambient, 3 months.", notes: "Denser than juice, which is what makes it sink." },
     passionjuice: { name: "Passion fruit juice", pack: "1 L carton", pack_size: "1L", cost_per_pack_eur: 4.20, prebatchable_days: 2, supplier: "TODO: supplier", estimate: true, prebatch: "Premix with apple, lime and vanilla. Keeps 2 days.", notes: "" },
     passionpuree: { name: "Passion fruit puree", pack: "1 kg", pack_size: "1kg", cost_per_pack_eur: 9.50, prebatchable_days: 2, supplier: "TODO: supplier", estimate: true, prebatch: "Keeps 2 days once opened.", notes: "" },
     passionfresh: { name: "Fresh passion fruit", pack: "Each", pack_size: "each", cost_per_pack_eur: 0.80, prebatchable_days: 0, supplier: "Market, daily", estimate: true, prebatch: "Halved to order for the float.", notes: "" },
@@ -533,16 +549,17 @@ var MENU_DATA = {
     coconutmilk:  { name: "Coconut milk", pack: "1 L carton", pack_size: "1L", cost_per_pack_eur: 2.30, prebatchable_days: 3, supplier: "TODO: supplier", estimate: true, prebatch: "Shake the carton before every pour.", notes: "" },
     pineapple:    { name: "Pineapple juice", pack: "1 L carton", pack_size: "1L", cost_per_pack_eur: 2.20, prebatchable_days: 3, supplier: "TODO: supplier", estimate: true, prebatch: "Pours straight from the carton.", notes: "" },
     cherries:     { name: "Cocktail cherries", pack: "Jar", pack_size: "jar", cost_per_pack_eur: 5.50, prebatchable_days: 365, supplier: "TODO: supplier", estimate: true, prebatch: "Shelf stable.", notes: "" },
-    jasmine:      { name: "Jasmine tea", pack: "250 g", pack_size: "250g", cost_per_pack_eur: 9.00, prebatchable_days: 3, supplier: "TODO: supplier", estimate: true, prebatch: "Cold brew 12 g per litre, 12 h. Keeps 3 days.", notes: "" },
+    jasmine:      { name: "Jasmine tea", pack: "250 g", pack_size: "250g", cost_per_pack_eur: 9.00, prebatchable_days: 3, supplier: "TODO: supplier", estimate: true, prebatch: "Cold brew 1 L, 12 g per litre, 12 h. Keeps 3 days.", notes: "Cold brewed, never hot: heat pulls tannin and turns it bitter." },
+    chamomile:    { name: "Chamomile", pack: "250 g", pack_size: "250g", cost_per_pack_eur: 7.00, prebatchable_days: 4, supplier: "TODO: supplier", estimate: true, prebatch: "Cold brew 2 L, keeps 4 days.", notes: "Held for future use." },
     elderflower:  { name: "Elderflower syrup", pack: "700 ml", pack_size: "700ml", cost_per_pack_eur: 6.50, prebatchable_days: 90, supplier: "TODO: supplier", estimate: true, prebatch: "Store ambient.", notes: "" },
     tajin:        { name: "Chili-lime salt", pack: "160 g", pack_size: "160g", cost_per_pack_eur: 4.50, prebatchable_days: 365, supplier: "CONFIRM: Tajin, not Tajine", estimate: true, prebatch: "Shelf stable.", notes: "" },
-    oleo:         { name: "Lemon oleo saccharum syrup", pack: "In house", pack_size: "1L", cost_per_pack_eur: 3.60, prebatchable_days: 14, supplier: "In house", estimate: true, prebatch: "Peels of 8 lemons plus 200 g sugar, rest 12 to 24 h, dissolve with 200 ml warm water, strain. Keeps 2 weeks.", notes: "Highest margin made drink on the menu." },
-    lavender:     { name: "Lavender syrup", pack: "700 ml", pack_size: "700ml", cost_per_pack_eur: 7.00, prebatchable_days: 90, supplier: "TODO: supplier", estimate: true, prebatch: "Store ambient.", notes: "" },
+    oleo:         { name: "Oleo saccharum lemon syrup", pack: "In house", pack_size: "1L", cost_per_pack_eur: 3.60, prebatchable_days: 14, supplier: "In house", estimate: true, prebatch: "Peels of 8 lemons packed in 200 g sugar overnight, dissolve with 200 ml warm water, strain. Keeps 2 weeks.", notes: "The sugar draws the oil straight out of the skin." },
+    lavender:     { name: "Lavender syrup", pack: "1 L", pack_size: "1L", cost_per_pack_eur: 7.00, prebatchable_days: 21, supplier: "TODO: supplier", estimate: true, prebatch: "Keeps 3 weeks.", notes: "Goes soapy fast. Less than you would expect." },
     lemongrass:   { name: "Lemongrass syrup", pack: "1 L, in house", pack_size: "1L", cost_per_pack_eur: 2.60, prebatchable_days: 21, supplier: "In house", estimate: true, prebatch: "1:1 sugar and water plus 8 crushed stalks, steep 20 min, strain. Keeps 3 weeks.", notes: "" },
-    peachsyrup:   { name: "Peach syrup", pack: "1 L, in house", pack_size: "1L", cost_per_pack_eur: 4.80, prebatchable_days: 7, supplier: "TODO: peaches or syrup, decide then source", estimate: true, prebatch: "500 g peaches, 500 g sugar, 200 ml water, simmer 10 min, strain. Keeps 1 week.", notes: "" },
-    matcha:       { name: "Matcha, Uji Kyoto", pack: "100 g tin", pack_size: "100g", cost_per_pack_eur: 24.00, prebatchable_days: 0, supplier: "TODO: supplier", estimate: true, prebatch: "Whisked to order, always.", notes: "" },
+    peachsyrup:   { name: "Peach syrup", pack: "In house", pack_size: "1L", cost_per_pack_eur: 4.80, prebatchable_days: 7, supplier: "TODO: peaches or syrup, decide then source", estimate: true, prebatch: "500 g peaches, 500 g sugar, 200 ml water, simmer 10 min, strain. Keeps 1 week.", notes: "" },
+    matcha:       { name: "Matcha, Uji Kyoto, ceremonial", pack: "100 g tin", pack_size: "100g", cost_per_pack_eur: 24.00, prebatchable_days: 0, supplier: "TODO: supplier", estimate: true, prebatch: "Whisked to order, always. Whisking suspends the powder, stirring lets it sink.", notes: "Youngest leaf, stone ground." },
     milk:         { name: "Milk", pack: "1 L", pack_size: "1L", cost_per_pack_eur: 1.20, prebatchable_days: 5, supplier: "Dairy, weekly", estimate: true, prebatch: "No.", notes: "ALLERGEN: milk." },
-    whitechoc:    { name: "White chocolate sauce", pack: "In house", pack_size: "400ml", cost_per_pack_eur: 4.20, prebatchable_days: 5, supplier: "In house", estimate: true, prebatch: "200 g white chocolate into 200 ml hot milk, whisk smooth, bottle. Keeps 5 days.", notes: "" },
+    whitechoc:    { name: "White chocolate sauce", pack: "In house", pack_size: "400ml", cost_per_pack_eur: 4.20, prebatchable_days: 5, supplier: "In house", estimate: true, prebatch: "200 g white chocolate into 200 ml hot milk, whisk smooth, bottle. Keeps 5 days.", notes: "Fat and sugar with no cocoa bitterness of its own." },
     strawcrush:   { name: "Crushed strawberry", pack: "Prepped daily", pack_size: "daily", cost_per_pack_eur: 1.00, prebatchable_days: 0, supplier: "Market, daily", estimate: true, prebatch: "Same day only.", notes: "" },
     sparklemon:   { name: "Sparkling lemonade", pack: "1 L", pack_size: "1L", cost_per_pack_eur: 1.30, prebatchable_days: 0, supplier: "TODO: supplier", estimate: true, prebatch: "Bottled, opened to order.", notes: "" }
   },
@@ -556,10 +573,11 @@ var MENU_DATA = {
       drinks: [
 
         {
-          id: "lychee-siren", name: "Lychee Siren", price: 11.50,
+          id: "lychee-siren", name: "Lychee Siren", price: null, sheetPrice: 11.50,
           swatch: { name: "Indigo dusk over pale pearl", hex: "#4C4C9D" },
           glass: "Highball", ice: "Crushed", method: "Build and float",
-          story: "Lychee and coconut water beneath a deep indigo crown of butterfly pea flower. In Taipei, lychee is what you drink because it is hot outside. Ask your server about the lime.",
+          desc: "Lychee and coconut water under an indigo crown of butterfly pea flower.",
+          story: "Lychee on its own is all perfume and no spine, so it reads as sweet and then goes nowhere. Coconut water gives it a body to sit in, and the pinch of salt underneath makes the fruit taste more like itself, the way salt does with watermelon. The flower is not stirred in. It floats, because it is waiting for acid. In Taipei, lychee is what you drink because it is hot outside; the rest of this glass is what happened to that habit in Amsterdam. Ask your server about the lime.",
           tag: "Not a fan of coconut water? We swap in cloudy apple",
           build: [
             { ref: "lychee", ml: 70 }, { ref: "coconutw", ml: 70 },
@@ -589,10 +607,11 @@ var MENU_DATA = {
         },
 
         {
-          id: "forest-fairy", name: "Forest Fairy", price: 11.50,
+          id: "forest-fairy", name: "Forest Fairy", price: null, sheetPrice: 11.50,
           swatch: { name: "Deep forest green, smoke-dimmed", hex: "#3E5140" },
           glass: "Highball", ice: "Cubed", method: "Stir in glass",
-          story: "Rosemary is smoked before it goes in, thyme stays raw and green, lemon cuts the dark maple so it drinks dry rather than sweet. Herbal, smoky, quietly bitter at the edges.",
+          desc: "Smoked rosemary and raw thyme over dark maple, cut with lemon.",
+          story: "Maple is the reason this works. Plain sugar would sit on top of the herbs and flatten them, but maple carries smoke and bitterness inside its sweetness, so it argues with the rosemary instead of covering it. The rosemary is smoked for three seconds and no longer, enough to perfume the glass without tasting of ash. Thyme goes in raw and green underneath to stop the whole thing turning medicinal. Lemon arrives last and pulls it dry.",
           tag: "Want it extra herby? We bash in more thyme",
           build: [
             { ref: "lemon", ml: 25 }, { ref: "cordial", ml: 60 },
@@ -615,10 +634,11 @@ var MENU_DATA = {
         },
 
         {
-          id: "the-hulk", name: "The Hulk", price: 11.50,
+          id: "the-hulk", name: "The Hulk", price: null, sheetPrice: 11.50,
           swatch: { name: "Bright leaf green", hex: "#6E8C3A" },
           glass: "Highball", ice: "Cubed", method: "Shake and double strain",
-          story: "Basil pressed once releases its peppery anise oils into the sugar of green grapes; apple and pear give it body, lime lifts it. The green is the leaf itself, no colouring.",
+          desc: "Basil and green grape, orchard apple and pear, lime.",
+          story: "Basil pressed once gives up its oil. Pressed twice it gives up bitterness, and the colour turns brown within a minute. The grapes are muddled properly because their sugar is the vehicle, and without them the basil has nothing to travel on. Apple and pear are the orchard underneath, familiar and Northern European. Lime is what stops it tasting like a smoothie. The green you are looking at is a leaf that was pressed exactly once.",
           tag: "On the sour side, very refreshing",
           build: [
             { ref: "grapes", ml: 0, note: "8 grapes, 6 presses" },
@@ -642,11 +662,12 @@ var MENU_DATA = {
         },
 
         {
-          id: "hibiscus-princess", name: "Hibiscus Princess", price: 12.00,
+          id: "hibiscus-princess", name: "Hibiscus Princess", price: null, sheetPrice: 12.00,
           swatch: { name: "Hibiscus red under cream silk", hex: "#9E2B3B" },
           glass: "Coppa", ice: "Cubed", method: "Dry shake then wet shake, fine strain",
-          story: "Hibiscus steeps deep red and properly tart; strawberry rounds that acid with sweetness and body. Shaken above it, orange, lemon and vanilla settle into a pale silk that holds as its own layer. Sharp below, soft on top.",
-          tag: "Layered: tart red under a citrus-vanilla silk",
+          desc: "Tart hibiscus and strawberry under a citrus and vanilla silk.",
+          story: "Hibiscus is one of the most acidic things you can put in a glass and on its own it strips your mouth. Strawberry is there to give that acid something soft to land on. The top layer is built separately: orange rounds it, lemon sharpens it, vanilla turns the two into cream, and the plant foamer holds it as its own layer instead of letting it fall through. You drink down through the soft into the sharp. Nothing is stirred.",
+          tag: "Layered, and vegan as standard",
           build: [
             { ref: "hibiscus", ml: 120, note: "GLASS FIRST, over ice and strawberries" },
             { ref: "strawberry", ml: 0, note: "4 halved, tucked visibly against the glass" },
@@ -670,11 +691,12 @@ var MENU_DATA = {
         },
 
         {
-          id: "orange-mint-sparkle", name: "Orange Mint Sparkle", price: null,
+          id: "orange-mint-sparkle", name: "Orange Mint Sparkle", price: null, sheetPrice: null,
           swatch: { name: "Sun orange, mint-flecked", hex: "#D98236" },
           glass: "Highball", ice: "Cubed", method: "Press and churn",
-          story: "Fresh orange juice pressed over mint and lengthened with sparkle, so the citrus stays bright and the herb sits just underneath it.",
-          tag: "Bright and simple, mint pressed not shredded",
+          desc: "Fresh orange, mint pressed once, lengthened with sparkle.",
+          story: "The simplest drink on this list and the easiest to ruin. Mint that is shredded turns bitter and grassy within minutes; mint that is pressed once gives up its oil and nothing else. Orange juice carries it and sparkling water thins it, so the citrus stays bright instead of going syrupy. Made properly it tastes like the first hour of a warm day.",
+          tag: "Ask for it still if you prefer it softer",
           build: [
             { ref: "mint", ml: 0, note: "8 leaves, pressed once in the glass" },
             { ref: "orange", ml: 120, note: "Fresh" },
@@ -692,7 +714,7 @@ var MENU_DATA = {
           ],
           table: [],
           say: [ { line: "Mint is pressed, not shredded, so it stays sweet rather than green and bitter.", draft: true } ],
-          todos: ["Drafted from Kaykay's shopping list. Confirm with Kaykay before training.", "No price set and no costing. Both show TBD until decided."],
+          todos: ["Drafted from Kaykay's shopping list. Confirm with Kaykay before training."],
           ops: { cost: null, estimate: true, prebatch: "no", steps: 5, seconds: 55, complexity: 2, profile: "single" }
         }
       ]
@@ -705,10 +727,11 @@ var MENU_DATA = {
       drinks: [
 
         {
-          id: "jalapeno-mule", name: "Spicy Jalapeno Mule", price: 9.50,
+          id: "jalapeno-mule", name: "Spicy Jalapeno Mule", price: null, sheetPrice: 9.50,
           swatch: { name: "Pale jade fizz", hex: "#86A177" },
           glass: "Highball", ice: "Crushed", method: "Build",
-          story: "Fresh jalapeno, half a lime, proper ginger beer over crushed ice. The heat arrives first, the ginger finishes it.",
+          desc: "Fresh jalapeno, lime and proper ginger beer over crushed ice.",
+          story: "Ginger beer already has heat in it, but it is a low rooty warmth that sits at the back of the mouth. Jalapeno is a bright green heat that hits the front first, so the two never compete: they arrive in sequence, one after the other. Lime keeps both of them honest. We take the seeds out as standard, which is where most of the fire lives. Ask, and we leave them in.",
           tag: "Not a jalapeno fan? Feel free to ask without",
           build: [
             { ref: "jalapeno", ml: 0, note: "3 slices, seeds out as standard" },
@@ -728,10 +751,11 @@ var MENU_DATA = {
         },
 
         {
-          id: "ocean-nojito", name: "Ocean No-jito", price: 9.50,
+          id: "ocean-nojito", name: "Ocean No-jito", price: null, sheetPrice: 9.50,
           swatch: { name: "Ocean violet-blue", hex: "#4A66A8" },
           glass: "Highball", ice: "Crushed", method: "Muddle, bash, build and churn",
-          story: "Mint pressed once with lime and cane sugar, lengthened with soda. The blue is butterfly pea flower; where it reaches the lime it turns violet.",
+          desc: "Mint, lime and cane sugar churned through crushed ice, blue with a flower.",
+          story: "A mojito is not shaken, it is churned. The barspoon drags the mint and sugar up through the ice so the drink keeps building flavour while you hold it. The mint is bashed once rather than muddled, because bruised mint goes black and bitter. The blue is butterfly pea flower and there is no dye in it; where the flower meets the lime it turns violet, and the churn is what carries that colour down through the glass.",
           tag: "Want it fruitier? Swap the ocean for a strawberry no-jito",
           build: [
             { ref: "lime", ml: 0, note: "4 wedges" }, { ref: "simple", ml: 20 },
@@ -753,11 +777,11 @@ var MENU_DATA = {
         },
 
         {
-          id: "strawberry-nojito", name: "Strawberry No-jito", price: 9.50,
+          id: "strawberry-nojito", name: "Strawberry No-jito", price: null, sheetPrice: 9.50,
           swatch: { name: "Crushed-strawberry rose", hex: "#C4707E" },
           glass: "Highball", ice: "Crushed", method: "Muddle, bash, build and churn",
-          story: "The same build as the ocean, with strawberries muddled in from the start so the fruit runs the whole length of the glass instead of sitting on top.",
-          tag: "The fruitier half of the no-jito pair",
+          desc: "Strawberries and lime muddled with mint, churned through crushed ice.",
+          story: "Same build as the Ocean, different problem to solve. Strawberry is sweet but flat, so the limes go in as wedges and get muddled with the fruit rather than juiced: the oil in the peel gives the strawberry an edge it does not have on its own. Mint bashed once, churned up through the ice, so the last sip tastes like the first.",
           build: [
             { ref: "strawberry", ml: 0, note: "4, muddled" },
             { ref: "lime", ml: 0, note: "2 wedges" }, { ref: "simple", ml: 20 },
@@ -779,10 +803,11 @@ var MENU_DATA = {
         },
 
         {
-          id: "cosmo-nolitan", name: "Cosmo-Nolitan", price: 9.50,
+          id: "cosmo-nolitan", name: "Cosmo-Nolitan", price: null, sheetPrice: 9.50,
           swatch: { name: "Cosmopolitan pink", hex: "#C24D66" },
           glass: "Coupe, served up", ice: "Shaken with ice, none in glass", method: "Shake and fine strain",
-          story: "Dry cranberry against fresh lime, orange juice rounding the middle, a short top of soda to finish. Served up in a chilled coupe.",
+          desc: "Dry cranberry, fresh lime and orange, served up.",
+          story: "Cranberry is sour without being sweet, which is why this classic survives the loss of its spirit better than most. Lime sharpens it, orange rounds the middle so it is more than just tart, and a short top of soda gives back the lift the alcohol used to provide. Shaken hard and strained fine into a chilled coupe, because temperature is most of what makes a drink served up worth serving up.",
           build: [
             { ref: "cranberry", ml: 60 }, { ref: "lime", ml: 30 },
             { ref: "orange", ml: 30 }, { ref: "soda", ml: 60, note: "Top" }
@@ -800,10 +825,11 @@ var MENU_DATA = {
         },
 
         {
-          id: "milano", name: "Milano", price: 9.50,
+          id: "milano", name: "Milano", price: null, sheetPrice: 9.50,
           swatch: { name: "Burnt sienna, bitter red", hex: "#B4471C" },
           glass: "Coppa", ice: "Cubed", method: "Build",
-          story: "Negroni's innocent brother: rooibos and hibiscus brewed strong and dark, topped with Sanbitter and fresh orange. Fruity, bitter, refreshing.",
+          desc: "Rooibos and hibiscus under Sanbitter and fresh orange.",
+          story: "Negroni's innocent brother. In a negroni the bitterness comes from a spirit; here it comes from three places at once. Rooibos brings tannin and a woody depth, hibiscus brings the acid, and Sanbitter brings the true bitter edge. Orange is the only sweetness in the glass and it is fresh, never syrup. Built rather than shaken, stirred once so it stays clear.",
           tag: "For the bitter lovers",
           build: [
             { ref: "rooibos_hib", ml: 100, note: "Cold, brewed strong" },
@@ -811,7 +837,7 @@ var MENU_DATA = {
             { ref: "sanbitter", ml: 100, note: "Top" }
           ],
           bar: [
-            "Pour 100 ml cold rooibos hibiscus tea into the coppa.",
+            "Pour 100 ml cold rooibos and hibiscus tea into the coppa.",
             "Add 60 ml fresh orange juice.",
             "Fill with cubed ice.",
             "Top with 100 ml Sanbitter.",
@@ -823,10 +849,11 @@ var MENU_DATA = {
         },
 
         {
-          id: "amsterdam-sunrise", name: "Amsterdam Sunrise", price: 9.50,
+          id: "amsterdam-sunrise", name: "Amsterdam Sunrise", price: null, sheetPrice: 9.50,
           swatch: { name: "Sunrise gradient, amber into grenadine red", hex: "#E07B2C" },
           glass: "Highball", ice: "Cubed", method: "Build and sink",
-          story: "Orange juice over ice, then grenadine poured down the inside of the glass so it sinks and settles at the bottom as the sun. Left alone it holds the gradient; one stir pulls the red up through the amber and the whole glass goes to sunset.",
+          desc: "Fresh orange over ice with grenadine sunk beneath it.",
+          story: "Grenadine is denser than juice, and that is the entire trick. Poured slowly down the inside of the glass it sinks and stays there, so the drink arrives as first light without anyone having to build it in layers. Drink it as it comes and it moves from bright to sweet as you reach the bottom. Stir it, and you get sunset instead.",
           tag: "Stir it when you are ready for sunset",
           build: [
             { ref: "orange", ml: 200, note: "Fill" },
@@ -845,10 +872,11 @@ var MENU_DATA = {
         },
 
         {
-          id: "tropical-velvet", name: "Tropical Velvet", price: 9.50,
+          id: "tropical-velvet", name: "Tropical Velvet", price: null, sheetPrice: 9.50,
           swatch: { name: "Passionfruit gold", hex: "#D8A32E" },
           glass: "Chilled martini or coupe", ice: "No ice in glass", method: "Shake and fine strain",
-          story: "Passion fruit brings a sharp tropical acidity that cloudy apple rounds without dulling, and vanilla sits underneath holding the two together. Served clean and cold, with coconut cream alongside if you want it silk rather than sharp.",
+          desc: "Passionfruit, cloudy apple and vanilla, shaken and served up.",
+          story: "Passionfruit is aggressive on its own, all acid and perfume and seeds. Cloudy apple is the quiet ingredient doing the real work: it has body and a gentle sweetness, so it gives the passionfruit somewhere to sit without dulling it. Vanilla underneath rounds the edges. Shaken hard, strained fine. The coconut cream arrives on the side so you decide how silky you want it.",
           tag: "Add coconut cream for extra silk",
           build: [
             { ref: "passionjuice", ml: 40 },
@@ -871,11 +899,11 @@ var MENU_DATA = {
         },
 
         {
-          id: "virgin-pina-colada", name: "Virgin Pina Colada", price: 9.50,
+          id: "virgin-pina-colada", name: "Virgin Pina Colada", price: null, sheetPrice: 9.50,
           swatch: { name: "Cloud white", hex: "#E7E0D2" },
           glass: "Highball or hurricane", ice: "Cubed", method: "Shake and strain",
-          story: "Coconut milk and cream shaken silky against pineapple, a squeeze of lime keeping it honest.",
-          tag: "The soft one, thick and cold",
+          desc: "Coconut milk and cream shaken silky with pineapple.",
+          story: "Most pina coladas fail by being only sweet. Coconut milk gives the body, coconut cream gives the richness, but pineapple is already sugary, so lime goes in to cut all three. Shaken rather than blended, which is why it comes out silky instead of icy and does not water down while you drink it.",
           build: [
             { ref: "coconutmilk", ml: 100 }, { ref: "lime", ml: 10, note: "Fresh" },
             { ref: "pineapple", ml: 60 }, { ref: "coconutcream", ml: 40 },
@@ -892,11 +920,11 @@ var MENU_DATA = {
         },
 
         {
-          id: "shirley-temple", name: "Shirley Temple", price: 9.50,
+          id: "shirley-temple", name: "Shirley Temple", price: null, sheetPrice: 9.50,
           swatch: { name: "Cherry-lit rose gold", hex: "#C86A72" },
           glass: "Highball", ice: "Cubed", method: "Build and gentle churn",
-          story: "The one you were given as a child, built properly: grenadine at the bottom, ginger ale poured slowly over it so the colour blushes upward instead of muddying.",
-          tag: "The childhood classic, done properly",
+          desc: "Grenadine under ginger ale, cherries on top.",
+          story: "For a lot of us this was the first drink we were ever served in a proper glass. Grenadine goes in first and stays at the bottom. The ginger ale is poured down the back of a barspoon so it lifts the colour rather than mixing it flat, which is the whole difference between a blush and a plain pink drink. The ginger gives it just enough bite to be taken seriously.",
           build: [
             { ref: "grenadine", ml: 15 },
             { ref: "gingerale", ml: 200, note: "Fill, down the barspoon" },
@@ -916,12 +944,13 @@ var MENU_DATA = {
         },
 
         {
-          id: "elderflower-sour", name: "Elderflower Sour", price: 9.50,
+          id: "elderflower-sour", name: "Elderflower Sour", price: null, sheetPrice: 9.50,
           swatch: { name: "Pale gold under white foam", hex: "#DCC98A" },
           glass: "Coupe, confirm", ice: "No ice in glass", method: "Dry shake then wet shake, fine strain",
-          credit: "By Nadine and Jade",
-          story: "Elderflower florals pressed against fresh lemon acid, with jasmine tea underneath to keep it dry rather than perfumed. Double shaken to a silky foam, finished with a chili-lime salt rim that catches on the first sip.",
-          tag: "Sweet, sour and a little salty at the edge",
+          credit: "Created by Nadine and Jade",
+          desc: "Elderflower and lemon over jasmine, foamed, with a chili-lime rim.",
+          story: "A sour is a structure before it is a flavour: something sweet, something sour, and something with enough body to hold a foam. Elderflower is the sweet and it is floral rather than sugary. Lemon is the sour. Jasmine tea sits underneath and gives a tannin backbone that keeps the whole thing from drinking like dessert. Dry shaken first so the foam builds, then shaken again with ice so it tightens. The rim is sugar and chili-lime salt, so every sip starts with a little heat.",
+          tag: "Sugar and chili-lime salt on the rim, a little fire",
           build: [
             { ref: "foamer", ml: 0, note: "House standard. Recipe as written says 40 ml aquafaba" },
             { ref: "lemon", ml: 30, note: "Fresh" }, { ref: "jasmine", ml: 30 },
@@ -952,19 +981,20 @@ var MENU_DATA = {
       id: "coffee", title: "Coffee", kind: "rows",
       note: "Every coffee is available as decaf, same price.",
       rows: [
-        { name: "Espresso", comp: "30 ml, short and dense", price: 2.40, cost: 0.28 },
-        { name: "Americano", comp: "Espresso lengthened with hot water", price: 3.00, cost: 0.30 },
-        { name: "Cortado", comp: "Espresso to warm milk, 1:1", price: 3.20, cost: 0.42 },
-        { name: "Cappuccino", comp: "Espresso, steamed milk, fine foam, in thirds", price: 3.40, cost: 0.50 },
-        { name: "Flat white", comp: "Double ristretto under silk microfoam", price: 3.60, cost: 0.52 },
-        { name: "Latte", comp: "Milk-forward, roughly 1:4", price: 3.60, cost: 0.58 },
-        { name: "Latte macchiato", comp: "Milk first, espresso poured through", price: 3.80, cost: 0.60 },
-        { name: "White mocha", comp: "White chocolate", price: 4.60, cost: 0.85 },
-        { name: "Dark mocha", comp: "Dark chocolate", price: 4.60, cost: 0.80 },
-        { name: "Golden latte", comp: "Turmeric", price: 4.60, cost: 0.62 },
-        { name: "Chai latte", comp: "Spiced, steamed", price: 4.60, cost: 0.66 }
+        { name: "Espresso", comp: "30 ml, short and dense" },
+        { name: "Americano", comp: "Espresso lengthened with hot water" },
+        { name: "Cortado", comp: "Espresso to warm milk, 1:1" },
+        { name: "Cappuccino", comp: "Espresso, steamed milk, fine foam, in thirds" },
+        { name: "Flat white", comp: "Double ristretto under silk microfoam" },
+        { name: "Latte", comp: "Milk-forward, roughly 1:4" },
+        { name: "Latte macchiato", comp: "Milk first, espresso poured through" },
+        { name: "White mocha", comp: "White chocolate" },
+        { name: "Dark mocha", comp: "Dark chocolate" },
+        { name: "Golden latte", comp: "Turmeric" },
+        { name: "Chai latte", comp: "Spiced, steamed" }
       ],
-      addons: "Oat, almond or coconut milk, plus 0.60.",
+      addons: "Oat, almond or coconut milk on any of the above.",
+      upsell: true,
       bridge: {
         title: "Not a coffee person?",
         body: "Matcha carries roughly half the caffeine of an espresso and releases it more slowly. Whisked to order, hot or over ice."
@@ -977,10 +1007,11 @@ var MENU_DATA = {
       note: "Uji, Kyoto heritage matcha. Whisked to order, never in advance.",
       drinks: [
         {
-          id: "matcha-latte", name: "Matcha Latte", price: 5.20,
+          id: "matcha-latte", name: "Matcha Latte", price: null, sheetPrice: 5.20,
           swatch: { name: "Whisked jade", hex: "#7B9A4E" },
           glass: "Latte glass or cup", ice: "Hot, or over ice", method: "Whisk and build",
-          story: "Uji, Kyoto heritage matcha whisked to order and poured under steamed milk. Also available as a cappuccino, flat white or cortado.",
+          desc: "Ceremonial grade matcha from Uji, whisked to order.",
+          story: "Ceremonial grade is the youngest leaf, stone ground, and it is the difference between a matcha that tastes sweet and grassy and one that tastes bitter and flat. It is whisked, never stirred, because whisking suspends the powder rather than letting it sink. Roughly half the caffeine of an espresso, released more slowly.",
           tag: "Also as cappuccino, flat white or cortado",
           build: [ { ref: "matcha", ml: 60, note: "Whisked" }, { ref: "milk", ml: 180 } ],
           bar: [ "Whisk the matcha to order.", "Steam the milk to texture.", "Pour the milk under the matcha." ],
@@ -988,10 +1019,24 @@ var MENU_DATA = {
           ops: { cost: 0.78, estimate: false, prebatch: "no", steps: 3, seconds: 70, complexity: 2, profile: "single" }
         },
         {
-          id: "matcha-mojito", name: "Eminence Matcha Mojito", price: 7.20,
+          id: "vanilla-matcha", name: "Vanilla Matcha", price: null, sheetPrice: null,
+          swatch: { name: "Jade under pale vanilla", hex: "#9DAE72" },
+          glass: "Latte glass or cup", ice: "Iced or hot", method: "Whisk and build",
+          credit: "Suggested by Nadine",
+          desc: "Matcha with vanilla, hot or over ice.",
+          story: "Vanilla does something specific to matcha: it softens the tannin without adding sugar the way a flavoured powder would, so the tea still tastes like tea. The gentlest way into matcha if you have not had it before.",
+          tag: "Iced or hot",
+          build: [ { ref: "matcha", ml: 60, note: "Whisked" }, { ref: "milk", ml: 180 }, { ref: "vanilla", ml: 15 } ],
+          bar: [ "Whisk the matcha to order.", "Vanilla syrup into the glass.", "Milk, steamed or cold.", "Pour the matcha over the top." ],
+          table: [], say: [ { line: "Vanilla only, no flavoured powder, so it still tastes like tea.", draft: true } ],
+          ops: { cost: 0.90, estimate: true, prebatch: "no", steps: 3, seconds: 70, complexity: 2, profile: "single" }
+        },
+        {
+          id: "matcha-mojito", name: "Eminence Matcha Mojito", price: null, sheetPrice: 7.20,
           swatch: { name: "Cold green, mint-shot", hex: "#5F8F5A" },
           glass: "Highball", ice: "Cubed", method: "Build",
-          story: "Ceremonial matcha with mint, lime and apple juice, lengthened with sparkling lemonade and served cold. Green and grassy underneath, sharp on top.",
+          desc: "Matcha, mint, lime and apple, finished with sparkling lemonade.",
+          story: "Matcha and mint share a green, slightly bitter register, so instead of competing they stack. Apple juice is the body that carries them, lime cuts the tannin, and the sparkling lemonade at the end lifts the whole thing off the ground. It drinks like a mojito that went to the tea house.",
           tag: "Can't decide between mocktail and matcha? We got you",
           build: [
             { ref: "mint", ml: 0, note: "6 leaves, pressed once" }, { ref: "lime", ml: 20 },
@@ -1003,10 +1048,11 @@ var MENU_DATA = {
           ops: { cost: 1.10, estimate: false, prebatch: "base", steps: 5, seconds: 85, complexity: 4, profile: "layered" }
         },
         {
-          id: "white-choc-matcha", name: "White Chocolate Matcha", price: 6.80,
+          id: "white-choc-matcha", name: "White Chocolate Matcha", price: null, sheetPrice: 6.80,
           swatch: { name: "Pale jade over cream", hex: "#BFCE96" },
           glass: "Latte glass", ice: "Hot or cold", method: "Build",
-          story: "White chocolate sauce under milk, with matcha poured over the top so the first sip is grassy and the last is sweet.",
+          desc: "White chocolate under whisked matcha, hot or cold.",
+          story: "White chocolate is fat and sugar with no cocoa bitterness of its own, which is exactly why it works here: it gives the matcha something rich to sit against without adding a competing bitterness. The most forgiving drink on the matcha list.",
           tag: "Hot or cold",
           build: [ { ref: "whitechoc", ml: 30 }, { ref: "milk", ml: 140 }, { ref: "matcha", ml: 60, note: "On top" } ],
           bar: [ "White chocolate sauce into the glass.", "Milk, hot or cold.", "Pour 60 ml whisked matcha over the top." ],
@@ -1014,24 +1060,37 @@ var MENU_DATA = {
           ops: { cost: 0.95, estimate: false, prebatch: "base", steps: 3, seconds: 65, complexity: 2, profile: "layered" }
         },
         {
-          id: "strawberry-matcha", name: "Iced Strawberry Matcha", price: 6.50,
+          id: "strawberry-matcha", name: "Iced Strawberry Matcha", price: null, sheetPrice: 6.50,
           swatch: { name: "Strawberry under jade", hex: "#C9748C" },
           glass: "Highball", ice: "Cubed", method: "Build",
-          story: "Strawberry and matcha have been long-time lovers: crushed fruit at the bottom, cold milk, matcha poured over the top.",
-          tag: "Three clean layers, stir when you like",
+          desc: "Crushed strawberry beneath cold milk, matcha poured over the top.",
+          story: "Strawberry brings acidity as well as sweetness, and that acidity is what keeps this from drinking like a milkshake: it cuts the milk and meets the matcha halfway instead of burying it. The fruit is crushed rather than pureed smooth so there is still texture at the bottom. Milk goes over it, matcha last so it holds as its own green layer.",
           build: [ { ref: "strawcrush", ml: 60 }, { ref: "milk", ml: 140 }, { ref: "matcha", ml: 60, note: "Over the top" } ],
           bar: [ "Crushed strawberry into the bottom of the glass.", "Fill with cubed ice.", "Cold milk.", "Pour 60 ml whisked matcha over the top." ],
           table: [], say: [ { line: "Three layers. Strawberry, milk, matcha. Stir it whenever you are ready.", draft: true } ],
+          todos: ["The desc and story here are the only drink copy not supplied verbatim. Written to match the mango pair. Review the wording."],
           ops: { cost: 1.38, estimate: false, prebatch: "base", steps: 4, seconds: 60, complexity: 2, profile: "layered" }
+        },
+        {
+          id: "mango-matcha", name: "Iced Mango Matcha", price: null, sheetPrice: null,
+          swatch: { name: "Mango gold under jade", hex: "#E0A23C" },
+          glass: "Highball", ice: "Cubed", method: "Build",
+          desc: "Mango sunk beneath cold milk with matcha poured over the top.",
+          story: "Mango and matcha are an unlikely pair that works for one reason: mango is sweet without being sharp, so it does not fight the grassy bitterness in the matcha the way a citrus fruit would. The fruit sits at the bottom, milk goes over it, matcha is poured last so it stays as its own green layer. Stir it when you want the two to meet.",
+          build: [ { ref: "mangopuree", ml: 60 }, { ref: "milk", ml: 140 }, { ref: "matcha", ml: 60, note: "Over the top" } ],
+          bar: [ "Mango puree into the bottom of the glass.", "Fill with cubed ice.", "Cold milk.", "Pour 60 ml whisked matcha over the top." ],
+          table: [], say: [ { line: "Same build as the strawberry one. Mango is softer, so it does not fight the matcha.", draft: true } ],
+          ops: { cost: 1.40, estimate: true, prebatch: "base", steps: 4, seconds: 60, complexity: 2, profile: "layered" }
         }
       ],
+      upsell: true,
       altPanel: {
         title: "Not a matcha enthusiast? Maybe the next ones will convince you",
-        note: "Any of the above on a different base, plus 0.90.",
+        note: "Any of the above on a different base.",
         items: [
-          { name: "Taro", cjk: "芋頭", desc: "Creamy, soft, violet. 12 g a drink, EUR 0.24 at the 3 kg staffel.", todo: "Quote pending, BobaSupply" },
-          { name: "Black sesame", cjk: "黑芝麻", desc: "Toasted, nutty, thicker on the tongue. 8 g a drink. ALLERGEN: sesame.", todo: "Quote pending, BobaSupply" },
-          { name: "Hojicha", cjk: "焙茶", desc: "Roasted green tea, caramel edges, low caffeine. 8 g a drink.", todo: "Quote pending, BobaSupply" }
+          { name: "Taro", cjk: "芋頭", desc: "Creamy, soft, violet.", todo: "Quote pending, BobaSupply" },
+          { name: "Black sesame", cjk: "黑芝麻", desc: "Toasted, nutty, thicker on the tongue. ALLERGEN: sesame.", todo: "Quote pending, BobaSupply" },
+          { name: "Hojicha", cjk: "焙茶", desc: "Roasted green tea, caramel edges, low caffeine.", todo: "Quote pending, BobaSupply" }
         ]
       }
     },
@@ -1042,10 +1101,11 @@ var MENU_DATA = {
       note: "Sparkling or still, your choice.",
       drinks: [
         {
-          id: "grandmas-lemonade", name: "Grandma's Lemonade", price: 5.80,
+          id: "grandmas-lemonade", name: "Grandma's Lemonade", price: null, sheetPrice: 5.80,
           swatch: { name: "Lemon peel yellow", hex: "#D9BC4E" },
           glass: "Highball", ice: "Cubed", method: "Build",
-          story: "The syrup is pressed from lemon peels and sugar before any juice goes in, so the citrus oils carry the flavour: sharper nose, rounder taste.",
+          desc: "Lemonade built from the peel, not just the juice.",
+          story: "The syrup is made before any juice goes near it. Lemon peels are packed in sugar and left overnight, and the sugar draws the oil straight out of the skin. That oil is where the smell of a lemon lives, which is why this tastes sharper in the nose and rounder in the mouth than lemonade made from juice alone. Old method, no shortcut, and worth the day it takes.",
           tag: "Sparkling or still",
           build: [ { ref: "oleo", ml: 40 }, { ref: "lemon", ml: 30 }, { ref: "soda", ml: 180, note: "Top, sparkling or still" } ],
           bar: [ "Oleo saccharum syrup into the glass.", "Fresh lemon juice.", "Fill with cubed ice.", "Top with sparkling or still water." ],
@@ -1053,10 +1113,11 @@ var MENU_DATA = {
           ops: { cost: 0.45, estimate: false, prebatch: "full", steps: 3, seconds: 35, complexity: 1, profile: "single" }
         },
         {
-          id: "lavender-lychee", name: "Lavender Lychee Lemongrass", price: 6.20,
+          id: "lavender-lychee", name: "Lavender Lychee Lemongrass", price: null, sheetPrice: 6.20,
           swatch: { name: "Lavender over pale lychee", hex: "#A98FC0" },
           glass: "Highball", ice: "Cubed", method: "Build",
-          story: "Lavender florals over lychee sweetness, with lemongrass underneath for a green, citric edge.",
+          desc: "Lavender and lychee over a green lemongrass base.",
+          story: "Lavender goes soapy fast, so there is less of it here than you would expect. Lychee sits underneath as the sweetness and lemongrass runs beneath both, green and citric, which is what keeps the florals from tipping into perfume. Three flowers and a grass, in a specific order.",
           tag: "Sparkling or still",
           build: [ { ref: "lavender", ml: 20 }, { ref: "lychee", ml: 50 }, { ref: "lemongrass", ml: 10 }, { ref: "lemon", ml: 20 }, { ref: "soda", ml: 160, note: "Top" } ],
           bar: [ "Lavender syrup, lychee juice, lemongrass syrup, lemon.", "Fill with cubed ice.", "Top with sparkling or still water.", "Stir once from the bottom." ],
@@ -1064,10 +1125,11 @@ var MENU_DATA = {
           ops: { cost: 0.82, estimate: false, prebatch: "full", steps: 3, seconds: 40, complexity: 2, profile: "single" }
         },
         {
-          id: "peach-jasmine", name: "Peach Jasmine Tea Lemonade", price: 6.20,
+          id: "peach-jasmine", name: "Peach Jasmine Tea Lemonade", price: null, sheetPrice: 6.20,
           swatch: { name: "Jasmine amber, peach blush", hex: "#DFA274" },
           glass: "Highball", ice: "Cubed", method: "Build",
-          story: "Freshly brewed jasmine tea, real peach syrup, squeezed lemon. Three things, nothing else.",
+          desc: "Cold-brewed jasmine, real peach syrup, squeezed lemon.",
+          story: "Jasmine is cold brewed for twelve hours rather than steeped hot, because heat pulls tannin out of green tea and turns it bitter. Cold water takes only the floral part. Peach fills the middle, lemon sharpens the end. Three ingredients, and the patience is the fourth.",
           tag: "Sparkling or still",
           build: [ { ref: "jasmine", ml: 140, note: "Cold-brewed, 12 g per litre, 12 hours" }, { ref: "peachsyrup", ml: 30 }, { ref: "lemon", ml: 20 } ],
           bar: [ "Cold-brewed jasmine tea into the glass.", "Peach syrup, then lemon.", "Fill with cubed ice.", "Stir once." ],
@@ -1081,32 +1143,43 @@ var MENU_DATA = {
     {
       id: "bottled", title: "Bottled and Chilled", kind: "rows",
       rows: [
-        { name: "Fritz-Kola", comp: "", price: 4.20, cost: 0.85 },
-        { name: "Fritz-Limo", comp: "Lemon", price: 4.20, cost: 0.85 },
-        { name: "Fritz-Limo", comp: "Apple, cherry, elderberry", price: 4.20, cost: 0.85 },
-        { name: "Three Cents", comp: "Tonic", price: 4.20, cost: 1.10 },
-        { name: "Three Cents", comp: "Aegean tonic", price: 4.20, cost: 1.10 },
-        { name: "Three Cents", comp: "Ginger beer", price: 4.20, cost: 1.10 },
-        { name: "Three Cents", comp: "Pink grapefruit soda", price: 4.20, cost: 1.10 },
-        { name: "Living Things", comp: "Watermelon and lime", price: 4.40, cost: 1.10 },
-        { name: "Living Things", comp: "Peach and blood orange", price: 4.40, cost: 1.10 },
-        { name: "Passion Mama", comp: "Orange passionfruit", price: 4.40, cost: 1.15 },
-        { name: "Moody Hydration", comp: "Peach mango", price: 4.40, cost: 1.15 }
+        { name: "Fresh juice", comp: "Freshly pressed orange as standard, others by season" },
+        { name: "Fritz-Kola", comp: "" },
+        { name: "Fritz-Limo", comp: "Lemon" },
+        { name: "Fritz-Limo", comp: "Apple, cherry, elderberry" },
+        { name: "Three Cents", comp: "Tonic" },
+        { name: "Three Cents", comp: "Aegean tonic" },
+        { name: "Three Cents", comp: "Ginger beer" },
+        { name: "Three Cents", comp: "Pink grapefruit soda" },
+        { name: "Living Things", comp: "Watermelon and lime" },
+        { name: "Living Things", comp: "Peach and blood orange" },
+        { name: "Passion Mama", comp: "Orange passionfruit" },
+        { name: "Moody Hydration", comp: "Peach mango" }
       ],
       sub: {
         title: "Fermented *",
         rows: [
-          { name: "Cult-cha kombucha", comp: "Hibiscus and citrus", price: 4.80, cost: 1.45 },
-          { name: "Cult-cha kombucha", comp: "Apple and ginger", price: 4.80, cost: 1.45 },
-          { name: "Kefir del Sol", comp: "Grapefruit lime", price: 4.80, cost: 1.45 },
-          { name: "Kefir del Sol", comp: "Pineapple hibiscus", price: 4.80, cost: 1.45 },
-          { name: "Kefir del Sol", comp: "Orange lemon", price: 4.80, cost: 1.45 },
-          { name: "ISH Spritz", comp: "Alcohol-free spritz", price: 5.50, cost: 1.90 }
+          { name: "Cult-cha kombucha", comp: "Hibiscus and citrus" },
+          { name: "Cult-cha kombucha", comp: "Apple and ginger" },
+          { name: "Kefir del Sol", comp: "Grapefruit lime" },
+          { name: "Kefir del Sol", comp: "Pineapple hibiscus" },
+          { name: "Kefir del Sol", comp: "Orange lemon" },
+          { name: "ISH Spritz", comp: "Alcohol-free spritz" }
         ]
       },
       water: [
-        { name: "Water", comp: "500 ml", price: 3.50, cost: 0.55 },
-        { name: "Water", comp: "1 L", price: 6.00, cost: 0.85 }
+        { name: "Water", comp: "500 ml" },
+        { name: "Water", comp: "1 L" }
+      ]
+    },
+
+    /* ============ FOR CHILDREN ============ */
+    {
+      id: "children", title: "For Children", kind: "rows",
+      rows: [
+        { name: "Fristi", comp: "" },
+        { name: "Chocomel", comp: "" },
+        { name: "Apple juice", comp: "" }
       ]
     }
   ]
@@ -1115,10 +1188,7 @@ var MENU_DATA = {
 /* ---- vendor emails, ready to copy ---------------------------------------- */
 var VENDOR_EMAILS = [
   {
-    id: "boba",
-    vendor: "BobaSupply.nl",
-    to: "AskMe@BobaSupply.nl",
-    attn: "Eda Comlekci",
+    id: "boba", vendor: "BobaSupply.nl", to: "AskMe@BobaSupply.nl", attn: "Eda Comlekci",
     subject: "Wholesale staffel quotation for Quatro Amsterdam, 3 month opening order (Taro, Hojicha, Sesame, Butterfly)",
     body:
 "Dear Eda,\n\n" +
@@ -1133,14 +1203,10 @@ var VENDOR_EMAILS = [
 "  2. What is the shipping cost to Amsterdam, and the lead time?\n" +
 "  3. Can you confirm the ingredient declarations and allergen sheets for each product? Black sesame in particular, since we must declare it.\n\n" +
 "To be straightforward with you: our KvK registration is not yet complete, so we cannot supply a KvK number today. We are ready to raise a purchase order immediately and can pay in advance by bank transfer if that suits you better than an account. If a KvK number is required before you can quote, tell me and I will come back the moment it is issued.\n\n" +
-"Thank you,\n\n" +
-"Quatro Amsterdam"
+"Thank you,\n\nQuatro Amsterdam"
   },
   {
-    id: "vandeven",
-    vendor: "Van de Ven Thee",
-    to: "",
-    attn: "",
+    id: "vandeven", vendor: "Van de Ven Thee", to: "", attn: "",
     subject: "Bulk butterfly pea flower inquiry, Restaurant Quatro Amsterdam",
     body:
 "Good day,\n\n" +
@@ -1148,17 +1214,13 @@ var VENDOR_EMAILS = [
 "Could you quote:\n\n" +
 "  1. Price per 1 kg bag of dried Clitoria ternatea flowers, and your price at 2 kg and 5 kg if the staffel improves.\n" +
 "  2. Origin and harvest, and whether the flowers are whole or broken.\n" +
-"  3. Your recommended cold steep ratio. We currently work to roughly 3 g per drink and steep 2 L at a time, holding it 5 days refrigerated. If you have a house ratio that gives a deeper blue at lower dosage, I would rather follow yours.\n" +
+"  3. Your recommended cold steep ratio. We currently work to roughly 3 g per drink and steep 500 ml at a time, holding it 5 days refrigerated. If you have a house ratio that gives a deeper blue at lower dosage, I would rather follow yours.\n" +
 "  4. Shipping cost to Amsterdam and lead time.\n\n" +
 "Our planning volume is about 100 butterfly pea drinks a month, so roughly 300 g a month.\n\n" +
-"Thank you,\n\n" +
-"Quatro Amsterdam"
+"Thank you,\n\nQuatro Amsterdam"
   },
   {
-    id: "kokkerell",
-    vendor: "Kokkerell Amsterdam",
-    to: "",
-    attn: "",
+    id: "kokkerell", vendor: "Kokkerell Amsterdam", to: "", attn: "",
     subject: "Wholesale order, Fee Foam and 25 highball glasses",
     body:
 "Good day,\n\n" +
@@ -1171,8 +1233,7 @@ var VENDOR_EMAILS = [
 "  15 x coppa, around 620 ml\n" +
 "  15 x coupe, 200 to 250 ml\n\n" +
 "Could you quote each line separately, including any breakage or spare allowance you would recommend for a new bar, plus delivery to Amsterdam and lead time. If you carry more than one range at these volumes, send the durable option and the entry option and we will choose.\n\n" +
-"Thank you,\n\n" +
-"Quatro Amsterdam"
+"Thank you,\n\nQuatro Amsterdam"
   }
 ];
 
@@ -1189,6 +1250,10 @@ var esc = function (s) {
 };
 var money = function (n) { return n.toFixed(2); };
 
+/* The one place price policy lives. While PRICES_LIVE is false this returns
+   null for everything, so no price renders anywhere on the menu. */
+function livePrice(d) { return PRICES_LIVE ? (d.price != null ? d.price : d.sheetPrice) : d.price; }
+
 var ALL_DRINKS = [];
 MENU_DATA.sections.forEach(function (sec) {
   (sec.drinks || []).forEach(function (d) { d._section = sec.title; ALL_DRINKS.push(d); });
@@ -1196,27 +1261,16 @@ MENU_DATA.sections.forEach(function (sec) {
 var byId = {};
 ALL_DRINKS.forEach(function (d) { byId[d.id] = d; });
 
-/* Margin is always derived, never stored. Net of VAT first, because gross
-   profit on a VAT inclusive price is not a real number. */
 function netOfVat(sell) { return sell == null ? null : sell / (1 + VAT); }
-function gpEur(sell, cost) {
-  if (sell == null || cost == null) return null;
-  return netOfVat(sell) - cost;
-}
+function gpEur(sell, cost) { return (sell == null || cost == null) ? null : netOfVat(sell) - cost; }
 function gpPct(sell, cost) {
   var g = gpEur(sell, cost);
-  if (g == null) return null;
-  return (g / netOfVat(sell)) * 100;
+  return g == null ? null : (g / netOfVat(sell)) * 100;
 }
-
-/* Scalability Score = 5 minus 0.5 x to-order steps, plus 1 if fully
-   prebatchable. Clamped to the range 1 to 5. */
 function scalability(ops) {
   if (!ops) return null;
   return Math.max(1, Math.min(5, 5 - 0.5 * ops.steps + (ops.prebatch === "full" ? 1 : 0)));
 }
-
-/* ---- derived economics ---------------------------------------------------- */
 
 var POWDER_TOTALS = (function () {
   var monthly = 0, opening = 0;
@@ -1227,8 +1281,7 @@ var POWDER_TOTALS = (function () {
     var kg = parseFloat(p.buy);
     p.openingCost = kg * p.costPerKg;
     p.monthsCovered = (kg * 1000) / p.monthlyG;
-    monthly += p.monthlyCost;
-    opening += p.openingCost;
+    monthly += p.monthlyCost; opening += p.openingCost;
   });
   return { monthly: monthly, opening: opening };
 })();
@@ -1264,16 +1317,16 @@ function todoBadge(n) { return '<span class="todo">' + (n > 1 ? n + " todo" : "t
 
 function cardHTML(d) {
   var n = (d.todos || []).length;
+  var p = livePrice(d);
   return '' +
     '<button class="card" data-drink="' + esc(d.id) + '" type="button">' +
       '<span class="card-top">' +
         '<span class="swatch" style="background:' + esc(d.swatch.hex) + '"></span>' +
         '<span class="card-name">' + esc(d.name) + (n ? todoBadge(n) : "") + "</span>" +
-        /* Price slot is omitted entirely when there is no price, so the row
-           reads as a finished name rather than a name with a gap after it. */
-        (d.price != null ? '<span class="card-price">' + money(d.price) + "</span>" : "") +
+        (p != null ? '<span class="card-price">' + money(p) + "</span>" : "") +
       "</span>" +
-      '<span class="card-desc">' + esc(d.story) + "</span>" +
+      /* desc on the card, story only in the sheet. Never the same words. */
+      '<span class="card-desc">' + esc(d.desc) + "</span>" +
       (d.tag ? '<span class="card-tag">' + esc(d.tag) + "</span>" : "") +
     "</button>";
 }
@@ -1282,9 +1335,16 @@ function rowHTML(r) {
   return '<div class="row">' +
     '<span class="row-name">' + esc(r.name) + "</span>" +
     '<span class="row-comp">' + esc(r.comp || "") + "</span>" +
-    (r.price != null ? '<span class="row-price">' + money(r.price) + "</span>" : "") +
+    (PRICES_LIVE && r.price != null ? '<span class="row-price">' + money(r.price) + "</span>" : "") +
   "</div>";
 }
+
+var UPSELL_HTML =
+  '<div class="panel panel--upsell">' +
+    '<span class="smallcaps">Make it yours</span>' +
+    "<h3>Vanilla, caramel or hazelnut</h3>" +
+    "<p>In any coffee or matcha.<span class=\"sub\">Sugar-free available.</span></p>" +
+  "</div>";
 
 function sectionHTML(sec) {
   var h = '<section class="section" id="sec-' + esc(sec.id) + '">' +
@@ -1303,7 +1363,6 @@ function sectionHTML(sec) {
     if (sec.water) h += '<div class="rows">' + sec.water.map(rowHTML).join("") + "</div>";
   }
 
-  if (sec.bridge) h += '<div class="panel"><h3>' + esc(sec.bridge.title) + "</h3><p>" + esc(sec.bridge.body) + "</p></div>";
   if (sec.altPanel) {
     h += '<div class="panel"><h3>' + esc(sec.altPanel.title) + "</h3><p>" + esc(sec.altPanel.note) + '</p><ul class="altlist">' +
       sec.altPanel.items.map(function (it) {
@@ -1311,10 +1370,29 @@ function sectionHTML(sec) {
           (it.todo ? '<span class="todo">' + esc(it.todo) + "</span>" : "") + "</li>";
       }).join("") + "</ul></div>";
   }
+  /* The syrup upsell sits at the foot of both coffee and matcha, so it is the
+     last thing read before the lemonades. */
+  if (sec.upsell) h += UPSELL_HTML;
+  if (sec.bridge) h += '<div class="panel"><h3>' + esc(sec.bridge.title) + "</h3><p>" + esc(sec.bridge.body) + "</p></div>";
   return h + "</section>";
 }
 
 $("#guest-root").innerHTML = MENU_DATA.sections.map(sectionHTML).join("");
+
+/* One consolidated prep panel. Replaces the per drink blocks, which repeated
+   hibiscus on every card and never mentioned the cordial at all. */
+$("#prep-root").innerHTML =
+  '<section class="prep"><div class="smallcaps">Behind the bar</div><h2>Prep and rotation</h2>' +
+  PREP.map(function (g) {
+    return '<div class="prep-group"><h3>' + esc(g.group) + '</h3><ul class="prep-list">' +
+      g.items.map(function (it) {
+        var meta = [it.yield, it.keeps].filter(Boolean).join(", ");
+        return "<li><span class=\"prep-name\">" + esc(it.name) + "</span>" +
+          (meta ? '<span class="prep-yield">' + esc(meta) + "</span>" : "") +
+          '<span class="prep-for">' + esc(it.forDrinks) + "</span></li>";
+      }).join("") + "</ul></div>";
+  }).join("") +
+  '<div class="fifo"><strong>FIFO, every batch, every day</strong>' + esc(FIFO) + "</div></section>";
 
 $("#todo-root").innerHTML =
   '<section class="todo-panel"><h2>Open items</h2><ol>' +
@@ -1359,21 +1437,20 @@ function todoBlock(d) {
 
 function econStrip(d) {
   if (VIEW === "guest") return "";
-  var cost = d.ops ? d.ops.cost : null;
-  var g = gpEur(d.price, cost), gp = gpPct(d.price, cost);
+  var cost = d.ops ? d.ops.cost : null, sp = d.sheetPrice;
+  var g = gpEur(sp, cost), gp = gpPct(sp, cost);
   return '<dl class="econ">' +
-    "<div><dt>Sell, VAT in</dt><dd>" + (d.price != null ? "EUR " + money(d.price) : "TBD") + "</dd></div>" +
-    "<div><dt>Net of VAT</dt><dd>" + (d.price != null ? "EUR " + money(netOfVat(d.price)) : "TBD") + "</dd></div>" +
+    "<div><dt>Sheet proposal</dt><dd>" + (sp != null ? "EUR " + money(sp) : "TBD") + "</dd></div>" +
     "<div><dt>Pour cost</dt><dd>" + (cost != null ? "EUR " + money(cost) + (d.ops && d.ops.estimate ? " est" : "") : "TBD") + "</dd></div>" +
-    "<div><dt>Gross profit</dt><dd>" + (g != null ? "EUR " + money(g) : "TBD") + "</dd></div>" +
-    "<div><dt>GP</dt><dd" + (gp != null && gp >= 80 ? ' class="good"' : "") + ">" + (gp != null ? gp.toFixed(1) + "%" : "TBD") + "</dd></div>" +
+    "<div><dt>GP if agreed</dt><dd" + (gp != null && gp >= 80 ? ' class="good"' : "") + ">" + (gp != null ? gp.toFixed(1) + "%" : "TBD") + "</dd></div>" +
   "</dl>";
 }
 
 function tabBody(d, tab) {
   if (tab === "story") {
+    /* Story only. The card already said what it is. */
     var h = '<p class="story">' + esc(d.story) + "</p>";
-    if (d.credit) h += '<p class="sheet-meta" style="margin-top:16px">' + esc(d.credit) + "</p>";
+    if (VIEW !== "guest" && d.credit) h += '<p class="sheet-meta" style="margin-top:16px">' + esc(d.credit) + "</p>";
     if (d.tag) h += '<p style="margin-top:20px"><span class="card-tag">' + esc(d.tag) + "</span></p>";
     return h + todoBlock(d);
   }
@@ -1399,11 +1476,9 @@ function tabBody(d, tab) {
       h2 += '<div class="substack"><h4>At the table</h4><ol class="steps">' +
         d.table.map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ol></div>";
     }
-    h2 += '<div class="substack"><h4>Between drinks, 30 seconds</h4><ol class="steps">' +
+    /* No FIFO block here any more. It lives once, in the prep panel. */
+    return h2 + '<div class="substack"><h4>Between drinks, 30 seconds</h4><ol class="steps">' +
       RESET.map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ol></div>";
-    /* FIFO is a standing rule, so it rides on every drink rather than living
-       in one panel nobody opens. */
-    return h2 + '<div class="fifo"><strong>FIFO, every batch, every day</strong>' + esc(FIFO) + "</div>";
   }
 
   return d.say.map(function (s) {
@@ -1421,10 +1496,13 @@ function openSheet(id, tab) {
   var allowed = tabsFor().map(function (t) { return t.id; });
   activeTab = allowed.indexOf(tab) === -1 ? "story" : tab;
 
+  var p = livePrice(d);
   $("#sheet-swatch").style.background = d.swatch.hex;
   $("#sheet-name").textContent = d.name;
-  $("#sheet-price").textContent = d.price != null ? money(d.price) : "";
-  $("#sheet-meta").textContent = [d.glass, d.ice, d.method].filter(Boolean).join("  /  ");
+  $("#sheet-price").textContent = p != null ? money(p) : "";
+  /* Guests never see the bar data. CSS hides it too, this keeps it out of the
+     accessibility tree as well. */
+  $("#sheet-meta").textContent = VIEW === "guest" ? "" : [d.glass, d.ice, d.method].filter(Boolean).join("  /  ");
   $("#sheet-colour").textContent = VIEW === "guest" ? "" : d.swatch.name;
 
   $("#sheet-tabs").innerHTML = tabsFor().map(function (t) {
@@ -1499,11 +1577,9 @@ function openDrawer(key) {
   $("#drawer-body").innerHTML =
     "<dt>Pack</dt><dd>" + esc(ing.pack) + "</dd>" +
     (ing.cost_per_pack_eur != null
-      ? "<dt>Cost</dt><dd>EUR " + money(ing.cost_per_pack_eur) + " per pack" +
-        (ing.estimate ? '<span class="todo">estimate</span>' : "") + "</dd>"
+      ? "<dt>Cost</dt><dd>EUR " + money(ing.cost_per_pack_eur) + " per pack" + (ing.estimate ? '<span class="todo">estimate</span>' : "") + "</dd>"
       : "<dt>Cost</dt><dd>TBD</dd>") +
-    "<dt>Prebatch</dt><dd>" + esc(ing.prebatch) +
-      (ing.prebatchable_days != null ? " Keeps " + ing.prebatchable_days + " day" + (ing.prebatchable_days === 1 ? "" : "s") + "." : "") + "</dd>" +
+    "<dt>Prebatch</dt><dd>" + esc(ing.prebatch) + "</dd>" +
     "<dt>Supplier</dt><dd>" + esc(ing.supplier) + (open ? '<span class="todo">open</span>' : "") + "</dd>" +
     (ing.notes ? "<dt>Notes</dt><dd>" + esc(ing.notes) + "</dd>" : "");
   if (drawerTimer) { clearTimeout(drawerTimer); drawerTimer = null; }
@@ -1523,8 +1599,10 @@ function copyEmail(btn) {
   var em = VENDOR_EMAILS.filter(function (x) { return x.id === btn.dataset.copy; })[0];
   if (!em) return;
   var text = (em.to ? "To: " + em.to + "\n" : "") + "Subject: " + em.subject + "\n\n" + em.body;
-  var done = function () { btn.textContent = "Copied"; btn.classList.add("done");
-    setTimeout(function () { btn.textContent = "Copy email"; btn.classList.remove("done"); }, 1800); };
+  var done = function () {
+    btn.textContent = "Copied"; btn.classList.add("done");
+    setTimeout(function () { btn.textContent = "Copy email"; btn.classList.remove("done"); }, 1800);
+  };
   /* navigator.clipboard needs a secure context, and file:// is not one, so
      fall back to a hidden textarea and execCommand. */
   if (navigator.clipboard && window.isSecureContext) {
@@ -1545,8 +1623,7 @@ function legacyCopy(text, done) {
 var COLS = [
   { key: "name",       label: "Drink" },
   { key: "_section",   label: "Category" },
-  { key: "price",      label: "Sell" },
-  { key: "net",        label: "Net of VAT" },
+  { key: "sheetPrice", label: "Sheet proposal" },
   { key: "cost",       label: "Est. cost" },
   { key: "gp",         label: "GP EUR" },
   { key: "gpp",        label: "GP%" },
@@ -1571,10 +1648,10 @@ var PREBATCH_LABEL = { full: "Fully", base: "Base only", no: "No" };
 
 function ownerRows() {
   return ALL_DRINKS.filter(function (d) { return d.ops; }).map(function (d) {
-    var cost = d.ops.cost;
+    var cost = d.ops.cost, sp = d.sheetPrice;
     return {
-      name: d.name, _section: d._section, price: d.price, net: netOfVat(d.price),
-      cost: cost, estimate: d.ops.estimate, gp: gpEur(d.price, cost), gpp: gpPct(d.price, cost),
+      name: d.name, _section: d._section, sheetPrice: sp,
+      cost: cost, estimate: d.ops.estimate, gp: gpEur(sp, cost), gpp: gpPct(sp, cost),
       prebatch: d.ops.prebatch, steps: d.ops.steps, seconds: d.ops.seconds,
       complexity: d.ops.complexity, profile: d.ops.profile, scal: scalability(d.ops)
     };
@@ -1604,13 +1681,9 @@ function economicsHTML() {
       '<td class="num">' + money(g.qty * g.unitEur) + "</td></tr>";
   }).join("");
 
-  var prebatchRows = PREBATCH.map(function (b) {
-    return "<tr><td>" + esc(b.item) + "</td><td style=\"white-space:normal\">" + esc(b.method) + "</td><td>" + esc(b.keeps) + "</td></tr>";
-  }).join("");
-
   var emails = VENDOR_EMAILS.map(function (em) {
     return '<div class="email"><h4>' + esc(em.vendor) + "</h4>" +
-      '<div class="to">' + (em.to ? "To: " + esc(em.to) + (em.attn ? ", attn " + esc(em.attn) : "") : "Address: TODO, find the current sales address") + "</div>" +
+      '<div class="to">' + (em.to ? "To: " + esc(em.to) + (em.attn ? ", attn " + esc(em.attn) : "") : "Address: TODO, take it from the vendor's own contact page") + "</div>" +
       "<pre>Subject: " + esc(em.subject) + "\n\n" + esc(em.body) + "</pre>" +
       '<button class="copy-btn" type="button" data-copy="' + esc(em.id) + '">Copy email</button></div>';
   }).join("");
@@ -1631,18 +1704,13 @@ function economicsHTML() {
       "<th>Ingredient</th><th>Drink</th><th>Share</th><th>Drinks</th><th>Per drink</th><th>Monthly</th><th>EUR per kg</th><th>EUR per drink</th><th>Monthly EUR</th><th>Buy</th><th>Months</th>" +
     "</tr></thead><tbody>" + powderRows + "</tbody></table></div>" +
     '<p class="legend">Fee Foam sits outside this table: EUR 12.00 for 250 ml, about 0.4 ml a drink, so EUR 0.019 a drink. ' +
-    "Taro, hojicha and black sesame are bought to the staffel break rather than to exact demand, so the 3 kg and 1 kg packs cover about 5 months each rather than 3. That is the price of the discount, not an error.</p>" +
+    "Taro, hojicha and black sesame are bought to the staffel break rather than to exact demand, so those packs cover about 5 months each rather than 3. That is the price of the discount, not an error.</p>" +
 
     '<h3 style="margin-top:32px;font-size:18px">Glassware</h3>' +
     '<div class="tablewrap" style="margin-top:8px"><table><thead><tr><th>Item</th><th>Volume</th><th>Qty</th><th>EUR each</th><th>EUR total</th></tr></thead><tbody>' +
-      glassRows +
-      '<tr><td colspan="4"><b>Total</b></td><td class="num"><b>' + money(GLASS_TOTAL) + "</b></td></tr>" +
+      glassRows + '<tr><td colspan="4"><b>Total</b></td><td class="num"><b>' + money(GLASS_TOTAL) + "</b></td></tr>" +
     "</tbody></table></div>" +
     '<p class="legend">' + esc(GLASSWARE_NOTE) + "</p>" +
-
-    '<h3 style="margin-top:32px;font-size:18px">Prebatch schedule</h3>' +
-    '<div class="tablewrap" style="margin-top:8px"><table style="min-width:640px"><thead><tr><th>Item</th><th>Method</th><th>Keeps</th></tr></thead><tbody>' + prebatchRows + "</tbody></table></div>" +
-    '<div class="fifo"><strong>FIFO, every batch, every day</strong>' + esc(FIFO) + "</div>" +
 
     '<h3 style="margin-top:32px;font-size:18px">Vendor quotation emails</h3>' +
     '<p class="legend">Three drafts, ready to send. They ask for staffel pricing against the three month volume above.</p>' +
@@ -1654,7 +1722,7 @@ function renderOwner() {
   var rows = ownerRows().filter(FILTERS[ownerFilter].fn);
   rows.sort(function (a, b) {
     var k = ownerSort.key, av = a[k], bv = b[k];
-    /* Nulls (uncosted rows) always sort to the bottom rather than winning. */
+    /* Nulls (uncosted or unpriced rows) sort to the bottom rather than winning. */
     if (av == null && bv == null) return 0;
     if (av == null) return 1;
     if (bv == null) return -1;
@@ -1662,7 +1730,7 @@ function renderOwner() {
     return (av - bv) * ownerSort.dir;
   });
 
-  var costed = rows.filter(function (r) { return r.cost != null && r.price != null; });
+  var costed = rows.filter(function (r) { return r.cost != null && r.sheetPrice != null; });
   var avgGp = costed.length ? costed.reduce(function (n, r) { return n + r.gpp; }, 0) / costed.length : null;
 
   var head = COLS.map(function (c) {
@@ -1675,13 +1743,11 @@ function renderOwner() {
   var body = rows.map(function (r) {
     var pct = ((r.scal - 1) / 4) * 100;
     return "<tr>" +
-      "<td>" + esc(r.name) + "</td>" +
-      "<td>" + esc(r._section) + "</td>" +
-      eur(r.price) + eur(r.net) + eur(r.cost, r.estimate) + eur(r.gp) +
+      "<td>" + esc(r.name) + "</td>" + "<td>" + esc(r._section) + "</td>" +
+      eur(r.sheetPrice) + eur(r.cost, r.estimate) + eur(r.gp) +
       (r.gpp != null ? '<td class="num">' + r.gpp.toFixed(1) + "%</td>" : '<td class="tbd">TBD</td>') +
       '<td><span class="pill ' + r.prebatch + '">' + PREBATCH_LABEL[r.prebatch] + "</span></td>" +
-      '<td class="num">' + r.steps + "</td>" +
-      '<td class="num">' + r.complexity + "</td>" +
+      '<td class="num">' + r.steps + "</td>" + '<td class="num">' + r.complexity + "</td>" +
       "<td>" + (r.profile === "layered" ? "Layered" : "Single flavour") + "</td>" +
       '<td><span class="bar"><span class="bar-track"><span class="bar-fill" style="width:' +
         pct.toFixed(0) + '%"></span></span>' + r.scal.toFixed(1) + "</span></td></tr>";
@@ -1690,15 +1756,15 @@ function renderOwner() {
   $("#owner-root").innerHTML =
     '<section class="section" style="margin-top:24px">' +
       '<div class="section-head"><div class="smallcaps">Operations</div><h2>Margin and scale</h2>' +
-      '<p class="section-note">Net of VAT at ' + (VAT * 100).toFixed(0) + ' percent. Gross profit and GP percent are computed here from sell and cost, not read from the pricing sheet, because ten rows in that sheet carried broken margin arithmetic. Costs marked e are estimates.</p></div>' +
+      '<p class="section-note">No price is live. Sheet proposal is the figure from the pricing spreadsheet, shown here so the costing survives until Achraf signs off. GP is computed from it net of VAT at ' + (VAT * 100).toFixed(0) + ' percent, never read from the sheet, because ten rows there carried broken arithmetic. Costs marked e are estimates.</p></div>' +
       '<div class="owner-controls"><div class="field"><label for="owner-filter">Filter</label>' +
       '<select id="owner-filter">' +
         Object.keys(FILTERS).map(function (k) {
           return '<option value="' + k + '"' + (k === ownerFilter ? " selected" : "") + ">" + FILTERS[k].label + "</option>";
         }).join("") +
       "</select></div></div>" +
-      '<p class="owner-summary">' + rows.length + " drink" + (rows.length === 1 ? "" : "s") + " shown, " + costed.length + " costed" +
-        (avgGp != null ? ", average GP " + avgGp.toFixed(1) + " percent" : "") + ".</p>" +
+      '<p class="owner-summary">' + rows.length + " drink" + (rows.length === 1 ? "" : "s") + " shown, " + costed.length + " with both a proposal and a cost" +
+        (avgGp != null ? ", average GP if agreed " + avgGp.toFixed(1) + " percent" : "") + ".</p>" +
       '<div class="tablewrap"><table><thead><tr>' + head + "</tr></thead><tbody>" + body + "</tbody></table></div>" +
       '<p class="legend"><b>Scalability Score</b> = 5 minus 0.5 x to-order steps, plus 1 if fully prebatchable, clamped to 1 through 5. ' +
       "A high score means the drink survives a full room. A low score means it needs a person standing still.</p></section>" +
