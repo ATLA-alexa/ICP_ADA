@@ -1,0 +1,1473 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>Quatro</title>
+<style>
+/* ==========================================================================
+   QUATRO. One file, no network, runs offline on a phone behind the bar.
+   The arch (20px 20px 6px 6px) is the brand, taken from the backlit
+   limestone niches. The room is the calm canvas; the drinks are the paint.
+   ========================================================================== */
+
+:root {
+  --limestone: #FAF6EF;
+  --limestone-deep: #F2EBDF;
+  --ink: #23201C;
+  --ink-soft: #6B6459;
+  --gold: #A8863C;
+  --gold-pale: #D9C79A;
+
+  --amber: #B26A05;
+  --amber-bg: #FBF0DC;
+  --green: #2F6B3A;
+  --green-bg: #EEF6F0;
+  --red: #8C3A2E;
+  --red-bg: #FBEEEB;
+  --pink-zone: #C4708A;
+  --yellow-zone: #C9A227;
+
+  --arch: 20px 20px 6px 6px;
+  --arch-sm: 12px 12px 4px 4px;
+
+  --display: 'Marcellus', Georgia, 'Times New Roman', serif;
+  --body: 'Jost', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px; --s8: 64px;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--limestone); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4 { font-family: var(--display); font-weight: 400; margin: 0; line-height: 1.15; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 3px; }
+
+.wrap { max-width: 820px; margin: 0 auto; padding: 0 var(--s4) var(--s8); }
+.smallcaps { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; color: var(--gold); }
+
+/* ---- top bar -------------------------------------------------------------- */
+
+.topbar { position: sticky; top: 0; z-index: 40; background: color-mix(in srgb, var(--limestone) 93%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--gold-pale); }
+.topbar-inner { max-width: 820px; margin: 0 auto; padding: var(--s3) var(--s4); display: flex; align-items: center; gap: var(--s3); flex-wrap: wrap; }
+.brand { display: flex; align-items: baseline; gap: var(--s2); flex: 1 1 auto; min-width: 0; }
+.brand-name { font-family: var(--display); font-size: 22px; letter-spacing: 0.02em; }
+.brand-city { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-soft); }
+
+.seg { display: flex; gap: 2px; background: var(--limestone-deep); border-radius: 999px; padding: 3px; flex: 0 0 auto; }
+.seg button { border: 0; background: transparent; border-radius: 999px; padding: 6px 12px; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); transition: background 140ms ease, color 140ms ease; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--limestone); }
+.seg--lang button { padding: 6px 9px; }
+
+/* ---- sub tabs ------------------------------------------------------------- */
+
+.subtabs { display: flex; gap: var(--s1); overflow-x: auto; padding: var(--s3) var(--s4); max-width: 820px; margin: 0 auto; border-bottom: 1px solid var(--limestone-deep); -webkit-overflow-scrolling: touch; }
+.subtabs button { flex: 0 0 auto; border: 1px solid transparent; background: none; border-radius: 999px; padding: 6px 12px; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); white-space: nowrap; }
+.subtabs button[aria-selected="true"] { background: #fff; border-color: var(--gold-pale); color: var(--ink); }
+
+/* ---- masthead ------------------------------------------------------------- */
+
+.masthead { text-align: center; padding: var(--s7) 0 var(--s5); }
+.masthead h1 { font-size: 40px; letter-spacing: 0.03em; }
+.masthead .rule { display: block; width: 120px; height: 1px; background: var(--gold-pale); margin: var(--s4) auto; }
+.masthead p { margin: 0; color: var(--ink-soft); font-size: 15px; font-style: italic; }
+
+/* ---- sections ------------------------------------------------------------- */
+
+.section { margin-top: var(--s7); }
+.section-head { border-bottom: 1px solid var(--gold-pale); padding-bottom: var(--s2); margin-bottom: var(--s4); }
+.section-head h2 { font-size: 26px; margin-top: var(--s1); }
+.section-note { margin: var(--s2) 0 0; font-size: 14px; color: var(--ink-soft); font-style: italic; }
+
+.cards { display: grid; grid-template-columns: 1fr; gap: var(--s3); }
+@media (min-width: 640px) { .cards { grid-template-columns: 1fr 1fr; } }
+
+.card { position: relative; display: block; width: 100%; text-align: left; background: #fff; border: 1px solid var(--limestone-deep); border-radius: var(--arch); padding: var(--s4); transition: border-color 140ms ease, transform 140ms ease; }
+.card:hover { border-color: var(--gold-pale); }
+.card:active { transform: scale(0.995); }
+.card-top { display: flex; align-items: baseline; gap: var(--s2); }
+.swatch { width: 12px; height: 12px; border-radius: 999px; flex: 0 0 auto; transform: translateY(1px); box-shadow: inset 0 0 0 1px rgba(35,32,28,0.22); }
+.card-name { font-family: var(--display); font-size: 19px; flex: 1 1 auto; min-width: 0; }
+.card-desc { display: block; margin: var(--s2) 0 0; font-size: 14px; color: var(--ink-soft); }
+.card-tag { display: inline-block; margin-top: var(--s3); font-size: 11.5px; color: var(--gold); border: 1px solid var(--gold-pale); border-radius: 999px; padding: 3px 9px; }
+
+.rows { display: flex; flex-direction: column; }
+.row { display: flex; align-items: baseline; gap: var(--s3); border-bottom: 1px solid var(--limestone-deep); padding: var(--s3) 0; }
+.row-name { font-family: var(--display); font-size: 17px; flex: 0 0 auto; }
+.row-comp { font-size: 13px; color: var(--ink-soft); flex: 1 1 auto; min-width: 0; }
+
+.panel { margin-top: var(--s4); background: var(--limestone-deep); border-radius: var(--arch); padding: var(--s4) var(--s5); }
+.panel h3 { font-size: 18px; margin-bottom: var(--s1); }
+.panel p { margin: 0; font-size: 14px; color: var(--ink-soft); }
+.panel--upsell { background: #fff; border: 1px solid var(--gold-pale); padding: var(--s5); text-align: center; }
+.panel--upsell .smallcaps { display: block; margin-bottom: var(--s2); }
+.panel--upsell h3 { font-size: 22px; margin-bottom: var(--s2); }
+.panel--upsell p { font-size: 15px; color: var(--ink); }
+.panel--upsell .sub { display: block; margin-top: var(--s2); font-size: 13px; color: var(--ink-soft); }
+
+.altlist { margin: var(--s3) 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--s2); }
+.altlist li { font-size: 14px; color: var(--ink-soft); }
+.altlist b { color: var(--ink); font-weight: 600; }
+
+.footer { margin-top: var(--s8); border-top: 1px solid var(--gold-pale); padding-top: var(--s4); text-align: center; }
+.footer .claim { font-family: var(--display); font-size: 18px; }
+.footer .fine { font-size: 12px; color: var(--ink-soft); margin-top: var(--s2); }
+
+/* ---- flags and notes ------------------------------------------------------ */
+
+.flag { margin-top: var(--s3); background: var(--amber-bg); border: 1px dashed var(--amber); border-radius: var(--arch-sm); padding: var(--s3); font-size: 13px; color: var(--amber); line-height: 1.5; }
+.flag strong { display: block; font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 4px; }
+.warn { margin-top: var(--s3); background: var(--red-bg); border: 1px solid var(--red); border-radius: var(--arch-sm); padding: var(--s3) var(--s4); font-size: 13px; color: var(--red); line-height: 1.5; }
+.warn strong { display: block; font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 4px; }
+.todo { display: inline-block; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; background: var(--amber-bg); color: var(--amber); border: 1px solid currentColor; border-radius: 4px; padding: 1px 6px; margin-left: 6px; font-weight: 600; }
+
+/* ---- detail sheet --------------------------------------------------------- */
+
+.scrim { position: fixed; inset: 0; z-index: 50; background: rgba(35,32,28,0.42); opacity: 0; pointer-events: none; transition: opacity 180ms ease; }
+.scrim.open { opacity: 1; pointer-events: auto; }
+.sheet { position: fixed; z-index: 60; left: 0; right: 0; bottom: 0; max-height: 88vh; display: flex; flex-direction: column; background: var(--limestone); border-radius: var(--arch); transform: translateY(102%); transition: transform 220ms cubic-bezier(0.2,0,0.2,1); box-shadow: 0 -8px 40px rgba(35,32,28,0.18); }
+.sheet.open { transform: translateY(0); }
+/* display:flex above beats the browser default for [hidden], so say it here.
+   Without this the sheet stays in the hit test and swallows every tap. */
+.sheet[hidden] { display: none; }
+@media (min-width: 720px) { .sheet { left: 50%; right: auto; width: 660px; transform: translate(-50%, 102%); bottom: 3vh; max-height: 90vh; } .sheet.open { transform: translate(-50%, 0); } }
+.sheet-head { padding: var(--s5) var(--s5) var(--s3); border-bottom: 1px solid var(--gold-pale); }
+.sheet-title { display: flex; align-items: baseline; gap: var(--s2); padding-right: 40px; }
+.sheet-title h3 { font-size: 24px; flex: 1 1 auto; }
+.sheet-close { position: absolute; top: var(--s3); right: var(--s3); width: 34px; height: 34px; border-radius: 999px; border: 1px solid var(--limestone-deep); background: #fff; color: var(--ink-soft); font-size: 18px; line-height: 1; display: grid; place-items: center; }
+.sheet-body { overflow-y: auto; padding: var(--s4) var(--s5) var(--s7); -webkit-overflow-scrolling: touch; }
+.story { font-size: 16px; line-height: 1.7; margin: 0; }
+
+/* ---- builds --------------------------------------------------------------- */
+
+.build { background: #fff; border: 1px solid var(--limestone-deep); border-radius: var(--arch); padding: var(--s5); margin-top: var(--s4); }
+.build-head { display: flex; align-items: baseline; gap: var(--s2); }
+.build-head h3 { font-size: 21px; flex: 1 1 auto; }
+.spec { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s5); margin: var(--s3) 0 var(--s4); padding: 0; }
+.spec div { font-size: 13px; }
+.spec dt { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
+.spec dd { margin: 2px 0 0; }
+.ing { margin: 0 0 var(--s4); padding: 0; list-style: none; }
+.ing li { display: flex; align-items: baseline; gap: var(--s3); border-bottom: 1px solid var(--limestone-deep); padding: 7px 0; font-size: 14.5px; }
+.ing .ml { font-variant-numeric: tabular-nums; color: var(--gold); font-size: 13px; min-width: 56px; flex: 0 0 auto; }
+.ing .nm { flex: 1 1 auto; }
+.ing .nm small { display: block; color: var(--ink-soft); font-size: 12.5px; }
+.substack { margin-bottom: var(--s4); }
+.substack h4 { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: var(--s2); }
+.steps { margin: 0; padding-left: 20px; }
+.steps li { margin-bottom: var(--s2); font-size: 14.5px; }
+blockquote.say { margin: 0 0 var(--s3); padding: var(--s3) var(--s4); border-left: 2px solid var(--gold); background: var(--limestone); border-radius: 0 var(--arch-sm) var(--arch-sm) 0; font-family: var(--display); font-size: 16.5px; line-height: 1.5; }
+
+/* ---- tables --------------------------------------------------------------- */
+
+.tablewrap { overflow-x: auto; border: 1px solid var(--limestone-deep); border-radius: var(--arch); background: #fff; margin-top: var(--s3); }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+table.wide { min-width: 760px; }
+th, td { padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--limestone-deep); vertical-align: top; }
+th { background: var(--limestone-deep); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); white-space: nowrap; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; }
+td.tbd { color: var(--amber); font-size: 11px; letter-spacing: 0.08em; }
+.legend { font-size: 12px; color: var(--ink-soft); margin-top: var(--s3); line-height: 1.6; }
+
+.chip { display: inline-block; font-size: 11px; border-radius: 999px; padding: 2px 9px; border: 1px solid; white-space: nowrap; }
+.chip.yes { color: var(--green); border-color: #A9C9B0; background: var(--green-bg); }
+.chip.no  { color: var(--red); border-color: #E0B3AA; background: var(--red-bg); }
+.chip.due { color: var(--amber); border-color: var(--gold-pale); background: var(--amber-bg); }
+
+/* rail slot colour dot, the house language */
+.slot { display: inline-flex; align-items: center; gap: var(--s2); }
+.slot-dot { width: 14px; height: 14px; border-radius: 3px; flex: 0 0 auto; box-shadow: inset 0 0 0 1px rgba(35,32,28,0.28); }
+.slot-n { font-family: var(--display); font-size: 16px; min-width: 14px; }
+
+/* ---- storage zones ------------------------------------------------------- */
+
+.zone { border-radius: var(--arch); padding: var(--s4) var(--s5); margin-top: var(--s4); background: #fff; border: 1px solid var(--limestone-deep); border-left: 4px solid var(--limestone-deep); }
+.zone--pink { border-left-color: var(--pink-zone); }
+.zone--yellow { border-left-color: var(--yellow-zone); }
+.zone h3 { font-size: 19px; }
+.zone-label { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; }
+.zone--pink .zone-label { color: var(--pink-zone); }
+.zone--yellow .zone-label { color: var(--yellow-zone); }
+.stations { margin: var(--s3) 0 0; padding-left: 18px; }
+.stations li { font-size: 14px; margin-bottom: var(--s2); }
+.fridge { margin-top: var(--s4); }
+.fridge h4 { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: var(--s2); }
+.doors { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--s1); }
+.doors li { font-size: 13.5px; }
+.doors b { font-family: var(--mono); font-size: 12px; color: var(--gold); }
+
+/* ---- training ------------------------------------------------------------- */
+
+.tool-block { background: #fff; border: 1px solid var(--limestone-deep); border-radius: var(--arch); padding: var(--s4) var(--s5); margin-top: var(--s4); }
+.tool-block h3 { font-size: 19px; margin-bottom: var(--s3); }
+.picks { display: flex; flex-wrap: wrap; gap: var(--s2); }
+.pick { border: 1px solid var(--gold-pale); background: #fff; border-radius: 999px; padding: 6px 12px; font-size: 13px; display: inline-flex; align-items: center; gap: var(--s2); transition: opacity 140ms ease, border-color 140ms ease, background 140ms ease; }
+.pick .swatch { width: 10px; height: 10px; }
+.pick[aria-pressed="true"] { border-color: var(--gold); background: var(--limestone-deep); font-weight: 600; }
+body.has-picks .pick[aria-pressed="false"] { opacity: 0.38; }
+.pick-count { font-size: 12px; color: var(--ink-soft); margin-top: var(--s2); }
+
+/* ---- print booklet -------------------------------------------------------- */
+
+#booklet { display: none; }
+
+@media print {
+  @page { margin: 12mm; }
+  body { background: #fff; }
+  .topbar, .subtabs, .scrim, .sheet, .print-hide { display: none !important; }
+
+  /* Booklet mode: one drink per page, everything else gone. */
+  body.booklet #app { display: none !important; }
+  body.booklet #booklet { display: block !important; }
+  .bk-page { break-after: page; page-break-after: always; padding-bottom: 6mm; }
+  .bk-page:last-child { break-after: auto; page-break-after: auto; }
+  .bk-head { border-bottom: 1.5pt solid #000; padding-bottom: 2mm; margin-bottom: 4mm; }
+  .bk-head h2 { font-size: 22pt; }
+  .bk-swatch { display: inline-block; width: 10pt; height: 10pt; border-radius: 50%; border: 0.75pt solid #000; margin-right: 4pt; }
+  .bk-spec { font-size: 9.5pt; letter-spacing: 0.06em; text-transform: uppercase; color: #000; margin-top: 1.5mm; }
+  .bk-sec { margin-bottom: 4mm; }
+  .bk-sec h3 { font-size: 8.5pt; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 1.5mm; border-bottom: 0.5pt solid #999; padding-bottom: 0.8mm; }
+  .bk-sec ol, .bk-sec ul { margin: 0; padding-left: 5mm; font-size: 10pt; }
+  .bk-sec li { margin-bottom: 1mm; }
+  .bk-say { font-family: var(--display); font-size: 11pt; border-left: 1.5pt solid #000; padding-left: 3mm; margin: 0 0 2mm; }
+  .bk-flag { border: 0.75pt dashed #000; padding: 2mm; font-size: 9pt; margin-bottom: 3mm; }
+  /* Grayscale safe: a ruled box, no fills. */
+  .bk-notes { border: 0.75pt solid #000; padding: 2mm 3mm 0; margin-top: 5mm; }
+  .bk-notes h3 { font-size: 8.5pt; letter-spacing: 0.16em; text-transform: uppercase; border: 0; margin-bottom: 1mm; }
+  .bk-rule { border-bottom: 0.4pt solid #666; height: 7mm; }
+
+  /* Plain menu print, when not in booklet mode. */
+  body:not(.booklet) .wrap { max-width: none; padding: 0; }
+  body:not(.booklet) .card { border: 0; padding: 0 0 2mm; break-inside: avoid; border-radius: 0; }
+  body:not(.booklet) .cards { grid-template-columns: 1fr 1fr; gap: 2mm 6mm; }
+  body:not(.booklet) .flag, body:not(.booklet) .warn { display: none !important; }
+}
+
+@media (prefers-reduced-motion: reduce) { * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; } }
+</style>
+</head>
+<body class="mode-menu">
+
+<div id="app">
+
+<header class="topbar print-hide">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="brand-name">Quatro</span>
+      <span class="brand-city">Amsterdam</span>
+    </div>
+    <div class="seg" id="modes" role="group" aria-label="Mode"></div>
+    <div class="seg seg--lang" id="langs" role="group" aria-label="Language"></div>
+  </div>
+  <nav class="subtabs" id="subtabs" role="tablist" hidden></nav>
+</header>
+
+<main class="wrap">
+  <div id="root"></div>
+</main>
+
+</div>
+
+<div id="booklet"></div>
+
+<div class="scrim" id="scrim"></div>
+<section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-name" hidden>
+  <div class="sheet-head">
+    <button class="sheet-close" id="sheet-close" type="button" aria-label="Close">&times;</button>
+    <div class="sheet-title">
+      <span class="swatch" id="sheet-swatch"></span>
+      <h3 id="sheet-name"></h3>
+    </div>
+  </div>
+  <div class="sheet-body" id="sheet-body"></div>
+</section>
+
+<script>
+"use strict";
+
+/* ==========================================================================
+   DATA
+   One object. A non-developer can edit any text here, add a price, or change
+   a build without touching the code below it.
+
+   Every translatable string is {en, nl}. Drink names stay in English by
+   instruction, so name is a plain string.
+
+   PRICES. price is null on every drink and nothing renders one. The layout is
+   built to look finished without them. When prices land, fill price and
+   ops.cost and the Owner block fills in on its own.
+   ========================================================================== */
+
+var VAT = 0.09;
+
+var UI = {
+  menu:        { en: "Menu",            nl: "Menu" },
+  runsheet:    { en: "Run sheet",       nl: "Werkblad" },
+  builds:      { en: "Builds",          nl: "Opbouw" },
+  rail:        { en: "Rail",            nl: "Speedrail" },
+  prep:        { en: "Prep and FIFO",   nl: "Voorbereiding en FIFO" },
+  inventory:   { en: "Inventory",       nl: "Voorraad" },
+  storage:     { en: "Storage",         nl: "Opslag" },
+  training:    { en: "Training",        nl: "Training" },
+  tagline:     { en: "The room is the calm canvas. The drinks are the paint.",
+                 nl: "De ruimte is het rustige doek. De drankjes zijn de verf." },
+  alcoholFree: { en: "Everything on this menu is alcohol-free",
+                 nl: "Alles op dit menu is alcoholvrij" },
+  allergies:   { en: "Please tell us about any allergies. We build around them.",
+                 nl: "Laat het ons weten bij allergieen. Wij passen de drank aan." },
+  glass:       { en: "Glass",           nl: "Glas" },
+  ice:         { en: "Ice",             nl: "Ijs" },
+  method:      { en: "Method",          nl: "Methode" },
+  atBar:       { en: "At the bar",      nl: "Achter de bar" },
+  atTable:     { en: "At the table",    nl: "Aan tafel" },
+  sayThis:     { en: "Say this",        nl: "Zeg dit" },
+  ingredients: { en: "Ingredients, in build order", nl: "Ingredienten, in opbouwvolgorde" },
+  printBooklet:{ en: "Print booklet",   nl: "Boekje afdrukken" },
+  bookletNote: { en: "One drink per page with a notes box, grayscale safe.",
+                 nl: "Een drankje per pagina met een notitievak, geschikt voor grijstinten." },
+  myNotes:     { en: "My notes",        nl: "Mijn aantekeningen" },
+  staffBlock:  { en: "Staff",           nl: "Personeel" },
+  ownerBlock:  { en: "Owner",           nl: "Eigenaar" },
+  slot:        { en: "Slot",            nl: "Slot" },
+  colour:      { en: "Colour",          nl: "Kleur" },
+  contents:    { en: "Contents",        nl: "Inhoud" },
+  drinksN:     { en: "Drinks",          nl: "Drankjes" },
+  item:        { en: "Item",            nl: "Item" },
+  yield:       { en: "Yield",           nl: "Opbrengst" },
+  keeps:       { en: "Keeps",           nl: "Houdbaar" },
+  home:        { en: "Home",            nl: "Plek" },
+  inStock:     { en: "In stock",        nl: "Op voorraad" },
+  needsPrep:   { en: "Prep today",      nl: "Vandaag maken" },
+  ingredient:  { en: "Ingredient",      nl: "Ingredient" },
+  packSize:    { en: "Pack size",       nl: "Verpakking" },
+  costPack:    { en: "Cost per pack",   nl: "Kosten per verpakking" },
+  costDrink:   { en: "Cost per drink",  nl: "Kosten per drankje" },
+  monthly:     { en: "Monthly usage",   nl: "Maandelijks gebruik" },
+  supplier:    { en: "Supplier",        nl: "Leverancier" },
+  location:    { en: "Storage",         nl: "Opslag" },
+  sell:        { en: "Sell price",      nl: "Verkoopprijs" },
+  netVat:      { en: "Net of VAT",      nl: "Excl. btw" },
+  pourCost:    { en: "Pour cost",       nl: "Inkoopprijs per glas" },
+  gpEur:       { en: "Gross profit EUR", nl: "Brutowinst EUR" },
+  gpPct:       { en: "Gross profit %",  nl: "Brutowinst %" },
+  yes:         { en: "Yes",             nl: "Ja" },
+  no:          { en: "No",              nl: "Nee" },
+  todaysFive:  { en: "Today's five",    nl: "De vijf van vandaag" },
+  fiveHelp:    { en: "Tap up to five drinks to work on. The rest stay visible but dim.",
+                 nl: "Tik maximaal vijf drankjes aan om te oefenen. De rest blijft zichtbaar maar gedimd." },
+  selected:    { en: "selected",        nl: "geselecteerd" },
+  clear:       { en: "Clear",           nl: "Wissen" },
+  labelRule:   { en: "Label standard",  nl: "Labelstandaard" },
+  labelBody:   { en: "Every container carries a day-dot plus tape with NAME, MADE, USE BY. New stock goes behind old. Anything past date is binned at open.",
+                 nl: "Elke bak heeft een dagsticker plus tape met NAAM, GEMAAKT, TE GEBRUIKEN TOT. Nieuwe voorraad achter oude. Alles over datum gaat bij opening in de bak." },
+  secondTier:  { en: "Second tier, bottled and spouted but off the rail",
+                 nl: "Tweede rij, op fles met schenktuit maar niet in de speedrail" },
+  moneyTbd:    { en: "All money fields show TBD until prices are entered.",
+                 nl: "Alle geldvelden tonen TBD totdat de prijzen zijn ingevoerd." }
+};
+
+var SECTION_TITLES = {
+  signatures: { en: "Signatures",            nl: "Signatuurdrankjes" },
+  classics:   { en: "Classics, Reimagined",  nl: "Klassiekers, opnieuw bedacht" },
+  matcha:     { en: "Matcha",                nl: "Matcha" },
+  lemonades:  { en: "Lemonades",             nl: "Limonades" },
+  coffee:     { en: "Coffee",                nl: "Koffie" },
+  bottled:    { en: "Bottled and Chilled",   nl: "Flesjes en gekoeld" }
+};
+
+/* ---- ingredients: staff facts and owner facts in one place ---------------- */
+var ING = {
+  lychee:       { name: { en: "Lychee juice", nl: "Lycheesap" }, pack: "1 L", cost: null, supplier: "TODO", home: "Rail slot 7, spares FR1 A", inStock: true,  prep: false },
+  coconutw:     { name: { en: "Coconut water", nl: "Kokoswater" }, pack: "1 L", cost: null, supplier: "TODO", home: "FR3 door C", inStock: true, prep: false },
+  salt:         { name: { en: "Sea salt", nl: "Zeezout" }, pack: "1 kg", cost: null, supplier: "Kitchen", home: "Station 3 dry store", inStock: true, prep: false },
+  peatea:       { name: { en: "Butterfly pea tea", nl: "Vlindererwtthee" }, pack: "50 g dried", cost: null, supplier: "TODO", home: "FR1 door B", inStock: true, prep: true },
+  lime:         { name: { en: "Lime juice", nl: "Limoensap" }, pack: "Fresh, 1 kg", cost: null, supplier: "Market, daily", home: "Rail slot 1, whole FR2 A", inStock: true, prep: true },
+  lemon:        { name: { en: "Lemon juice", nl: "Citroensap" }, pack: "Fresh, 1 kg", cost: null, supplier: "Market, daily", home: "Rail slot 2, whole FR2 A", inStock: true, prep: true },
+  orange:       { name: { en: "Orange juice", nl: "Sinaasappelsap" }, pack: "Fresh, 1 kg", cost: null, supplier: "Market, daily", home: "Rail slot 4, whole FR2 A", inStock: true, prep: true },
+  simple:       { name: { en: "Simple syrup", nl: "Suikersiroop" }, pack: "1 L, bought in", cost: null, supplier: "TODO", home: "Rail slot 3", inStock: true, prep: false },
+  cordial:      { name: { en: "Rosemary-thyme maple cordial", nl: "Rozemarijn-tijm-ahornsiroop" }, pack: "1 L, in house", cost: null, supplier: "In house", home: "FR1 door B", inStock: false, prep: true },
+  rosemary:     { name: { en: "Rosemary", nl: "Rozemarijn" }, pack: "Bunch", cost: null, supplier: "Market, daily", home: "FR2 door C", inStock: true, prep: false },
+  thyme:        { name: { en: "Thyme", nl: "Tijm" }, pack: "Bunch", cost: null, supplier: "Market, daily", home: "FR2 door C", inStock: true, prep: false },
+  soda:         { name: { en: "Sparkling water", nl: "Spa rood" }, pack: "1 L", cost: null, supplier: "TODO", home: "FR1 door A", inStock: true, prep: false },
+  grapes:       { name: { en: "Green grapes", nl: "Witte druiven" }, pack: "500 g", cost: null, supplier: "Market, daily", home: "FR2 door C", inStock: true, prep: false },
+  basil:        { name: { en: "Basil", nl: "Basilicum" }, pack: "Bunch", cost: null, supplier: "Market, daily", home: "FR2 door C, damp cloth", inStock: true, prep: false },
+  cloudyapple:  { name: { en: "Cloudy apple juice", nl: "Troebel appelsap" }, pack: "1 L", cost: null, supplier: "TODO", home: "Rail slot 5", inStock: true, prep: false },
+  pear_gar:     { name: { en: "Caramelised pear", nl: "Gekaramelliseerde peer" }, pack: "Cut daily", cost: null, supplier: "In house", home: "FR2 door B", inStock: false, prep: true },
+  hibiscus:     { name: { en: "Hibiscus tea, strong", nl: "Hibiscusthee, sterk" }, pack: "250 g dried", cost: null, supplier: "TODO", home: "FR1 door B", inStock: true, prep: true },
+  strawberry:   { name: { en: "Strawberries", nl: "Aardbeien" }, pack: "Punnet", cost: null, supplier: "Market, daily", home: "FR2 door C", inStock: true, prep: false },
+  strawpuree:   { name: { en: "Strawberry puree", nl: "Aardbeienpuree" }, pack: "Squeeze bottle", cost: null, supplier: "In house", home: "FR1 door C", inStock: false, prep: true },
+  mangopuree:   { name: { en: "Mango puree", nl: "Mangopuree" }, pack: "Squeeze bottle", cost: null, supplier: "In house", home: "FR1 door C", inStock: false, prep: true },
+  vanilla:      { name: { en: "Vanilla syrup", nl: "Vanillesiroop" }, pack: "700 ml", cost: null, supplier: "TODO, confirm alcohol-free", home: "Rail slot 6", inStock: true, prep: false },
+  foamer:       { name: { en: "Fee Foam, plant foamer", nl: "Fee Foam, plantaardige schuimer" }, pack: "250 ml", cost: null, supplier: "TODO", home: "Station 3 dry store", inStock: false, prep: false },
+  jalapeno:     { name: { en: "Jalapeno", nl: "Jalapeno" }, pack: "Fresh", cost: null, supplier: "Market, daily", home: "FR2 door B, sliced", inStock: true, prep: true },
+  gingerbeer:   { name: { en: "Ginger beer", nl: "Ginger beer" }, pack: "200 ml bottle", cost: null, supplier: "TODO", home: "FR1 door A", inStock: true, prep: false },
+  mint:         { name: { en: "Mint", nl: "Munt" }, pack: "Bunch", cost: null, supplier: "Market, daily", home: "FR2 door C, damp cloth", inStock: true, prep: false },
+  blackberry:   { name: { en: "Blackberries", nl: "Bramen" }, pack: "Punnet", cost: null, supplier: "Market, daily", home: "FR2 door C", inStock: false, prep: false },
+  cranberry:    { name: { en: "Cranberry juice", nl: "Cranberrysap" }, pack: "1 L", cost: null, supplier: "TODO", home: "Second tier, FR1 C", inStock: true, prep: false },
+  grenadine:    { name: { en: "Grenadine", nl: "Grenadine" }, pack: "700 ml", cost: null, supplier: "TODO", home: "Second tier, FR1 C", inStock: true, prep: false },
+  passionjuice: { name: { en: "Passionfruit juice", nl: "Passievruchtensap" }, pack: "1 L", cost: null, supplier: "TODO", home: "Second tier, FR1 C", inStock: true, prep: false },
+  passionpuree: { name: { en: "Passionfruit puree", nl: "Passievruchtenpuree" }, pack: "1 kg", cost: null, supplier: "TODO", home: "FR1 door C", inStock: true, prep: false },
+  passionfresh: { name: { en: "Fresh passion fruit, garnish only", nl: "Verse passievrucht, alleen garnering" }, pack: "Each", cost: null, supplier: "Market", home: "FR2 door C", inStock: true, prep: false },
+  coconutcream: { name: { en: "Coconut cream", nl: "Kokosroom" }, pack: "400 ml", cost: null, supplier: "TODO", home: "Second tier, FR1 C", inStock: true, prep: false },
+  coconutmilk:  { name: { en: "Coconut milk", nl: "Kokosmelk" }, pack: "1 L", cost: null, supplier: "TODO", home: "Second tier, FR1 C", inStock: true, prep: false },
+  pineapple:    { name: { en: "Pineapple juice", nl: "Ananassap" }, pack: "1 L", cost: null, supplier: "TODO", home: "Second tier, FR1 C", inStock: true, prep: false },
+  cherries:     { name: { en: "Cocktail cherries", nl: "Cocktailkersen" }, pack: "Jar", cost: null, supplier: "TODO", home: "Station 3 dry store", inStock: true, prep: false },
+  jasmine:      { name: { en: "Jasmine cold brew", nl: "Jasmijn cold brew" }, pack: "250 g leaf", cost: null, supplier: "TODO", home: "FR1 door B", inStock: true, prep: true },
+  oleo:         { name: { en: "Oleo saccharum", nl: "Oleo saccharum" }, pack: "500 ml, in house", cost: null, supplier: "In house", home: "FR1 door B", inStock: false, prep: true },
+  lavender:     { name: { en: "Lavender syrup", nl: "Lavendelsiroop" }, pack: "1 L", cost: null, supplier: "TODO", home: "FR1 door B", inStock: true, prep: false },
+  lemongrass:   { name: { en: "Lemongrass syrup", nl: "Citroengrassiroop" }, pack: "1 L", cost: null, supplier: "In house", home: "FR1 door B", inStock: true, prep: false },
+  peachsyrup:   { name: { en: "Peach syrup", nl: "Perziksiroop" }, pack: "500 ml", cost: null, supplier: "TODO", home: "FR1 door B", inStock: false, prep: true },
+  matcha:       { name: { en: "Matcha, Uji ceremonial", nl: "Matcha, Uji ceremonieel" }, pack: "100 g", cost: null, supplier: "TODO", home: "Station 5 matcha station", inStock: true, prep: false },
+  milk:         { name: { en: "Whole milk", nl: "Volle melk" }, pack: "1 L", cost: null, supplier: "Dairy", home: "FR3 door A, beside the machine", inStock: true, prep: false },
+  whitechoc:    { name: { en: "White chocolate sauce", nl: "Witte chocoladesaus" }, pack: "In house", cost: null, supplier: "In house", home: "FR3 door C", inStock: true, prep: false },
+  sparklemon:   { name: { en: "Sparkling lemonade", nl: "Bruisende limonade" }, pack: "1 L", cost: null, supplier: "TODO", home: "FR1 door A", inStock: true, prep: false }
+};
+
+/* ---- drinks -------------------------------------------------------------- */
+/* tool drives the Training grouping: glass, barspoon, jigger, shaker. */
+
+var SECTIONS = [
+{
+  id: "signatures", kind: "cards",
+  drinks: [
+    {
+      id: "lychee-siren", name: "Lychee Siren", price: null, tool: "barspoon",
+      swatch: "#4C4C9D", glass: { en: "Highball", nl: "Highball" }, ice: { en: "Crushed", nl: "Crushed" },
+      method: { en: "Build and float", nl: "Opbouwen en laten drijven" },
+      desc: {
+        en: "Lychee and coconut water beneath a deep indigo crown of butterfly pea flower. In Taipei, lychee is what you drink because it is hot outside. Ask your server about the lime.",
+        nl: "Lychee en kokoswater onder een diepblauwe kroon van vlindererwtbloem. In Taipei drink je lychee omdat het heet is buiten. Vraag je gastheer naar de limoen."
+      },
+      tag: { en: "Not a fan of coconut water? We swap in cloudy apple", nl: "Geen liefhebber van kokoswater? Wij vervangen het door troebele appel" },
+      build: [
+        { ref: "lychee", ml: 70 }, { ref: "coconutw", ml: 70 },
+        { ref: "salt", ml: 0, note: { en: "A pinch", nl: "Een snuf" } },
+        { ref: "peatea", ml: 40, note: { en: "Floated last", nl: "Als laatste erop" } },
+        { ref: "lime", ml: 20, note: { en: "Carried to the table separately", nl: "Apart naar tafel gebracht" } }
+      ],
+      bar: { en: [
+        "Fill the highball with crushed ice.",
+        "Lychee, then coconut water.",
+        "Pinch of salt, stir 3 turns.",
+        "Re-mound the ice to the rim.",
+        "Float the pea tea over the back of a spoon.",
+        "Lime wheel, straw.",
+        "20 ml lime in a small carafe on the tray."
+      ], nl: [
+        "Vul de highball met crushed ice.",
+        "Lychee, dan kokoswater.",
+        "Snuf zout, 3 keer roeren.",
+        "Stapel het ijs weer op tot de rand.",
+        "Laat de vlindererwtthee over de bolle kant van een loffel drijven.",
+        "Limoenwiel, rietje.",
+        "20 ml limoen in een kleine karaf op het blad."
+      ]},
+      table: { en: [
+        "Set the glass down.",
+        "Pour the lime over the indigo.",
+        "Hand the guest the barspoon. They stir."
+      ], nl: [
+        "Zet het glas neer.",
+        "Giet de limoen over het diepblauw.",
+        "Geef de gast de barloffel. Zij roeren zelf."
+      ]},
+      say: { en: [
+        "There is no colouring in this, the blue is butterfly pea flower. I have kept the lime out on purpose. Watch.",
+        "That is just acid meeting the flower. Stir it and the whole glass follows."
+      ], nl: [
+        "Hier zit geen kleurstof in, het blauw is vlindererwtbloem. Ik heb de limoen er met opzet uit gelaten. Kijk.",
+        "Dat is alleen zuur dat de bloem raakt. Roer het en het hele glas volgt."
+      ]}
+    },
+    {
+      id: "forest-fairy", name: "Forest Fairy", price: null, tool: "jigger",
+      swatch: "#3E5140", glass: { en: "Highball", nl: "Highball" }, ice: { en: "Cubed", nl: "Blokjes" },
+      method: { en: "Stir in glass", nl: "In het glas roeren" },
+      desc: {
+        en: "Rosemary is smoked before it goes in, thyme stays raw and green, lemon cuts the dark maple so it drinks dry rather than sweet. Herbal, smoky, quietly bitter at the edges.",
+        nl: "Rozemarijn wordt gerookt voordat hij erin gaat, tijm blijft rauw en groen, citroen snijdt door de donkere ahornsiroop zodat het droog drinkt in plaats van zoet. Kruidig, rokerig, licht bitter aan de randen."
+      },
+      tag: { en: "Want it extra herby? We bash in more thyme", nl: "Extra kruidig? Wij kneuzen er meer tijm bij" },
+      build: [
+        { ref: "lemon", ml: 25 }, { ref: "cordial", ml: 60 },
+        { ref: "soda", ml: 155, note: { en: "Top, roughly", nl: "Aanvullen, ongeveer" } },
+        { ref: "rosemary", ml: 0, note: { en: "1 sprig, smoked 3 seconds", nl: "1 takje, 3 seconden gerookt" } },
+        { ref: "thyme", ml: 0, note: { en: "1 sprig, raw", nl: "1 takje, rauw" } }
+      ],
+      bar: { en: [
+        "Smoke the rosemary sprig 3 seconds, blow it out.",
+        "Fill the highball with cubed ice.",
+        "Lemon, then cordial.",
+        "Stir 5 seconds.",
+        "Top with sparkling water down the barspoon.",
+        "One stir from the bottom.",
+        "Drop in the smoked rosemary and the raw thyme."
+      ], nl: [
+        "Rook het rozemarijntakje 3 seconden, blaas het uit.",
+        "Vul de highball met ijsblokjes.",
+        "Citroen, dan de siroop.",
+        "5 seconden roeren.",
+        "Aanvullen met spa rood langs de barloffel.",
+        "Een keer roeren vanaf de bodem.",
+        "Laat de gerookte rozemarijn en de rauwe tijm erin vallen."
+      ]},
+      table: null,
+      say: { en: ["This is the one for someone who does not want anything sweet. Maple instead of sugar, two herbs, nothing else."],
+             nl: ["Dit is de drank voor wie niets zoets wil. Ahornsiroop in plaats van suiker, twee kruiden, niets anders."] }
+    },
+    {
+      id: "the-hulk", name: "The Hulk", price: null, tool: "shaker",
+      swatch: "#6E8C3A", glass: { en: "Highball", nl: "Highball" }, ice: { en: "Cubed", nl: "Blokjes" },
+      method: { en: "Shake and double strain", nl: "Shaken en dubbel zeven" },
+      desc: {
+        en: "Basil pressed once releases its peppery anise oils into the sugar of green grapes; apple and pear give it body, lime lifts it. The green is the leaf itself, no colouring.",
+        nl: "Basilicum, een keer geperst, geeft zijn peperige anijsolie af aan de suiker van groene druiven; appel en peer geven body, limoen tilt het op. Het groen is het blad zelf, geen kleurstof."
+      },
+      tag: { en: "On the sour side, very refreshing", nl: "Aan de zure kant, heel verfrissend" },
+      build: [
+        { ref: "grapes", ml: 0, note: { en: "8 green grapes, 6 presses", nl: "8 witte druiven, 6 keer persen" } },
+        { ref: "basil", ml: 0, note: { en: "10 leaves, press ONCE only", nl: "10 blaadjes, EEN keer persen" } },
+        { ref: "cloudyapple", ml: 120 }, { ref: "lime", ml: 20 }, { ref: "simple", ml: 15 },
+        { ref: "soda", ml: 85, note: { en: "Top, roughly", nl: "Aanvullen, ongeveer" } },
+        { ref: "pear_gar", ml: 0, note: { en: "Slice, with a floated basil leaf", nl: "Schijfje, met een drijvend basilicumblad" } }
+      ],
+      bar: { en: [
+        "Muddle 8 green grapes, 6 presses.",
+        "Add 10 basil leaves and press once only.",
+        "Cloudy apple, lime, simple syrup.",
+        "Shake hard 12 seconds.",
+        "Double strain over fresh cubed ice.",
+        "Top with roughly 85 ml sparkling water.",
+        "Basil leaf floated, caramelised pear slice."
+      ], nl: [
+        "Kneus 8 witte druiven, 6 keer persen.",
+        "Voeg 10 basilicumblaadjes toe en pers een keer.",
+        "Troebel appelsap, limoen, suikersiroop.",
+        "12 seconden hard shaken.",
+        "Dubbel zeven over verse ijsblokjes.",
+        "Aanvullen met ongeveer 85 ml spa rood.",
+        "Basilicumblad erop, schijfje gekaramelliseerde peer."
+      ]},
+      table: null,
+      say: { en: ["The trick is you press the basil exactly once. Any more and it turns bitter on you."],
+             nl: ["De truc is dat je de basilicum precies een keer perst. Meer en hij wordt bitter."] }
+    },
+    {
+      id: "hibiscus-royale", name: "Hibiscus Royale", price: null, tool: "shaker",
+      swatch: "#9E2B3B", glass: { en: "Coppa", nl: "Coppa" }, ice: { en: "Cubed", nl: "Blokjes" },
+      method: { en: "Dry shake then wet shake", nl: "Droog shaken, dan met ijs" },
+      desc: {
+        en: "Hibiscus steeps deep red and properly tart; strawberry rounds that acid with sweetness and body. Shaken above it, orange, lemon and vanilla settle into a pale silk that holds as its own layer. Sharp below, soft on top.",
+        nl: "Hibiscus trekt diep rood en echt zuur; aardbei rondt dat zuur af met zoetheid en body. Daarboven zakken sinaasappel, citroen en vanille in een bleke zijde die als eigen laag blijft liggen. Scherp onder, zacht boven."
+      },
+      tag: { en: "Layered, and vegan as standard", nl: "Gelaagd, en standaard veganistisch" },
+      build: [
+        { ref: "hibiscus", ml: 120, note: { en: "GLASS FIRST, over ice and strawberries", nl: "EERST HET GLAS, over ijs en aardbeien" } },
+        { ref: "strawberry", ml: 0, note: { en: "4 halved, tucked so they show through the glass", nl: "4 gehalveerd, zo geplaatst dat ze door het glas zichtbaar zijn" } },
+        { ref: "foamer", ml: 0, note: { en: "6 to 8 drops, in the shaker", nl: "6 tot 8 druppels, in de shaker" } },
+        { ref: "strawpuree", ml: 30, note: { en: "In the shaker", nl: "In de shaker" } },
+        { ref: "orange", ml: 60, note: { en: "In the shaker", nl: "In de shaker" } },
+        { ref: "lemon", ml: 30, note: { en: "In the shaker", nl: "In de shaker" } },
+        { ref: "vanilla", ml: 30, note: { en: "In the shaker", nl: "In de shaker" } }
+      ],
+      bar: { en: [
+        "Glass first: cubed ice, then 4 halved strawberries tucked so they show through the glass.",
+        "Add roughly 120 ml hibiscus tea. Set the glass down.",
+        "Shaker: 6 to 8 drops Fee Foam, 30 strawberry puree, 60 orange, 30 lemon, 30 vanilla syrup.",
+        "Dry shake 15 seconds, no ice.",
+        "Add ice, wet shake 12 seconds.",
+        "Fine strain slowly over the back of a spoon onto the surface."
+      ], nl: [
+        "Eerst het glas: ijsblokjes, dan 4 gehalveerde aardbeien zo geplaatst dat ze door het glas zichtbaar zijn.",
+        "Voeg ongeveer 120 ml hibiscusthee toe. Zet het glas neer.",
+        "Shaker: 6 tot 8 druppels Fee Foam, 30 aardbeienpuree, 60 sinaasappel, 30 citroen, 30 vanillesiroop.",
+        "15 seconden droog shaken, zonder ijs.",
+        "Ijs toevoegen, 12 seconden shaken.",
+        "Langzaam fijn zeven over de bolle kant van een loffel op het oppervlak."
+      ]},
+      table: null,
+      say: { en: ["Red at the bottom, cream on top, and they do not mix until you drink. The foam is plant based, no egg anywhere."],
+             nl: ["Rood onderin, room bovenop, en ze mengen niet tot je drinkt. Het schuim is plantaardig, nergens ei."] }
+    }
+  ]
+},
+{
+  id: "classics", kind: "cards",
+  drinks: [
+    {
+      id: "jalapeno-mule", name: "Spicy Jalapeno Mule", price: null, tool: "glass",
+      swatch: "#5E8C4A", glass: { en: "Highball", nl: "Highball" }, ice: { en: "Crushed", nl: "Crushed" },
+      method: { en: "Build", nl: "Opbouwen" },
+      desc: {
+        en: "Fresh jalapeno, half a lime, proper ginger beer over crushed ice. The heat arrives first, the ginger finishes it.",
+        nl: "Verse jalapeno, een halve limoen, echte ginger beer over crushed ice. De hitte komt eerst, de gember maakt het af."
+      },
+      tag: { en: "Not a jalapeno fan? Feel free to ask without", nl: "Geen jalapeno-liefhebber? Vraag hem gerust zonder" },
+      build: [
+        { ref: "jalapeno", ml: 0, note: { en: "3 slices, seeds out as standard", nl: "3 schijfjes, standaard zonder zaadjes" } },
+        { ref: "lime", ml: 20 },
+        { ref: "simple", ml: 10, note: { en: "Optional", nl: "Optioneel" } },
+        { ref: "gingerbeer", ml: 200, note: { en: "Top", nl: "Aanvullen" } },
+        { ref: "mint", ml: 0, note: { en: "Sprig, with a jalapeno wheel", nl: "Takje, met een schijfje jalapeno" } }
+      ],
+      bar: { en: [
+        "Muddle 3 jalapeno slices, seeds out as standard, with the lime and the optional simple syrup.",
+        "Fill with crushed ice.",
+        "Top with 200 ml ginger beer.",
+        "Jalapeno wheel and mint sprig."
+      ], nl: [
+        "Kneus 3 schijfjes jalapeno, standaard zonder zaadjes, met de limoen en de optionele suikersiroop.",
+        "Vul met crushed ice.",
+        "Aanvullen met 200 ml ginger beer.",
+        "Schijfje jalapeno en een takje munt."
+      ]},
+      table: null,
+      say: { en: ["Seeds are out as standard, so it is warm rather than hot. Say the word and we leave them in."],
+             nl: ["De zaadjes gaan er standaard uit, dus hij is warm in plaats van heet. Zeg het en we laten ze erin."] }
+    },
+    {
+      id: "ocean-mojito", name: "Ocean Mojito", price: null, tool: "barspoon",
+      swatch: "#4A66A8", glass: { en: "Highball", nl: "Highball" }, ice: { en: "Crushed", nl: "Crushed" },
+      method: { en: "Muddle, bash, build and churn", nl: "Kneuzen, aantikken, opbouwen en churnen" },
+      desc: {
+        en: "Mint, lime and cane sugar churned through crushed ice. Blackberries sink to the bottom, dark as the deep, while butterfly pea flower floats above and turns violet where it meets the lime.",
+        nl: "Munt, limoen en rietsuiker gechurnd door crushed ice. Bramen zakken naar de bodem, donker als de diepte, terwijl vlindererwtbloem erboven drijft en violet kleurt waar hij de limoen raakt."
+      },
+      tag: { en: "Prefer it without the berries? Just the ocean, then", nl: "Liever zonder de bramen? Dan alleen de oceaan" },
+      build: [
+        { ref: "lime", ml: 0, note: { en: "4 wedges, muddled with the simple", nl: "4 partjes, gekneusd met de siroop" } },
+        { ref: "simple", ml: 20 },
+        { ref: "mint", ml: 0, note: { en: "8 to 12 leaves, bash once, press do not shred", nl: "8 tot 12 blaadjes, een keer aantikken, persen niet scheuren" } },
+        { ref: "blackberry", ml: 0, note: { en: "5 to 6, muddle gently, colour without crushing the seeds", nl: "5 tot 6, voorzichtig kneuzen, kleur zonder de zaadjes te breken" } },
+        { ref: "peatea", ml: 60 },
+        { ref: "soda", ml: 0, note: { en: "Fill", nl: "Aanvullen" } }
+      ],
+      bar: { en: [
+        "Muddle 4 lime wedges with 20 simple syrup in the glass.",
+        "Add 8 to 12 mint leaves, bash once. Press, do not shred.",
+        "Add 5 to 6 blackberries and muddle gently: colour without crushing the seeds.",
+        "Fill with crushed ice.",
+        "Pour 60 butterfly pea tea.",
+        "Fill with soda.",
+        "Churn from the bottom until violet-blue runs the whole glass.",
+        "Cap with crushed ice, slap the mint sprig."
+      ], nl: [
+        "Kneus 4 limoenpartjes met 20 suikersiroop in het glas.",
+        "Voeg 8 tot 12 muntblaadjes toe, een keer aantikken. Persen, niet scheuren.",
+        "Voeg 5 tot 6 bramen toe en kneus voorzichtig: kleur zonder de zaadjes te breken.",
+        "Vul met crushed ice.",
+        "Giet 60 vlindererwtthee erin.",
+        "Aanvullen met spa rood.",
+        "Churn vanaf de bodem tot violetblauw door het hele glas loopt.",
+        "Afdekken met crushed ice, tik het munttakje aan."
+      ]},
+      table: null,
+      say: { en: ["The blackberries sink and stay there, dark as the deep. The flower floats above. Two colours, two depths, one drink."],
+             nl: ["De bramen zakken en blijven liggen, donker als de diepte. De bloem drijft erboven. Twee kleuren, twee dieptes, een drankje."] }
+    },
+    {
+      id: "cosmopolitan", name: "Cosmopolitan", price: null, tool: "shaker",
+      swatch: "#C24D66", glass: { en: "Chilled coupe", nl: "Gekoelde coupe" }, ice: { en: "Served up, none in glass", nl: "Up geserveerd, geen ijs in het glas" },
+      method: { en: "Shake and fine strain", nl: "Shaken en fijn zeven" },
+      desc: {
+        en: "Dry cranberry against fresh lime, orange juice rounding the middle, a short top of soda to finish. Served up in a chilled coupe.",
+        nl: "Droge cranberry tegen verse limoen, sinaasappelsap dat het midden afrondt, een korte scheut soda om af te maken. Opgediend in een gekoelde coupe."
+      },
+      tag: null,
+      flag: {
+        en: "The 20 ml simple syrup is a tasting correction. Without it the drink was too sour. Do not drop it.",
+        nl: "De 20 ml suikersiroop is een correctie na het proeven. Zonder was de drank te zuur. Laat hem er niet uit."
+      },
+      build: [
+        { ref: "cranberry", ml: 60 }, { ref: "lime", ml: 30 }, { ref: "orange", ml: 30 },
+        { ref: "simple", ml: 20, note: { en: "Tasting correction, do not drop", nl: "Correctie na proeven, niet weglaten" } },
+        { ref: "soda", ml: 60, note: { en: "Top", nl: "Aanvullen" } }
+      ],
+      bar: { en: [
+        "Chill the coupe.",
+        "Shake cranberry, lime, orange and 20 ml simple syrup 12 seconds.",
+        "Fine strain into the chilled coupe.",
+        "Top with 60 soda.",
+        "Expressed orange peel."
+      ], nl: [
+        "Koel de coupe.",
+        "Shake cranberry, limoen, sinaasappel en 20 ml suikersiroop 12 seconden.",
+        "Fijn zeven in de gekoelde coupe.",
+        "Aanvullen met 60 soda.",
+        "Sinaasappelzeste eroverheen knijpen."
+      ]},
+      table: null,
+      say: { en: ["Cranberry and lime do the work here, the orange rounds the middle."],
+             nl: ["Cranberry en limoen doen hier het werk, de sinaasappel rondt het midden af."] }
+    },
+    {
+      id: "amsterdam-sunrise", name: "Amsterdam Sunrise", price: null, tool: "glass",
+      swatch: "#E8791D", glass: { en: "Highball", nl: "Highball" }, ice: { en: "Cubed", nl: "Blokjes" },
+      method: { en: "Build and sink", nl: "Opbouwen en laten zakken" },
+      desc: {
+        en: "Fresh orange over ice with grenadine sunk beneath it. Grenadine is denser than juice, so it settles and stays there, and the glass arrives as first light.",
+        nl: "Verse sinaasappel over ijs met grenadine die eronder zakt. Grenadine is zwaarder dan sap, dus het zakt en blijft liggen: het glas komt binnen als het eerste licht."
+      },
+      tag: { en: "Stir it when you are ready for sunset", nl: "Roer hem als je klaar bent voor de zonsondergang" },
+      build: [
+        { ref: "orange", ml: 200, note: { en: "Fill", nl: "Aanvullen" } },
+        { ref: "grenadine", ml: 10, note: { en: "Sink slowly down the inside", nl: "Langzaam langs de binnenkant laten zakken" } }
+      ],
+      bar: { en: [
+        "Fill the highball with cubed ice.",
+        "Fill with orange juice.",
+        "Sink 10 grenadine slowly down the inside of the glass so it settles and stays.",
+        "Do not stir."
+      ], nl: [
+        "Vul de highball met ijsblokjes.",
+        "Aanvullen met sinaasappelsap.",
+        "Laat 10 grenadine langzaam langs de binnenkant zakken zodat het blijft liggen.",
+        "Niet roeren."
+      ]},
+      table: null,
+      say: { en: ["Leave it as it comes for first light. When you are ready for sunset, stir it once."],
+             nl: ["Laat hem zoals hij komt voor het eerste licht. Als je klaar bent voor de zonsondergang, roer een keer."] }
+    },
+    {
+      id: "tropical-velvet", name: "Tropical Velvet", price: null, tool: "shaker",
+      swatch: "#C9973B", glass: { en: "Chilled coupe", nl: "Gekoelde coupe" }, ice: { en: "No ice in glass", nl: "Geen ijs in het glas" },
+      method: { en: "Shake and fine strain", nl: "Shaken en fijn zeven" },
+      desc: {
+        en: "Passionfruit is all acid and perfume on its own. Cloudy apple gives it body and a gentle sweetness to sit against, vanilla rounds the edges. Shaken hard, strained fine, served up.",
+        nl: "Passievrucht is op zichzelf alleen maar zuur en parfum. Troebele appel geeft body en zachte zoetheid om op te rusten, vanille rondt de randen af. Hard geshaket, fijn gezeefd, opgediend up."
+      },
+      tag: { en: "Add coconut cream for extra silk", nl: "Kokosroom erbij voor extra zachtheid" },
+      flag: {
+        en: "Bought puree or juice only. Scooping fresh passion fruit per batch is not repeatable in service. Fresh fruit is garnish.",
+        nl: "Alleen gekochte puree of sap. Verse passievrucht per batch uitscheppen is niet herhaalbaar in de service. Vers fruit is garnering."
+      },
+      build: [
+        { ref: "passionjuice", ml: 40 }, { ref: "passionpuree", ml: 20 },
+        { ref: "cloudyapple", ml: 30 }, { ref: "lime", ml: 20 }, { ref: "vanilla", ml: 10 },
+        { ref: "coconutcream", ml: 15, note: { en: "Sidecar shot, served alongside", nl: "Apart shotglaasje ernaast" } },
+        { ref: "passionfresh", ml: 0, note: { en: "Half, floated, garnish only", nl: "Half, drijvend, alleen garnering" } }
+      ],
+      bar: { en: [
+        "Shake passionfruit juice, puree, cloudy apple, lime and vanilla hard 12 seconds.",
+        "Fine strain into the chilled coupe.",
+        "Float half a passion fruit.",
+        "15 coconut cream as a sidecar shot, alongside."
+      ], nl: [
+        "Shake passievruchtensap, puree, troebel appelsap, limoen en vanille 12 seconden hard.",
+        "Fijn zeven in de gekoelde coupe.",
+        "Laat een halve passievrucht drijven.",
+        "15 kokosroom als apart shotglaasje ernaast."
+      ]},
+      table: null,
+      say: { en: ["The coconut cream comes on the side. Pour it in when you want it silkier, or leave it sharp."],
+             nl: ["De kokosroom komt er apart bij. Giet hem erin als je het zachter wilt, of laat hem scherp."] }
+    },
+    {
+      id: "pina-colada", name: "Pina Colada", price: null, tool: "shaker",
+      swatch: "#E7DFCF", glass: { en: "Highball or hurricane", nl: "Highball of hurricane" }, ice: { en: "Cubed", nl: "Blokjes" },
+      method: { en: "Shake and strain", nl: "Shaken en zeven" },
+      desc: {
+        en: "Coconut milk gives the body, coconut cream the richness, and a squeeze of lime cuts all three so it never collapses into sugar. Shaken rather than blended, so it comes out silky instead of icy.",
+        nl: "Kokosmelk geeft de body, kokosroom de rijkdom, en een scheut limoen snijdt door alle drie zodat het nooit in suiker verandert. Geshaket in plaats van geblend, dus zijdezacht in plaats van ijzig."
+      },
+      tag: null,
+      build: [
+        { ref: "coconutmilk", ml: 100 }, { ref: "lime", ml: 10 },
+        { ref: "pineapple", ml: 60 }, { ref: "coconutcream", ml: 40 },
+        { ref: "cherries", ml: 0, note: { en: "1, with a pineapple wedge", nl: "1, met een stukje ananas" } }
+      ],
+      bar: { en: [
+        "Shake coconut milk, lime, pineapple juice and coconut cream.",
+        "Strain over cubed ice.",
+        "Pineapple wedge and a cherry."
+      ], nl: [
+        "Shake kokosmelk, limoen, ananassap en kokosroom.",
+        "Zeven over ijsblokjes.",
+        "Stukje ananas en een kers."
+      ]},
+      table: null,
+      say: { en: ["It is coconut milk and cream, so it is properly thick. The lime is what stops it going cloying."],
+             nl: ["Het is kokosmelk en kokosroom, dus hij is echt dik. De limoen voorkomt dat hij te zoet wordt."] }
+    }
+  ]
+},
+{
+  id: "matcha", kind: "cards",
+  note: { en: "Uji ceremonial, whisked never stirred. Roughly half the caffeine of an espresso, released more slowly.",
+          nl: "Uji ceremonieel, geklopt en nooit geroerd. Ongeveer de helft van de cafeine van een espresso, langzamer afgegeven." },
+  drinks: [
+    {
+      id: "matcha-latte", name: "Matcha Latte", price: null, tool: "jigger",
+      swatch: "#7A9A5B", glass: { en: "Latte glass or cup", nl: "Latteglas of kop" }, ice: { en: "Hot or over ice", nl: "Warm of over ijs" },
+      method: { en: "Whisk and build", nl: "Kloppen en opbouwen" },
+      desc: { en: "Ceremonial Uji matcha, whisked to order. Also as cappuccino, flat white or cortado.",
+              nl: "Ceremoniele Uji-matcha, geklopt op bestelling. Ook als cappuccino, flat white of cortado." },
+      tag: null,
+      build: [ { ref: "matcha", ml: 60, note: { en: "Whisked", nl: "Geklopt" } }, { ref: "milk", ml: 180 } ],
+      bar: { en: ["Whisk the matcha to order.", "Steam or chill the milk.", "Pour the milk under the matcha."],
+             nl: ["Klop de matcha op bestelling.", "Stoom of koel de melk.", "Giet de melk onder de matcha."] },
+      table: null,
+      say: { en: ["Uji matcha, whisked when you order it. About half the caffeine of an espresso."],
+             nl: ["Uji-matcha, geklopt zodra je hem bestelt. Ongeveer de helft van de cafeine van een espresso."] }
+    },
+    {
+      id: "eminence-matcha-mojito", name: "Eminence Matcha Mojito", price: null, tool: "jigger",
+      swatch: "#5E8C4A", glass: { en: "Highball", nl: "Highball" }, ice: { en: "Cubed", nl: "Blokjes" },
+      method: { en: "Build, cold only", nl: "Opbouwen, alleen koud" },
+      desc: { en: "Matcha and mint share the same green, slightly bitter register, so they stack instead of competing. Apple carries them, lime cuts the tannin, sparkling lemonade lifts it. Served cold.",
+              nl: "Matcha en munt delen hetzelfde groene, licht bittere register, dus ze stapelen in plaats van te concurreren. Appel draagt ze, limoen snijdt de tannine, bruisende limonade tilt het op. Koud geserveerd." },
+      tag: { en: "Can't decide between mocktail and matcha? We got you", nl: "Kun je niet kiezen tussen mocktail en matcha? Wij regelen het" },
+      build: [
+        { ref: "mint", ml: 0, note: { en: "6 leaves, pressed once", nl: "6 blaadjes, een keer geperst" } },
+        { ref: "lime", ml: 20 }, { ref: "cloudyapple", ml: 80 },
+        { ref: "matcha", ml: 60, note: { en: "Whisked", nl: "Geklopt" } },
+        { ref: "sparklemon", ml: 100, note: { en: "Top, roughly", nl: "Aanvullen, ongeveer" } }
+      ],
+      bar: { en: ["Press 6 mint leaves once.", "Lime, then apple juice.", "Fill with cubed ice.", "Add 60 whisked matcha.", "Top with roughly 100 sparkling lemonade."],
+             nl: ["Pers 6 muntblaadjes een keer.", "Limoen, dan appelsap.", "Vul met ijsblokjes.", "Voeg 60 geklopte matcha toe.", "Aanvullen met ongeveer 100 bruisende limonade."] },
+      table: null,
+      say: { en: ["This is the one when you cannot choose. A proper matcha, just cold and long."],
+             nl: ["Dit is hem als je niet kunt kiezen. Een echte matcha, maar koud en lang."] }
+    },
+    {
+      id: "white-chocolate-matcha", name: "White Chocolate Matcha", price: null, tool: "jigger",
+      swatch: "#EDE3D5", glass: { en: "Latte glass", nl: "Latteglas" }, ice: { en: "Hot or cold", nl: "Warm of koud" },
+      method: { en: "Build", nl: "Opbouwen" },
+      desc: { en: "White chocolate is fat and sugar with no cocoa bitterness of its own, which is exactly why it works here. Hot or cold.",
+              nl: "Witte chocolade is vet en suiker zonder eigen cacaobitterheid, precies daarom werkt het hier. Warm of koud." },
+      tag: null,
+      build: [ { ref: "whitechoc", ml: 30 }, { ref: "milk", ml: 140 }, { ref: "matcha", ml: 60, note: { en: "Over the top", nl: "Erover" } } ],
+      bar: { en: ["White chocolate sauce into the glass.", "Milk, hot or cold.", "Pour 60 whisked matcha over the top."],
+             nl: ["Witte chocoladesaus in het glas.", "Melk, warm of koud.", "Giet 60 geklopte matcha erover."] },
+      table: null,
+      say: { en: ["Sweet at the bottom, green on top. Stir it if you want them to meet."],
+             nl: ["Zoet onderin, groen bovenop. Roer als je wilt dat ze samenkomen."] }
+    },
+    {
+      id: "fruit-matcha", name: "Iced Strawberry or Mango Matcha", price: null, tool: "jigger",
+      swatch: "#D45C6B", glass: { en: "Highball", nl: "Highball" }, ice: { en: "Cubed", nl: "Blokjes" },
+      method: { en: "Build", nl: "Opbouwen" },
+      desc: { en: "Crushed fruit at the bottom, cold milk over it, matcha poured last. You choose strawberry or mango.",
+              nl: "Gekneusd fruit onderin, koude melk erover, matcha als laatste erop gegoten. Jij kiest aardbei of mango." },
+      tag: { en: "Strawberry or mango, your choice", nl: "Aardbei of mango, jij kiest" },
+      /* One card, one build. The guest picks the fruit; ratios are identical. */
+      build: [
+        { ref: "strawpuree", ml: 60, note: { en: "OR 60 mango puree. Identical ratios either way", nl: "OF 60 mangopuree. Dezelfde verhoudingen" } },
+        { ref: "milk", ml: 140 },
+        { ref: "matcha", ml: 60, note: { en: "Poured over the top", nl: "Erover gegoten" } }
+      ],
+      bar: { en: [
+        "Ask the guest: strawberry or mango.",
+        "60 crushed strawberry OR 60 mango puree into the bottom of the glass.",
+        "Fill with cubed ice.",
+        "140 cold milk.",
+        "Pour 60 whisked matcha over the top."
+      ], nl: [
+        "Vraag de gast: aardbei of mango.",
+        "60 gekneusde aardbei OF 60 mangopuree onderin het glas.",
+        "Vul met ijsblokjes.",
+        "140 koude melk.",
+        "Giet 60 geklopte matcha erover."
+      ]},
+      table: null,
+      say: { en: ["Strawberry or mango, same drink either way. The fruit sits at the bottom until you stir it."],
+             nl: ["Aardbei of mango, hetzelfde drankje. Het fruit blijft onderin tot je roert."] }
+    },
+    {
+      id: "vanilla-matcha", name: "Vanilla Matcha", price: null, tool: "jigger",
+      swatch: "#E4D9BF", glass: { en: "Latte glass or cup", nl: "Latteglas of kop" }, ice: { en: "Hot or iced", nl: "Warm of over ijs" },
+      method: { en: "Whisk and build", nl: "Kloppen en opbouwen" },
+      desc: { en: "Vanilla softens the tannin without burying the tea, so it still tastes like matcha. The gentlest way in. Hot or over ice.",
+              nl: "Vanille verzacht de tannine zonder de thee te begraven, dus het smaakt nog steeds naar matcha. De zachtste manier om te beginnen. Warm of over ijs." },
+      tag: null,
+      build: [ { ref: "vanilla", ml: 20 }, { ref: "milk", ml: 170, note: { en: "140 to 200", nl: "140 tot 200" } }, { ref: "matcha", ml: 60, note: { en: "Whisked", nl: "Geklopt" } } ],
+      bar: { en: ["20 vanilla syrup into the glass.", "140 to 200 milk, hot or cold.", "Pour 60 whisked matcha over the top."],
+             nl: ["20 vanillesiroop in het glas.", "140 tot 200 melk, warm of koud.", "Giet 60 geklopte matcha erover."] },
+      table: null,
+      say: { en: ["Vanilla only, no flavoured powder, so it still tastes like tea."],
+             nl: ["Alleen vanille, geen poeder met smaak, dus het smaakt nog steeds naar thee."] }
+    }
+  ],
+  altPanel: {
+    title: { en: "Alternative bases", nl: "Andere bases" },
+    note: { en: "Any latte above built on a different base.", nl: "Elke latte hierboven op een andere basis." },
+    items: [
+      { name: "Taro", cjk: "芋頭", desc: { en: "Creamy, soft, violet.", nl: "Romig, zacht, violet." } },
+      { name: "Black sesame", cjk: "黑芝麻", desc: { en: "Toasted, nutty, thicker on the tongue.", nl: "Geroosterd, nootachtig, dikker op de tong." } },
+      { name: "Hojicha", cjk: "焙茶", desc: { en: "Roasted green tea, caramel edges.", nl: "Geroosterde groene thee, karamelrandjes." } }
+    ]
+  }
+},
+{
+  id: "lemonades", kind: "cards",
+  drinks: [
+    {
+      id: "grandmas-lemonade", name: "Grandma's Lemonade", price: null, tool: "jigger",
+      swatch: "#C9A94E", glass: { en: "Highball", nl: "Highball" }, ice: { en: "Cubed", nl: "Blokjes" },
+      method: { en: "Build", nl: "Opbouwen" },
+      desc: { en: "The syrup is pressed from lemon peels and sugar before any juice goes in, so the citrus oils carry the flavour: sharper nose, rounder taste.",
+              nl: "De siroop wordt uit citroenschil en suiker geperst voordat er sap bij komt, zodat de citrusolie de smaak draagt: scherper in de neus, ronder in de mond." },
+      tag: null,
+      build: [ { ref: "oleo", ml: 40 }, { ref: "lemon", ml: 30 }, { ref: "soda", ml: 180, note: { en: "Top, still or sparkling", nl: "Aanvullen, plat of bruisend" } } ],
+      bar: { en: ["40 oleo saccharum into the glass.", "30 lemon juice.", "Fill with cubed ice.", "Top with still or sparkling water."],
+             nl: ["40 oleo saccharum in het glas.", "30 citroensap.", "Vul met ijsblokjes.", "Aanvullen met plat of bruisend water."] },
+      table: null,
+      say: { en: ["The syrup is made from the peels, not the juice. That is where the smell comes from."],
+             nl: ["De siroop is van de schil gemaakt, niet van het sap. Daar komt de geur vandaan."] }
+    },
+    {
+      id: "lavender-lychee-lemongrass", name: "Lavender Lychee Lemongrass", price: null, tool: "jigger",
+      swatch: "#8E7CC3", glass: { en: "Highball", nl: "Highball" }, ice: { en: "Cubed", nl: "Blokjes" },
+      method: { en: "Build", nl: "Opbouwen" },
+      desc: { en: "Lavender florals over lychee sweetness, with lemongrass underneath for a green, citric edge.",
+              nl: "Lavendelbloemen over lycheezoetheid, met citroengras eronder voor een groene, citrusachtige rand." },
+      tag: null,
+      build: [ { ref: "lavender", ml: 20 }, { ref: "lychee", ml: 50 }, { ref: "lemongrass", ml: 10 }, { ref: "lemon", ml: 20 }, { ref: "soda", ml: 160, note: { en: "Top", nl: "Aanvullen" } } ],
+      bar: { en: ["Lavender syrup, lychee, lemongrass syrup, lemon.", "Fill with cubed ice.", "Top with still or sparkling water.", "One stir from the bottom."],
+             nl: ["Lavendelsiroop, lychee, citroengrassiroop, citroen.", "Vul met ijsblokjes.", "Aanvullen met plat of bruisend water.", "Een keer roeren vanaf de bodem."] },
+      table: null,
+      say: { en: ["Lavender goes soapy if you overdo it, so it sits under the lychee on purpose."],
+             nl: ["Lavendel wordt zeepachtig als je het overdrijft, dus hij zit met opzet onder de lychee."] }
+    },
+    {
+      id: "peach-jasmine", name: "Peach Jasmine Tea Lemonade", price: null, tool: "jigger",
+      swatch: "#E8A06B", glass: { en: "Highball", nl: "Highball" }, ice: { en: "Cubed", nl: "Blokjes" },
+      method: { en: "Build", nl: "Opbouwen" },
+      desc: { en: "Freshly brewed jasmine tea, real peach syrup, squeezed lemon. Three things, nothing else.",
+              nl: "Vers gezette jasmijnthee, echte perziksiroop, geperste citroen. Drie dingen, meer niet." },
+      tag: null,
+      build: [ { ref: "jasmine", ml: 140, note: { en: "Cold brew, 12 hours", nl: "Cold brew, 12 uur" } }, { ref: "peachsyrup", ml: 30 }, { ref: "lemon", ml: 20 } ],
+      bar: { en: ["140 jasmine cold brew into the glass.", "30 peach syrup, 20 lemon.", "Fill with cubed ice.", "One stir."],
+             nl: ["140 jasmijn cold brew in het glas.", "30 perziksiroop, 20 citroen.", "Vul met ijsblokjes.", "Een keer roeren."] },
+      table: null,
+      say: { en: ["The tea is cold brewed overnight, so it is floral without going bitter."],
+             nl: ["De thee is een nacht koud getrokken, dus hij is bloemig zonder bitter te worden."] }
+    }
+  ]
+},
+{
+  id: "coffee", kind: "rows",
+  note: { en: "All available decaf. Milks: whole, oat, almond, coconut.", nl: "Alles ook cafeinevrij. Melk: vol, haver, amandel, kokos." },
+  rows: [
+    { name: "Espresso", comp: { en: "30 ml, short and dense", nl: "30 ml, kort en krachtig" } },
+    { name: "Americano", comp: { en: "Espresso and hot water", nl: "Espresso en heet water" } },
+    { name: "Cortado", comp: { en: "Espresso and warm milk, 1:1", nl: "Espresso en warme melk, 1:1" } },
+    { name: "Cappuccino", comp: { en: "Espresso, steamed milk, fine foam", nl: "Espresso, gestoomde melk, fijn schuim" } },
+    { name: "Flat white", comp: { en: "Double ristretto under silk microfoam", nl: "Dubbele ristretto onder zijdezacht microschuim" } },
+    { name: "Latte", comp: { en: "Milk forward", nl: "Melkrijk" } },
+    { name: "Latte macchiato", comp: { en: "Milk first, espresso through", nl: "Eerst melk, espresso erdoor" } },
+    { name: "Mocha", comp: { en: "Milk or white chocolate", nl: "Melk- of witte chocolade" } },
+    { name: "Golden latte", comp: { en: "Turmeric", nl: "Kurkuma" } },
+    { name: "Chai latte", comp: { en: "Spiced, steamed", nl: "Gekruid, gestoomd" } }
+  ],
+  upsell: true
+},
+{
+  id: "bottled", kind: "rows",
+  rows: [
+    { name: "Coca-Cola", comp: { en: "", nl: "" } },
+    { name: "Fanta", comp: { en: "", nl: "" } },
+    { name: "Sprite or 7up", comp: { en: "", nl: "" } },
+    { name: "Cassis", comp: { en: "", nl: "" } },
+    { name: "Tonic water", comp: { en: "", nl: "" } },
+    { name: "Ginger ale", comp: { en: "", nl: "" } },
+    { name: "Sparkling water", comp: { en: "", nl: "" } },
+    { name: "Still water", comp: { en: "", nl: "" } }
+  ]
+}
+];
+
+/* ---- rail ---------------------------------------------------------------- */
+/* Slots are earned by how many drinks pull from them. Colour is the house
+   language and is fixed. */
+var RAIL = [
+  { n: 1, colour: "#3E7A32", label: { en: "Green", nl: "Groen" },  contents: { en: "Lime juice", nl: "Limoensap" },                  drinks: 7 },
+  { n: 2, colour: "#D9C24E", label: { en: "Yellow", nl: "Geel" },  contents: { en: "Lemon juice", nl: "Citroensap" },                drinks: 5 },
+  { n: 3, colour: "#FFFFFF", label: { en: "White", nl: "Wit" },    contents: { en: "Simple syrup, bought in", nl: "Suikersiroop, ingekocht" }, drinks: 4 },
+  { n: 4, colour: "#E8791D", label: { en: "Orange", nl: "Oranje" },contents: { en: "Orange juice", nl: "Sinaasappelsap" },           drinks: 3 },
+  { n: 5, colour: "#8A6134", label: { en: "Brown", nl: "Bruin" },  contents: { en: "Cloudy apple juice", nl: "Troebel appelsap" },   drinks: 3 },
+  { n: 6, colour: "#23201C", label: { en: "Black and white", nl: "Zwart-wit" }, contents: { en: "Vanilla syrup", nl: "Vanillesiroop" }, drinks: "3 + coffee" },
+  { n: 7, colour: "#D98BA5", label: { en: "Pink", nl: "Roze" },    contents: { en: "Lychee juice", nl: "Lycheesap" },                drinks: 2 }
+];
+var RAIL_SECOND = {
+  en: "Cranberry (black), pineapple (blue), grenadine, coconut milk, coconut cream, passionfruit, butterfly pea tea.",
+  nl: "Cranberry (zwart), ananas (blauw), grenadine, kokosmelk, kokosroom, passievrucht, vlindererwtthee."
+};
+var RAIL_NOTES = [
+  { en: "Standardise on one cloudy apple juice across The Hulk, Tropical Velvet and Eminence Matcha Mojito.",
+    nl: "Standaardiseer op een troebel appelsap voor The Hulk, Tropical Velvet en Eminence Matcha Mojito." },
+  { en: "Do not batch simple syrup. It is bought in and in stock.",
+    nl: "Maak geen suikersiroop zelf. Hij wordt ingekocht en is op voorraad." }
+];
+
+/* ---- prep and FIFO ------------------------------------------------------- */
+var PREP = [
+  { item: { en: "Butterfly pea tea", nl: "Vlindererwtthee" }, yield: "500 ml", keeps: { en: "5 days", nl: "5 dagen" }, home: "FR1 door B" },
+  { item: { en: "Butterfly pea, strong infusion for depth", nl: "Vlindererwt, sterke infusie voor diepte" }, yield: "250 ml", keeps: { en: "5 days", nl: "5 dagen" }, home: "FR1 door B" },
+  { item: { en: "Hibiscus tea, strong", nl: "Hibiscusthee, sterk" }, yield: "2 L", keeps: { en: "5 days", nl: "5 dagen" }, home: "FR1 door B" },
+  { item: { en: "Jasmine cold brew, 12 h", nl: "Jasmijn cold brew, 12 uur" }, yield: "1 L", keeps: { en: "3 days", nl: "3 dagen" }, home: "FR1 door B" },
+  { item: { en: "Rosemary-thyme maple cordial", nl: "Rozemarijn-tijm-ahornsiroop" }, yield: "1 L", keeps: { en: "2 weeks", nl: "2 weken" }, home: "FR1 door B" },
+  { item: { en: "Oleo saccharum", nl: "Oleo saccharum" }, yield: "500 ml", keeps: { en: "2 weeks", nl: "2 weken" }, home: "FR1 door B" },
+  { item: { en: "Lavender syrup", nl: "Lavendelsiroop" }, yield: "1 L", keeps: { en: "3 weeks", nl: "3 weken" }, home: "FR1 door B" },
+  { item: { en: "Lemongrass syrup", nl: "Citroengrassiroop" }, yield: "1 L", keeps: { en: "3 weeks", nl: "3 weken" }, home: "FR1 door B" },
+  { item: { en: "Peach syrup", nl: "Perziksiroop" }, yield: "500 ml", keeps: { en: "1 week", nl: "1 week" }, home: "FR1 door B" },
+  { item: { en: "Strawberry puree", nl: "Aardbeienpuree" }, yield: { en: "Squeeze bottle", nl: "Knijpflacon" }, keeps: { en: "2 days", nl: "2 dagen" }, home: "FR1 door C" },
+  { item: { en: "Mango puree", nl: "Mangopuree" }, yield: { en: "Squeeze bottle", nl: "Knijpflacon" }, keeps: { en: "2 days", nl: "2 dagen" }, home: "FR1 door C" },
+  { item: { en: "Citrus, juiced at open", nl: "Citrus, bij opening geperst" }, yield: { en: "Rail bottles", nl: "Speedrailflessen" }, keeps: { en: "Same day", nl: "Dezelfde dag" }, home: { en: "Rail, spares FR2", nl: "Speedrail, extra in FR2" } },
+  { item: { en: "Cut garnish, caramelised pear, jalapeno slices", nl: "Gesneden garnering, gekaramelliseerde peer, schijfjes jalapeno" }, yield: { en: "Tubs", nl: "Bakjes" }, keeps: { en: "Same day", nl: "Dezelfde dag" }, home: "FR2 door B" }
+];
+
+/* ---- storage ------------------------------------------------------------- */
+var STORAGE = {
+  zones: [
+    { key: "pink", label: { en: "Pink, mocktails", nl: "Roze, mocktails" }, stations: {
+      en: ["Station 1: wash.",
+           "Station 2: build, with the rail.",
+           "Fridge 1, glassware on a mat, ice bin and tools.",
+           "Station 3: cabinet for dry store, backup glass and the FIFO kit.",
+           "Station 4: prep, with Fridge 2 and the cutting board."],
+      nl: ["Station 1: afwassen.",
+           "Station 2: opbouwen, met de speedrail.",
+           "Koelkast 1, glaswerk op een mat, ijsbak en gereedschap.",
+           "Station 3: kast voor droge voorraad, extra glaswerk en de FIFO-kit.",
+           "Station 4: voorbereiden, met koelkast 2 en de snijplank."]
+    }},
+    { key: "yellow", label: { en: "Yellow, barista", nl: "Geel, barista" }, stations: {
+      en: ["Station 5: Fridge 3, milk directly beside the espresso machine.",
+           "Grinder, matcha station, syrups.",
+           "Ice machine, blender."],
+      nl: ["Station 5: koelkast 3, melk direct naast de espressomachine.",
+           "Molen, matchastation, siropen.",
+           "Ijsmachine, blender."]
+    }}
+  ],
+  fridges: [
+    { name: { en: "Fridge 1, mocktail liquids", nl: "Koelkast 1, mocktailvloeistoffen" }, doors: [
+      { d: "A", t: { en: "Rail refills", nl: "Speedrail bijvullen" } },
+      { d: "B", t: { en: "Prebatch", nl: "Voorbereid" } },
+      { d: "C", t: { en: "Purees and second tier", nl: "Purees en tweede rij" } }
+    ]},
+    { name: { en: "Fridge 2, fresh", nl: "Koelkast 2, vers" }, doors: [
+      { d: "A", t: { en: "Whole citrus", nl: "Hele citrusvruchten" } },
+      { d: "B", t: { en: "Cut and prepped, same day", nl: "Gesneden en voorbereid, dezelfde dag" } },
+      { d: "C", t: { en: "Soft fruit and herbs, in damp cloth", nl: "Zacht fruit en kruiden, in vochtige doek" } }
+    ]},
+    { name: { en: "Fridge 3, barista", nl: "Koelkast 3, barista" }, doors: [
+      { d: "A", t: { en: "Whole milk, nearest the machine", nl: "Volle melk, dichtst bij de machine" } },
+      { d: "B", t: { en: "Alternatives", nl: "Alternatieven" } },
+      { d: "C", t: { en: "Cream, coconut water, white chocolate, open syrups", nl: "Room, kokoswater, witte chocolade, geopende siropen" } }
+    ]}
+  ],
+  warnings: [
+    { en: "The ice machine is in the barista zone. Station 2 needs an insulated ice bin, filled at open and again at the midpoint of service.",
+      nl: "De ijsmachine staat in de baristazone. Station 2 heeft een geisoleerde ijsbak nodig, gevuld bij opening en halverwege de service." },
+    { en: "Guest bottled drinks have no fridge assigned yet. TODO.",
+      nl: "Voor de flesjes voor gasten is nog geen koelkast toegewezen. TODO." }
+  ]
+};
+
+/* ---- training: blocks by tool, never by difficulty ---------------------- */
+var TOOL_BLOCKS = [
+  { key: "glass",    label: { en: "Glass work", nl: "Werk in het glas" } },
+  { key: "barspoon", label: { en: "Bar spoon", nl: "Barloffel" } },
+  { key: "jigger",   label: { en: "Jigger", nl: "Maatbeker" } },
+  { key: "shaker",   label: { en: "Shaker", nl: "Shaker" } }
+];
+
+/* ==========================================================================
+   Machinery. Editing DATA above never requires touching this.
+   ========================================================================== */
+
+var $ = function (s) { return document.querySelector(s); };
+var esc = function (s) {
+  return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+};
+var money = function (n) { return n.toFixed(2); };
+
+var LANG = "en", MODE = "menu", TAB = "builds";
+try {
+  LANG = localStorage.getItem("quatro-lang") || "en";
+  MODE = localStorage.getItem("quatro-mode") || "menu";
+  TAB  = localStorage.getItem("quatro-tab") || "builds";
+} catch (e) {}
+if (["en", "nl"].indexOf(LANG) === -1) LANG = "en";
+if (["menu", "runsheet"].indexOf(MODE) === -1) MODE = "menu";
+
+/* t() takes either a plain string or an {en, nl} pair, so DATA can mix both. */
+function t(v) {
+  if (v == null) return "";
+  if (typeof v === "string") return v;
+  return v[LANG] != null ? v[LANG] : (v.en != null ? v.en : "");
+}
+function ui(k) { return t(UI[k]); }
+
+var ALL = [];
+SECTIONS.forEach(function (s) { (s.drinks || []).forEach(function (d) { d._sec = s.id; ALL.push(d); }); });
+var byId = {};
+ALL.forEach(function (d) { byId[d.id] = d; });
+
+/* Today's five, trainer selection. */
+var PICKS = [];
+try { PICKS = JSON.parse(localStorage.getItem("quatro-picks") || "[]"); } catch (e) { PICKS = []; }
+if (!Array.isArray(PICKS)) PICKS = [];
+
+/* ---------------- chrome ---------------- */
+
+function renderChrome() {
+  $("#modes").innerHTML =
+    ['menu', 'runsheet'].map(function (m) {
+      return '<button type="button" data-mode="' + m + '" aria-pressed="' + (MODE === m) + '">' + ui(m === 'menu' ? 'menu' : 'runsheet') + "</button>";
+    }).join("");
+  $("#langs").innerHTML =
+    ['en', 'nl'].map(function (l) {
+      return '<button type="button" data-lang="' + l + '" aria-pressed="' + (LANG === l) + '">' + l.toUpperCase() + "</button>";
+    }).join("");
+
+  var st = $("#subtabs");
+  if (MODE === "runsheet") {
+    st.hidden = false;
+    st.innerHTML = ['builds', 'rail', 'prep', 'inventory', 'storage', 'training'].map(function (k) {
+      return '<button type="button" role="tab" data-tab="' + k + '" aria-selected="' + (TAB === k) + '">' + ui(k) + "</button>";
+    }).join("");
+  } else { st.hidden = true; st.innerHTML = ""; }
+
+  document.documentElement.lang = LANG;
+  document.body.className = "mode-" + MODE + (PICKS.length ? " has-picks" : "");
+}
+
+/* ---------------- menu mode ---------------- */
+
+function cardHTML(d) {
+  return '<button class="card" type="button" data-drink="' + esc(d.id) + '">' +
+    '<span class="card-top">' +
+      '<span class="swatch" style="background:' + esc(d.swatch) + '"></span>' +
+      '<span class="card-name">' + esc(d.name) + "</span>" +
+    "</span>" +
+    '<span class="card-desc">' + esc(t(d.desc)) + "</span>" +
+    (d.tag ? '<span class="card-tag">' + esc(t(d.tag)) + "</span>" : "") +
+  "</button>";
+}
+
+var UPSELL = function () {
+  return '<div class="panel panel--upsell"><span class="smallcaps">' +
+    (LANG === "nl" ? "Maak het je eigen" : "Make it yours") + "</span><h3>" +
+    (LANG === "nl" ? "Vanille, karamel of hazelnoot" : "Vanilla, caramel or hazelnut") + "</h3><p>" +
+    (LANG === "nl" ? "In elke koffie of matcha." : "In any coffee or matcha.") +
+    '<span class="sub">' + (LANG === "nl" ? "Ook zonder suiker." : "Sugar free available.") + "</span></p></div>";
+};
+
+function renderMenu() {
+  var h = '<div class="masthead"><h1>Quatro</h1><span class="rule"></span><p>' + esc(ui("tagline")) + "</p></div>";
+  SECTIONS.forEach(function (sec) {
+    h += '<section class="section" id="sec-' + sec.id + '">' +
+      '<div class="section-head"><div class="smallcaps">Quatro</div><h2>' + esc(t(SECTION_TITLES[sec.id])) + "</h2>" +
+      (sec.note ? '<p class="section-note">' + esc(t(sec.note)) + "</p>" : "") + "</div>";
+    if (sec.kind === "cards") {
+      h += '<div class="cards">' + sec.drinks.map(cardHTML).join("") + "</div>";
+    } else {
+      h += '<div class="rows">' + sec.rows.map(function (r) {
+        return '<div class="row"><span class="row-name">' + esc(r.name) + "</span>" +
+          '<span class="row-comp">' + esc(t(r.comp)) + "</span></div>";
+      }).join("") + "</div>";
+    }
+    if (sec.altPanel) {
+      h += '<div class="panel"><h3>' + esc(t(sec.altPanel.title)) + "</h3><p>" + esc(t(sec.altPanel.note)) + '</p><ul class="altlist">' +
+        sec.altPanel.items.map(function (it) {
+          return "<li><b>" + esc(it.name) + "</b> " + esc(it.cjk) + ". " + esc(t(it.desc)) + "</li>";
+        }).join("") + "</ul></div>";
+    }
+    if (sec.upsell) h += UPSELL();
+    h += "</section>";
+  });
+  h += '<footer class="footer"><div class="claim">' + esc(ui("alcoholFree")) + "</div>" +
+    '<p class="fine">' + esc(ui("allergies")) + "</p></footer>";
+  return h;
+}
+
+/* ---------------- run sheet: builds ---------------- */
+
+function ingList(d) {
+  return '<ul class="ing">' + d.build.map(function (b) {
+    var ing = ING[b.ref];
+    if (!ing) return "";
+    return "<li><span class=\"ml\">" + (b.ml ? b.ml + " ml" : "") + "</span>" +
+      '<span class="nm">' + esc(t(ing.name)) +
+      (b.note ? "<small>" + esc(t(b.note)) + "</small>" : "") + "</span></li>";
+  }).join("") + "</ul>";
+}
+
+function buildBlock(d) {
+  var h = '<article class="build" id="build-' + esc(d.id) + '">' +
+    '<div class="build-head"><span class="swatch" style="background:' + esc(d.swatch) + '"></span>' +
+    "<h3>" + esc(d.name) + "</h3></div>" +
+    '<dl class="spec">' +
+      "<div><dt>" + esc(ui("glass")) + "</dt><dd>" + esc(t(d.glass)) + "</dd></div>" +
+      "<div><dt>" + esc(ui("ice")) + "</dt><dd>" + esc(t(d.ice)) + "</dd></div>" +
+      "<div><dt>" + esc(ui("method")) + "</dt><dd>" + esc(t(d.method)) + "</dd></div>" +
+    "</dl>";
+  if (d.flag) h += '<div class="flag"><strong>Flag</strong>' + esc(t(d.flag)) + "</div>";
+  h += '<div class="substack"><h4>' + esc(ui("ingredients")) + "</h4>" + ingList(d) + "</div>";
+  h += '<div class="substack"><h4>' + esc(ui("atBar")) + '</h4><ol class="steps">' +
+    t(d.bar).map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ol></div>";
+  if (d.table) {
+    h += '<div class="substack"><h4>' + esc(ui("atTable")) + '</h4><ol class="steps">' +
+      t(d.table).map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ol></div>";
+  }
+  h += '<div class="substack"><h4>' + esc(ui("sayThis")) + "</h4>" +
+    t(d.say).map(function (s) { return '<blockquote class="say">' + esc(s) + "</blockquote>"; }).join("") + "</div>";
+  return h + "</article>";
+}
+
+function renderBuilds() {
+  return '<section class="section"><div class="section-head"><div class="smallcaps">' + esc(ui("runsheet")) +
+    '</div><h2>' + esc(ui("builds")) + "</h2>" +
+    '<p class="section-note">' + esc(ui("bookletNote")) + "</p></div>" +
+    '<button class="pick" type="button" id="print-booklet" style="border-color:var(--gold)">' + esc(ui("printBooklet")) + "</button>" +
+    ALL.map(buildBlock).join("") + "</section>";
+}
+
+/* ---------------- rail ---------------- */
+
+function renderRail() {
+  return '<section class="section"><div class="section-head"><div class="smallcaps">' + esc(ui("runsheet")) +
+    '</div><h2>' + esc(ui("rail")) + "</h2></div>" +
+    '<div class="tablewrap"><table class="wide"><thead><tr>' +
+      "<th>" + esc(ui("slot")) + "</th><th>" + esc(ui("colour")) + "</th><th>" + esc(ui("contents")) + "</th><th>" + esc(ui("drinksN")) + "</th>" +
+    "</tr></thead><tbody>" +
+    RAIL.map(function (r) {
+      return "<tr><td><span class=\"slot\"><span class=\"slot-n\">" + r.n + "</span></span></td>" +
+        '<td><span class="slot"><span class="slot-dot" style="background:' + esc(r.colour) + '"></span>' + esc(t(r.label)) + "</span></td>" +
+        "<td>" + esc(t(r.contents)) + "</td>" +
+        '<td class="num">' + esc(r.drinks) + "</td></tr>";
+    }).join("") + "</tbody></table></div>" +
+    '<div class="panel"><h3>' + esc(ui("secondTier")) + "</h3><p>" + esc(t(RAIL_SECOND)) + "</p></div>" +
+    RAIL_NOTES.map(function (n) { return '<div class="flag"><strong>Note</strong>' + esc(t(n)) + "</div>"; }).join("") +
+  "</section>";
+}
+
+/* ---------------- prep and FIFO ---------------- */
+
+function renderPrep() {
+  return '<section class="section"><div class="section-head"><div class="smallcaps">' + esc(ui("runsheet")) +
+    '</div><h2>' + esc(ui("prep")) + "</h2></div>" +
+    '<div class="warn"><strong>' + esc(ui("labelRule")) + "</strong>" + esc(ui("labelBody")) + "</div>" +
+    '<div class="tablewrap"><table class="wide"><thead><tr>' +
+      "<th>" + esc(ui("item")) + "</th><th>" + esc(ui("yield")) + "</th><th>" + esc(ui("keeps")) + "</th><th>" + esc(ui("home")) + "</th>" +
+    "</tr></thead><tbody>" +
+    PREP.map(function (p) {
+      return "<tr><td>" + esc(t(p.item)) + "</td><td>" + esc(t(p.yield)) + "</td><td>" + esc(t(p.keeps)) + "</td><td>" + esc(t(p.home)) + "</td></tr>";
+    }).join("") + "</tbody></table></div></section>";
+}
+
+/* ---------------- inventory, split staff and owner ---------------- */
+
+function renderInventory() {
+  var keys = Object.keys(ING);
+  var staff = '<div class="tablewrap"><table class="wide"><thead><tr>' +
+    "<th>" + esc(ui("ingredient")) + "</th><th>" + esc(ui("inStock")) + "</th><th>" + esc(ui("home")) + "</th><th>" + esc(ui("needsPrep")) + "</th>" +
+    "</tr></thead><tbody>" +
+    keys.map(function (k) {
+      var i = ING[k];
+      return "<tr><td>" + esc(t(i.name)) + "</td>" +
+        '<td><span class="chip ' + (i.inStock ? "yes" : "no") + '">' + esc(i.inStock ? ui("yes") : ui("no")) + "</span></td>" +
+        "<td>" + esc(t(i.home)) + "</td>" +
+        '<td>' + (i.prep ? '<span class="chip due">' + esc(ui("yes")) + "</span>" : '<span class="chip yes">' + esc(ui("no")) + "</span>") + "</td></tr>";
+    }).join("") + "</tbody></table></div>";
+
+  /* Owner money columns are all null today, so every one reads TBD. */
+  var owner = '<div class="tablewrap"><table class="wide"><thead><tr>' +
+    "<th>" + esc(ui("ingredient")) + "</th><th>" + esc(ui("packSize")) + "</th><th>" + esc(ui("costPack")) + "</th>" +
+    "<th>" + esc(ui("costDrink")) + "</th><th>" + esc(ui("monthly")) + "</th><th>" + esc(ui("supplier")) + "</th><th>" + esc(ui("location")) + "</th>" +
+    "</tr></thead><tbody>" +
+    keys.map(function (k) {
+      var i = ING[k];
+      return "<tr><td>" + esc(t(i.name)) + "</td><td>" + esc(i.pack) + "</td>" +
+        (i.cost != null ? '<td class="num">' + money(i.cost) + "</td>" : '<td class="tbd">TBD</td>') +
+        '<td class="tbd">TBD</td><td class="tbd">TBD</td>' +
+        "<td>" + esc(i.supplier) + "</td><td>" + esc(t(i.home)) + "</td></tr>";
+    }).join("") + "</tbody></table></div>";
+
+  var margin = '<div class="tablewrap"><table class="wide"><thead><tr>' +
+    "<th>" + esc(ui("ingredient")) + "</th><th>" + esc(ui("sell")) + "</th><th>" + esc(ui("netVat")) + "</th>" +
+    "<th>" + esc(ui("pourCost")) + "</th><th>" + esc(ui("gpEur")) + "</th><th>" + esc(ui("gpPct")) + "</th>" +
+    "</tr></thead><tbody>" +
+    ALL.map(function (d) {
+      return "<tr><td>" + esc(d.name) + "</td>" +
+        '<td class="tbd">TBD</td><td class="tbd">TBD</td><td class="tbd">TBD</td><td class="tbd">TBD</td><td class="tbd">TBD</td></tr>';
+    }).join("") + "</tbody></table></div>";
+
+  return '<section class="section"><div class="section-head"><div class="smallcaps">' + esc(ui("runsheet")) +
+    '</div><h2>' + esc(ui("inventory")) + "</h2></div>" +
+    '<h3 style="font-size:20px;margin-top:8px">' + esc(ui("staffBlock")) + "</h3>" +
+    '<p class="legend">' + (LANG === "nl" ? "Wat er is, waar het staat, wat vandaag gemaakt moet worden. Geen geld." : "What is in stock, where it lives, what needs prepping today. Nothing about money.") + "</p>" +
+    staff +
+    '<h3 style="font-size:20px;margin-top:32px">' + esc(ui("ownerBlock")) + "</h3>" +
+    '<p class="legend">' + esc(ui("moneyTbd")) + "</p>" +
+    owner + margin + "</section>";
+}
+
+/* ---------------- storage ---------------- */
+
+function renderStorage() {
+  var h = '<section class="section"><div class="section-head"><div class="smallcaps">' + esc(ui("runsheet")) +
+    '</div><h2>' + esc(ui("storage")) + "</h2></div>";
+  STORAGE.zones.forEach(function (z) {
+    h += '<div class="zone zone--' + z.key + '"><span class="zone-label">' + esc(t(z.label)) + "</span>" +
+      '<ol class="stations">' + t(z.stations).map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ol></div>";
+  });
+  STORAGE.fridges.forEach(function (f) {
+    h += '<div class="zone fridge"><h4>' + esc(t(f.name)) + '</h4><ul class="doors">' +
+      f.doors.map(function (d) { return "<li><b>" + esc(d.d) + "</b> " + esc(t(d.t)) + "</li>"; }).join("") + "</ul></div>";
+  });
+  STORAGE.warnings.forEach(function (w) {
+    h += '<div class="warn"><strong>' + (LANG === "nl" ? "Let op" : "Warning") + "</strong>" + esc(t(w)) + "</div>";
+  });
+  return h + "</section>";
+}
+
+/* ---------------- training ---------------- */
+
+function renderTraining() {
+  var h = '<section class="section"><div class="section-head"><div class="smallcaps">' + esc(ui("runsheet")) +
+    '</div><h2>' + esc(ui("training")) + "</h2></div>" +
+    '<div class="panel"><h3>' + esc(ui("todaysFive")) + "</h3><p>" + esc(ui("fiveHelp")) + "</p>" +
+    '<p class="pick-count"><span id="pick-count">' + PICKS.length + "</span> / 5 " + esc(ui("selected")) +
+    ' <button class="pick" type="button" id="clear-picks" style="padding:2px 10px;font-size:12px">' + esc(ui("clear")) + "</button></p></div>";
+  TOOL_BLOCKS.forEach(function (tb) {
+    var list = ALL.filter(function (d) { return d.tool === tb.key; });
+    if (!list.length) return;
+    h += '<div class="tool-block"><h3>' + esc(t(tb.label)) + '</h3><div class="picks">' +
+      list.map(function (d) {
+        var on = PICKS.indexOf(d.id) !== -1;
+        return '<button class="pick" type="button" data-pick="' + esc(d.id) + '" aria-pressed="' + on + '">' +
+          '<span class="swatch" style="background:' + esc(d.swatch) + '"></span>' + esc(d.name) + "</button>";
+      }).join("") + "</div></div>";
+  });
+  return h + "</section>";
+}
+
+/* ---------------- print booklet ---------------- */
+
+function bookletHTML() {
+  return ALL.map(function (d) {
+    var h = '<div class="bk-page"><div class="bk-head">' +
+      '<h2><span class="bk-swatch"></span>' + esc(d.name) + "</h2>" +
+      '<div class="bk-spec">' + esc(t(d.glass)) + "  /  " + esc(t(d.ice)) + "  /  " + esc(t(d.method)) + "</div></div>";
+    if (d.flag) h += '<div class="bk-flag"><b>Flag.</b> ' + esc(t(d.flag)) + "</div>";
+    h += '<div class="bk-sec"><h3>' + esc(ui("ingredients")) + "</h3><ul>" +
+      d.build.map(function (b) {
+        var ing = ING[b.ref];
+        return "<li>" + (b.ml ? b.ml + " ml " : "") + esc(t(ing.name)) + (b.note ? ". " + esc(t(b.note)) : "") + "</li>";
+      }).join("") + "</ul></div>";
+    h += '<div class="bk-sec"><h3>' + esc(ui("atBar")) + "</h3><ol>" +
+      t(d.bar).map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ol></div>";
+    if (d.table) {
+      h += '<div class="bk-sec"><h3>' + esc(ui("atTable")) + "</h3><ol>" +
+        t(d.table).map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ol></div>";
+    }
+    h += '<div class="bk-sec"><h3>' + esc(ui("sayThis")) + "</h3>" +
+      t(d.say).map(function (s) { return '<p class="bk-say">' + esc(s) + "</p>"; }).join("") + "</div>";
+    h += '<div class="bk-notes"><h3>' + esc(ui("myNotes")) + "</h3>" +
+      '<div class="bk-rule"></div><div class="bk-rule"></div><div class="bk-rule"></div>' +
+      '<div class="bk-rule"></div><div class="bk-rule"></div><div class="bk-rule"></div></div>';
+    return h + "</div>";
+  }).join("");
+}
+
+/* ---------------- render ---------------- */
+
+var TABS = { builds: renderBuilds, rail: renderRail, prep: renderPrep, inventory: renderInventory, storage: renderStorage, training: renderTraining };
+
+function render() {
+  renderChrome();
+  $("#root").innerHTML = MODE === "menu" ? renderMenu() : (TABS[TAB] || renderBuilds)();
+  try {
+    localStorage.setItem("quatro-lang", LANG);
+    localStorage.setItem("quatro-mode", MODE);
+    localStorage.setItem("quatro-tab", TAB);
+    localStorage.setItem("quatro-picks", JSON.stringify(PICKS));
+  } catch (e) {}
+  if (sheetDrink) openSheet(sheetDrink.id);
+}
+
+/* ---------------- detail sheet, guest facing ---------------- */
+
+var sheet = $("#sheet"), scrim = $("#scrim");
+var sheetDrink = null, sheetTimer = null, lastFocus = null;
+
+function openSheet(id) {
+  var d = byId[id];
+  if (!d) return;
+  sheetDrink = d;
+  $("#sheet-swatch").style.background = d.swatch;
+  $("#sheet-name").textContent = d.name;
+  /* Guest sheet: story and tag only. No glass, no ice, no method. */
+  $("#sheet-body").innerHTML = '<p class="story">' + esc(t(d.desc)) + "</p>" +
+    (d.tag ? '<p style="margin-top:20px"><span class="card-tag">' + esc(t(d.tag)) + "</span></p>" : "");
+  if (sheetTimer) { clearTimeout(sheetTimer); sheetTimer = null; }
+  sheet.hidden = false;
+  requestAnimationFrame(function () { sheet.classList.add("open"); scrim.classList.add("open"); });
+  $("#sheet-close").focus();
+}
+function closeSheet() {
+  sheet.classList.remove("open"); scrim.classList.remove("open");
+  if (sheetTimer) clearTimeout(sheetTimer);
+  /* Hiding is deferred so the exit transition can play, and the timer is held
+     so a fast reopen can cancel it. */
+  sheetTimer = setTimeout(function () { sheet.hidden = true; sheetTimer = null; }, 220);
+  sheetDrink = null;
+  if (lastFocus && lastFocus.focus) lastFocus.focus();
+}
+
+/* ---------------- events ---------------- */
+
+document.addEventListener("click", function (e) {
+  var m = e.target.closest("[data-mode]");
+  if (m) { MODE = m.dataset.mode; render(); return; }
+
+  var l = e.target.closest("[data-lang]");
+  if (l) { LANG = l.dataset.lang; render(); return; }
+
+  var tb = e.target.closest("[data-tab]");
+  if (tb) { TAB = tb.dataset.tab; render(); return; }
+
+  if (e.target.closest("#print-booklet")) {
+    $("#booklet").innerHTML = bookletHTML();
+    document.body.classList.add("booklet");
+    window.print();
+    /* Leave booklet mode once the dialog is done with. */
+    setTimeout(function () { document.body.classList.remove("booklet"); }, 500);
+    return;
+  }
+
+  if (e.target.closest("#clear-picks")) { PICKS = []; render(); return; }
+
+  var pk = e.target.closest("[data-pick]");
+  if (pk) {
+    var id = pk.dataset.pick, i = PICKS.indexOf(id);
+    if (i !== -1) PICKS.splice(i, 1);
+    else if (PICKS.length < 5) PICKS.push(id);
+    render();
+    return;
+  }
+
+  var card = e.target.closest("[data-drink]");
+  if (card) { lastFocus = card; openSheet(card.dataset.drink); return; }
+
+  if (e.target.id === "sheet-close" || e.target.id === "scrim") closeSheet();
+});
+
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape" && sheet.classList.contains("open")) closeSheet();
+});
+
+window.addEventListener("afterprint", function () { document.body.classList.remove("booklet"); });
+
+render();
+</script>
+</body>
+</html>
