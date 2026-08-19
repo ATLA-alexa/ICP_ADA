@@ -431,6 +431,7 @@ var ING = {
   bluecolour:   { name: { en: "Blue food colouring", nl: "Blauwe kleurstof" }, pack: "Small bottle", cost: null, supplier: "DECISION OPEN, see the flag on Ocean Mojito", home: "Station 3 dry store", inStock: false, prep: false },
   ice:          { name: { en: "Ice cubes", nl: "Ijsblokjes" }, pack: "From the machine", cost: null, supplier: "Ice machine, barista zone", home: "Insulated bin at station 2, filled at open and midpoint", inStock: true, prep: true },
   condensed:    { name: { en: "Condensed milk", nl: "Gecondenseerde melk" }, pack: "Tin", cost: null, supplier: "TODO", home: "Station 3 dry store", inStock: false, prep: false },
+  saltrim:      { name: { en: "Rosemary-lemon sea salt", nl: "Rozemarijn-citroen-zeezout" }, pack: "Small bowl, in house", cost: null, supplier: "In house", home: "Station 3 dry store", inStock: false, prep: true }
 };
 
 /* ---- drinks -------------------------------------------------------------- */
@@ -445,43 +446,43 @@ var SECTIONS = [
       swatch: "#4C4C9D", glass: { en: "Hurricane", nl: "Hurricane" }, ice: { en: "Crushed", nl: "Crushed" },
       method: { en: "Build and float", nl: "Opbouwen en laten drijven" },
       desc: {
-        en: "Lychee and coconut water beneath a deep indigo crown of butterfly pea flower. In Taipei, lychee is what you drink because it is hot outside. Ask your server about the lime.",
-        nl: "Lychee en kokoswater onder een diepblauwe kroon van vlindererwtbloem. In Taipei drink je lychee omdat het heet is buiten. Vraag je gastheer naar de limoen."
+        en: "Lychee and coconut water under an indigo crown of butterfly pea flower.",
+        nl: "Lychee en kokoswater onder een indigo kroon van vlindererwtbloem."
+      },
+      story: {
+        en: "Lychee on its own is all perfume and no spine, so it reads as sweet and then goes nowhere. Coconut water gives it a body to sit in, and the pinch of salt underneath makes the fruit taste more like itself, the way salt does with watermelon. The flower is not stirred in. It floats, because it is waiting for acid. In Taipei, lychee is what you drink because it is hot outside; the rest of this glass is what happened to that habit in Amsterdam.",
+        nl: "Lychee op zich is alleen parfum en geen ruggengraat, dus het smaakt zoet en verdwijnt dan. Kokoswater geeft het een lichaam om in te rusten, en de snuf zout eronder laat de vrucht meer naar zichzelf smaken, zoals zout bij watermeloen. De bloem wordt niet geroerd. Hij drijft, omdat hij op zuur wacht. In Taipei drink je lychee omdat het heet is buiten; de rest van dit glas is wat er met die gewoonte in Amsterdam is gebeurd."
       },
       tag: { en: "Not a fan of coconut water? We swap in cloudy apple", nl: "Geen liefhebber van kokoswater? Wij vervangen het door troebele appel" },
-      flag: {
-        en: "Lime service is undecided. Either the guest squeezes the lime wedge off the garnish, or 20 ml lime goes to the table in a small carafe. The table steps below assume the carafe. Pick one before training.",
-        nl: "De limoenservice staat nog niet vast. Of de gast knijpt het limoenpartje van de garnering, of 20 ml limoen gaat in een klein karafje mee naar tafel. De stappen hieronder gaan uit van het karafje. Kies er een voor de training."
-      },
       build: [
         { ref: "lychee", ml: 50 },
         { ref: "lycheecordial", ml: 20 },
         { ref: "coconutw", ml: 70 },
         { ref: "peatea", ml: 40, note: { en: "Floated last", nl: "Als laatste erop" } },
-        { ref: "lime", ml: 20, note: { en: "Carried to the table separately", nl: "Apart naar tafel gebracht" } }
+        { ref: "lime", ml: 20, note: { en: "Carried to the table separately or served as a garnish wedge", nl: "Apart naar tafel gebracht of als garneringpartje" } }
       ],
       bar: { en: [
+        "Lychee juice, lychee cordial, then coconut water into the hurricane.",
         "Fill the hurricane with crushed ice.",
-        "Lychee juice, lychee cordial, then coconut water.",
+        "Gently top with the pea tea by floating it with a jigger.",
         "Re-mound the ice to the rim.",
-        "Float the pea tea over the back of a spoon.",
-        "Garnish with the golden glitter lychee and a lime wedge.",
-        "20 ml lime in a small carafe on the tray."
+        "Garnish with a golden glitter lychee and a lime wedge.",
+        "TO BE DECIDED: Place 20 ml lime in a small carafe on the tray, OR have the guest squeeze the lime wedge from the garnish."
       ], nl: [
+        "Lycheesap, lycheecordial, dan kokoswater in de hurricane.",
         "Vul de hurricane met crushed ice.",
-        "Lycheesap, lycheecordial, dan kokoswater.",
+        "Voeg voorzichtig de vlindererwtthee toe door deze met een jigger te laten drijven.",
         "Stapel het ijs weer op tot de rand.",
-        "Laat de vlindererwtthee over de bolle kant van een lepel drijven.",
-        "Garneer met de gouden glitterlychee en een limoenpartje.",
-        "20 ml limoen in een klein karafje op het blad."
+        "Garneer met een gouden glitterlychee en een limoenpartje.",
+        "NOG TE BESLISSEN: Zet 20 ml limoen in een klein karafje op het blad, OF laat de gast het limoenpartje uitknijpen."
       ]},
       table: { en: [
-        "Set the glass down.",
-        "Pour the lime over the indigo, or have the guest squeeze the wedge.",
+        "Set the glass down in front of the guest.",
+        "Have the guest squeeze the lime wedge, or pour the 20 ml lime from the carafe over the indigo.",
         "Hand the guest the straw and have them stir."
       ], nl: [
-        "Zet het glas neer.",
-        "Giet de limoen over het diepblauw, of laat de gast het partje uitknijpen.",
+        "Zet het glas voor de gast neer.",
+        "Laat de gast het limoenpartje uitknijpen, of giet de 20 ml limoen uit het karafje over het indigo.",
         "Geef de gast het rietje en laat hen roeren."
       ]},
       sayLabel: { en: "If the customer asks", nl: "Als de gast het vraagt" },
@@ -494,33 +495,48 @@ var SECTIONS = [
       ]}
     },
     {
-      id: "forest-fairy", name: "Forest Fairy", price: null, tool: "jigger",
-      swatch: "#3E5140", glass: { en: "Highball", nl: "Highball" }, ice: { en: "Cubed", nl: "Blokjes" },
+      id: "forest-fairy",
+      name: "Forest Fairy",
+      price: null,
+      tool: "jigger",
+      swatch: "#3E5140",
+      glass: { en: "Highball", nl: "Highball" },
+      ice: { en: "Cubed", nl: "Blokjes" },
       method: { en: "Stir and strain if a mixing glass is free, otherwise shake and strain", nl: "Roeren en zeven als er een mengglas vrij is, anders shaken en zeven" },
       desc: {
-        en: "Rosemary is smoked before it goes in, thyme stays raw and green, lemon cuts the dark maple so it drinks dry rather than sweet. Herbal, smoky, quietly bitter at the edges.",
-        nl: "Rozemarijn wordt gerookt voordat hij erin gaat, tijm blijft rauw en groen, citroen snijdt door de donkere ahornsiroop zodat het droog drinkt in plaats van zoet. Kruidig, rokerig, licht bitter aan de randen."
+        en: "Rosemary-lemon salt rim, smoked rosemary and raw thyme over dark maple, cut with lemon. Herbal, smoky, quietly bitter at the edges.",
+        nl: "Rozemarijn-citroen-zoutrand, gerookte rozemarijn en rauwe tijm over donkere ahorn, met citroen. Kruidig, rokerig, licht bitter aan de randen."
+      },
+      story: {
+        en: "Rosemary is smoked for exactly three seconds, long enough to perfume the glass, short enough to avoid ash. The salt rim carries rosemary and lemon zest, so the first sip is herbal and bright. Maple brings smoke and bitterness inside its sweetness, arguing with the herbs instead of covering them. Thyme stays raw and green underneath to stop the whole thing turning medicinal. Lemon arrives last and pulls it dry.",
+        nl: "Rozemarijn wordt precies drie seconden gerookt, lang genoeg om het glas te parfumeren, kort genoeg om as te vermijden. De zoutrand draagt rozemarijn en citroenschil, dus de eerste slok is kruidig en helder. Ahorn brengt rook en bitterheid mee in zijn zoetheid, wat ruzie maakt met de kruiden in plaats van ze te bedekken. Tijm blijft rauw en groen eronder om te voorkomen dat het geheel medicinaal wordt. Citroen komt als laatste en trekt het droog."
       },
       tag: { en: "Want it extra herby? We bash in more thyme", nl: "Extra kruidig? Wij kneuzen er meer tijm bij" },
       build: [
-        { ref: "lemon", ml: 25 }, { ref: "cordial", ml: 50 },
+        { ref: "saltrim", ml: 0, note: { en: "Rosemary-lemon sea salt rim, half oval", nl: "Rozemarijn-citroen-zeezoutrand, half ovaal" } },
+        { ref: "lemon", ml: 25 },
+        { ref: "cordial", ml: 50 },
         { ref: "soda", ml: 0, note: { en: "Top up", nl: "Aanvullen" } },
         { ref: "rosemary", ml: 0, note: { en: "1 sprig, smoked 3 seconds", nl: "1 takje, 3 seconden gerookt" } },
         { ref: "thyme", ml: 0, note: { en: "1 sprig, raw", nl: "1 takje, rauw" } }
       ],
       bar: { en: [
+        "Run a lemon wedge around half the rim of the highball to moisten it.",
+        "Dip the moistened rim into the rosemary-lemon sea salt to create a half-oval salt rim. Set aside.",
         "Smoke the rosemary sprig 3 seconds, blow it out.",
         "Fill the highball with cubed ice.",
-        "Lemon, cordial, then 10 to 15 ml sparkling water.",
+        "Lemon juice, then rosemary-thyme maple cordial, then 10 to 15 ml sparkling water.",
         "In a mixing glass, add ice and stir 10 to 12 seconds. In a tin, add ice and shake 12 seconds.",
         "Strain into the highball, then top with sparkling water down the barspoon.",
         "Gently set the smoked rosemary and the raw thyme between the ice cubes."
       ], nl: [
+        "Wrijf een limoenpartje langs de helft van de rand van het highballglas om hem te bevochtigen.",
+        "Doop de bevochtigde rand in het rozemarijn-citroenzout voor een half-ovale zoutrand. Zet apart.",
         "Rook het rozemarijntakje 3 seconden, blaas het uit.",
         "Vul de highball met ijsblokjes.",
-        "Citroen, siroop, dan 10 tot 15 ml spa rood.",
+        "Citroensap, dan rozemarijn-tijm-ahornsiroop, dan 10 tot 15 ml bruisend water.",
         "In een mengglas: ijs erbij en 10 tot 12 seconden roeren. In een tin: ijs erbij en 12 seconden shaken.",
-        "Zeef in de highball en vul aan met spa rood langs de barlepel.",
+        "Zeef in de highball en vul aan met bruisend water langs de barlepel.",
         "Zet de gerookte rozemarijn en de rauwe tijm voorzichtig tussen de ijsblokjes."
       ]},
       table: null,
@@ -573,10 +589,6 @@ var SECTIONS = [
         nl: "Hibiscus trekt diep rood en echt zuur; aardbei rondt dat zuur af met zoetheid en body. Daarboven zakken sinaasappel, citroen en vanille in een bleke zijde die als eigen laag blijft liggen. Scherp onder, zacht boven."
       },
       tag: { en: "Layered, tart red under a citrus silk", nl: "Gelaagd, zuur rood onder een citruszijde" },
-      flag: {
-        en: "DECISION OPEN, and it changes the menu. The build now offers egg white OR plant foam drops. Egg white is not vegan and is a declarable allergen, and egg was taken off this menu earlier for hygiene. While both are listed the guest tag cannot promise vegan, so it has been changed. Choose one house standard, then put the vegan wording back if the foam drops win.",
-        nl: "OPEN BESLISSING, en dit verandert het menu. De opbouw biedt nu eiwit OF plantaardige schuimdruppels. Eiwit is niet veganistisch en is een aan te geven allergeen, en ei was eerder van dit menu gehaald om hygiene. Zolang beide vermeld staan kan het gastlabel geen veganistisch beloven, dus dat is aangepast. Kies een huisstandaard en zet de veganistische tekst terug als de schuimdruppels winnen."
-      },
       build: [
         { ref: "hibiscus", ml: 120, note: { en: "GLASS FIRST, over ice and strawberries", nl: "EERST HET GLAS, over ijs en aardbeien" } },
         { ref: "strawberry", ml: 0, note: { en: "4 halved, tucked so they show through the glass", nl: "4 gehalveerd, zo geplaatst dat ze door het glas zichtbaar zijn" } },
@@ -654,10 +666,6 @@ var SECTIONS = [
         nl: "Munt, limoen en rietsuiker gechurnd door crushed ice. Bramen zakken naar de bodem, donker als de diepte, en het churnen draagt die kleur door het hele glas omhoog."
       },
       tag: { en: "Prefer it without the berries? Just the ocean, then", nl: "Liever zonder de bramen? Dan alleen de oceaan" },
-      flag: {
-        en: "DECISION OPEN. The default build now uses 1 to 2 drops of blue food colouring. The old line about there being no colouring in the glass has been taken out of the guest copy, because with the drops in it is not true. The all natural version below uses butterfly pea flower instead and keeps that story available. Choose which one is the house build.",
-        nl: "OPEN BESLISSING. De standaardopbouw gebruikt nu 1 tot 2 druppels blauwe kleurstof. De oude zin dat er geen kleurstof in zit is uit de gastteksten gehaald, want met die druppels klopt hij niet. De volledig natuurlijke versie hieronder gebruikt vlindererwtbloem en houdt dat verhaal beschikbaar. Kies welke de huisopbouw wordt."
-      },
       build: [
         { ref: "lime", ml: 0, note: { en: "4 wedges, muddled with the simple", nl: "4 partjes, gekneusd met de siroop" } },
         { ref: "simple", ml: 20 },
@@ -697,10 +705,6 @@ var SECTIONS = [
         nl: "Droge cranberry tegen verse limoen, sinaasappelsap dat het midden afrondt. Opgediend in een gekoelde coupe."
       },
       tag: null,
-      flag: {
-        en: "The 20 ml simple syrup is a tasting correction. Without it the drink was too sour. Do not drop it.",
-        nl: "De 20 ml suikersiroop is een correctie na het proeven. Zonder was de drank te zuur. Laat hem er niet uit."
-      },
       build: [
         { ref: "cranberry", ml: 70 }, { ref: "orange", ml: 40 }, { ref: "lime", ml: 30 },
         { ref: "simple", ml: 20, note: { en: "Tasting correction, do not drop", nl: "Correctie na proeven, niet weglaten" } }
@@ -759,10 +763,6 @@ var SECTIONS = [
         nl: "Passievrucht is op zichzelf alleen maar zuur en parfum. Appel en peer geven body en zachte zoetheid om op te rusten, vanille rondt de randen af. Hard geshaket, fijn gezeefd, opgediend up."
       },
       tag: null,
-      flag: {
-        en: "Bought puree or juice only. Scooping fresh passion fruit per batch is not repeatable in service. Fresh fruit is garnish. The coconut cream sidecar has been taken out of this build, so the old add-coconut-cream tag is gone too. Put both back together or not at all.",
-        nl: "Alleen gekochte puree of sap. Verse passievrucht per batch uitscheppen is niet herhaalbaar in de service. Vers fruit is garnering. Het kokosroom-shotje is uit deze opbouw gehaald, dus het oude label erover is ook weg. Zet ze samen terug of geen van beide."
-      },
       build: [
         { ref: "passionjuice", ml: 40 },
         { ref: "applepear", ml: 30 },
@@ -996,13 +996,17 @@ var SECTIONS = [
   id: "bottled", kind: "rows",
   rows: [
     { name: "Coca-Cola", comp: { en: "", nl: "" } },
+    { name: "Cola Zero", comp: { en: "", nl: "" } },
     { name: "Fanta", comp: { en: "", nl: "" } },
-    { name: "Sprite or 7up", comp: { en: "", nl: "" } },
-    { name: "Cassis", comp: { en: "", nl: "" } },
+    { name: "Sprite or Red Bull", comp: { en: "", nl: "" } },
+    { name: "Royal Bliss Ginger Ale", comp: { en: "", nl: "" } },
     { name: "Tonic water", comp: { en: "", nl: "" } },
-    { name: "Ginger ale", comp: { en: "", nl: "" } },
-    { name: "Sparkling water", comp: { en: "", nl: "" } },
-    { name: "Still water", comp: { en: "", nl: "" } }
+    { name: "Lipton Iced Tea Lemon (sparkling)", comp: { en: "", nl: "" } },
+    { name: "Lipton Iced Tea Peach (still)", comp: { en: "", nl: "" } },
+    { name: "SPA Rood (sparkling)", comp: { en: "", nl: "" } },
+    { name: "SPA Blauw (still)", comp: { en: "", nl: "" } },
+    { name: "De Appelaere (200 ml)", comp: { en: "", nl: "" } },
+    { name: "Royal Club Bitter Lemon", comp: { en: "", nl: "" } }
   ]
 }
 ];
@@ -1044,7 +1048,13 @@ var PREP = [
   { item: { en: "Strawberry puree", nl: "Aardbeienpuree" }, yield: { en: "Squeeze bottle", nl: "Knijpflacon" }, keeps: { en: "2 days", nl: "2 dagen" }, home: "FR1 door C" },
   { item: { en: "Mango puree", nl: "Mangopuree" }, yield: { en: "Squeeze bottle", nl: "Knijpflacon" }, keeps: { en: "2 days", nl: "2 dagen" }, home: "FR1 door C" },
   { item: { en: "Citrus, juiced at open", nl: "Citrus, bij opening geperst" }, yield: { en: "Rail bottles", nl: "Speedrailflessen" }, keeps: { en: "Same day", nl: "Dezelfde dag" }, home: { en: "Rail, spares FR2", nl: "Speedrail, extra in FR2" } },
-  { item: { en: "Cut garnish, caramelised pear, jalapeno slices", nl: "Gesneden garnering, gekaramelliseerde peer, schijfjes jalapeno" }, yield: { en: "Tubs", nl: "Bakjes" }, keeps: { en: "Same day", nl: "Dezelfde dag" }, home: "FR2 door B" }
+  { item: { en: "Cut garnish, caramelised pear, jalapeno slices", nl: "Gesneden garnering, gekaramelliseerde peer, schijfjes jalapeno" }, yield: { en: "Tubs", nl: "Bakjes" }, keeps: { en: "Same day", nl: "Dezelfde dag" }, home: "FR2 door B" },
+  { item: { en: "Rosemary-lemon sea salt rim mix", nl: "Rozemarijn-citroen-zeezoutrand" },
+    yield: { en: "Small bowl, enough for service", nl: "Klein kommetje, voldoende voor de service" },
+    keeps: { en: "1 week in airtight container", nl: "1 week in luchtdichte verpakking" },
+    home: "Station 3 dry store",
+    prep: { en: "Place a sheet of paper towel on a heatproof plate. Spread rosemary on the paper towel, then cover with another single sheet of paper towel. Microwave in 4 x 30 second increments on high until the rosemary leaves are fully dry and can be crumbled into powder between your fingers, but still a lovely vibrant green. Grind into a coarse powder in a mortar and pestle (or even with your fingers). Goal: some fine powder and some coarse little rosemary bits. Mix: measure out 3 teaspoons of the rosemary powder and mix in a small bowl with sea salt. Grate a whole lemon zest into the bowl and mix well. Store in an airtight container.",
+            nl: "Leg een vel keukenpapier op een hittebestendig bord. Verspreid rozemarijn over het papier en dek af met nog een vel keukenpapier. Magnetron in 4 x 30 seconden op hoog tot de rozemarijnblaadjes volledig droog zijn en tot poeder kunnen worden verkruimeld tussen je vingers, maar nog steeds mooi levendig groen zijn. Maal tot een grof poeder in een vijzel (of zelfs met je vingers). Doel: wat fijn poeder en wat grovere rozemarijnstukjes. Meng: meet 3 theelepels van het rozemarijnpoeder af en meng in een klein kommetje met zeezout. Rasp een hele citroenschil erbij en meng goed. Bewaar in een luchtdichte verpakking." } }
 ];
 
 /* ---- storage ------------------------------------------------------------- */
@@ -1236,7 +1246,6 @@ function buildBlock(d) {
       "<div><dt>" + esc(ui("ice")) + "</dt><dd>" + esc(t(d.ice)) + "</dd></div>" +
       "<div><dt>" + esc(ui("method")) + "</dt><dd>" + esc(t(d.method)) + "</dd></div>" +
     "</dl>";
-  if (d.flag) h += '<div class="flag"><strong>Flag</strong>' + esc(t(d.flag)) + "</div>";
   h += '<div class="substack"><h4>' + esc(ui("ingredients")) + "</h4>" + ingList(d) + "</div>";
   h += '<div class="substack"><h4>' + esc(ui("atBar")) + '</h4><ol class="steps">' +
     t(d.bar).map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ol></div>";
@@ -1244,8 +1253,6 @@ function buildBlock(d) {
     h += '<div class="substack"><h4>' + esc(ui("atTable")) + '</h4><ol class="steps">' +
       t(d.table).map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ol></div>";
   }
-  /* Some drinks carry their own heading here, "Nice to know" or an
-     alternative build, so the standard label is only the fallback. */
   h += '<div class="substack"><h4>' + esc(d.sayLabel ? t(d.sayLabel) : ui("sayThis")) + "</h4>" +
     t(d.say).map(function (s) { return '<blockquote class="say">' + esc(s) + "</blockquote>"; }).join("") + "</div>";
   return h + "</article>";
