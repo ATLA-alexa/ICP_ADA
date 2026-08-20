@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quatro, Food</title>
+<style>
+/* ==========================================================================
+   QUATRO PRINT MENU, ENGLISH
+   A3 folded to A4. Delivered as 4 sequential A4 pages in reading order:
+   1 front cover, 2 inside left, 3 inside right, 4 back cover.
+   The printer imposes the fold from these four pages.
+   Paper: 300 g mat MC. Print from Chrome: File, Print, Save as PDF,
+   margins None, background graphics ON, then upload the PDF.
+   Limestone #FAF6EF, ink #23201C, gold #A8863C, gold-pale #D9C79A.
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
+
+:root {
+  --limestone: #FAF6EF;
+  --ink: #23201C;
+  --ink-soft: #6B6459;
+  --gold: #A8863C;
+  --gold-pale: #D9C79A;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+body {
+  font-family: 'Jost', 'Segoe UI', system-ui, sans-serif;
+  font-weight: 300;
+  color: var(--ink);
+  background: #E8E2D6;
+}
+
+/* ---- page geometry ------------------------------------------------------- */
+
+.page {
+  width: 210mm;
+  height: 297mm;
+  background: var(--limestone);
+  padding: 17mm 17mm 14mm;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  break-after: page;
+  page-break-after: always;
+}
+.page:last-child { break-after: auto; page-break-after: auto; }
+
+@media screen {
+  body { padding: 32px 0; }
+  .page { margin: 0 auto 28px; box-shadow: 0 18px 50px rgba(35, 32, 28, 0.18); }
+}
+
+@page { size: A4 portrait; margin: 0; }
+
+@media print {
+  body { background: none; padding: 0; }
+  .page { margin: 0; box-shadow: none; }
+}
+
+/* ---- shared typography ---------------------------------------------------- */
+
+h2 {
+  font-family: 'Marcellus', Georgia, serif;
+  font-weight: 400;
+  font-size: 13.5pt;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0 0 3.2mm;
+}
+h2::after {
+  content: "";
+  display: block;
+  width: 34px;
+  height: 1px;
+  background: var(--gold);
+  margin-top: 2.4mm;
+}
+.sec { margin-top: 9mm; }
+.sec:first-child { margin-top: 0; }
+
+.item {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  font-size: 10.5pt;
+  line-height: 1.6;
+}
+.item .nm { font-weight: 400; letter-spacing: 0.02em; }
+.item .lead {
+  flex: 1;
+  min-width: 18px;
+  border-bottom: 1px dotted var(--gold-pale);
+  transform: translateY(-3.5px);
+}
+.item .pr { font-weight: 400; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+.desc {
+  font-size: 8.8pt;
+  font-style: italic;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  margin: 0.4mm 0 2.6mm;
+  max-width: 88%;
+}
+
+.supp {
+  font-size: 8.2pt;
+  font-style: italic;
+  color: var(--ink-soft);
+  letter-spacing: 0.03em;
+  border-top: 1px solid var(--gold-pale);
+  padding-top: 2.2mm;
+  margin-top: 2.2mm;
+}
+.supp b { color: var(--gold); font-weight: 500; }
+
+.cols-2 { display: grid; grid-template-columns: 1fr 1fr; column-gap: 10mm; }
+.cols-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; column-gap: 8mm; }
+
+/* ---- front cover ---------------------------------------------------------- */
+
+.cover {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.arch {
+  border: 1px solid var(--gold);
+  border-radius: 20px 20px 6px 6px;
+  padding: 36mm 16mm 28mm;
+  background: rgba(168, 134, 60, 0.035);
+}
+.cover h1 {
+  font-family: 'Marcellus', Georgia, serif;
+  font-weight: 400;
+  font-size: 44pt;
+  letter-spacing: 0.28em;
+  text-indent: 0.28em; /* recentres the letterspaced word */
+  color: var(--gold);
+  margin-bottom: 6mm;
+}
+.cover .seasons {
+  font-size: 11pt;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  text-transform: uppercase;
+  color: var(--ink);
+  font-weight: 400;
+}
+.cover .harmony {
+  font-size: 11.5pt;
+  font-style: italic;
+  color: var(--ink);
+  margin-top: 1.6mm;
+  letter-spacing: 0.06em;
+}
+.cover .rule {
+  width: 120px;
+  height: 1px;
+  background: var(--gold);
+  margin: 8mm auto;
+}
+.cover .tagline {
+  font-size: 8.2pt;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  line-height: 2.1;
+  font-weight: 400;
+}
+
+/* ---- back cover ----------------------------------------------------------- */
+
+.flowline {
+  font-size: 8.8pt;
+  line-height: 1.7;
+  color: var(--ink);
+  margin-top: 1mm;
+}
+.allergy {
+  margin-top: auto;
+  border-top: 1px solid var(--gold-pale);
+  padding-top: 3mm;
+  text-align: center;
+  font-size: 7.4pt;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  line-height: 2;
+}
+
+/* v2 drinks menu additions */
+.dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:7px;
+       vertical-align:baseline; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+.dtag { font-size:8.2pt; font-style:italic; color:var(--gold); margin:-1.4mm 0 3mm; }
+.crosssell { text-align:center; font-size:8.2pt; letter-spacing:0.22em; text-transform:uppercase;
+             color:var(--gold); margin-top:8mm; }
+.note-inline { font-size:8.8pt; font-style:italic; color:var(--ink-soft); margin:-1mm 0 3mm; }
+
+/* v2 drinks menu additions */
+.dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:7px;
+       vertical-align:baseline; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+.dtag { font-size:8.2pt; font-style:italic; color:var(--gold); margin:-1.4mm 0 3mm; }
+.crosssell { text-align:center; font-size:8.2pt; letter-spacing:0.22em; text-transform:uppercase;
+             color:var(--gold); margin-top:8mm; }
+.note-inline { font-size:8.8pt; font-style:italic; color:var(--ink-soft); margin:-1mm 0 3mm; }
+/* compact back cover for the combined menu */
+.compact { padding-top: 12mm; }
+.compact .sec { margin-top: 5.2mm; }
+.compact .item { font-size: 9.6pt; line-height: 1.45; }
+.compact .desc { font-size: 8pt; margin: 0.2mm 0 1.6mm; max-width: 100%; line-height: 1.45; }
+.compact .note-inline { margin: -0.6mm 0 2mm; font-size: 8.2pt; }
+.compact h2 { font-size: 12pt; margin-bottom: 2.2mm; }
+.compact h2::after { margin-top: 1.6mm; }
+.compact .supp { margin-top: 1.4mm; padding-top: 1.4mm; }
+.compact .flowline { font-size: 8.2pt; line-height: 1.55; }
+.compact .allergy { padding-top: 2mm; line-height: 1.8; }
+
+/* v2 drinks menu additions */
+.dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:7px;
+       vertical-align:baseline; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+.dtag { font-size:8.2pt; font-style:italic; color:var(--gold); margin:-1.4mm 0 3mm; }
+.crosssell { text-align:center; font-size:8.2pt; letter-spacing:0.22em; text-transform:uppercase;
+             color:var(--gold); margin-top:8mm; }
+.note-inline { font-size:8.8pt; font-style:italic; color:var(--ink-soft); margin:-1mm 0 3mm; }
+/* compact back cover for the combined menu */
+.compact { padding-top: 12mm; }
+.compact .sec { margin-top: 5.2mm; }
+.compact .item { font-size: 9.6pt; line-height: 1.45; }
+.compact .desc { font-size: 8pt; margin: 0.2mm 0 1.6mm; max-width: 100%; line-height: 1.45; }
+.compact .note-inline { margin: -0.6mm 0 2mm; font-size: 8.2pt; }
+.compact h2 { font-size: 12pt; margin-bottom: 2.2mm; }
+.compact h2::after { margin-top: 1.6mm; }
+.compact .supp { margin-top: 1.4mm; padding-top: 1.4mm; }
+.compact .flowline { font-size: 8.2pt; line-height: 1.55; }
+.compact .allergy { padding-top: 2mm; line-height: 1.8; }
+/* staged pages of the dedicated drinks menu */
+.stage .item { font-size: 12.5pt; margin-top: 5.5mm; }
+.stage .desc { font-size: 9.6pt; max-width: 84%; margin: 1mm 0 1.6mm; }
+.stage .dtag { font-size: 8.8pt; margin: 0 0 1mm; }
+.stage h2 { font-size: 15.5pt; }
+.stage .note-inline { font-size: 9.2pt; }
+</style>
+</head>
+<body>
+<section class="page cover">
+  <div class="arch">
+    <h1>QUATRO</h1>
+    <div class="seasons">Four Seasons</div>
+    <div class="harmony">In Perfect Harmony</div>
+    <div class="rule"></div>
+    <div class="tagline">A place to gather.<br>A reason to return.</div>
+  </div>
+</section><section class="page ">
+  <div class="sec">
+    <h2>Voorgerechten</h2>
+    <div class="item"><span class="nm">Paprika &amp; Chèvre</span><span class="lead"></span><span class="pr">&euro;16</span></div>
+    <p class="desc">Milde geitenkaas, honing, geroosterde walnoten, olijven, basilicumolie.</p>
+    <div class="item"><span class="nm">Burrata</span><span class="lead"></span><span class="pr">&euro;16</span></div>
+    <p class="desc">Romige burrata, mediterrane caponata, Kalamata-olijven, ansjovis, kappertjes, basilicum.</p>
+    <div class="item"><span class="nm">Croustillant de Crabe</span><span class="lead"></span><span class="pr">&euro;17</span></div>
+    <p class="desc">Gemarineerde krab, krokant jasje, remoulade, yuzumayonaise, koriander.</p>
+    <div class="item"><span class="nm">Octopus</span><span class="lead"></span><span class="pr">&euro;18</span></div>
+    <p class="desc">Zachte octopus, knoflook, gerookte paprika, romige aardappelpuree.</p>
+    <div class="item"><span class="nm">Exotic Shrimp</span><span class="lead"></span><span class="pr">&euro;18</span></div>
+    <p class="desc">Garnalen, ananaschutney met steranijs, koriander, harissa beurre monté.</p>
+    <div class="item"><span class="nm">Beef Carpaccio</span><span class="lead"></span><span class="pr">&euro;17</span></div>
+    <p class="desc">Dun gesneden ossenhaas, rucola, kappertjes, Parmezaanse krokantjes, mosterddressing, balsamico.</p>
+    <div class="item"><span class="nm">Tuna Tataki</span><span class="lead"></span><span class="pr">&euro;18</span></div>
+    <p class="desc">Kort geschroeide saku-tonijn, yuzu, sesam, pittige jalapeño-guacamole, krokante chips.</p>
+    <p class="supp">Supplementen: 5 g geschaafde truffel <b>&euro;20</b> &nbsp;&middot;&nbsp; 5 g kaviaar <b>&euro;20</b></p>
+  </div>
+  <div class="sec">
+    <h2>Pasta &amp; Risotto</h2>
+    <div class="item"><span class="nm">Zwarte tagliatelle met kokkels</span><span class="lead"></span><span class="pr">&euro;26</span></div>
+    <p class="desc">Inktvisinkt-tagliatelle, verse kokkels, aromatische kruiden.</p>
+    <div class="item"><span class="nm">Orzo met garnalen</span><span class="lead"></span><span class="pr">&euro;24</span></div>
+    <p class="desc">Orzo, garnalen, basilicum, koriander, limoen, harissa.</p>
+    <div class="item"><span class="nm">Risotto met kip &amp; paddenstoelen</span><span class="lead"></span><span class="pr">&euro;24</span></div>
+    <p class="desc">Romige risotto, kip, gebakken paddenstoelen, gevogeltejus.</p>
+    <div class="item"><span class="nm">Truffelrisotto</span><span class="lead"></span><span class="pr">&euro;24</span></div>
+    <p class="desc">Romige risotto, champignonduxelles, truffelolie.</p>
+    <div class="item"><span class="nm">Gnocchi</span><span class="lead"></span><span class="pr">&euro;24</span></div>
+    <p class="desc">Zachte gnocchi, Quatro's tomatenroom, licht pittige toets.</p>
+  </div>
+
+</section><section class="page ">
+  <div class="sec">
+    <h2>Vlees &amp; Gevogelte</h2>
+    <div class="item"><span class="nm">Ossenhaas met pepersaus</span><span class="lead"></span><span class="pr">&euro;29</span></div>
+    <p class="desc">Klassieke ossenhaas, romige pepersaus.</p>
+    <div class="item"><span class="nm">Ribeye in Café de Paris-saus</span><span class="lead"></span><span class="pr">&euro;29</span></div>
+    <p class="desc">Gegrilde ribeye, zijdezachte groene Café de Paris-saus.</p>
+    <div class="item"><span class="nm">Chateaubriand (400 g, voor twee)</span><span class="lead"></span><span class="pr">&euro;55</span></div>
+    <p class="desc">Premium ossenhaas voor twee, romige spinazie.</p>
+    <div class="item"><span class="nm">Beef Sliders</span><span class="lead"></span><span class="pr">&euro;21</span></div>
+    <p class="desc">Sappige miniburgers, gesmolten kaas, gekarameliseerde ui, romige champignonsaus.</p>
+    <div class="item"><span class="nm">Suprême de Poulet</span><span class="lead"></span><span class="pr">&euro;26</span></div>
+    <p class="desc">Kippenborst met krokant vel, romige champignonsaus, Dijon-mosterdsaus, gebakken shimeji.</p>
+  </div>
+  <div class="sec">
+    <h2>Vis &amp; Zeevruchten</h2>
+    <div class="item"><span class="nm">Tong</span><span class="lead"></span><span class="pr">&euro;16 / 100 g</span></div>
+    <p class="desc">Klassieke beurre blanc, zalmeitjes, kappertjes.</p>
+    <div class="item"><span class="nm">Zeebaars</span><span class="lead"></span><span class="pr">&euro;26</span></div>
+    <p class="desc">Op de huid gebakken zeebaars, saus op Normandische wijze, kokkels.</p>
+    <div class="item"><span class="nm">Miso-gemarineerde zalm</span><span class="lead"></span><span class="pr">&euro;24</span></div>
+    <p class="desc">Marinade van miso en koriander, frisse citrussaus.</p>
+    <p class="supp">Supplement: 5 g kaviaar <b>&euro;20</b></p>
+  </div>
+  <div class="sec">
+    <h2>Bijgerechten</h2>
+    <div class="cols-2">
+      <div class="item"><span class="nm">Friet</span><span class="lead"></span><span class="pr">&euro;6</span></div>
+      <div class="item"><span class="nm">Aardappelgratin Dauphinois</span><span class="lead"></span><span class="pr">&euro;9</span></div>
+      <div class="item"><span class="nm">Romige aardappelpuree</span><span class="lead"></span><span class="pr">&euro;8</span></div>
+      <div class="item"><span class="nm">Groentespaghetti</span><span class="lead"></span><span class="pr">&euro;8</span></div>
+      <div class="item"><span class="nm">Truffelfriet</span><span class="lead"></span><span class="pr">&euro;9</span></div>
+    </div>
+  </div>
+  <div class="sec">
+    <h2>Sauzen</h2>
+    <div class="cols-2">
+      <div class="item"><span class="nm">Dijon-mosterdsaus</span><span class="lead"></span><span class="pr">&euro;5</span></div>
+      <div class="item"><span class="nm">Rundvleesjus</span><span class="lead"></span><span class="pr">&euro;5</span></div>
+      <div class="item"><span class="nm">Romige champignonsaus</span><span class="lead"></span><span class="pr">&euro;5</span></div>
+    </div>
+  </div>
+
+</section><section class="page ">
+  <div class="sec">
+    <h2>Desserts</h2>
+    <div class="item"><span class="nm">Tiramisù</span><span class="lead"></span><span class="pr">&euro;15</span></div>
+    <p class="desc">Huisgemaakte dacquoise, koffiecrumble, mascarponemousse.</p>
+    <div class="item"><span class="nm">Mille-feuille</span><span class="lead"></span><span class="pr">&euro;16</span></div>
+    <p class="desc">Krokant bladerdeeg, vanilleroom, gezouten karamel, vanillemascarpone.</p>
+    <div class="item"><span class="nm">Jawhara</span><span class="lead"></span><span class="pr">&euro;17</span></div>
+    <p class="desc">Extra krokant filodeeg, oranjebloesemroom, pistache-ijs, pistachesaus.</p>
+    <div class="item"><span class="nm">Profiteroles</span><span class="lead"></span><span class="pr">&euro;17</span></div>
+    <p class="desc">Soezendeeg, hazelnootroom, hazelnoot-ijs, warme chocoladesaus.</p>
+  </div>
+  <p class="crosssell">Onze alcoholvrije bar heeft een eigen kaart, vraag ernaar.</p>
+  <p class="allergy">Please inform us of any allergies. We adapt accordingly.<br>Laat het ons weten bij allergie&euml;n. Wij passen ons aan.</p>
+
+</section>
+</body>
+</html>

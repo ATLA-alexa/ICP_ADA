@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quatro, Drinks</title>
+<style>
+/* ==========================================================================
+   QUATRO PRINT MENU, ENGLISH
+   A3 folded to A4. Delivered as 4 sequential A4 pages in reading order:
+   1 front cover, 2 inside left, 3 inside right, 4 back cover.
+   The printer imposes the fold from these four pages.
+   Paper: 300 g mat MC. Print from Chrome: File, Print, Save as PDF,
+   margins None, background graphics ON, then upload the PDF.
+   Limestone #FAF6EF, ink #23201C, gold #A8863C, gold-pale #D9C79A.
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
+
+:root {
+  --limestone: #FAF6EF;
+  --ink: #23201C;
+  --ink-soft: #6B6459;
+  --gold: #A8863C;
+  --gold-pale: #D9C79A;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+body {
+  font-family: 'Jost', 'Segoe UI', system-ui, sans-serif;
+  font-weight: 300;
+  color: var(--ink);
+  background: #E8E2D6;
+}
+
+/* ---- page geometry ------------------------------------------------------- */
+
+.page {
+  width: 210mm;
+  height: 297mm;
+  background: var(--limestone);
+  padding: 17mm 17mm 14mm;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  break-after: page;
+  page-break-after: always;
+}
+.page:last-child { break-after: auto; page-break-after: auto; }
+
+@media screen {
+  body { padding: 32px 0; }
+  .page { margin: 0 auto 28px; box-shadow: 0 18px 50px rgba(35, 32, 28, 0.18); }
+}
+
+@page { size: A4 portrait; margin: 0; }
+
+@media print {
+  body { background: none; padding: 0; }
+  .page { margin: 0; box-shadow: none; }
+}
+
+/* ---- shared typography ---------------------------------------------------- */
+
+h2 {
+  font-family: 'Marcellus', Georgia, serif;
+  font-weight: 400;
+  font-size: 13.5pt;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0 0 3.2mm;
+}
+h2::after {
+  content: "";
+  display: block;
+  width: 34px;
+  height: 1px;
+  background: var(--gold);
+  margin-top: 2.4mm;
+}
+.sec { margin-top: 9mm; }
+.sec:first-child { margin-top: 0; }
+
+.item {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  font-size: 10.5pt;
+  line-height: 1.6;
+}
+.item .nm { font-weight: 400; letter-spacing: 0.02em; }
+.item .lead {
+  flex: 1;
+  min-width: 18px;
+  border-bottom: 1px dotted var(--gold-pale);
+  transform: translateY(-3.5px);
+}
+.item .pr { font-weight: 400; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+.desc {
+  font-size: 8.8pt;
+  font-style: italic;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  margin: 0.4mm 0 2.6mm;
+  max-width: 88%;
+}
+
+.supp {
+  font-size: 8.2pt;
+  font-style: italic;
+  color: var(--ink-soft);
+  letter-spacing: 0.03em;
+  border-top: 1px solid var(--gold-pale);
+  padding-top: 2.2mm;
+  margin-top: 2.2mm;
+}
+.supp b { color: var(--gold); font-weight: 500; }
+
+.cols-2 { display: grid; grid-template-columns: 1fr 1fr; column-gap: 10mm; }
+.cols-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; column-gap: 8mm; }
+
+/* ---- front cover ---------------------------------------------------------- */
+
+.cover {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.arch {
+  border: 1px solid var(--gold);
+  border-radius: 20px 20px 6px 6px;
+  padding: 36mm 16mm 28mm;
+  background: rgba(168, 134, 60, 0.035);
+}
+.cover h1 {
+  font-family: 'Marcellus', Georgia, serif;
+  font-weight: 400;
+  font-size: 44pt;
+  letter-spacing: 0.28em;
+  text-indent: 0.28em; /* recentres the letterspaced word */
+  color: var(--gold);
+  margin-bottom: 6mm;
+}
+.cover .seasons {
+  font-size: 11pt;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  text-transform: uppercase;
+  color: var(--ink);
+  font-weight: 400;
+}
+.cover .harmony {
+  font-size: 11.5pt;
+  font-style: italic;
+  color: var(--ink);
+  margin-top: 1.6mm;
+  letter-spacing: 0.06em;
+}
+.cover .rule {
+  width: 120px;
+  height: 1px;
+  background: var(--gold);
+  margin: 8mm auto;
+}
+.cover .tagline {
+  font-size: 8.2pt;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  line-height: 2.1;
+  font-weight: 400;
+}
+
+/* ---- back cover ----------------------------------------------------------- */
+
+.flowline {
+  font-size: 8.8pt;
+  line-height: 1.7;
+  color: var(--ink);
+  margin-top: 1mm;
+}
+.allergy {
+  margin-top: auto;
+  border-top: 1px solid var(--gold-pale);
+  padding-top: 3mm;
+  text-align: center;
+  font-size: 7.4pt;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  line-height: 2;
+}
+
+/* v2 drinks menu additions */
+.dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:7px;
+       vertical-align:baseline; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+.dtag { font-size:8.2pt; font-style:italic; color:var(--gold); margin:-1.4mm 0 3mm; }
+.crosssell { text-align:center; font-size:8.2pt; letter-spacing:0.22em; text-transform:uppercase;
+             color:var(--gold); margin-top:8mm; }
+.note-inline { font-size:8.8pt; font-style:italic; color:var(--ink-soft); margin:-1mm 0 3mm; }
+
+/* v2 drinks menu additions */
+.dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:7px;
+       vertical-align:baseline; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+.dtag { font-size:8.2pt; font-style:italic; color:var(--gold); margin:-1.4mm 0 3mm; }
+.crosssell { text-align:center; font-size:8.2pt; letter-spacing:0.22em; text-transform:uppercase;
+             color:var(--gold); margin-top:8mm; }
+.note-inline { font-size:8.8pt; font-style:italic; color:var(--ink-soft); margin:-1mm 0 3mm; }
+/* compact back cover for the combined menu */
+.compact { padding-top: 12mm; }
+.compact .sec { margin-top: 5.2mm; }
+.compact .item { font-size: 9.6pt; line-height: 1.45; }
+.compact .desc { font-size: 8pt; margin: 0.2mm 0 1.6mm; max-width: 100%; line-height: 1.45; }
+.compact .note-inline { margin: -0.6mm 0 2mm; font-size: 8.2pt; }
+.compact h2 { font-size: 12pt; margin-bottom: 2.2mm; }
+.compact h2::after { margin-top: 1.6mm; }
+.compact .supp { margin-top: 1.4mm; padding-top: 1.4mm; }
+.compact .flowline { font-size: 8.2pt; line-height: 1.55; }
+.compact .allergy { padding-top: 2mm; line-height: 1.8; }
+
+/* v2 drinks menu additions */
+.dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:7px;
+       vertical-align:baseline; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+.dtag { font-size:8.2pt; font-style:italic; color:var(--gold); margin:-1.4mm 0 3mm; }
+.crosssell { text-align:center; font-size:8.2pt; letter-spacing:0.22em; text-transform:uppercase;
+             color:var(--gold); margin-top:8mm; }
+.note-inline { font-size:8.8pt; font-style:italic; color:var(--ink-soft); margin:-1mm 0 3mm; }
+/* compact back cover for the combined menu */
+.compact { padding-top: 12mm; }
+.compact .sec { margin-top: 5.2mm; }
+.compact .item { font-size: 9.6pt; line-height: 1.45; }
+.compact .desc { font-size: 8pt; margin: 0.2mm 0 1.6mm; max-width: 100%; line-height: 1.45; }
+.compact .note-inline { margin: -0.6mm 0 2mm; font-size: 8.2pt; }
+.compact h2 { font-size: 12pt; margin-bottom: 2.2mm; }
+.compact h2::after { margin-top: 1.6mm; }
+.compact .supp { margin-top: 1.4mm; padding-top: 1.4mm; }
+.compact .flowline { font-size: 8.2pt; line-height: 1.55; }
+.compact .allergy { padding-top: 2mm; line-height: 1.8; }
+/* staged pages of the dedicated drinks menu */
+.stage .item { font-size: 12.5pt; margin-top: 5.5mm; }
+.stage .desc { font-size: 9.6pt; max-width: 84%; margin: 1mm 0 1.6mm; }
+.stage .dtag { font-size: 8.8pt; margin: 0 0 1mm; }
+.stage h2 { font-size: 15.5pt; }
+.stage .note-inline { font-size: 9.2pt; }
+</style>
+</head>
+<body>
+<section class="page cover">
+  <div class="arch">
+    <h1>QUATRO</h1>
+    <div class="seasons">Four Seasons</div>
+    <div class="harmony">In Perfect Harmony</div>
+    <div class="rule"></div>
+    <div class="tagline">Alles op dit menu<br>is alcoholvrij.</div>
+  </div>
+</section><section class="page stage">
+  <div class="sec">
+    <h2>Signatuurdrankjes</h2>
+    <p class="note-inline">Elk drankje kan zoet of minder zoet, zeg het even bij het bestellen.</p>
+    <div class="item"><span class="nm"><span class="dot" style="background:#4C4C9D"></span>Lychee Siren</span><span class="lead"></span><span class="pr">&euro;12,95</span></div>
+    <p class="desc">Lychee en kokoswater onder een indigo kroon van vlindererwtbloem.</p>
+    <p class="dtag">Knijp het limoenpartje uit en zie de sirene haar magie doen</p>
+    <div class="item"><span class="nm"><span class="dot" style="background:#3E5140"></span>Forest Fairy</span><span class="lead"></span><span class="pr">&euro;12,95</span></div>
+    <p class="desc">Rozemarijn-citroen-zoutrand, gerookte rozemarijn en rauwe tijm over donkere ahorn, met citroen. Kruidig, rokerig, licht bitter aan de randen.</p>
+    <p class="dtag">Extra kruidig? Wij kneuzen er meer tijm bij</p>
+    <div class="item"><span class="nm"><span class="dot" style="background:#6E8C3A"></span>The Hulk</span><span class="lead"></span><span class="pr">&euro;12,95</span></div>
+    <p class="desc">Basilicum, een keer geperst, geeft zijn peperige anijsolie af aan de suiker van groene druiven; appel en peer geven body, limoen tilt het op. Het groen is het blad zelf, geen kleurstof.</p>
+    <p class="dtag">Aan de zure kant, heel verfrissend</p>
+    <div class="item"><span class="nm"><span class="dot" style="background:#9E2B3B"></span>Hibiscus Royale</span><span class="lead"></span><span class="pr">&euro;12,95</span></div>
+    <p class="desc">Hibiscus trekt diep rood en echt zuur; aardbei rondt dat zuur af met zoetheid en body. Daarboven zakken sinaasappel, citroen en vanille in een bleke zijde die als eigen laag blijft liggen. Scherp onder, zacht boven.</p>
+    <p class="dtag">Gelaagd, zuur rood onder een citruszijde</p>
+  </div>
+
+</section><section class="page stage">
+  <div class="sec">
+    <h2>Klassiekers, opnieuw bedacht</h2>
+    <div class="item"><span class="nm"><span class="dot" style="background:#5E8C4A"></span>Spicy Jalapeño Mule</span><span class="lead"></span><span class="pr">&euro;11,95</span></div>
+    <p class="desc">Verse jalapeno, een halve limoen, echte ginger beer over crushed ice. De hitte komt eerst, de gember maakt het af.</p>
+    <p class="dtag">Geen jalapeno-liefhebber? Vraag hem gerust zonder</p>
+    <div class="item"><span class="nm"><span class="dot" style="background:#5A5AA0"></span>Ocean Mojito</span><span class="lead"></span><span class="pr">&euro;13,95</span></div>
+    <p class="desc">Munt en limoen gekneusd door crushed ice, cassis eroverheen geschud, en vlindererwtbloem als laag daarboven. Paars onder, blauw erboven.</p>
+    <p class="dtag">Gelaagd, diep besachtig en kruidenvers</p>
+    <div class="item"><span class="nm"><span class="dot" style="background:#C24D66"></span>Cosmopolitan</span><span class="lead"></span><span class="pr">&euro;11,95</span></div>
+    <p class="desc">Droge cranberry tegen verse limoen, sinaasappelsap dat het midden afrondt. Opgediend in een gekoelde coupe.</p>
+    <div class="item"><span class="nm"><span class="dot" style="background:#E8791D"></span>Amsterdam Sunrise</span><span class="lead"></span><span class="pr">&euro;10,95</span></div>
+    <p class="desc">Verse sinaasappel over ijs met grenadine die eronder zakt. Grenadine is zwaarder dan sap, dus het zakt en blijft liggen: het glas komt binnen als het eerste licht.</p>
+    <p class="dtag">Roer hem als je klaar bent voor de zonsondergang</p>
+    <div class="item"><span class="nm"><span class="dot" style="background:#C9973B"></span>Tropical Velvet</span><span class="lead"></span><span class="pr">&euro;12,95</span></div>
+    <p class="desc">Passievrucht is op zichzelf alleen maar zuur en parfum. Appel en peer geven body en zachte zoetheid om op te rusten, vanille rondt de randen af. Hard geshaket, fijn gezeefd, opgediend up.</p>
+    <div class="item"><span class="nm"><span class="dot" style="background:#E7DFCF"></span>Piña Colada</span><span class="lead"></span><span class="pr">&euro;11,95</span></div>
+    <p class="desc">Ananas tegen kokosroom, met gecondenseerde melk voor gewicht, geblend met ijs tot het dik en koud uitschenkt.</p>
+  </div>
+
+</section><section class="page ">
+  <div class="sec">
+    <h2>Koffie</h2>
+    <div class="cols-2">
+      <div class="item"><span class="nm">Espresso</span><span class="lead"></span><span class="pr">&euro;3,75</span></div>
+      <div class="item"><span class="nm">Flat White</span><span class="lead"></span><span class="pr">&euro;5,00</span></div>
+      <div class="item"><span class="nm">Americano</span><span class="lead"></span><span class="pr">&euro;4,00</span></div>
+      <div class="item"><span class="nm">Latte Macchiato</span><span class="lead"></span><span class="pr">&euro;5,00</span></div>
+      <div class="item"><span class="nm">Cappuccino</span><span class="lead"></span><span class="pr">&euro;4,50</span></div>
+      <div class="item"><span class="nm">IJskoffie</span><span class="lead"></span><span class="pr">&euro;6,00</span></div>
+    </div>
+    <p class="supp">Maak het je eigen: vanille in elke koffie <b>+ &euro;0,75</b></p>
+  </div>
+  <div class="sec">
+    <h2>Frisdranken</h2>
+    <div class="item"><span class="nm">Alle frisdranken</span><span class="lead"></span><span class="pr">&euro;4,50</span></div>
+    <p class="flowline">Coca-Cola &middot; Cola Zero &middot; Fanta &middot; Sprite &middot; Red Bull &middot; Royal Bliss Ginger Ale &middot; Tonic &middot; Lipton Iced Tea Lemon &middot; Lipton Iced Tea Peach &middot; SPA Rood &middot; SPA Blauw &middot; De Appelaere &middot; Royal Club Bitter Lemon</p>
+  </div>
+  <div class="sec">
+    <h2>Water</h2>
+    <div class="item"><span class="nm">SPA Blauw (plat) &middot; SPA Rood (bruisend)</span><span class="lead"></span><span class="pr">&euro;4,00</span></div>
+  </div>
+  <p class="allergy">Please inform us of any allergies. We adapt accordingly.<br>Laat het ons weten bij allergie&euml;n. Wij passen ons aan.</p>
+
+</section>
+</body>
+</html>
