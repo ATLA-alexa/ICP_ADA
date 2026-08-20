@@ -7,12 +7,8 @@
 <style>
 /* ==========================================================================
    QUATRO PRINT MENU, ENGLISH
-   A3 folded to A4. Delivered as 4 sequential A4 pages in reading order:
+   A3 folded to A4. Four sequential A4 pages in reading order:
    1 front cover, 2 inside left, 3 inside right, 4 back cover.
-   The printer imposes the fold from these four pages.
-   Paper: 300 g mat MC. Print from Chrome: File, Print, Save as PDF,
-   margins None, background graphics ON, then upload the PDF.
-   Limestone #FAF6EF, ink #23201C, gold #A8863C, gold-pale #D9C79A.
    ========================================================================== */
 @import url('https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
 
@@ -33,6 +29,10 @@ body {
   font-weight: 300;
   color: var(--ink);
   background: #E8E2D6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 0;
 }
 
 /* ---- page geometry ------------------------------------------------------- */
@@ -45,21 +45,17 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  break-after: page;
-  page-break-after: always;
-}
-.page:last-child { break-after: auto; page-break-after: auto; }
-
-@media screen {
-  body { padding: 32px 0; }
-  .page { margin: 0 auto 28px; box-shadow: 0 18px 50px rgba(35, 32, 28, 0.18); }
+  margin-bottom: 28px;
+  box-shadow: 0 18px 50px rgba(35, 32, 28, 0.18);
+  flex-shrink: 0;
 }
 
 @page { size: A4 portrait; margin: 0; }
 
 @media print {
   body { background: none; padding: 0; }
-  .page { margin: 0; box-shadow: none; }
+  .page { margin: 0; box-shadow: none; break-after: page; page-break-after: always; }
+  .page:last-child { break-after: auto; page-break-after: auto; }
 }
 
 /* ---- shared typography ---------------------------------------------------- */
@@ -106,7 +102,7 @@ h2::after {
   color: var(--ink-soft);
   line-height: 1.55;
   margin: 0.4mm 0 2.6mm;
-  max-width: 88%;
+  max-width: 92%;
 }
 
 .supp {
@@ -141,7 +137,7 @@ h2::after {
   font-weight: 400;
   font-size: 44pt;
   letter-spacing: 0.28em;
-  text-indent: 0.28em; /* recentres the letterspaced word */
+  text-indent: 0.28em;
   color: var(--gold);
   margin-bottom: 6mm;
 }
@@ -187,69 +183,129 @@ h2::after {
 .allergy {
   margin-top: auto;
   border-top: 1px solid var(--gold-pale);
-  padding-top: 3mm;
+  padding-top: 2.4mm;
   text-align: center;
-  font-size: 7.4pt;
-  letter-spacing: 0.14em;
+  font-size: 6.8pt;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
   color: var(--ink-soft);
-  line-height: 2;
+  line-height: 1.85;
 }
 
-/* v2 drinks menu additions */
-.dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:7px;
-       vertical-align:baseline; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-.dtag { font-size:8.2pt; font-style:italic; color:var(--gold); margin:-1.4mm 0 3mm; }
-.crosssell { text-align:center; font-size:8.2pt; letter-spacing:0.22em; text-transform:uppercase;
-             color:var(--gold); margin-top:8mm; }
-.note-inline { font-size:8.8pt; font-style:italic; color:var(--ink-soft); margin:-1mm 0 3mm; }
+/* SERVICE NOTES: deliberately not italic prose. These are house notes,
+   not drink descriptions, so they carry the gold small-caps voice instead. */
+.note-inline {
+  font-family: 'Marcellus', Georgia, serif;
+  font-style: normal;
+  font-size: 7.4pt;
+  letter-spacing: 0.2em;
+  text-indent: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  line-height: 1.7;
+  margin: 0 0 2.6mm;
+}
+.note-inline.after {
+  margin: 2.6mm 0 0;
+  border-top: 1px solid var(--gold-pale);
+  padding-top: 2mm;
+}
 
-/* v2 drinks menu additions */
-.dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:7px;
-       vertical-align:baseline; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-.dtag { font-size:8.2pt; font-style:italic; color:var(--gold); margin:-1.4mm 0 3mm; }
-.crosssell { text-align:center; font-size:8.2pt; letter-spacing:0.22em; text-transform:uppercase;
-             color:var(--gold); margin-top:8mm; }
-.note-inline { font-size:8.8pt; font-style:italic; color:var(--ink-soft); margin:-1mm 0 3mm; }
+/* small kicker label, sits above the first heading on a category page */
+.pagehead-small {
+  font-family: 'Marcellus', Georgia, serif;
+  font-weight: 400;
+  font-size: 12.5pt;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-align: center;
+  margin: 0 0 5.6mm;
+}
+
 /* compact back cover for the combined menu */
 .compact { padding-top: 12mm; }
-.compact .sec { margin-top: 5.2mm; }
-.compact .item { font-size: 9.6pt; line-height: 1.45; }
-.compact .desc { font-size: 8pt; margin: 0.2mm 0 1.6mm; max-width: 100%; line-height: 1.45; }
-.compact .note-inline { margin: -0.6mm 0 2mm; font-size: 8.2pt; }
-.compact h2 { font-size: 12pt; margin-bottom: 2.2mm; }
+.compact .sec { margin-top: 7mm; }
+.compact .item { font-size: 10.2pt; line-height: 1.55; }
+.compact .desc { font-size: 8.4pt; margin: 0.4mm 0 2.2mm; max-width: 100%; line-height: 1.5; }
+.compact .note-inline { font-size: 7.4pt; margin-bottom: 2.8mm; }
+.compact h2 { font-size: 13pt; margin-bottom: 3mm; }
 .compact h2::after { margin-top: 1.6mm; }
-.compact .supp { margin-top: 1.4mm; padding-top: 1.4mm; }
-.compact .flowline { font-size: 8.2pt; line-height: 1.55; }
-.compact .allergy { padding-top: 2mm; line-height: 1.8; }
+.compact .supp { margin-top: 1.4mm; padding-top: 1.4mm; font-size: 7.8pt; }
+.compact .flowline { font-size: 7.4pt; line-height: 1.5; }
 
-/* v2 drinks menu additions */
-.dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:7px;
-       vertical-align:baseline; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-.dtag { font-size:8.2pt; font-style:italic; color:var(--gold); margin:-1.4mm 0 3mm; }
-.crosssell { text-align:center; font-size:8.2pt; letter-spacing:0.22em; text-transform:uppercase;
-             color:var(--gold); margin-top:8mm; }
-.note-inline { font-size:8.8pt; font-style:italic; color:var(--ink-soft); margin:-1mm 0 3mm; }
-/* compact back cover for the combined menu */
-.compact { padding-top: 12mm; }
-.compact .sec { margin-top: 5.2mm; }
-.compact .item { font-size: 9.6pt; line-height: 1.45; }
-.compact .desc { font-size: 8pt; margin: 0.2mm 0 1.6mm; max-width: 100%; line-height: 1.45; }
-.compact .note-inline { margin: -0.6mm 0 2mm; font-size: 8.2pt; }
-.compact h2 { font-size: 12pt; margin-bottom: 2.2mm; }
-.compact h2::after { margin-top: 1.6mm; }
-.compact .supp { margin-top: 1.4mm; padding-top: 1.4mm; }
-.compact .flowline { font-size: 8.2pt; line-height: 1.55; }
-.compact .allergy { padding-top: 2mm; line-height: 1.8; }
-/* staged pages of the dedicated drinks menu */
-.stage .item { font-size: 12.5pt; margin-top: 5.5mm; }
-.stage .desc { font-size: 9.6pt; max-width: 84%; margin: 1mm 0 1.6mm; }
-.stage .dtag { font-size: 8.8pt; margin: 0 0 1mm; }
-.stage h2 { font-size: 15.5pt; }
-.stage .note-inline { font-size: 9.2pt; }
+/* section subheading for signatures/classics */
+.subhead {
+  font-family: 'Marcellus', Georgia, serif;
+  font-size: 10.5pt;
+  letter-spacing: 0.18em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-top: 3mm;
+  margin-bottom: 0.8mm;
+}
+.compact .subhead { font-size: 10pt; margin-top: 4mm; }
+
+/* ---- page 3 food page, lightly compacted to take desserts --------------- */
+.plated .sec { margin-top: 6.4mm; }
+.plated .item { font-size: 10pt; line-height: 1.45; }
+.plated .desc { font-size: 8.4pt; margin: 0.3mm 0 2mm; line-height: 1.48; }
+.plated h2 { font-size: 12.5pt; margin-bottom: 2.6mm; }
+.plated h2::after { margin-top: 1.8mm; }
+.plated .supp { margin-top: 1.6mm; padding-top: 1.6mm; font-size: 8pt; }
+
+/* two blocks side by side, used for sides and sauces */
+.two-up {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 10mm;
+  align-items: start;
+}
+.two-up h3, .tail h3 {
+  font-family: 'Marcellus', Georgia, serif;
+  font-weight: 400;
+  font-size: 9.5pt;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 1.4mm;
+  padding-bottom: 1.2mm;
+  border-bottom: 1px solid var(--gold-pale);
+}
+.two-up .item { font-size: 9.6pt; line-height: 1.5; }
+
+/* ---- the tail: soft drinks and water, tightened to fit ------------------- */
+.tail { margin-top: 4.6mm; }
+.tail-grid {
+  display: grid;
+  grid-template-columns: 1fr 62mm;
+  column-gap: 9mm;
+  align-items: start;
+}
+.tail h3 {
+  font-family: 'Marcellus', Georgia, serif;
+  font-weight: 400;
+  font-size: 9.5pt;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 1.4mm;
+  padding-bottom: 1.2mm;
+  border-bottom: 1px solid var(--gold-pale);
+}
+.tail .item { font-size: 9pt; }
+.tail .flowline { font-size: 7.2pt; line-height: 1.45; color: var(--ink-soft); }
+
+/* prices recede: lighter, smaller, softer ink, so the eye reads the dish first */
+.item .pr { font-weight: 300; font-size: 0.86em; color: var(--ink-soft); letter-spacing: 0.02em; }
+.supp b { font-weight: 400; }
+.item .lead { border-bottom-color: rgba(217, 199, 154, 0.55); }
 </style>
 </head>
 <body>
+
+<!-- =================== PAGE 1: COVER =================== -->
 <section class="page cover">
   <div class="arch">
     <h1>QUATRO</h1>
@@ -258,10 +314,13 @@ h2::after {
     <div class="rule"></div>
     <div class="tagline">A place to gather.<br>A reason to return.</div>
   </div>
-</section><section class="page ">
+</section>
+
+<!-- =================== PAGE 2: INSIDE LEFT =================== -->
+<section class="page">
   <div class="sec">
     <h2>Starters</h2>
-    <div class="item"><span class="nm">Paprika &amp; Chèvre</span><span class="lead"></span><span class="pr">&euro;16</span></div>
+    <div class="item"><span class="nm">Paprika &amp; Ch&egrave;vre</span><span class="lead"></span><span class="pr">&euro;16</span></div>
     <p class="desc">Mild goat cheese, honey, roasted walnuts, olives, basil oil.</p>
     <div class="item"><span class="nm">Burrata</span><span class="lead"></span><span class="pr">&euro;16</span></div>
     <p class="desc">Creamy burrata, Mediterranean caponata, Kalamata olives, anchovies, capers, basil.</p>
@@ -270,11 +329,11 @@ h2::after {
     <div class="item"><span class="nm">Octopus</span><span class="lead"></span><span class="pr">&euro;18</span></div>
     <p class="desc">Tender octopus, garlic, smoked paprika, creamy mashed potato.</p>
     <div class="item"><span class="nm">Exotic Shrimp</span><span class="lead"></span><span class="pr">&euro;18</span></div>
-    <p class="desc">Shrimp, star anise pineapple chutney, coriander, harissa beurre monté.</p>
+    <p class="desc">Shrimp, star anise pineapple chutney, coriander, harissa beurre mont&eacute;.</p>
     <div class="item"><span class="nm">Beef Carpaccio</span><span class="lead"></span><span class="pr">&euro;17</span></div>
     <p class="desc">Thinly sliced beef tenderloin, arugula, capers, Parmesan crisps, mustard dressing, balsamic.</p>
     <div class="item"><span class="nm">Tuna Tataki</span><span class="lead"></span><span class="pr">&euro;18</span></div>
-    <p class="desc">Seared saku tuna, yuzu, sesame, spicy jalapeño guacamole, crispy chips.</p>
+    <p class="desc">Seared saku tuna, yuzu, sesame, spicy jalape&ntilde;o guacamole, crispy chips.</p>
     <p class="supp">Supplements: 5 g shaved truffle <b>&euro;20</b> &nbsp;&middot;&nbsp; 5 g caviar <b>&euro;20</b></p>
   </div>
   <div class="sec">
@@ -284,26 +343,28 @@ h2::after {
     <div class="item"><span class="nm">Orzo with Shrimp</span><span class="lead"></span><span class="pr">&euro;24</span></div>
     <p class="desc">Orzo, shrimp, basil, coriander, lime, harissa.</p>
     <div class="item"><span class="nm">Risotto with Chicken &amp; Mushrooms</span><span class="lead"></span><span class="pr">&euro;24</span></div>
-    <p class="desc">Creamy risotto, chicken, sautéed mushrooms, poultry jus.</p>
+    <p class="desc">Creamy risotto, chicken, saut&eacute;ed mushrooms, poultry jus.</p>
     <div class="item"><span class="nm">Truffle Risotto</span><span class="lead"></span><span class="pr">&euro;24</span></div>
     <p class="desc">Creamy risotto, mushroom duxelles, truffle oil.</p>
     <div class="item"><span class="nm">Gnocchi</span><span class="lead"></span><span class="pr">&euro;24</span></div>
     <p class="desc">Soft gnocchi, Quatro's tomato cream, light spicy kick.</p>
   </div>
+</section>
 
-</section><section class="page ">
+<!-- =================== PAGE 3: INSIDE RIGHT =================== -->
+<section class="page plated">
   <div class="sec">
     <h2>Meat &amp; Poultry</h2>
     <div class="item"><span class="nm">Beef Tenderloin with Pepper Sauce</span><span class="lead"></span><span class="pr">&euro;29</span></div>
     <p class="desc">Classic beef tenderloin, creamy pepper sauce.</p>
-    <div class="item"><span class="nm">Ribeye in Café de Paris Sauce</span><span class="lead"></span><span class="pr">&euro;29</span></div>
-    <p class="desc">Grilled ribeye, silky green Café de Paris sauce.</p>
+    <div class="item"><span class="nm">Ribeye in Caf&eacute; de Paris Sauce</span><span class="lead"></span><span class="pr">&euro;29</span></div>
+    <p class="desc">Grilled ribeye, silky green Caf&eacute; de Paris sauce.</p>
     <div class="item"><span class="nm">Chateaubriand (400 g, for two)</span><span class="lead"></span><span class="pr">&euro;55</span></div>
     <p class="desc">Premium beef tenderloin for two, creamy spinach.</p>
     <div class="item"><span class="nm">Beef Sliders</span><span class="lead"></span><span class="pr">&euro;21</span></div>
     <p class="desc">Juicy mini burgers, melted cheese, caramelized onion, creamy mushroom sauce.</p>
-    <div class="item"><span class="nm">Suprême de Poulet</span><span class="lead"></span><span class="pr">&euro;26</span></div>
-    <p class="desc">Crispy skin chicken breast, creamy mushroom sauce, Dijon mustard sauce, sautéed shimeji.</p>
+    <div class="item"><span class="nm">Supr&ecirc;me de Poulet</span><span class="lead"></span><span class="pr">&euro;26</span></div>
+    <p class="desc">Crispy skin chicken breast, creamy mushroom sauce, Dijon mustard sauce, saut&eacute;ed shimeji.</p>
   </div>
   <div class="sec">
     <h2>Fish &amp; Seafood</h2>
@@ -315,29 +376,26 @@ h2::after {
     <p class="desc">Miso and coriander marinade, fresh citrus sauce.</p>
     <p class="supp">Supplement: 5 g caviar <b>&euro;20</b></p>
   </div>
-  <div class="sec">
-    <h2>Sides</h2>
-    <div class="cols-2">
+  <div class="sec two-up">
+    <div>
+      <h3>Sides</h3>
       <div class="item"><span class="nm">Fries</span><span class="lead"></span><span class="pr">&euro;6</span></div>
       <div class="item"><span class="nm">Potato Gratin Dauphinois</span><span class="lead"></span><span class="pr">&euro;9</span></div>
       <div class="item"><span class="nm">Creamy Mashed Potato</span><span class="lead"></span><span class="pr">&euro;8</span></div>
       <div class="item"><span class="nm">Vegetable Spaghetti</span><span class="lead"></span><span class="pr">&euro;8</span></div>
       <div class="item"><span class="nm">Truffle Fries</span><span class="lead"></span><span class="pr">&euro;9</span></div>
     </div>
-  </div>
-  <div class="sec">
-    <h2>Sauces</h2>
-    <div class="cols-2">
+    <div>
+      <h3>Sauces</h3>
       <div class="item"><span class="nm">Dijon Mustard Sauce</span><span class="lead"></span><span class="pr">&euro;5</span></div>
       <div class="item"><span class="nm">Beef Jus</span><span class="lead"></span><span class="pr">&euro;5</span></div>
       <div class="item"><span class="nm">Creamy Mushroom Sauce</span><span class="lead"></span><span class="pr">&euro;5</span></div>
     </div>
   </div>
 
-</section><section class="page compact">
   <div class="sec">
     <h2>Desserts</h2>
-    <div class="item"><span class="nm">Tiramisù</span><span class="lead"></span><span class="pr">&euro;15</span></div>
+    <div class="item"><span class="nm">Tiramis&ugrave;</span><span class="lead"></span><span class="pr">&euro;15</span></div>
     <p class="desc">House-made dacquoise biscuit, coffee crumble, mascarpone mousse.</p>
     <div class="item"><span class="nm">Mille-feuille</span><span class="lead"></span><span class="pr">&euro;16</span></div>
     <p class="desc">Crispy puff pastry, vanilla cream, salted caramel, vanilla mascarpone.</p>
@@ -346,6 +404,13 @@ h2::after {
     <div class="item"><span class="nm">Profiteroles</span><span class="lead"></span><span class="pr">&euro;17</span></div>
     <p class="desc">Choux pastry, hazelnut cream, hazelnut ice cream, warm chocolate sauce.</p>
   </div>
+</section>
+
+<!-- =================== PAGE 4: BACK COVER =================== -->
+<section class="page compact">
+
+  <div class="pagehead-small">Drinks</div>
+
   <div class="sec">
     <h2>Coffee</h2>
     <div class="cols-2">
@@ -358,43 +423,57 @@ h2::after {
     </div>
     <p class="supp">Make it yours: vanilla in any coffee <b>+ &euro;0.75</b></p>
   </div>
+
+  <!-- ========== MOCKTAILS ========== -->
   <div class="sec">
-    <h2>Mocktails</h2>
-    <p class="note-inline">Every drink can be made sweet or less sweet, just say which.</p>
-    <div class="cols-2">
-      <div class="item"><span class="nm">Amsterdam Sunrise</span><span class="lead"></span><span class="pr">&euro;10.95</span></div>
-    <p class="desc">Grenadine dawn under fresh orange.</p>
-      <div class="item"><span class="nm">Cosmopolitan</span><span class="lead"></span><span class="pr">&euro;11.95</span></div>
-    <p class="desc">Dry and rosy, served up in a chilled coupe.</p>
-      <div class="item"><span class="nm">Spicy Jalapeño Mule</span><span class="lead"></span><span class="pr">&euro;11.95</span></div>
-    <p class="desc">Fresh jalapeño heat, ginger beer finish.</p>
-      <div class="item"><span class="nm">Piña Colada</span><span class="lead"></span><span class="pr">&euro;11.95</span></div>
-    <p class="desc">Pineapple and coconut, blended thick and cold.</p>
-      <div class="item"><span class="nm">Lychee Siren</span><span class="lead"></span><span class="pr">&euro;12.95</span></div>
-    <p class="desc">Lychee under an indigo crown of butterfly pea.</p>
-      <div class="item"><span class="nm">Hibiscus Royale</span><span class="lead"></span><span class="pr">&euro;12.95</span></div>
-    <p class="desc">Tart hibiscus red under a citrus silk.</p>
-      <div class="item"><span class="nm">The Hulk</span><span class="lead"></span><span class="pr">&euro;12.95</span></div>
-    <p class="desc">Basil, green grapes and lime, green from the leaf itself.</p>
-      <div class="item"><span class="nm">Forest Fairy</span><span class="lead"></span><span class="pr">&euro;12.95</span></div>
-    <p class="desc">Smoked rosemary and maple behind a salt rim.</p>
-      <div class="item"><span class="nm">Tropical Velvet</span><span class="lead"></span><span class="pr">&euro;12.95</span></div>
-    <p class="desc">Passionfruit rounded with vanilla, served up.</p>
-      <div class="item"><span class="nm">Ocean Mojito</span><span class="lead"></span><span class="pr">&euro;13.95</span></div>
-    <p class="desc">Mint and lime below, blackcurrant and blue above.</p>
+    <h2>Cocktails</h2>
+    <p class="note-inline">Alcohol free, without exception</p>
+
+    <p class="subhead">Signatures</p>
+    <div class="item"><span class="nm">Lychee Siren</span><span class="lead"></span><span class="pr">&euro;12.95</span></div>
+    <p class="desc">Lychee and coconut water under an indigo crown of butterfly pea.</p>
+    <div class="item"><span class="nm">Forest Fairy</span><span class="lead"></span><span class="pr">&euro;12.95</span></div>
+    <p class="desc">Smoked rosemary and maple, cut with lemon, behind a salt rim.</p>
+    <div class="item"><span class="nm">The Hulk</span><span class="lead"></span><span class="pr">&euro;12.95</span></div>
+    <p class="desc">Basil, green grapes and lime. The green is the leaf itself.</p>
+    <div class="item"><span class="nm">Hibiscus Royale</span><span class="lead"></span><span class="pr">&euro;12.95</span></div>
+    <p class="desc">Tart hibiscus red under a citrus silk. Sharp below, soft on top.</p>
+
+    <p class="subhead">Classics</p>
+    <div class="item"><span class="nm">Amsterdam Sunrise</span><span class="lead"></span><span class="pr">&euro;10.95</span></div>
+    <p class="desc">Fresh orange over ice with grenadine sunk beneath it. First light in a glass.</p>
+    <div class="item"><span class="nm">Cosmopolitan</span><span class="lead"></span><span class="pr">&euro;11.95</span></div>
+    <p class="desc">Dry cranberry, fresh lime and orange. Served up in a chilled coupe.</p>
+    <div class="item"><span class="nm">Spicy Jalape&ntilde;o Mule</span><span class="lead"></span><span class="pr">&euro;11.95</span></div>
+    <p class="desc">Fresh jalape&ntilde;o heat, lime and ginger beer. The heat arrives first.</p>
+    <div class="item"><span class="nm">Pi&ntilde;a Colada</span><span class="lead"></span><span class="pr">&euro;11.95</span></div>
+    <p class="desc">Pineapple and coconut cream, blended thick and cold.</p>
+    <div class="item"><span class="nm">Tropical Velvet</span><span class="lead"></span><span class="pr">&euro;12.95</span></div>
+    <p class="desc">Passionfruit and vanilla, shaken hard and served up.</p>
+    <div class="item"><span class="nm">Ocean Mojito</span><span class="lead"></span><span class="pr">&euro;13.95</span></div>
+    <p class="desc">Mint and lime below, blackcurrant and butterfly pea above. Purple below, blue above.</p>
+
+    <p class="note-inline after">Sweeter or less sweet, simply ask</p>
+  </div>
+
+  <!-- ========== TAIL: SOFT DRINKS AND WATER, SIDE BY SIDE ========== -->
+  <div class="tail tail-grid">
+    <div>
+      <h3>Soft Drinks</h3>
+      <div class="item"><span class="nm">All soft drinks</span><span class="lead"></span><span class="pr">&euro;4.50</span></div>
+      <p class="flowline">Coca-Cola &middot; Cola Zero &middot; Fanta &middot; Sprite &middot; Red Bull &middot; Royal Bliss Ginger Ale &middot; Tonic &middot; Lipton Iced Tea Lemon &middot; Lipton Iced Tea Peach &middot; SPA Rood &middot; SPA Blauw &middot; De Appelaere &middot; Royal Club Bitter Lemon</p>
+    </div>
+    <div>
+      <h3>Water</h3>
+      <div class="item"><span class="nm">SPA Blauw</span><span class="lead"></span><span class="pr">&euro;4.00</span></div>
+      <p class="flowline">Still</p>
+      <div class="item"><span class="nm">SPA Rood</span><span class="lead"></span><span class="pr">&euro;4.00</span></div>
+      <p class="flowline">Sparkling</p>
     </div>
   </div>
-  <div class="sec">
-    <h2>Soft Drinks</h2>
-    <div class="item"><span class="nm">All soft drinks</span><span class="lead"></span><span class="pr">&euro;4.50</span></div>
-    <p class="flowline">Coca-Cola &middot; Cola Zero &middot; Fanta &middot; Sprite &middot; Red Bull &middot; Royal Bliss Ginger Ale &middot; Tonic &middot; Lipton Iced Tea Lemon &middot; Lipton Iced Tea Peach &middot; SPA Rood &middot; SPA Blauw &middot; De Appelaere &middot; Royal Club Bitter Lemon</p>
-  </div>
-  <div class="sec">
-    <h2>Water</h2>
-    <div class="item"><span class="nm">SPA Blauw (still) &middot; SPA Rood (sparkling)</span><span class="lead"></span><span class="pr">&euro;4.00</span></div>
-  </div>
-  <p class="allergy">Please inform us of any allergies. We adapt accordingly.<br>Laat het ons weten bij allergie&euml;n. Wij passen ons aan.</p>
 
+  <p class="allergy">Please inform us of any allergies. We adapt accordingly.<br>Laat het ons weten bij allergie&euml;n. Wij passen ons aan.</p>
 </section>
+
 </body>
 </html>

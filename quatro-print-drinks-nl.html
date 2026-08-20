@@ -247,6 +247,19 @@ h2::after {
 .stage .dtag { font-size: 8.8pt; margin: 0 0 1mm; }
 .stage h2 { font-size: 15.5pt; }
 .stage .note-inline { font-size: 9.2pt; }
+
+/* prices recede: lighter, smaller, softer ink, so the eye reads the dish first */
+.item .pr { font-weight: 300; font-size: 0.86em; color: var(--ink-soft); letter-spacing: 0.02em; }
+.supp b { font-weight: 400; }
+.item .lead { border-bottom-color: rgba(217, 199, 154, 0.55); }
+
+/* cocktails page voice, matched to the combined menu */
+.note-inline { font-family: 'Marcellus', Georgia, serif; font-style: normal; font-size: 8pt;
+  letter-spacing: 0.2em; text-indent: 0.2em; text-transform: uppercase; color: var(--gold);
+  line-height: 1.7; margin: 0 0 3mm; }
+.note-inline.after { margin: 5mm 0 0; border-top: 1px solid var(--gold-pale); padding-top: 2.4mm; }
+.subhead { font-family: 'Marcellus', Georgia, serif; font-size: 11pt; letter-spacing: 0.18em;
+  color: var(--gold); text-transform: uppercase; margin-top: 2mm; }
 </style>
 </head>
 <body>
@@ -260,9 +273,10 @@ h2::after {
   </div>
 </section><section class="page stage">
   <div class="sec">
-    <h2>Signatuurdrankjes</h2>
-    <p class="note-inline">Elk drankje kan zoet of minder zoet, zeg het even bij het bestellen.</p>
-    <div class="item"><span class="nm"><span class="dot" style="background:#4C4C9D"></span>Lychee Siren</span><span class="lead"></span><span class="pr">&euro;12,95</span></div>
+    <h2>Cocktails</h2>
+    <p class="note-inline">Alcoholvrij, zonder uitzondering</p>
+    <p class="subhead">Signatures</p>
+        <div class="item"><span class="nm"><span class="dot" style="background:#4C4C9D"></span>Lychee Siren</span><span class="lead"></span><span class="pr">&euro;12,95</span></div>
     <p class="desc">Lychee en kokoswater onder een indigo kroon van vlindererwtbloem.</p>
     <p class="dtag">Knijp het limoenpartje uit en zie de sirene haar magie doen</p>
     <div class="item"><span class="nm"><span class="dot" style="background:#3E5140"></span>Forest Fairy</span><span class="lead"></span><span class="pr">&euro;12,95</span></div>
@@ -278,7 +292,8 @@ h2::after {
 
 </section><section class="page stage">
   <div class="sec">
-    <h2>Klassiekers, opnieuw bedacht</h2>
+    <h2>Cocktails</h2>
+    <p class="subhead">Klassiekers</p>
     <div class="item"><span class="nm"><span class="dot" style="background:#5E8C4A"></span>Spicy Jalapeño Mule</span><span class="lead"></span><span class="pr">&euro;11,95</span></div>
     <p class="desc">Verse jalapeno, een halve limoen, echte ginger beer over crushed ice. De hitte komt eerst, de gember maakt het af.</p>
     <p class="dtag">Geen jalapeno-liefhebber? Vraag hem gerust zonder</p>
@@ -294,6 +309,7 @@ h2::after {
     <p class="desc">Passievrucht is op zichzelf alleen maar zuur en parfum. Appel en peer geven body en zachte zoetheid om op te rusten, vanille rondt de randen af. Hard geshaket, fijn gezeefd, opgediend up.</p>
     <div class="item"><span class="nm"><span class="dot" style="background:#E7DFCF"></span>Piña Colada</span><span class="lead"></span><span class="pr">&euro;11,95</span></div>
     <p class="desc">Ananas tegen kokosroom, met gecondenseerde melk voor gewicht, geblend met ijs tot het dik en koud uitschenkt.</p>
+    <p class="note-inline after">Zoeter of minder zoet, vraag het gewoon</p>
   </div>
 
 </section><section class="page ">
@@ -316,7 +332,10 @@ h2::after {
   </div>
   <div class="sec">
     <h2>Water</h2>
-    <div class="item"><span class="nm">SPA Blauw (plat) &middot; SPA Rood (bruisend)</span><span class="lead"></span><span class="pr">&euro;4,00</span></div>
+    <div class="item"><span class="nm">SPA Blauw</span><span class="lead"></span><span class="pr">&euro;4,00</span></div>
+    <p class="flowline">Plat</p>
+    <div class="item"><span class="nm">SPA Rood</span><span class="lead"></span><span class="pr">&euro;4,00</span></div>
+    <p class="flowline">Bruisend</p>
   </div>
   <p class="allergy">Please inform us of any allergies. We adapt accordingly.<br>Laat het ons weten bij allergie&euml;n. Wij passen ons aan.</p>
 

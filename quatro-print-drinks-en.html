@@ -247,6 +247,19 @@ h2::after {
 .stage .dtag { font-size: 8.8pt; margin: 0 0 1mm; }
 .stage h2 { font-size: 15.5pt; }
 .stage .note-inline { font-size: 9.2pt; }
+
+/* prices recede: lighter, smaller, softer ink, so the eye reads the dish first */
+.item .pr { font-weight: 300; font-size: 0.86em; color: var(--ink-soft); letter-spacing: 0.02em; }
+.supp b { font-weight: 400; }
+.item .lead { border-bottom-color: rgba(217, 199, 154, 0.55); }
+
+/* cocktails page voice, matched to the combined menu */
+.note-inline { font-family: 'Marcellus', Georgia, serif; font-style: normal; font-size: 8pt;
+  letter-spacing: 0.2em; text-indent: 0.2em; text-transform: uppercase; color: var(--gold);
+  line-height: 1.7; margin: 0 0 3mm; }
+.note-inline.after { margin: 5mm 0 0; border-top: 1px solid var(--gold-pale); padding-top: 2.4mm; }
+.subhead { font-family: 'Marcellus', Georgia, serif; font-size: 11pt; letter-spacing: 0.18em;
+  color: var(--gold); text-transform: uppercase; margin-top: 2mm; }
 </style>
 </head>
 <body>
@@ -260,9 +273,10 @@ h2::after {
   </div>
 </section><section class="page stage">
   <div class="sec">
-    <h2>Signatures</h2>
-    <p class="note-inline">Every drink can be made sweet or less sweet, just say which.</p>
-    <div class="item"><span class="nm"><span class="dot" style="background:#4C4C9D"></span>Lychee Siren</span><span class="lead"></span><span class="pr">&euro;12.95</span></div>
+    <h2>Cocktails</h2>
+    <p class="note-inline">Alcohol free, without exception</p>
+    <p class="subhead">Signatures</p>
+        <div class="item"><span class="nm"><span class="dot" style="background:#4C4C9D"></span>Lychee Siren</span><span class="lead"></span><span class="pr">&euro;12.95</span></div>
     <p class="desc">Lychee and coconut water under an indigo crown of butterfly pea flower.</p>
     <p class="dtag">Squeeze the lime wedge and watch the siren do its magic</p>
     <div class="item"><span class="nm"><span class="dot" style="background:#3E5140"></span>Forest Fairy</span><span class="lead"></span><span class="pr">&euro;12.95</span></div>
@@ -278,7 +292,8 @@ h2::after {
 
 </section><section class="page stage">
   <div class="sec">
-    <h2>Classics, Reimagined</h2>
+    <h2>Cocktails</h2>
+    <p class="subhead">Classics</p>
     <div class="item"><span class="nm"><span class="dot" style="background:#5E8C4A"></span>Spicy Jalapeño Mule</span><span class="lead"></span><span class="pr">&euro;11.95</span></div>
     <p class="desc">Fresh jalapeno, half a lime, proper ginger beer over crushed ice. The heat arrives first, the ginger finishes it.</p>
     <p class="dtag">Not a jalapeno fan? Feel free to ask without</p>
@@ -294,6 +309,7 @@ h2::after {
     <p class="desc">Passionfruit is all acid and perfume on its own. Apple and pear give it body and a gentle sweetness to sit against, vanilla rounds the edges. Shaken hard, strained fine, served up.</p>
     <div class="item"><span class="nm"><span class="dot" style="background:#E7DFCF"></span>Piña Colada</span><span class="lead"></span><span class="pr">&euro;11.95</span></div>
     <p class="desc">Pineapple against coconut cream, with condensed milk for weight, blended with ice until it pours thick and cold.</p>
+    <p class="note-inline after">Sweeter or less sweet, simply ask</p>
   </div>
 
 </section><section class="page ">
@@ -316,7 +332,10 @@ h2::after {
   </div>
   <div class="sec">
     <h2>Water</h2>
-    <div class="item"><span class="nm">SPA Blauw (still) &middot; SPA Rood (sparkling)</span><span class="lead"></span><span class="pr">&euro;4.00</span></div>
+    <div class="item"><span class="nm">SPA Blauw</span><span class="lead"></span><span class="pr">&euro;4.00</span></div>
+    <p class="flowline">Still</p>
+    <div class="item"><span class="nm">SPA Rood</span><span class="lead"></span><span class="pr">&euro;4.00</span></div>
+    <p class="flowline">Sparkling</p>
   </div>
   <p class="allergy">Please inform us of any allergies. We adapt accordingly.<br>Laat het ons weten bij allergie&euml;n. Wij passen ons aan.</p>
 
