@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Quatro, Bay Map</title>
+<style>
+/* Fridge door sheet. Two A4 pages. Print: Chrome, margins None, backgrounds ON. */
+:root { --limestone:#FAF6EF; --ink:#23201C; --ink-soft:#6B6459; --gold:#A8863C; --gold-pale:#D9C79A; --warn:#9E2B3B; }
+* { margin:0; padding:0; box-sizing:border-box; }
+html { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+body { font-family:'Jost','Segoe UI',system-ui,sans-serif; color:var(--ink); background:#E8E2D6; }
+@media screen { body { padding:28px 0; } .page { margin:0 auto 24px; box-shadow:0 14px 40px rgba(35,32,28,.18); } }
+.page { width:210mm; height:297mm; background:var(--limestone); padding:12mm 12mm 10mm; overflow:hidden; }
+@page { size:A4 portrait; margin:0; }
+@media print { html,body{margin:0;padding:0;background:none;display:block;} .page{margin:0;box-shadow:none;}
+  .page + .page { break-before:page; page-break-before:always; } .page:last-child{break-after:avoid;page-break-after:avoid;} }
+h1 { font-family:Georgia,serif; font-weight:400; font-size:17pt; letter-spacing:.24em; text-transform:uppercase;
+     color:var(--gold); text-align:center; margin-bottom:1.5mm; }
+.sub { text-align:center; font-size:8pt; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:5mm; }
+.alert { border:1.5px solid var(--warn); border-radius:14px 14px 4px 4px; padding:3mm 4mm; margin-bottom:5mm;
+         font-size:9.5pt; line-height:1.5; }
+.alert b { color:var(--warn); letter-spacing:.06em; }
+.bay { border:1px solid var(--gold-pale); border-radius:14px 14px 4px 4px; margin-bottom:4mm; overflow:hidden; }
+.bay > h2 { font-family:Georgia,serif; font-weight:400; font-size:11.5pt; letter-spacing:.16em; text-transform:uppercase;
+     background:var(--gold); color:#fff; padding:2mm 4mm; }
+.tier { display:grid; grid-template-columns:34mm 1fr; border-top:1px solid var(--gold-pale); }
+.tier:first-of-type { border-top:none; }
+.tier .lbl { background:rgba(168,134,60,.09); padding:2.6mm 3mm; font-size:8.2pt; font-weight:500;
+     letter-spacing:.12em; text-transform:uppercase; color:var(--gold); border-right:1px solid var(--gold-pale); }
+.tier .val { padding:2.6mm 3.5mm; font-size:9.3pt; line-height:1.5; }
+.tier .val em { font-style:normal; color:var(--ink-soft); font-size:8.3pt; display:block; margin-top:.8mm; }
+.tall .lbl { background:rgba(158,43,59,.10); color:var(--warn); }
+table { width:100%; border-collapse:collapse; }
+th { font-family:Georgia,serif; font-weight:400; font-size:8.4pt; letter-spacing:.13em; text-transform:uppercase;
+     text-align:left; color:var(--gold); border-bottom:1px solid var(--gold); padding:1.6mm 2mm; }
+td { font-size:8.8pt; line-height:1.4; padding:1.5mm 2mm; border-bottom:1px solid rgba(217,199,154,.5); vertical-align:top; }
+td.d { font-weight:500; white-space:nowrap; }
+tr.hot td { background:rgba(158,43,59,.07); }
+tr.hot td.d { color:var(--warn); font-weight:600; }
+h3 { font-family:Georgia,serif; font-weight:400; font-size:11pt; letter-spacing:.18em; text-transform:uppercase;
+     color:var(--ink); margin:5mm 0 2.5mm; padding-bottom:1.4mm; border-bottom:1px solid var(--gold); }
+h3:first-child { margin-top:0; }
+ol { margin:0 0 0 5mm; font-size:9.3pt; line-height:1.62; }
+ol li { margin-bottom:.8mm; }
+.never { border-left:3px solid var(--warn); padding:2mm 0 2mm 3mm; margin-top:2.5mm; font-size:9pt; line-height:1.5; }
+.never b { color:var(--warn); }
+.foot { margin-top:auto; padding-top:2.5mm; border-top:1px solid var(--gold-pale); text-align:center;
+        font-size:7.2pt; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); }
+.page { display:flex; flex-direction:column; }
+/* page 2 carries the full FIFO table plus three routines, so it runs tighter */
+.tight td { font-size:8.2pt; padding:1.0mm 2mm; line-height:1.32; }
+.tight th { font-size:7.8pt; padding:1.2mm 2mm; }
+.tight h3 { font-size:10pt; margin:3.4mm 0 1.8mm; padding-bottom:1mm; }
+.tight ol { font-size:8.7pt; line-height:1.45; }
+.tight ol li { margin-bottom:.3mm; }
+.tight .never { font-size:8.5pt; padding:1.5mm 0 1.5mm 3mm; margin-top:1.8mm; line-height:1.42; }
+.tight .sub { margin-bottom:3.4mm; }
+.tight h1 { font-size:16pt; }
+</style>
+</head>
+<body>
+
+<section class="page">
+  <h1>Bay Map</h1>
+  <div class="sub">Sprint 1 &middot; Ten drinks &middot; Polar GL013, three bays, two tiers each</div>
+
+  <div class="alert">
+    <b>BEFORE YOU STOCK:</b> remove the middle shelf in <b>F1B</b> only. The 2 L prebatch bottles are 330 mm and the shelf pitch is 297 mm, so they do not stand under a shelf. F1A, F1C and F2A keep both shelves.<br>
+    <b>F2B, F2C, F3A, F3B, F3C are full. Put nothing in them.</b>
+  </div>
+
+  <div class="bay">
+    <h2>F1A &middot; Rail refills and open cartons</h2>
+    <div class="tier"><div class="lbl">Top shelf</div><div class="val">The 7 rail refill bottles: <b>green</b> lime, <b>yellow</b> lemon, <b>white</b> simple, <b>orange</b> OJ, <b>brown</b> apple-pear, <b>black-white</b> vanilla, <b>pink</b> lychee<em>Eye level, because these are grabbed most</em></div></div>
+    <div class="tier"><div class="lbl">Bottom shelf</div><div class="val">Open cartons: cranberry, pineapple, passionfruit juice, coconut water. Plus 7 x SPA Rood 330 ml<em>This is what you refill the rail from mid-service</em></div></div>
+  </div>
+
+  <div class="bay">
+    <h2>F1B &middot; Prebatch</h2>
+    <div class="tier tall"><div class="lbl">Shelf removed<br>One 600 mm tier</div><div class="val">Up to 9 filled 2 L bottles: butterfly pea tea, butterfly pea strong, hibiscus, rosemary-thyme maple cordial, Jade's mint syrup, lychee cordial. <b>3 x 1 L ginger beer at the back</b><em>Nothing stacks on top. Ginger beer is 300 mm and stands nowhere else cold</em></div></div>
+  </div>
+
+  <div class="bay">
+    <h2>F1C &middot; Squeeze bottles and open tubs</h2>
+    <div class="tier"><div class="lbl">Top shelf</div><div class="val">The 7 squeeze bottles: mint syrup, lychee cordial, strawberry puree, passionfruit puree, cassis, grenadine, condensed milk<em>Grenadine and cassis are dedicated for life, they stain. Condensed milk needs a wide bore</em></div></div>
+    <div class="tier"><div class="lbl">Bottom shelf</div><div class="val">Open tubs, cans, jars: cassis 2 x 500 g, strawberry puree, passionfruit puree, coconut cream, cocktail cherries<em>Refill the squeeze bottles from here</em></div></div>
+  </div>
+
+  <div class="bay">
+    <h2>F2A &middot; All fresh</h2>
+    <div class="tier"><div class="lbl">Top shelf</div><div class="val">Strawberries, grapes, mint, basil, rosemary, thyme in damp cloth, jalape&ntilde;os, pears, fresh passion fruit, the day's garnish tubs at the front</div></div>
+    <div class="tier"><div class="lbl">Bottom shelf</div><div class="val">Whole citrus: limes, lemons, oranges<em>Heavy and most used, so it sits low. Orange zest is cut from these to order</em></div></div>
+  </div>
+
+  <div class="alert" style="border-color:var(--gold-pale)">
+    <b>DRY STORE:</b> if it is sealed, it lives here, never in a fridge. Cartons, cans, tins, Monin and maple bottles, sugar, salt, rim mix, Fee Foam, dried teas, cherry jars, ginger beer and soda spares. <b>The grenadine Monin 1 L is 320 mm and fits no tier: decant from it.</b>
+  </div>
+
+  <div class="foot">Quatro &middot; Sprint 1 &middot; F1A, F1B, F1C, F2A and DRY. Nothing else.</div>
+</section>
+
+<section class="page tight">
+  <h1>FIFO &amp; Daily Routine</h1>
+  <div class="sub">Every container gets a day dot: name, made, use by</div>
+
+  <h3>How long it lasts once opened</h3>
+  <table>
+    <thead><tr><th style="width:52mm">Item</th><th style="width:20mm">Where</th><th style="width:24mm">Keeps</th><th>Note</th></tr></thead>
+    <tbody>
+      <tr class="hot"><td>Strawberry puree, decanted</td><td>F1C</td><td class="d">2 days</td><td>Bin on day three. Not a week</td></tr>
+      <tr class="hot"><td>Condensed milk, decanted</td><td>F1C</td><td class="d">2 days</td><td>Wide bore bottle only</td></tr>
+      <tr class="hot"><td>Fresh citrus juice</td><td>F1A rail</td><td class="d">Same day</td><td>Squeezed at open, binned at close</td></tr>
+      <tr class="hot"><td>Cut garnish, pear and jalape&ntilde;o</td><td>F2A</td><td class="d">Same day</td><td>Cut at open</td></tr>
+      <tr><td>Butterfly pea tea, and strong infusion</td><td>F1B</td><td class="d">5 days</td><td>Re-batch before the old one empties</td></tr>
+      <tr><td>Hibiscus tea, strong</td><td>F1B</td><td class="d">5 days</td><td>2 L yield</td></tr>
+      <tr><td>Jade's fresh mint syrup</td><td>F1B</td><td class="d">1 week</td><td>One week, not two</td></tr>
+      <tr><td>Rosemary-thyme maple cordial</td><td>F1B</td><td class="d">2 weeks</td><td></td></tr>
+      <tr><td>Rosemary-lemon salt rim mix</td><td>DRY</td><td class="d">1 week</td><td>Airtight or it clumps</td></tr>
+      <tr class="hot"><td>Lychee cordial</td><td>F1B</td><td class="d">NOT SET</td><td>No row in the file. Write it before batching</td></tr>
+      <tr><td>Opened juice cartons</td><td>F1A</td><td class="d">3 to 5 days</td><td>Date-stamp every one</td></tr>
+      <tr><td>Coconut cream, open can</td><td>F1C</td><td class="d">3 to 5 days</td><td>Decant out of the can, stir first</td></tr>
+      <tr><td>Passionfruit and cassis tubs</td><td>F1C</td><td class="d">5 to 7 days</td><td>Cassis stains</td></tr>
+      <tr><td>Bought syrups: simple, vanilla, grenadine</td><td>F1A, F1C</td><td class="d">1 to 3 months</td><td>High sugar</td></tr>
+      <tr><td>Sugar, salt, dried teas</td><td>DRY</td><td class="d">6 to 12 months</td><td>Airtight</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Opening</h3>
+  <ol>
+    <li>Squeeze the day's citrus. Fill rail bottles 1, 2 and 4. Bin yesterday's.</li>
+    <li>Check F1A top shelf. Refill simple, apple-pear, vanilla and lychee from the F1A bottom shelf.</li>
+    <li>Check F1B. Anything low or past its day dot gets batched now, not mid-service.</li>
+    <li>Check F1C top shelf. Refill empty squeeze bottles from the F1C bottom shelf.</li>
+    <li>Fresh delivery into F2A. Citrus below, everything else above.</li>
+    <li>Fill the ice bin at station 2.</li>
+  </ol>
+
+  <h3>Mid-service</h3>
+  <ol>
+    <li>Rail bottle empty: swap from the <b>F1A bottom shelf</b>.</li>
+    <li>Squeeze bottle empty: refill from the <b>F1C bottom shelf</b>.</li>
+    <li>Anything past its day dot comes out immediately.</li>
+    <li>Refill the ice bin at the midpoint.</li>
+  </ol>
+  <div class="never"><b>NOBODY OPENS THE DRY STORE DURING SERVICE.</b> Dry is backup only. If the fridge is empty of something, the drink comes off the board until close.</div>
+
+  <h3>Closing</h3>
+  <ol>
+    <li>Day-dot everything opened today.</li>
+    <li>Move tomorrow's stock from DRY into F1A, F1B and F1C to chill overnight, ginger beer and soda included.</li>
+    <li>Bin the day's citrus and cut garnish.</li>
+    <li>Wipe F1C. Purees do not sit dirty overnight.</li>
+  </ol>
+
+  <div class="foot">Blocks service: coconut water is not on the buy list, so Lychee Siren cannot be made</div>
+</section>
+
+</body>
+</html>
