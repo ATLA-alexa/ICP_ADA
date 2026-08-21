@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quatro, Menukaart</title>
+<style>
+/* ==========================================================================
+   QUATRO PRINT MENU, NEDERLANDS
+   A3 folded to A4. Four sequential A4 pages in reading order:
+   1 front cover, 2 inside left, 3 inside right, 4 back cover.
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
+
+:root {
+  --limestone: #FAF6EF;
+  --ink: #23201C;
+  --ink-soft: #6B6459;
+  --gold: #A8863C;
+  --gold-pale: #D9C79A;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+body {
+  font-family: 'Jost', 'Segoe UI', system-ui, sans-serif;
+  font-weight: 300;
+  color: var(--ink);
+  background: #E8E2D6;
+}
+/* On screen only. A flex body cannot be fragmented into printed pages:
+   Safari ignores page breaks inside a flex container, which pushed the
+   content out of register and produced a fifth sheet. Print gets plain
+   block layout below. */
+@media screen {
+  body { display: flex; flex-direction: column; align-items: center; padding: 32px 0; }
+}
+
+/* ---- page geometry ------------------------------------------------------- */
+
+.page {
+  width: 210mm;
+  height: 297mm;
+  background: var(--limestone);
+  padding: 17mm 17mm 14mm;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+@media screen {
+  .page { margin-bottom: 28px; box-shadow: 0 18px 50px rgba(35, 32, 28, 0.18); }
+}
+
+@page { size: A4 portrait; margin: 0; }
+
+@media print {
+  html, body { margin: 0; padding: 0; background: none; display: block; width: 210mm; }
+  .page { margin: 0; box-shadow: none; }
+  /* Break BEFORE each following page rather than after every page. A trailing
+     break-after is what generated the extra blank sheet. */
+  .page + .page { break-before: page; page-break-before: always; }
+  .page:last-child { break-after: avoid; page-break-after: avoid; }
+}
+
+/* ---- shared typography ---------------------------------------------------- */
+
+h2 {
+  font-family: 'Marcellus', Georgia, serif;
+  font-weight: 400;
+  font-size: 13.5pt;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0 0 3.2mm;
+}
+h2::after {
+  content: "";
+  display: block;
+  width: 34px;
+  height: 1px;
+  background: var(--gold);
+  margin-top: 2.4mm;
+}
+.sec { margin-top: 9mm; }
+.sec:first-child { margin-top: 0; }
+
+.item {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  font-size: 10.5pt;
+  line-height: 1.6;
+}
+.item .nm { font-weight: 400; letter-spacing: 0.02em; }
+.item .lead {
+  flex: 1;
+  min-width: 18px;
+  border-bottom: 1px dotted var(--gold-pale);
+  transform: translateY(-3.5px);
+}
+.item .pr { font-weight: 400; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+.desc {
+  font-size: 8.8pt;
+  font-style: italic;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  margin: 0.4mm 0 2.6mm;
+  max-width: 92%;
+}
+
+.supp {
+  font-size: 8.2pt;
+  font-style: italic;
+  color: var(--ink-soft);
+  letter-spacing: 0.03em;
+  border-top: 1px solid var(--gold-pale);
+  padding-top: 2.2mm;
+  margin-top: 2.2mm;
+}
+.supp b { color: var(--gold); font-weight: 500; }
+
+.cols-2 { display: grid; grid-template-columns: 1fr 1fr; column-gap: 10mm; }
+.cols-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; column-gap: 8mm; }
+
+/* ---- front cover ---------------------------------------------------------- */
+
+.cover {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.arch {
+  border: 1px solid var(--gold);
+  border-radius: 20px 20px 6px 6px;
+  padding: 36mm 16mm 28mm;
+  background: rgba(168, 134, 60, 0.035);
+}
+.cover h1 {
+  font-family: 'Marcellus', Georgia, serif;
+  font-weight: 400;
+  font-size: 44pt;
+  letter-spacing: 0.28em;
+  text-indent: 0.28em;
+  color: var(--gold);
+  margin-bottom: 6mm;
+}
+.cover .seasons {
+  font-size: 11pt;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  text-transform: uppercase;
+  color: var(--ink);
+  font-weight: 400;
+}
+.cover .harmony {
+  font-size: 11.5pt;
+  font-style: italic;
+  color: var(--ink);
+  margin-top: 1.6mm;
+  letter-spacing: 0.06em;
+}
+.cover .rule {
+  width: 120px;
+  height: 1px;
+  background: var(--gold);
+  margin: 8mm auto;
+}
+.cover .tagline {
+  font-size: 8.2pt;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  line-height: 2.1;
+  font-weight: 400;
+}
+
+/* ---- back cover ----------------------------------------------------------- */
+
+.flowline {
+  font-size: 8.8pt;
+  line-height: 1.7;
+  color: var(--ink);
+  margin-top: 1mm;
+}
+.allergy {
+  margin-top: auto;
+  border-top: 1px solid var(--gold-pale);
+  padding-top: 2.4mm;
+  text-align: center;
+  font-size: 6.8pt;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  line-height: 1.85;
+}
+
+/* SERVICE NOTES: deliberately not italic prose. These are house notes,
+   not drink descriptions, so they carry the gold small-caps voice instead. */
+.note-inline {
+  font-family: 'Marcellus', Georgia, serif;
+  font-style: normal;
+  font-size: 7.4pt;
+  letter-spacing: 0.2em;
+  text-indent: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  line-height: 1.7;
+  margin: 0 0 2.6mm;
+}
+.note-inline.after {
+  margin: 2.6mm 0 0;
+  border-top: 1px solid var(--gold-pale);
+  padding-top: 2mm;
+}
+
+/* small kicker label, sits above the first heading on a category page */
+.pagehead-small {
+  font-family: 'Marcellus', Georgia, serif;
+  font-weight: 400;
+  font-size: 12.5pt;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-align: center;
+  margin: 0 0 5.6mm;
+}
+
+/* compact back cover for the combined menu */
+.compact { padding-top: 12mm; }
+.compact .sec { margin-top: 7mm; }
+.compact .item { font-size: 10.2pt; line-height: 1.55; }
+.compact .desc { font-size: 8.4pt; margin: 0.4mm 0 2.2mm; max-width: 100%; line-height: 1.5; }
+.compact .note-inline { font-size: 7.4pt; margin-bottom: 2.8mm; }
+.compact h2 { font-size: 13pt; margin-bottom: 3mm; }
+.compact h2::after { margin-top: 1.6mm; }
+.compact .supp { margin-top: 1.4mm; padding-top: 1.4mm; font-size: 7.8pt; }
+.compact .flowline { font-size: 7.4pt; line-height: 1.5; }
+
+/* section subheading for signatures/classics */
+.subhead {
+  font-family: 'Marcellus', Georgia, serif;
+  font-size: 10.5pt;
+  letter-spacing: 0.18em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-top: 3mm;
+  margin-bottom: 0.8mm;
+}
+.compact .subhead { font-size: 10pt; margin-top: 4mm; }
+
+/* ---- page 3 food page, lightly compacted to take desserts --------------- */
+.plated .sec { margin-top: 6.4mm; }
+.plated .item { font-size: 10pt; line-height: 1.45; }
+.plated .desc { font-size: 8.4pt; margin: 0.3mm 0 2mm; line-height: 1.48; }
+.plated h2 { font-size: 12.5pt; margin-bottom: 2.6mm; }
+.plated h2::after { margin-top: 1.8mm; }
+.plated .supp { margin-top: 1.6mm; padding-top: 1.6mm; font-size: 8pt; }
+
+/* two blocks side by side, used for sides and sauces */
+.two-up {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 10mm;
+  align-items: start;
+}
+.two-up h3, .tail h3 {
+  font-family: 'Marcellus', Georgia, serif;
+  font-weight: 400;
+  font-size: 9.5pt;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 1.4mm;
+  padding-bottom: 1.2mm;
+  border-bottom: 1px solid var(--gold-pale);
+}
+.two-up .item { font-size: 9.6pt; line-height: 1.5; }
+
+/* ---- the tail: soft drinks and water, tightened to fit ------------------- */
+.tail { margin-top: 4.6mm; }
+.tail-grid {
+  display: grid;
+  grid-template-columns: 1fr 62mm;
+  column-gap: 9mm;
+  align-items: start;
+}
+.tail h3 {
+  font-family: 'Marcellus', Georgia, serif;
+  font-weight: 400;
+  font-size: 9.5pt;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 1.4mm;
+  padding-bottom: 1.2mm;
+  border-bottom: 1px solid var(--gold-pale);
+}
+.tail .item { font-size: 9pt; }
+.tail .flowline { font-size: 7.2pt; line-height: 1.45; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+
+<!-- =================== PAGE 1: COVER =================== -->
+<section class="page cover">
+  <div class="arch">
+    <h1>QUATRO</h1>
+    <div class="seasons">Vier Seizoenen</div>
+    <div class="harmony">In Perfecte Harmonie</div>
+    <div class="rule"></div>
+    <div class="tagline">Een plek om samen te komen.<br>Een reden om terug te keren.</div>
+  </div>
+</section>
+
+<!-- =================== PAGE 2: INSIDE LEFT =================== -->
+<section class="page">
+  <div class="sec">
+    <h2>Voorgerechten</h2>
+    <div class="item"><span class="nm">Paprika &amp; Ch&egrave;vre</span><span class="lead"></span><span class="pr">&euro;16</span></div>
+    <p class="desc">Milde geitenkaas met honing en geroosterde walnoten, olijven en basilicumolie.</p>
+    <div class="item"><span class="nm">Burrata</span><span class="lead"></span><span class="pr">&euro;16</span></div>
+    <p class="desc">Romige burrata op een mediterrane caponata, met Kalamata-olijven, ansjovis, kappertjes en verse basilicum.</p>
+    <div class="item"><span class="nm">Croustillant de Crabe</span><span class="lead"></span><span class="pr">&euro;17</span></div>
+    <p class="desc">Gemarineerd krabvlees, krokant omhuld. Remoulade, yuzu mayonaise en verse koriander.</p>
+    <div class="item"><span class="nm">Octopus</span><span class="lead"></span><span class="pr">&euro;18</span></div>
+    <p class="desc">Mals gebakken octopus met knoflook en gerookte paprika, met een romige aardappelpuree.</p>
+    <div class="item"><span class="nm">Exotic Shrimp</span><span class="lead"></span><span class="pr">&euro;18</span></div>
+    <p class="desc">Garnalen met een pittig-zoete ananaschutney op basis van steranijs, afgewerkt met koriander en harissa beurre mont&eacute;.</p>
+    <div class="item"><span class="nm">Beef Carpaccio</span><span class="lead"></span><span class="pr">&euro;17</span></div>
+    <p class="desc">Dungesneden ossenhaas met rucola, kappertjes en Parmezaanchips. Mosterddressing en balsamico reductie maken het compleet.</p>
+    <div class="item"><span class="nm">Tuna Tataki</span><span class="lead"></span><span class="pr">&euro;18</span></div>
+    <p class="desc">Kort geschroeide saku-tonijn met yuzu en sesam, geserveerd met pittige jalape&ntilde;o guacamole en krokante chips.</p>
+    <p class="supp">Supplementen: 5 g vers geschaafde truffel <b>&euro;20</b> &nbsp;&middot;&nbsp; 5 g kaviaar <b>&euro;20</b></p>
+  </div>
+  <div class="sec">
+    <h2>Pasta &amp; Risotto</h2>
+    <div class="item"><span class="nm">Black Tagliatelle with Cockles</span><span class="lead"></span><span class="pr">&euro;26</span></div>
+    <p class="desc">Tagliatelle met inktvisinkt, verse kokkels en aromatische kruiden.</p>
+    <div class="item"><span class="nm">Orzo with Shrimp</span><span class="lead"></span><span class="pr">&euro;24</span></div>
+    <p class="desc">Orzo met garnalen, basilicum, koriander, limoen en een vleugje harissa.</p>
+    <div class="item"><span class="nm">Risotto with Chicken &amp; Mushrooms</span><span class="lead"></span><span class="pr">&euro;24</span></div>
+    <p class="desc">Romige risotto met kip, gebakken paddenstoelen en gevogeltejus.</p>
+    <div class="item"><span class="nm">Truffle Risotto</span><span class="lead"></span><span class="pr">&euro;24</span></div>
+    <p class="desc">Romige risotto met paddenstoelenduxelles en truffelolie.</p>
+    <div class="item"><span class="nm">Gnocchi</span><span class="lead"></span><span class="pr">&euro;24</span></div>
+    <p class="desc">Zachte gnocchi in Quatro's eigen tomatencr&egrave;me, met een lichte pittige kick.</p>
+    <p class="supp">Supplementen: 5 g vers geschaafde truffel <b>&euro;20</b> &nbsp;&middot;&nbsp; 5 g kaviaar <b>&euro;20</b></p>
+    <p class="supp" style="border-top:none;padding-top:0;margin-top:1mm;font-style:italic;">Heerlijk aangevuld met een apart te bestellen bijgerecht en/of saus.</p>
+  </div>
+</section>
+
+<!-- =================== PAGE 3: INSIDE RIGHT =================== -->
+<section class="page plated">
+  <div class="sec">
+    <h2>Vlees &amp; Gevogelte</h2>
+    <div class="item"><span class="nm">Beef Tenderloin with Pepper Sauce</span><span class="lead"></span><span class="pr">&euro;29</span></div>
+    <p class="desc">Klassieke ossenhaas in een romige pepersaus.</p>
+    <div class="item"><span class="nm">Ribeye in Caf&eacute; de Paris Sauce</span><span class="lead"></span><span class="pr">&euro;29</span></div>
+    <p class="desc">Gegrilde ribeye, geserveerd in een zijdezachte, groene Caf&eacute; de Paris-saus.</p>
+    <div class="item"><span class="nm">Chateaubriand (400 g, for two)</span><span class="lead"></span><span class="pr">&euro;55</span></div>
+    <p class="desc">Premium ossenhaas voor twee, geserveerd met romige spinazie.</p>
+    <div class="item"><span class="nm">Beef Sliders</span><span class="lead"></span><span class="pr">&euro;21</span></div>
+    <p class="desc">Sappige mini-burgers met gesmolten kaas en gekarameliseerde ui, geserveerd in een romige paddenstoelencr&egrave;me.</p>
+    <div class="item"><span class="nm">Supr&ecirc;me de Poulet</span><span class="lead"></span><span class="pr">&euro;26</span></div>
+    <p class="desc">Een mooi stukje filet van de borst, met een crispy skin. Geserveerd met romige paddenstoelensaus, Dijonmosterdsaus en gebakken shimeji-paddenstoelen.</p>
+    <p class="supp">Supplement: 5 g vers geschaafde truffel <b>&euro;20</b></p>
+    <p class="supp" style="border-top:none;padding-top:0;margin-top:1mm;font-style:italic;">Heerlijk aangevuld met een apart te bestellen bijgerecht en/of saus.</p>
+  </div>
+  <div class="sec">
+    <h2>Vis &amp; Zeevruchten</h2>
+    <div class="item"><span class="nm">Sole</span><span class="lead"></span><span class="pr">&euro;16 / 100 g</span></div>
+    <p class="desc">Op klassieke wijze met beurre blanc, zalmkuit en kappertjes.</p>
+    <div class="item"><span class="nm">Sea Bass</span><span class="lead"></span><span class="pr">&euro;26</span></div>
+    <p class="desc">Op de huid gebakken zeebaarsfilet met een Normandische saus en kokkels.</p>
+    <div class="item"><span class="nm">Miso-Marinated Salmon</span><span class="lead"></span><span class="pr">&euro;24</span></div>
+    <p class="desc">Zalm gemarineerd in miso en koriander, afgewerkt met een frisse citrussaus.</p>
+    <p class="supp">Supplement: 5 g kaviaar <b>&euro;20</b></p>
+    <p class="supp" style="border-top:none;padding-top:0;margin-top:1mm;font-style:italic;">Heerlijk aangevuld met een apart te bestellen bijgerecht en/of saus.</p>
+  </div>
+  <div class="sec two-up">
+    <div>
+      <h3>Bijgerechten</h3>
+      <div class="item"><span class="nm">Fries</span><span class="lead"></span><span class="pr">&euro;6</span></div>
+      <div class="item"><span class="nm">Potato Gratin Dauphinois</span><span class="lead"></span><span class="pr">&euro;9</span></div>
+      <div class="item"><span class="nm">Creamy Mashed Potato</span><span class="lead"></span><span class="pr">&euro;8</span></div>
+      <div class="item"><span class="nm">Vegetable Spaghetti</span><span class="lead"></span><span class="pr">&euro;8</span></div>
+      <div class="item"><span class="nm">Truffle Fries</span><span class="lead"></span><span class="pr">&euro;9</span></div>
+    </div>
+    <div>
+      <h3>Sauzen</h3>
+      <div class="item"><span class="nm">Dijon Mustard Sauce</span><span class="lead"></span><span class="pr">&euro;5</span></div>
+      <div class="item"><span class="nm">Beef Jus</span><span class="lead"></span><span class="pr">&euro;5</span></div>
+      <div class="item"><span class="nm">Creamy Mushroom Sauce</span><span class="lead"></span><span class="pr">&euro;5</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>Desserts</h2>
+    <div class="item"><span class="nm">Tiramis&ugrave;</span><span class="lead"></span><span class="pr">&euro;15</span></div>
+    <p class="desc">Huisgemaakte dacquoise biscuit, koffiekruim en mascarponemousse.</p>
+    <div class="item"><span class="nm">Mille-feuille</span><span class="lead"></span><span class="pr">&euro;16</span></div>
+    <p class="desc">Krokant bladerdeeg met vanillecr&egrave;me, gezouten karamel en vanille mascarpone.</p>
+    <div class="item"><span class="nm">Jawhara</span><span class="lead"></span><span class="pr">&euro;17</span></div>
+    <p class="desc">Extra krokant filodeeg, oranjebloesemcr&egrave;me, pistache-ijs en pistachesaus.</p>
+    <!-- PRICE FLAG: working draft docx lists Profiteroles at €19, not €17. Confirm before print. -->
+    <div class="item"><span class="nm">Profiteroles</span><span class="lead"></span><span class="pr">&euro;17</span></div>
+    <p class="desc">Soezendeeg met hazelnootcr&egrave;me, hazelnootijs en warme chocoladesaus.</p>
+  </div>
+</section>
+
+<!-- =================== PAGE 4: BACK COVER =================== -->
+<section class="page compact">
+
+  <div class="pagehead-small">Dranken</div>
+
+  <div class="sec">
+    <h2>Koffie</h2>
+    <div class="cols-2">
+      <div class="item"><span class="nm">Espresso</span><span class="lead"></span><span class="pr">&euro;3,75</span></div>
+      <div class="item"><span class="nm">Flat White</span><span class="lead"></span><span class="pr">&euro;5,00</span></div>
+      <div class="item"><span class="nm">Americano</span><span class="lead"></span><span class="pr">&euro;4,00</span></div>
+      <div class="item"><span class="nm">Latte Macchiato</span><span class="lead"></span><span class="pr">&euro;5,00</span></div>
+      <div class="item"><span class="nm">Cappuccino</span><span class="lead"></span><span class="pr">&euro;4,50</span></div>
+      <div class="item"><span class="nm">Iced Coffee</span><span class="lead"></span><span class="pr">&euro;6,00</span></div>
+    </div>
+    <p class="supp">Maak het van jou: vanille in elke koffie <b>+ &euro;0,75</b></p>
+  </div>
+
+  <!-- ========== MOCKTAILS ========== -->
+  <div class="sec">
+    <h2>Cocktails</h2>
+    <p class="note-inline">Alcoholvrij, zonder uitzondering</p>
+
+    <p class="subhead">Huisspecialiteiten</p>
+    <div class="item"><span class="nm">Lychee Siren</span><span class="lead"></span><span class="pr">&euro;12,95</span></div>
+    <p class="desc">Lychee en kokoswater onder een indigoblauwe kroon van vlindererwt.</p>
+    <div class="item"><span class="nm">Forest Fairy</span><span class="lead"></span><span class="pr">&euro;12,95</span></div>
+    <p class="desc">Gerookte rozemarijn en ahornsiroop, aangescherpt met citroen, achter een zoutrand.</p>
+    <div class="item"><span class="nm">The Hulk</span><span class="lead"></span><span class="pr">&euro;12,95</span></div>
+    <p class="desc">Basilicum, groene druiven en limoen. Het groen is het blad zelf.</p>
+    <div class="item"><span class="nm">Hibiscus Royale</span><span class="lead"></span><span class="pr">&euro;12,95</span></div>
+    <p class="desc">Zure hibiscusrood onder een citruszijde. Scherp onder, zacht erboven.</p>
+
+    <p class="subhead">Klassiekers</p>
+    <div class="item"><span class="nm">Amsterdam Sunrise</span><span class="lead"></span><span class="pr">&euro;10,95</span></div>
+    <p class="desc">Verse sinaasappel over ijs met grenadine die eronder zakt. Eerste ochtendlicht in een glas.</p>
+    <div class="item"><span class="nm">Cosmopolitan</span><span class="lead"></span><span class="pr">&euro;11,95</span></div>
+    <p class="desc">Droge cranberry, verse limoen en sinaasappel. Opgediend up in een gekoelde coupe.</p>
+    <div class="item"><span class="nm">Spicy Jalape&ntilde;o Mule</span><span class="lead"></span><span class="pr">&euro;11,95</span></div>
+    <p class="desc">Verse jalape&ntilde;ohitte, limoen en gemberbier. De hitte komt als eerste.</p>
+    <div class="item"><span class="nm">Pi&ntilde;a Colada</span><span class="lead"></span><span class="pr">&euro;11,95</span></div>
+    <p class="desc">Ananas en kokosroom, dik en koud geblend.</p>
+    <div class="item"><span class="nm">Tropical Velvet</span><span class="lead"></span><span class="pr">&euro;12,95</span></div>
+    <p class="desc">Passievrucht en vanille, hard geshaket en opgediend up.</p>
+    <div class="item"><span class="nm">Ocean Mojito</span><span class="lead"></span><span class="pr">&euro;13,95</span></div>
+    <p class="desc">Munt en limoen onder, cassis en vlindererwt erboven. Paars onder, blauw erboven.</p>
+
+    <p class="note-inline after">Zoeter of minder zoet, vraag het gerust</p>
+  </div>
+
+  <!-- ========== TAIL: SOFT DRINKS AND WATER, SIDE BY SIDE ========== -->
+  <div class="tail tail-grid">
+    <div>
+      <h3>Frisdranken</h3>
+      <div class="item"><span class="nm">Alle frisdranken</span><span class="lead"></span><span class="pr">&euro;4,50</span></div>
+      <p class="flowline">Coca-Cola &middot; Cola Zero &middot; Fanta &middot; Sprite &middot; Red Bull &middot; Royal Bliss Ginger Ale &middot; Tonic &middot; Lipton Iced Tea Lemon &middot; Lipton Iced Tea Peach &middot; SPA Rood &middot; SPA Blauw &middot; De Appelaere &middot; Royal Club Bitter Lemon</p>
+    </div>
+    <div>
+      <h3>Water</h3>
+      <div class="item"><span class="nm">SPA Blauw</span><span class="lead"></span><span class="pr">&euro;4,00</span></div>
+      <p class="flowline">Plat</p>
+      <div class="item"><span class="nm">SPA Rood</span><span class="lead"></span><span class="pr">&euro;4,00</span></div>
+      <p class="flowline">Bruisend</p>
+    </div>
+  </div>
+
+  <p class="allergy">Laat het ons weten bij allergie&euml;n. Wij passen ons aan.</p>
+</section>
+
+</body>
+</html>
