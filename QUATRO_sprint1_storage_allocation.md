@@ -1,126 +1,160 @@
-# QUATRO SPRINT 1, DEFINITIVE STORAGE ALLOCATION (CORRECTED FOR THE MIDDLE SHELF)
+# QUATRO SPRINT 1, DEFINITIVE STORAGE ALLOCATION
+### Revision 2. Every shelf stays in. Nothing is removed.
 
-Scope: the ten bar drinks only. Signatures: Lychee Siren, Forest Fairy, The Hulk, Hibiscus Royale. Classics: Spicy Jalapeño Mule, Ocean Mojito, Cosmopolitan, Amsterdam Sunrise, Tropical Velvet, Piña Colada. Every ingredient is read from the builds in quatro.html. F2B, F2C, F3A, F3B, F3C are full and receive nothing.
+Scope: the ten bar drinks only. Signatures: Lychee Siren, Forest Fairy, The Hulk, Hibiscus Royale. Classics: Spicy Jalapeño Mule, Ocean Mojito, Cosmopolitan, Amsterdam Sunrise, Tropical Velvet, Piña Colada. Ingredients read from the builds in quatro.html. F2B, F2C, F3A, F3B, F3C are full and receive nothing.
 
 ---
 
-## THE REAL GL013 LAYOUT
+## THE DECISION THAT CHANGES EVERYTHING
 
-Three bays, each with **one middle shelf, so two tiers per bay**. The arithmetic from the drawing agrees twice: 297 mm pitch + 297 mm pitch + 6 mm shelf = 600 mm cavity.
+The last revision took the middle shelf out of F1B so 2 L bottles could stand. **That was wrong, and here is the cost:**
 
-| Figure | Value |
+| | Slots in the three F1 bays |
 |---|---|
-| Bays | 3 (F1A, F1B, F1C), split by 2 mullions |
-| Tiers per bay | **2**, created by one middle shelf |
-| Clear height per tier | 297 mm |
-| Full cavity height, shelf out | 600 mm |
-| Clear width per bay | 403 mm |
-| Usable depth | 380 mm, minus a 40 mm hand gap = 340 mm working |
+| All shelves in, batching into 700 ml | 40 + 40 + 40 = **120** |
+| Middle shelf out of F1B for 2 L bottles | 40 + 12 + 40 = **92** |
+| **Cost of removing one shelf** | **28 slots, a whole tier** |
 
-**What stands under 297 mm and what does not.** A vessel fits only if its height plus 10 mm is 297 mm or less, so **287 mm is the ceiling**.
+**Keep every shelf. Change the bottle instead.** A 2 L bottle is 330 mm and will never stand under a 297 mm shelf. A 700 ml bottle is 270 mm and stands anywhere. Four of the six preps already yield 500 ml, so this is barely a change: it only means hibiscus goes into three 700 ml bottles rather than one 2 L.
 
-| Vessel | Height | Under a shelf? | Slots per tier |
-|---|---|---|---|
-| 1 L carton, 70 mm | 200 mm | Yes | 5 across x 4 deep = 20 |
-| 700 ml glass, 80 mm | 270 mm | Yes | 5 x 4 = 20 |
-| 500 ml squeeze, 70 mm | 285 mm | Yes, by 2 mm | 5 x 4 = 20 |
-| 330 ml bottle, 60 mm | 210 mm | Yes | 6 x 5 = 30 |
-| 1 kg puree tub, 110 mm | 180 mm | Yes | 3 x 3 = 9 |
-| 1 L ginger beer, 90 mm | **300 mm** | **NO** | shelf-out bay only |
-| 1 L Monin glass, 85 mm | **320 mm** | **NO** | stays DRY |
-| 2 L prebatch, 110 mm | **330 mm** | **NO** | shelf-out bay only |
-
-**CRITICAL ACTION: remove the middle shelf in F1B.** That is the only way the 2 L prebatch bottles stand up. F1A, F1C and F2A keep both shelves.
+**The one purchase: 12 x 700 ml bottles.** That is what buys back the tier.
 
 ---
 
-## THE FOOLPROOF STORAGE MAP
+## THE ARITHMETIC, PER BAY, PER TIER
 
-### F1A, RAIL REFILLS AND OPEN CARTONS. Both shelves in, 2 tiers.
+Cavity 1,270 x 420 x 600 mm. Three bays at 403 mm clear. Shelf pitch 297 mm. 297 + 297 + 6 mm shelf = 600 mm, and the 320 L rating agrees.
 
-| Tier | What goes here | Count |
+Working footprint per tier: **403 mm wide x 340 mm deep**, after a 40 mm hand gap at the front. A vessel stands only if its height plus 10 mm clearance is 297 mm or less, so **287 mm is the ceiling**.
+
+| Vessel | Size | Stands? | Across | Deep | **Slots per tier** |
+|---|---|---|---|---|---|
+| 700 ml bottle | 80 x 270 | Yes | 403/80 = 5 | 340/80 = 4 | **20** |
+| 500 ml squeeze | 70 x 285 | Yes, by 2 mm | 5 | 4 | **20** |
+| 1 L carton | 70 x 200 | Yes | 5 | 4 | **20** |
+| 330 ml SPA Rood | 60 x 210 | Yes | 6 | 5 | **30** |
+| 1 kg puree tub | 110 x 180 | Yes | 3 | 3 | **9** |
+| 1 L ginger beer | 90 x 300 | **No** | lay it down, 4 per tier | | **4 lying** |
+| Monin 1 L | 85 x 320 | **No** | stays DRY, decant from it | | **0** |
+| 2 L prebatch | 110 x 330 | **No** | do not use this format | | **0** |
+
+**About 40 vessel slots per bay across the two tiers.** Six tiers of chilled storage in F1 alone.
+
+---
+
+## THE ALLOCATION, TIER BY TIER
+
+Rule that makes it foolproof: **each bay's bottom tier refills its own top tier.** Nobody needs the dry store during service.
+
+### F1A, THE POUR BAY. Both shelves in.
+
+| Tier | Contents | Slots used |
 |---|---|---|
-| **TOP SHELF** | The 7 open rail refill bottles: green lime, yellow lemon, white simple syrup, orange OJ, brown apple-pear, black-white vanilla, pink lychee | 7 of 20 slots |
-| **BOTTOM SHELF** | Open cartons poured straight from: cranberry, pineapple, passionfruit juice, coconut water. Plus 7 x SPA Rood 330 ml chilled for service | 11 of 20 slots |
+| **TOP** | The 7 rail refill bottles: green lime, yellow lemon, white simple, orange OJ, brown apple-pear, black-white vanilla, pink lychee | **7 of 20** |
+| **BOTTOM** | Open cartons poured straight from: cranberry, pineapple, passionfruit juice, coconut water, spare lychee. Plus 7 x SPA Rood 330 ml | **12 of 20** |
 
-Top shelf is eye level, so the bottles you grab most sit there. Nothing else goes in F1A.
+Top tier is eye level, so the seven bottles touched every ticket sit there. Bottom tier is what you swap from mid-service.
 
-### F1B, PREBATCH. **MIDDLE SHELF REMOVED**, one 600 mm tier.
+### F1B, THE PREBATCH BAY. **MIDDLE SHELF STAYS IN.**
 
-| Tier | What goes here | Count |
+| Tier | Contents | Slots used |
 |---|---|---|
-| **SINGLE TALL TIER** | 2 L prebatch bottles: butterfly pea tea, butterfly pea strong, hibiscus tea, rosemary-thyme maple cordial, Jade's mint syrup, lychee cordial. Up to 9 filled bottles once overlap is counted | 9 |
-| **Back row, same tier** | 3 x 1 L ginger beer. They are 300 mm and stand nowhere else cold | 3 |
+| **TOP** | **The twelve prebatch bottles, 700 ml:** butterfly pea tea x2, butterfly pea strong x2, hibiscus x4, rosemary-thyme maple cordial x2, Jade's mint syrup x1, lychee cordial x1 | **12 of 20** |
+| **BOTTOM** | The chill-down tier. Tomorrow's ginger beer, 3 x 1 L **laid on their side**, and tomorrow's soda, brought down from DRY at close so it is cold for open. Overlap batches land here as they are made | **about 10 of 20** |
 
-Do not put a shelf back above these. Nothing stacks on top of them.
+**The second tier needs twelve, and twelve is exactly what it holds.** Nothing is removed and nothing is wasted.
 
-**MEASURE THIS ONE THING:** the diameter of your 2 L bottles. At 100 mm you get 4 across x 3 deep = **12 slots** and everything above fits. At 110 mm you get 3 across x 3 deep = **9 slots**, and the 3 ginger beers do not fit. If that happens, lay the ginger beers on their side on the F1A bottom shelf. They are sealed, so lying down is fine.
+Why twelve:
 
-### F1C, SQUEEZE BOTTLES AND OPEN TUBS. Both shelves in, 2 tiers.
+| Prep | Yield | Keeps | Bottles |
+|---|---|---|---|
+| Butterfly pea tea | 500 ml | 5 days | 2, re-batched before the old one empties |
+| Butterfly pea, strong infusion | 250 ml | 5 days | 2, same reason |
+| Hibiscus tea, strong | 2 L | 5 days | 4, three carry the batch and one overlaps |
+| Rosemary-thyme maple cordial | 1 L | 2 weeks | 2 |
+| Jade's fresh mint syrup | 500 ml | 1 week | 1 |
+| Lychee cordial | 700 ml | not in the file | 1 |
+| | | **Total** | **12** |
 
-| Tier | What goes here | Count |
+Two more live at the sink as the wash allowance. They are empty, so they are not in the fridge.
+
+### F1C, THE SQUEEZE BAY. Both shelves in.
+
+| Tier | Contents | Slots used |
 |---|---|---|
-| **TOP SHELF** | The 7 squeeze bottles, every dose of 30 ml or less: Jade's mint syrup, lychee cordial, strawberry puree, passionfruit puree, cassis, grenadine, condensed milk | 7 of 20 slots |
-| **BOTTOM SHELF** | Open tubs, cans and jars: cassis 2 x 500 g, strawberry puree tub, passionfruit puree tub, coconut cream open can, cocktail cherries open jar | 6 of 9 slots |
+| **TOP** | The 7 squeeze bottles, every dose of 30 ml or less: Jade's mint syrup, lychee cordial, strawberry puree, passionfruit puree, cassis, grenadine, condensed milk | **7 of 20** |
+| **BOTTOM** | The open tubs, cans and jars they are refilled from: cassis 2 x 500 g, strawberry puree tub, passionfruit puree tub, coconut cream open can, cocktail cherries | **6 of 9** |
 
-Squeeze bottles go on top because they are grabbed most. **Grenadine and cassis squeezes are dedicated for life, they stain. Condensed milk needs a wide mouth and a large bore, it is too thick for a standard nozzle.**
+Grenadine and cassis squeezes are dedicated for life, they stain. Condensed milk needs a wide mouth and a large bore.
 
-The grenadine Monin 1 L bottle is 320 mm and does not fit any tier. It lives in DRY and you decant from it.
+### F2A, ALL FRESH. Both shelves in.
 
-### F2A, ALL FRESH. Both shelves in, 2 tiers.
-
-| Tier | What goes here | Volume |
+| Tier | Contents | Volume |
 |---|---|---|
-| **BOTTOM SHELF** | Whole citrus: limes 5 kg, lemons 1.5 kg, oranges 3 kg. Heavy, most used, and stable low down. Orange zest is cut to order from these | about 17 L |
-| **TOP SHELF** | Strawberries, green grapes, mint, basil, rosemary, thyme all in damp cloth, jalapeños, pears, fresh passion fruit, plus the day's cut garnish tubs at the front | about 18 L |
+| **TOP** | Strawberries, green grapes, mint, basil, rosemary, thyme in damp cloth, jalapeños, pears, fresh passion fruit, the day's cut garnish tubs at the front | about 18 L |
+| **BOTTOM** | Whole citrus: limes 5 kg, lemons 1.5 kg, oranges 3 kg. Heavy, most used, stable low down. Orange zest cut to order from these | about 17 L |
 
-About 35 litres into 40. It fits. The garnish tubs were homed in F2B in the file; F2B is full, so they live here. If a delivery tightens the door, **rosemary goes out first and thyme second**, to DRY in a damp cloth at room temperature. Both serve one drink and tolerate a day out.
+About 35 litres into 40. The garnish tubs were homed in F2B, which is full, so they live here. If a delivery tightens the door, rosemary goes out first and thyme second, to DRY in a damp cloth.
+
+---
+
+## HOW FULL IS IT
+
+| Bay | Tier | Capacity | Used | Free |
+|---|---|---|---|---|
+| F1A | Top | 20 | 7 | 13 |
+| F1A | Bottom | 20 | 12 | 8 |
+| F1B | Top | 20 | 12 | 8 |
+| F1B | Bottom | 20 | 10 | 10 |
+| F1C | Top | 20 | 7 | 13 |
+| F1C | Bottom | 9 | 6 | 3 |
+| | **Total** | **109** | **54** | **55** |
+
+Half empty, with every shelf in place. Storage was never the problem; the 2 L bottle was.
 
 ---
 
 ## DRY STORE, 5 SHELVES
 
-Sealed is shelf-stable. If it is unopened, it does not enter a fridge. That single rule is why 320 litres is enough.
+Sealed is shelf-stable. If it is unopened it does not enter a fridge. That single rule is why 320 litres is more than enough.
 
 **SHELF 1, liquid backups, unopened:** cranberry, pineapple, apple-pear, lychee, passionfruit juice, coconut water cartons. Coconut cream cans, condensed milk tins.
 
-**SHELF 2, bottles and cans, unopened:** canned lychees for the cordial, ginger beer spares, SPA Rood spares, cocktail cherry jars. Chill ginger beer and soda the night before, never during service.
+**SHELF 2, bottles and cans, unopened:** canned lychees for the cordial, ginger beer spares, SPA Rood spares, cocktail cherry jars. These move to the F1B bottom tier at close, never during service.
 
-**SHELF 3, dry goods and herbs, airtight:** dried butterfly pea flower, dried hibiscus, crystal sugar, sea salt, the rosemary-lemon salt rim mix, Fee Foam.
+**SHELF 3, dry goods, airtight:** dried butterfly pea flower, dried hibiscus, crystal sugar, sea salt, the rosemary-lemon salt rim mix, Fee Foam.
 
-**SHELF 4, syrups, unopened plus the tall ones:** Monin vanilla, Monin simple, Monin grenadine 1 L (too tall for any tier, decant-only), maple syrup 4 x 250 ml.
+**SHELF 4, syrups and the tall bottles:** Monin vanilla, Monin simple, **Monin grenadine 1 L at 320 mm, which fits no tier and is decant-only**, maple syrup 4 x 250 ml.
 
-**SHELF 5, equipment, not for consumption:** vershouddoos containers, spare squeeze bottles, empty wash-allowance prebatch bottles, jiggers, mixing glass, bar spoons, strainer, muddler, day-dot roll and markers.
+**SHELF 5, equipment:** vershouddoos containers, spare squeeze bottles, the 2 wash-allowance prebatch bottles, jiggers, mixing glass, bar spoons, strainer, muddler, day-dot roll and markers.
 
-Two shelf runs of 600 x 400 mm cover the roughly 25 sealed units. Top of the back bar and under-counter both count as DRY.
-
-**Do not stock these in the bar fridge for sprint 1:** mango puree, oleo saccharum, coconut milk, fresh ginger, lavender syrup, lemongrass syrup, peach syrup, jasmine cold brew. **No drink in the ten uses any of them.** Mango and the syrups belong to the matcha and lemonade sections, which are out of this sprint. Oleo saccharum appears in no build at all.
+**Do not stock in the bar fridge for sprint 1:** mango puree, oleo saccharum, coconut milk, fresh ginger, lavender syrup, lemongrass syrup, peach syrup, jasmine cold brew. **No drink in the ten uses any of them.**
 
 ---
 
-## FIFO, HOW LONG IT LASTS ONCE OPENED
+## FIFO, ONCE OPENED
 
-Print this and stick it to the fridge door. Where the file states a keep window, that window wins.
+Where the file states a keep window, that window wins.
 
-| Opened item | Where | Keeps | Notes |
+| Opened item | Where | Keeps | Note |
 |---|---|---|---|
-| **Strawberry puree, decanted** | F1C | **2 days** | The file says 2 days, not a week. Date-stamp and bin on day 3 |
-| **Condensed milk, decanted** | F1C | **2 days** | Thick, wide-bore bottle only |
-| Fresh citrus juice, lime, lemon, orange | F1A rail | **Same day** | Squeezed at open, binned at close. Never carried over |
-| Cut garnish, pear and jalapeño | F2A | Same day | Cut at open |
-| Butterfly pea tea, and the strong infusion | F1B | **5 days** | Re-batch before the old one empties |
-| Hibiscus tea, strong | F1B | **5 days** | 2 L yield, re-batch before empty |
-| Jade's fresh mint syrup | F1B | **1 week** | The file says 1 week, not two |
-| Rosemary-thyme maple cordial | F1B | **2 weeks** | |
-| Rosemary-lemon salt rim mix | DRY | **1 week** | Airtight or it clumps |
-| Lychee cordial | F1B | **NOT IN THE FILE** | Write yield, keep window and method before anyone batches it |
-| Opened cartons: cranberry, pineapple, apple-pear, lychee, passionfruit, coconut water | F1A | 3 to 5 days | Date-stamp every one |
-| Coconut cream, open can | F1C | 3 to 5 days | Decant out of the can, stir before use |
-| Passionfruit and cassis, open tubs | F1C | 5 to 7 days | Cassis stains, dedicated vessel |
-| Bought syrups: simple, vanilla, grenadine | F1A, F1C | 1 to 3 months | High sugar, keeps long |
+| **Strawberry puree, decanted** | F1C top | **2 days** | The file says 2 days, not a week |
+| **Condensed milk, decanted** | F1C top | **2 days** | Wide bore bottle only |
+| **Fresh citrus juice** | F1A top | **Same day** | Squeezed at open, binned at close |
+| **Cut garnish, pear and jalapeño** | F2A top | **Same day** | Cut at open |
+| Butterfly pea tea, and strong infusion | F1B top | 5 days | Re-batch before the old one empties |
+| Hibiscus tea, strong | F1B top | 5 days | Three bottles carry one batch |
+| Jade's fresh mint syrup | F1B top | 1 week | One week, not two |
+| Rosemary-thyme maple cordial | F1B top | 2 weeks | |
+| Rosemary-lemon salt rim mix | DRY | 1 week | Airtight or it clumps |
+| **Lychee cordial** | F1B top | **NOT IN THE FILE** | Write yield, keep window and method before anyone batches it |
+| Opened juice cartons | F1A bottom | 3 to 5 days | Date-stamp every one |
+| Coconut cream, open can | F1C bottom | 3 to 5 days | Decant, stir before use |
+| Passionfruit and cassis tubs | F1C bottom | 5 to 7 days | Cassis stains |
+| Bought syrups: simple, vanilla, grenadine | F1A, F1C | 1 to 3 months | High sugar |
 | Sugar, salt, dried teas | DRY | 6 to 12 months | Airtight |
 
-Every container gets a day dot with NAME, MADE, USE BY. New stock goes behind old. Anything past date is binned at open, not at close.
+Every container carries a day dot: NAME, MADE, USE BY. New stock behind old. Anything past date is binned at open.
 
 ---
 
@@ -128,25 +162,25 @@ Every container gets a day dot with NAME, MADE, USE BY. New stock goes behind ol
 
 **OPENING**
 1. Squeeze the day's citrus. Fill rail bottles 1, 2 and 4. Bin yesterday's.
-2. Check F1A top shelf. Refill simple, apple-pear, vanilla and lychee from the open cartons on the F1A bottom shelf.
-3. Check F1B. Is any prebatch low or past its day dot? Batch it now, not mid-service.
-4. Check F1C top shelf. Refill empty squeeze bottles from the open tubs on the F1C bottom shelf.
-5. Put the fresh delivery into F2A. Citrus below, everything else above.
+2. Check the F1A top tier. Refill simple, apple-pear, vanilla and lychee from the F1A bottom tier.
+3. Check the F1B top tier. Anything low or past its day dot is batched now, not mid-service.
+4. Check the F1C top tier. Refill empty squeeze bottles from the F1C bottom tier.
+5. Fresh delivery into F2A. Citrus below, everything else above.
 6. Fill the ice bin at station 2.
 
 **MID-SERVICE**
-1. Rail bottle empty: swap from the **F1A bottom shelf**. Never from DRY.
-2. Squeeze bottle empty: refill from the **F1C bottom shelf**. Never from DRY.
-3. **DRY is backup only. Nobody opens the dry store during service.**
-4. Anything past its day dot comes out immediately, no discussion.
-5. Refill the ice bin at the midpoint.
+1. Rail bottle empty: swap from the **F1A bottom tier**.
+2. Squeeze bottle empty: refill from the **F1C bottom tier**.
+3. Anything past its day dot comes out immediately.
+4. Refill the ice bin at the midpoint.
+5. **Nobody opens the dry store during service.** If the fridge is out of something, the drink comes off the board until close.
 
 **CLOSING**
 1. Day-dot everything opened today.
-2. Move tomorrow's stock from DRY into F1A, F1B and F1C to chill overnight, including the ginger beer and soda.
+2. Move tomorrow's ginger beer and soda from DRY into the **F1B bottom tier** to chill overnight.
 3. Bin the day's citrus and cut garnish.
-4. Wipe F1C. Purees do not sit dirty on a shelf overnight.
+4. Wipe F1C. Purees do not sit dirty overnight.
 
 ---
 
-**Three flags that block service, in order.** **Coconut water is not on the buy list**, so Lychee Siren cannot be made at all until it is bought, and it is a signature. **Lychee cordial has no FIFO row**, so nobody can batch it correctly. **Measure the 2 L bottle diameter** before you strip the F1B shelf, because 100 mm gives you twelve slots and 110 mm gives you nine.
+**Three things block service, in order.** **Coconut water is not on the buy list**, so Lychee Siren cannot be made at all, and it is a signature. **Lychee cordial has no FIFO row**, so nobody can batch it correctly. **Buy 12 x 700 ml bottles**, because that is what keeps every shelf in the cabinet.
