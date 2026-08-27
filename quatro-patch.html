@@ -101,6 +101,26 @@ td.buy.ok { color: var(--ink-soft); }
   background: rgba(158,43,59,.06); font-size: 12px; line-height: 1.5; }
 .qlink { border: none; background: none; color: var(--gold); font: inherit; text-decoration: underline;
   cursor: pointer; padding: 0; }
+/* booklet, rewritten for speed. One drink per page. */
+.bk-page { padding: 14mm 14mm 12mm; }
+.bk-head { border-bottom: 1px solid var(--gold); padding-bottom: 4mm; margin-bottom: 6mm; }
+.bk-head h2 { font-family: 'Marcellus', Georgia, serif; font-weight: 400; font-size: 25pt;
+  letter-spacing: .04em; display: flex; align-items: center; gap: 10px; margin: 0; }
+.bk-sw { width: 13px; height: 13px; border-radius: 50%; flex: none; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.bk-spec { font-size: 10pt; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); margin-top: 3mm; }
+.bk-blocks { display: grid; gap: 4.5mm; }
+.bk-b { display: grid; grid-template-columns: 32mm 1fr; gap: 6mm; align-items: baseline;
+  border-bottom: 1px dotted var(--gold-pale); padding-bottom: 3.5mm; }
+.bk-k { font-family: 'Marcellus', Georgia, serif; font-size: 11.5pt; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--gold); }
+.bk-v { font-size: 14.5pt; line-height: 1.45; }
+.bk-tbl { margin-top: 6mm; }
+.bk-tbl ol { margin: 2mm 0 0 6mm; font-size: 13pt; line-height: 1.5; }
+.bk-say { margin-top: 6mm; font-size: 11.5pt; line-height: 1.5; font-style: italic; color: var(--ink-soft); }
+.bk-flag { margin-top: 4mm; padding: 3mm 4mm; border-left: 3px solid #9E2B3B;
+  background: rgba(158,43,59,.06); font-size: 10.5pt; line-height: 1.5; }
+.bk-notes { margin-top: 8mm; }
+.bk-notes .bk-rule { border-bottom: 1px solid var(--gold-pale); height: 8mm; }
 </style>
 <script>
 (function () {
@@ -633,6 +653,122 @@ td.buy.ok { color: var(--ink-soft); }
   });
 
   if (typeof TABS !== "undefined" && TABS) { TABS.rail = railHTML; TABS.prep = prepHTML; }
+
+
+  /* ==================================================================
+     5. THE BOOKLET, REWRITTEN FOR SPEED
+     Station blocks instead of prose. Read the bold word, do the line.
+     Builds keeps the long version as the reference; this is what prints.
+     ================================================================== */
+  var BK = [
+    { id:"lychee-siren", name:"Lychee Siren", sw:"#4C4C9D",
+      spec:"Hurricane  ·  Crushed  ·  Build and float",
+      b:[["Glass","50 lychee juice · 20 lychee cordial · 70 coconut water"],
+         ["Ice","Crushed, up to the neck. Only after the liquids, never before"],
+         ["Float","40 butterfly pea tea, off the jigger"],
+         ["Garnish","Golden glitter lychee · lime wedge"],
+         ["Tray","50 lychee-lime cordial in a brute. That is 25 lychee cordial plus 25 Boiron lime"]],
+      tbl:["Set the glass down in front of the guest","Pour the lychee-lime cordial over the indigo","Straw in, guest stirs"],
+      say:"No colouring. The blue is butterfly pea and it reacts to citrus.",
+      flag:"The ingredient list says 50 ml lychee-lime cordial on the tray, but bar step 5 says 20 ml lime. Which is it?" },
+
+    { id:"forest-fairy", name:"Forest Fairy", sw:"#3E5140",
+      spec:"Highball  ·  Cubed  ·  Stir and strain",
+      b:[["Rim","Lemon wedge round the rim · dip half the rim in rosemary-lemon salt · set aside"],
+         ["Mixing glass","25 lemon · 50 rosemary-thyme maple cordial · 10 to 15 soda"],
+         ["Stir","Ice in, 10 to 12 seconds"],
+         ["Glass","Cubed ice"],
+         ["Finish","Strain in · soda to 1 cm · blowtorch the rosemary 3 seconds, blow it out · rosemary and raw thyme between the cubes"]],
+      say:"For someone who does not want anything sweet. Maple instead of sugar, two herbs, nothing else." },
+
+    { id:"the-hulk", name:"The Hulk", sw:"#6E8C3A",
+      spec:"Chilled coupe  ·  No ice in the glass  ·  Shake and fine strain",
+      b:[["Prep","Ice into the coupe to chill it · spread brown sugar over the pear slice with a spoon"],
+         ["Tin","Muddle 10 grapes to a puree · 10 basil leaves, press ONCE · 120 apple-pear · 20 lime · 15 simple"],
+         ["Shake","Tip the coupe ice into the tin · cap · hard 12 seconds, until the chips sound smaller"],
+         ["Finish","Fine strain into the chilled coupe · pear slice on the rim"]],
+      say:"Short on liquid? 5 to 15 soda keeps the crispness.",
+      flag:"Thin pear slices fall in and ruin the look. Drying them in the oven first is worth testing. Until then, slicing machine in the kitchen." },
+
+    { id:"hibiscus-royale", name:"Hibiscus Royale", sw:"#9E2B3B",
+      spec:"Coppa  ·  Cubed  ·  Dry shake then wet shake",
+      b:[["Glass","Cubed ice · 4 strawberry halves, tucked so they show through"],
+         ["Tin","6 to 8 foam drops · 50 strawberry puree · zest, 3 big or 6 small · 50 orange · 40 lemon · 40 vanilla · 120 hibiscus"],
+         ["Shake","Dry 15 seconds, no ice.  Then ice, wet 12 seconds"],
+         ["Finish","Fine strain slowly to 1 cm · 3 hibiscus petals"]],
+      say:"Tilt the strainer so the thick pink cream flows in and the fruit stays in the tin." },
+
+    { id:"jalapeno-mule", name:"Spicy Jalapeno Mule", sw:"#5E8C4A",
+      spec:"Highball  ·  Crushed  ·  Stir and strain",
+      b:[["Mixing glass","3 jalapeno slices, seeds out · 20 lime · 10 simple · muddle"],
+         ["Stir","Ice in, 8 to 10"],
+         ["Glass","Crushed ice"],
+         ["Finish","Strain in · ginger beer to 1 cm · cap with crushed · slap the mint sprig · jalapeno wheel"]],
+      say:"The heat lands first, the ginger finishes it. Ask before leaving the seeds in.",
+      flag:"The mint sprig and the jalapeno wheel are in the steps but missing from the ingredient list." },
+
+    { id:"ocean-mojito", name:"Ocean Mojito", sw:"#5A5AA0",
+      spec:"Hurricane  ·  Crushed  ·  Muddle, shake, layer, top",
+      b:[["Glass","Muddle 4 lime wedges · bash 8 to 10 mint leaves"],
+         ["Tin","20 cassis · 20 Jade's mint syrup · 15 lime · ice · shake hard"],
+         ["Churn","Fill HALF with crushed · churn 8 to 10 with the bar spoon until it takes the mojito look"],
+         ["Build","Fine strain the purple over · more crushed until it is covered · soda to 2 cm"],
+         ["Float","15 to 20 concentrated butterfly pea, off the spoon, for the layer"],
+         ["Garnish","Mint sprig, slapped once · lime wedge on the ice"]],
+      say:"The layers are on purpose. One stir and the whole glass turns violet-blue." },
+
+    { id:"cosmopolitan", name:"Cosmopolitan", sw:"#C24D66",
+      spec:"Chilled coupe  ·  No ice in the glass  ·  Shake and fine strain",
+      b:[["Prep","Ice into the coupe"],
+         ["Tin","70 cranberry · 40 orange · 30 lime · 20 simple"],
+         ["Shake","Tip the coupe ice into the tin · cap · hard"],
+         ["Finish","Fine strain · twisted orange zest"]],
+      say:"Cranberry and lime do the work, the orange rounds the middle." },
+
+    { id:"amsterdam-sunrise", name:"Amsterdam Sunrise", sw:"#E8791D",
+      spec:"Highball  ·  Crushed  ·  Build and sink",
+      b:[["Glass","Crushed ice"],
+         ["Pour","180 orange juice"],
+         ["Sink","30 grenadine, slowly down the inside, so it settles and stays"],
+         ["Do not","Stir it"]],
+      say:"Leave it for first light. Stir once when you are ready for sunset.",
+      flag:"The spec line says cubed, the step says crushed. Written as crushed here because the step is the more specific instruction. Confirm which." },
+
+    { id:"tropical-velvet", name:"Tropical Velvet", sw:"#C9973B",
+      spec:"Chilled coupe  ·  No ice in the glass  ·  Shake and fine strain",
+      b:[["Prep","Ice into the coupe"],
+         ["Tin","40 passionfruit juice · 30 apple-pear · 20 passionfruit puree · 20 lime · 10 vanilla"],
+         ["Shake","Ice · cap · hard 12 seconds"],
+         ["Finish","Fine strain · float half a passion fruit"]],
+      say:"Passionfruit alone is sharp. The apple and pear gives it somewhere to sit." },
+
+    { id:"pina-colada", name:"Pina Colada", sw:"#E7DFCF",
+      spec:"Hurricane  ·  Blended in  ·  Blend",
+      b:[["Blender","150 pineapple · 80 coconut cream · 20 condensed milk · 10 lime · 100 g ice"],
+         ["Blend","Until creamy"],
+         ["Finish","Pour into the hurricane · 3 pineapple wedges"]],
+      say:"Blended, not shaken, so it pours thick. The condensed milk carries it." }
+  ];
+
+  function bkPage(d) {
+    var h = '<div class="bk-page"><div class="bk-head">' +
+      '<h2><span class="bk-sw" style="background:' + d.sw + '"></span>' + esc(d.name) + "</h2>" +
+      '<div class="bk-spec">' + esc(d.spec) + "</div></div>";
+    h += '<div class="bk-blocks">' + d.b.map(function (r) {
+      return '<div class="bk-b"><span class="bk-k">' + esc(r[0]) + "</span>" +
+             '<span class="bk-v">' + esc(r[1]) + "</span></div>";
+    }).join("") + "</div>";
+    if (d.tbl) h += '<div class="bk-tbl"><span class="bk-k">At the table</span><ol>' +
+      d.tbl.map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ol></div>";
+    if (d.say) h += '<p class="bk-say"><b>Say.</b> ' + esc(d.say) + "</p>";
+    if (d.flag) h += '<p class="bk-flag"><b>Open.</b> ' + esc(d.flag) + "</p>";
+    h += '<div class="bk-notes"><span class="bk-k">My notes</span>' +
+      '<div class="bk-rule"></div><div class="bk-rule"></div><div class="bk-rule"></div><div class="bk-rule"></div></div>';
+    return h + "</div>";
+  }
+  if (typeof bookletHTML === "function" || true) {
+    window.bookletHTML = function () { return BK.map(bkPage).join(""); };
+  }
 
   if (typeof render === "function") render();
 })();
