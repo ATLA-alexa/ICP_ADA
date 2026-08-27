@@ -32,6 +32,50 @@
   font-size: 13px; line-height: 1.6; color: var(--ink-soft); }
 .src-warn { margin-top: 10px; padding: 8px 10px; border-left: 3px solid #9E2B3B;
   background: rgba(158,43,59,.06); font-size: 13px; line-height: 1.55; }
+/* subtab bar scrolls sideways instead of wrapping or clipping */
+.subtabs { display: flex; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden;
+  -webkit-overflow-scrolling: touch; scrollbar-width: none; scroll-snap-type: x proximity; }
+.subtabs::-webkit-scrollbar { display: none; }
+.subtabs > button { flex: 0 0 auto; white-space: nowrap; scroll-snap-align: start; }
+/* editable inventory */
+.iv-name, .iv-need { outline: none; border-radius: 4px; padding: 0 3px; margin: 0 -3px;
+  border-bottom: 1px dashed rgba(168,134,60,.45); }
+.iv-name:hover, .iv-need:hover { background: rgba(168,134,60,.10); }
+.iv-name:focus, .iv-need:focus, .iv-note:focus { background: rgba(168,134,60,.16);
+  border-bottom-color: var(--gold); }
+.iv-note { font-size: 12px; line-height: 1.5; color: var(--ink-soft); margin-top: 5px;
+  padding: 3px 5px; border-radius: 6px; border: 1px dashed rgba(168,134,60,.35); outline: none; min-height: 20px; }
+.iv-note.empty::before { content: attr(data-ph); color: rgba(107,100,89,.55); font-style: italic; }
+.iv-note:focus.empty::before { content: ""; }
+.iv-del { border: none; background: none; color: var(--ink-soft); font-size: 17px; cursor: pointer;
+  line-height: 1; padding: 0 4px; margin-left: 6px; opacity: .45; }
+.iv-del:hover { opacity: 1; color: #9E2B3B; }
+.iv-tbd { color: #9E2B3B; font-size: 12px; font-style: italic; }
+tr.par td { background: rgba(168,134,60,.05); }
+/* fallbacks, in case the host page does not already define these */
+.bar { height: 4px; border-radius: 2px; background: rgba(35,32,28,.10); margin-top: 6px; overflow: hidden; max-width: 220px; }
+.bar > span { display: block; height: 100%; background: var(--gold); }
+.bar.part > span { background: var(--gold-pale); }
+.bar.none > span { background: transparent; }
+.barlbl { font-size: 11px; color: var(--ink-soft); }
+.inv-qty { width: 72px; padding: 4px 6px; font: inherit; font-size: 13px;
+  border: 1px solid var(--gold-pale); border-radius: 6px; background: #fff; }
+.inv-unit { font-size: 11px; color: var(--ink-soft); margin-left: 4px; }
+.inv-filters { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 0 0 14px; }
+.inv-filters select, .inv-filters button { font: inherit; font-size: 13px; padding: 5px 10px;
+  border: 1px solid var(--gold-pale); border-radius: 8px; background: var(--limestone); cursor: pointer; }
+.inv-sum { display: flex; gap: 26px; flex-wrap: wrap; margin-top: 18px; padding-top: 14px;
+  border-top: 1px solid var(--gold-pale); }
+.inv-sum div { display: flex; flex-direction: column; }
+.inv-sum dt { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); }
+.inv-sum dd { margin: 2px 0 0; font-size: 19px; }
+.inv-sum dd.hi { color: #9E2B3B; font-weight: 500; }
+td.buy { font-size: 13px; }
+td.buy.ok { color: var(--ink-soft); }
+.chip { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 999px; cursor: pointer;
+  border: 1px solid var(--gold-pale); }
+.chip.due { background: rgba(158,43,59,.12); color: #9E2B3B; }
+@media print { .iv-del, .inv-filters, .iv-note.empty { display: none; } }
 </style>
 <script>
 (function () {
@@ -212,6 +256,201 @@
   new MutationObserver(invBanner).observe(document.getElementById("root") || document.body,
     { childList: true, subtree: true });
   invBanner();
+
+
+  /* ==================================================================
+     3. DYNAMIC INVENTORY
+     Replaces the Inventory tab with an editable one. Every row can be
+     edited, added or deleted, every row carries a dated note, and it all
+     saves to this browser. Seeded with the 41 rows already in the sheet,
+     plus the two Boiron purees and the twelve bottled soft drinks.
+     ================================================================== */
+  var LS_ROWS = "quatro-inv-rows-v1", LS_HAVE = "quatro-inv-have-v1";
+  var U = { L:"L", KG:"kg", G:"g", P:"pcs", C:"cans", B:"bottle", J:"jar", PK:"pack", S:"set" };
+
+  var SEED = [
+    ["Liquids","Lychee juice",7,U.L,4.14,""],
+    ["Liquids","Lychees in syrup, cordial",2.8,U.L,17.27,""],
+    ["Liquids","Coconut water",9.8,U.L,2.29,"NOT ON THE BUY LIST. Lychee Siren cannot be made until this is bought."],
+    ["Liquids","Apple-pear juice, Jumbo DUO smaak",16.8,U.L,2.49,"Jumbo DUO smaak, not the Albert Heijn one."],
+    ["Liquids","Orange juice, fresh with pulp",25.2,U.L,2.00,""],
+    ["Liquids","Pineapple juice, carton",21,U.L,2.59,""],
+    ["Liquids","Pineapple chunks, canned",4,U.C,2.15,"Garnish only."],
+    ["Liquids","Coconut cream",11.2,U.L,4.73,""],
+    ["Liquids","Condensed milk",2.8,U.L,7.03,"Two days once decanted. Wide bore bottle."],
+    ["Liquids","Cranberry juice",9.8,U.L,2.49,""],
+    ["Liquids","Passion fruit juice",5.6,U.L,6.78,""],
+    ["Liquids","Ginger beer, Royal Club",21,U.L,3.32,"1 L bottles are 300 mm. They lie down in F1B bottom."],
+    ["Liquids","Soda water, Spa Rood",16.1,U.L,0.50,""],
+    ["Boiron purees","Boiron lime puree, pasteurised",19.6,U.L,null,"Sligro 217504. PRICE NOT KNOWN. Every lime dose in the ten drinks pours this, not hand squeezed fruit."],
+    ["Boiron purees","Boiron lemon puree, pasteurised",9.1,U.L,null,"Sligro 217502. PRICE NOT KNOWN. Forest Fairy 25 ml and Hibiscus Royale 40 ml."],
+    ["Boiron purees","Cassis puree",2.8,U.L,21.26,"STAINS. Dedicated squeeze bottle, never rotated."],
+    ["Boiron purees","Strawberry puree",4.2,U.L,11.00,"Two days once decanted into a squeeze bottle."],
+    ["Boiron purees","Passion fruit puree",2.8,U.L,14.00,""],
+    ["Syrups and sugar","Monin vanilla syrup",4.2,U.L,18.00,""],
+    ["Syrups and sugar","Monin sugar syrup",8.4,U.L,18.00,"Bought in. Do not batch by hand."],
+    ["Syrups and sugar","Maple syrup, Maple Gold",7,U.L,25.96,"Goes into the rosemary-thyme cordial."],
+    ["Syrups and sugar","Crystal sugar",2,U.KG,1.50,""],
+    ["Syrups and sugar","Monin grenadine",2.8,U.L,18.00,"1 L bottle is 320 mm, fits no shelf. Stays dry, decant from it. STAINS."],
+    ["Teas and dried flowers","Butterfly pea, dried",56,U.G,0.063,"Makes the tea and the concentrated squeeze bottle."],
+    ["Teas and dried flowers","Hibiscus, dried",168,U.G,0.031,""],
+    ["Fresh produce","Limes",88,U.P,0.3625,"GARNISH ONLY now the juice is Boiron. 4 wedges Ocean Mojito plus 1 Lychee Siren, 700 wedges at 8 a lime."],
+    ["Fresh produce","Lemons",1.6,U.KG,3.18,"Rim wedge for Forest Fairy and zest. Juice is Boiron."],
+    ["Fresh produce","Oranges",3,U.KG,1.645,"Juice and zest."],
+    ["Fresh produce","Strawberries",2,U.KG,5.00,"TESTING 29-08-2026: freeze dried strawberry slices, Droogfruit, 40 g pot, as the replacement. Fresh decays too fast."],
+    ["Fresh produce","Green grapes",2,U.KG,5.18,""],
+    ["Fresh produce","Mint",450,U.G,0.0265,""],
+    ["Fresh produce","Basil",88,U.G,0.0541,"Press once only."],
+    ["Fresh produce","Rosemary",60,U.G,0.0793,"First out of F2A to a damp cloth if the door tightens."],
+    ["Fresh produce","Thyme",60,U.G,0.0793,"Second out of F2A if the door tightens."],
+    ["Fresh produce","Jalapenos",10,U.P,0.59,"Seeds out as standard."],
+    ["Fresh produce","Pears, Conference",6,U.P,2.415,"OPEN: thin slices fall into the glass. Test drying them in the oven."],
+    ["Fresh produce","Passion fruit, fresh",4,U.P,0.665,"Garnish only, never juiced."],
+    ["Dry goods and specials","Fee Foam or aquafaba",1,U.B,3.19,"This is the foam. No eggs are stocked."],
+    ["Dry goods and specials","Cocktail cherries",1,U.J,1.99,""],
+    ["Dry goods and specials","Fine sea salt",1,U.PK,3.69,"Goes into the rosemary-lemon rim mix."],
+    ["Dry goods and specials","Alpro Barista oat milk",10,U.L,2.79,"Coffee only. No drink in the ten uses it."],
+    ["Bar consumables","Ice, cubed and crushed",14,U.KG,0.89,"Only a purchase if the machine is not repaired in time. If it is, set this to 0."],
+    ["Bar consumables","Straws, cloths, wipes",1,U.S,5.00,""],
+    ["Bottled and chilled","Coca-Cola",null,U.B,null,"Set your own par."],
+    ["Bottled and chilled","Cola Zero",null,U.B,null,"Set your own par."],
+    ["Bottled and chilled","Fanta",null,U.B,null,"Set your own par."],
+    ["Bottled and chilled","Sprite or Red Bull",null,U.B,null,"DECIDE WHICH. The menu lists them as one line."],
+    ["Bottled and chilled","Royal Bliss Ginger Ale",null,U.B,null,"Not the same as the Royal Club ginger beer in the Mule."],
+    ["Bottled and chilled","Tonic water",null,U.B,null,"Set your own par."],
+    ["Bottled and chilled","Lipton Iced Tea Lemon, sparkling",null,U.B,null,"Set your own par."],
+    ["Bottled and chilled","Lipton Iced Tea Peach, still",null,U.B,null,"Set your own par."],
+    ["Bottled and chilled","SPA Rood, sparkling",null,U.B,null,"Also the soda for Forest Fairy and Ocean Mojito. Counted twice on purpose, bar and bottled service."],
+    ["Bottled and chilled","SPA Blauw, still",null,U.B,null,"Set your own par."],
+    ["Bottled and chilled","De Appelaere, 200 ml",null,U.B,null,"Set your own par."],
+    ["Bottled and chilled","Royal Club Bitter Lemon",null,U.B,null,"Set your own par."]
+  ].map(function (r, i) {
+    return { id:"s"+i, cat:r[0], name:r[1], need:r[2], unit:r[3], cost:r[4], note:r[5], prep:false };
+  });
+
+  function load(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
+  function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  var ROWS = load(LS_ROWS, null) || SEED.slice();
+  var HAVE = load(LS_HAVE, {});
+  var FILTER = "all";
+  function persist() { save(LS_ROWS, ROWS); save(LS_HAVE, HAVE); }
+  function n2(v) { return (Math.round(v * 100) / 100).toFixed(2); }
+  function tidy(v) { return String(Math.round(v * 1000) / 1000); }
+
+  function invHTML() {
+    var totNeed = 0, totHave = 0, totBuy = 0, unpriced = 0;
+    var body = ROWS.map(function (r, i) {
+      var have = Number(HAVE[r.id] || 0);
+      var need = r.need == null ? null : Number(r.need);
+      var short = need == null ? null : Math.max(0, need - have);
+      var priced = r.cost != null;
+      if (need != null && priced) {
+        totNeed += need * r.cost; totHave += Math.min(have, need) * r.cost; totBuy += short * r.cost;
+      }
+      if (!priced) unpriced++;
+      var pct = need ? Math.min(100, Math.round(have / need * 100)) : 0;
+      var cls = need == null ? "par" : (short > 0 ? "short" : "covered");
+      if (FILTER === "short" && cls !== "short") return "";
+      if (FILTER === "covered" && cls !== "covered") return "";
+      if (FILTER === "prep" && !r.prep) return "";
+      if (FILTER === "note" && !r.note) return "";
+      var bar = need == null ? "" :
+        '<div class="bar ' + (pct >= 100 ? "" : pct > 0 ? "part" : "none") + '"><span style="width:' + pct + '%"></span></div>' +
+        '<span class="barlbl">' + tidy(have) + " / " + tidy(need) + " " + esc(r.unit) + "  (" + pct + "%)</span>";
+      return '<tr class="' + cls + '" data-id="' + esc(r.id) + '">' +
+        "<td>" + esc(r.cat) + "</td>" +
+        '<td><span class="iv-name" contenteditable="true" data-f="name">' + esc(r.name) + "</span>" + bar +
+          '<div class="iv-note' + (r.note ? "" : " empty") + '" contenteditable="true" data-f="note" ' +
+          'data-ph="Add a note, dated">' + esc(r.note || "") + "</div></td>" +
+        '<td class="num"><span class="iv-need" contenteditable="true" data-f="need">' +
+          (need == null ? "set par" : tidy(need)) + "</span> " + esc(r.unit) + "</td>" +
+        '<td><input class="inv-qty" type="number" min="0" step="any" inputmode="decimal" data-id="' + esc(r.id) +
+          '" value="' + (HAVE[r.id] != null ? esc(HAVE[r.id]) : "") + '" aria-label="' + esc(r.name) +
+          '"><span class="inv-unit">' + esc(r.unit) + "</span></td>" +
+        '<td class="buy' + (short === 0 ? " ok" : "") + '">' +
+          (need == null ? "set par" : short > 0 ? tidy(short) + " " + esc(r.unit) : "covered") + "</td>" +
+        '<td class="num">' + (!priced ? '<span class="iv-tbd">price TBD</span>'
+          : short > 0 ? n2(short * r.cost) : "-") + "</td>" +
+        '<td><span class="chip ' + (r.prep ? "due" : "yes") + '" data-prep="' + esc(r.id) + '">' +
+          (r.prep ? "Yes" : "No") + "</span>" +
+          '<button class="iv-del" type="button" data-del="' + esc(r.id) + '" title="Delete row">&times;</button></td>' +
+        "</tr>";
+    }).join("");
+
+    return '<section class="section"><div class="section-head"><div class="smallcaps">Run sheet</div>' +
+      "<h2>Inventory</h2></div>" +
+      '<h3 style="font-size:20px;margin-top:8px">Staff</h3>' +
+      '<p class="legend">Every field on this page is editable. Click a name, a quantity or a note and type. ' +
+      'Use Add row for anything new and the cross to delete. Everything saves to this browser and survives a reload.</p>' +
+      '<div class="inv-filters"><span class="smallcaps">Filter</span>' +
+      '<select id="iv-filter">' +
+        ['all|All','short|Still to buy','covered|Covered','par|No par set','prep|Prep today','note|Has a note']
+          .map(function (o) { var p = o.split("|");
+            return '<option value="' + p[0] + '"' + (FILTER === p[0] ? " selected" : "") + ">" + p[1] + "</option>"; }).join("") +
+      "</select>" +
+      '<button type="button" id="iv-add">Add row</button>' +
+      '<button type="button" id="iv-reset">Reset to defaults</button></div>' +
+      (unpriced ? '<div class="src-warn" style="margin:0 0 14px"><b>' + unpriced +
+        " lines have no price yet.</b> They are counted in the quantities but not in the money below.</div>" : "") +
+      '<div class="tablewrap"><table class="wide"><thead><tr><th>Category</th><th>Ingredient and note</th>' +
+      "<th>Needed per week</th><th>Have on hand</th><th>Still to buy</th><th>Cost of shortfall</th><th>Prep</th>" +
+      "</tr></thead><tbody>" + body + "</tbody></table></div>" +
+      '<div class="inv-sum"><div><dt>Full week, everything priced</dt><dd>' + n2(totNeed) + "</dd></div>" +
+      "<div><dt>Value on hand</dt><dd>" + n2(totHave) + "</dd></div>" +
+      '<div><dt>Still to buy</dt><dd class="hi">' + n2(totBuy) + "</dd></div></div>" +
+      '<p class="legend">Money ignores any line marked price TBD, so the real figure is higher until ' +
+      'the two Boiron purees are priced.</p>' +
+      (typeof ownerBlockHTML === "function" ? ownerBlockHTML() : "") +
+      "</section>";
+  }
+
+  function invRender() { var r = document.getElementById("root"); if (r) render(); }
+
+  document.addEventListener("input", function (e) {
+    var q = e.target.closest && e.target.closest(".inv-qty[data-id]");
+    if (q) { HAVE[q.dataset.id] = q.value === "" ? undefined : Number(q.value); persist();
+             var s = document.getElementById("iv-filter"); FILTER = s ? s.value : FILTER; invRender(); return; }
+  });
+  document.addEventListener("change", function (e) {
+    if (e.target.id === "iv-filter") { FILTER = e.target.value; invRender(); }
+  });
+  document.addEventListener("blur", function (e) {
+    var el = e.target;
+    if (!el.dataset || !el.dataset.f) return;
+    var tr = el.closest("tr"); if (!tr) return;
+    var row = ROWS.filter(function (r) { return r.id === tr.dataset.id; })[0]; if (!row) return;
+    var val = el.textContent.trim();
+    if (el.dataset.f === "need") {
+      row.need = (val === "" || /^set par$/i.test(val)) ? null : (isNaN(parseFloat(val)) ? row.need : parseFloat(val));
+    } else if (el.dataset.f === "name") { if (val) row.name = val; }
+    else if (el.dataset.f === "note") { row.note = val; }
+    persist(); invRender();
+  }, true);
+  document.addEventListener("click", function (e) {
+    var p = e.target.closest && e.target.closest("[data-prep]");
+    if (p) { var r1 = ROWS.filter(function (r) { return r.id === p.dataset.prep; })[0];
+             if (r1) { r1.prep = !r1.prep; persist(); invRender(); } return; }
+    var d = e.target.closest && e.target.closest("[data-del]");
+    if (d) { var nm = (ROWS.filter(function (r) { return r.id === d.dataset.del; })[0] || {}).name || "this row";
+             if (window.confirm("Delete " + nm + "?")) {
+               ROWS = ROWS.filter(function (r) { return r.id !== d.dataset.del; }); persist(); invRender(); }
+             return; }
+    if (e.target.id === "iv-add") {
+      var name = window.prompt("Name of the new item");
+      if (!name) return;
+      var cat = window.prompt("Category", "Liquids") || "Uncategorised";
+      var unit = window.prompt("Unit, for example L, kg, g, pcs, bottle", "L") || "L";
+      ROWS.push({ id:"u" + Date.now(), cat:cat, name:name, need:null, unit:unit, cost:null, note:"", prep:false });
+      persist(); invRender(); return;
+    }
+    if (e.target.id === "iv-reset") {
+      if (window.confirm("Reset every row and every stock count back to the defaults?")) {
+        ROWS = SEED.slice(); HAVE = {}; persist(); invRender(); }
+      return;
+    }
+  });
+
+  if (typeof TABS !== "undefined" && TABS) TABS.inventory = invHTML;
 
   /* ---- 2. RAIL, SPRINT 1 ---------------------------------------------- */
   if (typeof RAIL !== "undefined" && Array.isArray(RAIL)) {
