@@ -76,6 +76,31 @@ td.buy.ok { color: var(--ink-soft); }
   border: 1px solid var(--gold-pale); }
 .chip.due { background: rgba(158,43,59,.12); color: #9E2B3B; }
 @media print { .iv-del, .inv-filters, .iv-note.empty { display: none; } }
+/* editable notes anywhere */
+.qn-wrap { margin-top: 8px; }
+.qn-lbl { display: block; font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 3px; }
+.qn { font-size: 12.5px; line-height: 1.55; color: var(--ink); padding: 5px 7px; border-radius: 6px;
+  border: 1px dashed rgba(168,134,60,.42); outline: none; min-height: 22px; background: rgba(168,134,60,.04); }
+.qn:focus { background: rgba(168,134,60,.14); border-color: var(--gold); border-style: solid; }
+.qn.empty::before { content: attr(data-ph); color: rgba(107,100,89,.55); font-style: italic; }
+.qn:focus.empty::before { content: ""; }
+/* station walkthrough */
+.qsteps { margin: 6px 0 0 18px; font-size: 14px; line-height: 1.65; }
+.qsteps li { margin-bottom: 5px; }
+.qsub { font-family: 'Marcellus', Georgia, serif; font-size: 13px; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--gold); margin: 14px 0 6px; }
+.qgar { margin: 0 0 0 18px; font-size: 13.5px; line-height: 1.6; columns: 2; column-gap: 26px; }
+.qgar li { break-inside: avoid; margin-bottom: 3px; }
+@media (max-width: 640px) { .qgar { columns: 1; } }
+/* prep table */
+.qmethod { font-size: 13px; line-height: 1.55; min-width: 240px; }
+.qdash { color: var(--ink-soft); font-style: italic; }
+.qopen { color: #9E2B3B; font-weight: 500; }
+.qflag { margin-top: 6px; padding: 5px 8px; border-left: 3px solid #9E2B3B;
+  background: rgba(158,43,59,.06); font-size: 12px; line-height: 1.5; }
+.qlink { border: none; background: none; color: var(--gold); font: inherit; text-decoration: underline;
+  cursor: pointer; padding: 0; }
 </style>
 <script>
 (function () {
@@ -452,24 +477,163 @@ td.buy.ok { color: var(--ink-soft); }
 
   if (typeof TABS !== "undefined" && TABS) TABS.inventory = invHTML;
 
-  /* ---- 2. RAIL, SPRINT 1 ---------------------------------------------- */
-  if (typeof RAIL !== "undefined" && Array.isArray(RAIL)) {
-    RAIL.length = 0;
-    [
-      { n:1, colour:"#3E7A32", label:{en:"Green",  nl:"Groen"},  contents:{en:"Lime juice, Boiron",              nl:"Limoensap, Boiron"},            drinks:6 },
-      { n:2, colour:"#D9C24E", label:{en:"Yellow", nl:"Geel"},   contents:{en:"Lemon juice, Boiron",             nl:"Citroensap, Boiron"},           drinks:2 },
-      { n:3, colour:"#FFFFFF", label:{en:"White",  nl:"Wit"},    contents:{en:"Lychee juice and coconut water",   nl:"Lycheesap en kokoswater"},      drinks:1 },
-      { n:4, colour:"#E8791D", label:{en:"Orange", nl:"Oranje"}, contents:{en:"Orange juice",                     nl:"Sinaasappelsap"},               drinks:3 },
-      { n:5, colour:"#8A6134", label:{en:"Brown",  nl:"Bruin"},  contents:{en:"Apple and pear juice, Jumbo DUO",  nl:"Appel-perensap, Jumbo DUO"},    drinks:2 },
-      { n:6, colour:"#23201C", label:{en:"Black",  nl:"Zwart"},  contents:{en:"Cranberry juice",                  nl:"Cranberrysap"},                 drinks:1 },
-      { n:7, colour:"#9E2B3B", label:{en:"Red",    nl:"Rood"},   contents:{en:"Hibiscus tea, strong",             nl:"Hibiscusthee, sterk"},          drinks:1 },
-      { n:8, colour:"#4C4C9D", label:{en:"Blue",   nl:"Blauw"},  contents:{en:"Butterfly pea tea, concentrated",  nl:"Vlindererwtthee, geconcentreerd"}, drinks:2 }
-    ].forEach(function (r) { RAIL.push(r); });
+
+  /* ==================================================================
+     4. RAIL, STATION LAYOUT, PREP AND FIFO
+     Rail rebuilt from the photo: no lime, no lemon, they are Boiron in
+     squeeze bottles on the tray. Prep gains a pre-batch instructions
+     column. Every note on both tabs is editable and saves.
+     ================================================================== */
+  var LS_NOTES = "quatro-notes-v1";
+  var NOTES = load(LS_NOTES, {});
+  function noteBox(id, ph) {
+    var v = NOTES[id] || "";
+    return '<div class="qn-wrap"><span class="qn-lbl">Notes</span>' +
+      '<div class="qn' + (v ? "" : " empty") + '" contenteditable="true" data-note="' + esc(id) +
+      '" data-ph="' + esc(ph || "Type here. It saves in this browser.") + '">' + esc(v) + "</div></div>";
   }
-  if (typeof RAIL_SECOND !== "undefined") {
-    RAIL_SECOND.en = "Squeeze bottles, on the right of the rail: cane sugar syrup, vanilla syrup. Behind them: pineapple, passionfruit, grenadine, cassis, coconut cream, condensed milk.";
-    RAIL_SECOND.nl = "Knijpflessen, rechts van de speedrail: rietsuikersiroop, vanillesiroop. Daarachter: ananas, passievrucht, grenadine, cassis, kokosroom, gecondenseerde melk.";
+  document.addEventListener("blur", function (e) {
+    var el = e.target;
+    if (!el.dataset || !el.dataset.note) return;
+    NOTES[el.dataset.note] = el.textContent.trim();
+    save(LS_NOTES, NOTES);
+    el.classList.toggle("empty", !el.textContent.trim());
+  }, true);
+
+  var RAIL2 = [
+    ["#3E7A32","Green","Apple and pear juice, Jumbo DUO smaak","The Hulk, Tropical Velvet"],
+    ["#D9C24E","Yellow","Passionfruit, pineapple, orange juice","Tropical Velvet, Pina Colada, Hibiscus Royale, Cosmopolitan, Amsterdam Sunrise"],
+    ["#FFFFFF","White","Coconut water and lychee juice","Lychee Siren"],
+    ["#9E2B3B","Red","Hibiscus tea, strong","Hibiscus Royale"],
+    ["#23201C","Black","Cranberry juice","Cosmopolitan"],
+    ["#4C4C9D","Blue","Butterfly pea tea","Lychee Siren, Ocean Mojito"]
+  ];
+
+  var STATION = [
+    ["1","In front of you","The speedrail. Six bottles, left to right as the photo: passionfruit, pineapple, apple-pear, orange, cranberry, hibiscus."],
+    ["2","Turn right","The Monin bottles, spouted and standing: sugar syrup, vanilla, grenadine."],
+    ["3","Next, the tray","Every squeeze bottle. Boiron lime, Boiron lemon, lychee cordial, lychee-lime cordial, mint syrup, cassis, coconut cream, condensed milk, concentrated butterfly pea."],
+    ["4","Back in front of the rail","Two steel condiment holders, the garnish and condiment dispensers. See the list below."],
+    ["5","Between the two holders","The two big squeeze bottles: strawberry puree and passionfruit puree."],
+    ["6","Directly behind","The crushed ice bucket, then the cubed ice bucket."]
+  ];
+
+  var GARNISH = [
+    "Lime wedges, cut fresh",
+    "Pineapple chunks, from the can",
+    "Mint sprigs for garnish, mint leaves for bashing and shaking",
+    "Basil leaves",
+    "Passion fruit, for cutting in half",
+    "Grapes, cut in half",
+    "Strawberries, cut in half",
+    "Jalapeno wheels cut in half, for muddling",
+    "Jalapeno wheels whole, for garnish. REMOVE THE SEEDS",
+    "Orange zests",
+    "Lychees, from the can",
+    "Pears, thinly sliced"
+  ];
+
+  function railHTML() {
+    return '<section class="section"><div class="section-head"><div class="smallcaps">Run sheet</div>' +
+      "<h2>Rail</h2></div>" +
+      '<div class="src-warn" style="margin:0 0 16px"><b>Lime and lemon are not on the rail.</b> ' +
+      "Both are Boiron pasteurised puree and both live in squeeze bottles on the tray. " +
+      "Nothing on the rail is hand squeezed.</div>" +
+      '<div class="tablewrap"><table class="wide"><thead><tr><th>Slot</th><th>Colour</th><th>Contents</th>' +
+      "<th>Feeds</th></tr></thead><tbody>" +
+      RAIL2.map(function (r, i) {
+        return "<tr><td><span class=\"slot\"><span class=\"slot-n\">" + (i + 1) + "</span></span></td>" +
+          '<td><span class="slot"><span class="slot-dot" style="background:' + r[0] +
+            (r[0] === "#FFFFFF" ? ";border:1px solid var(--gold-pale)" : "") + '"></span>' + esc(r[1]) + "</span></td>" +
+          "<td>" + esc(r[2]) + "</td><td>" + esc(r[3]) + "</td></tr>";
+      }).join("") + "</tbody></table></div>" +
+      '<div class="panel"><h3>The station, clockwise</h3>' +
+      '<ol class="qsteps">' + STATION.map(function (s) {
+        return "<li><b>" + esc(s[1]) + ".</b> " + esc(s[2]) + "</li>";
+      }).join("") + "</ol>" +
+      '<h4 class="qsub">In the two steel condiment holders</h4><ul class="qgar">' +
+      GARNISH.map(function (g) { return "<li>" + esc(g) + "</li>"; }).join("") + "</ul></div>" +
+      '<div class="flag"><strong>Note</strong>The Hulk and Tropical Velvet both take apple and pear, ' +
+      "which is what holds the green slot. The Eminence Matcha Mojito will take the same Jumbo apple-pear, " +
+      'but it is not on this sprint: it sits in <button class="qlink" type="button" data-goto="future">Future</button>.</div>' +
+      noteBox("rail-1", "Rail notes. Anything that changes at the station, type it here.") +
+      '<div class="flag"><strong>Note</strong>Do not batch simple syrup. It is bought in and in stock.</div>' +
+      noteBox("rail-2", "Syrup and Monin notes.") +
+      "</section>";
   }
+
+  var PREP2 = [
+    ["Butterfly pea tea","2 L","5 days","Speedrail blue bottle FR1A middle. 2 L brewing pitcher FR1B bottom.",
+     "Take the 2 L pitcher, fill with hot water. 6 to 8 g dried flowers, which is roughly 4 to 5 teaspoons, or 30 to 40 individual flowers, or one loose handful.",""],
+    ["Butterfly pea, strong infusion for depth","500 ml","5 days","Squeeze bottle, FR1C top shelf.",
+     "Take the 500 ml pitcher, fill with hot water. 6 to 8 g dried flowers, same measure as above. This is the concentrate that floats on the Ocean Mojito.",""],
+    ["Hibiscus tea, strong","2 L","48 HOURS MAX. Past that it turns bitter and Achraf will not be happy.",
+     "Speedrail red bottle FR1A middle. 2 L brewing pitcher FR1B bottom.",
+     "Take the 2 L pitcher, fill with hot water. One loose handful, about three quarters of a cup, 15 to 20 g. Steep 5 to 7 minutes. Because it is diluted you can leave the flowers in.",
+     "You wrote blue bottle here. Changed to red to match the rail, where hibiscus is the red slot. Confirm."],
+    ["Rosemary-thyme maple cordial","Big squeeze bottle","Months in the fridge, to be confirmed",
+     "FR1 door C top shelf.",
+     "In a large pot combine 1 L of maple syrup, which is 4 bottles, with 4 to 5 big rosemary sprigs, 4 to 5 thyme sprigs and 500 ml water. Bring to a boil, then simmer. Let it cool completely before it goes in the fridge.",
+     "Your mint syrup row says one week, but this row says mint syrup keeps months. Both cannot be right. Decide which."],
+    ["Lychee cordial","Large squeeze bottle","OPEN QUESTION","FR1 door C top or middle shelf.","",
+     "How long does juice from the can keep once opened? General food safety guidance for decanted canned fruit juice is 3 to 5 days refrigerated in a clean sealed container, never in the opened can. Treat that as the working rule until it is confirmed."],
+    ["Lychee-lime cordial","Small squeeze bottle","OPEN QUESTION","FR1 door C top or middle shelf.",
+     "Fill the small squeeze bottle half Boiron lime, half lychee cordial.",
+     "Inherits the shorter of the two keep windows, so it cannot outlast the lychee cordial."],
+    ["Coconut cream from the can","Small squeeze bottle","OPEN QUESTION","FR1 door C top or middle shelf.",
+     "Fill the small squeeze bottle using a funnel and a spoon. Tap the bottle on the board to help the cream go through.",
+     "General guidance for decanted canned coconut cream is 3 to 4 days refrigerated. Stir before every use, it separates."],
+    ["Boiron lemon juice","Squeeze bottle","Double check if 3 weeks","Big carton FR1 door A top. Small squeeze bottle at the station.","",
+     "Pasteurised, so it far outlasts hand squeezed. Confirm the figure on the carton, do not guess."],
+    ["Boiron lime juice","Squeeze bottle","Double check if 3 weeks","Big carton FR1 door A top. Small squeeze bottle at the station.","",
+     "Same as lemon. Confirm from the carton."],
+    ["Jade's homemade mint syrup","500 ml","1 week","FR1 door B.",
+     "Blanch 100 g mint leaves 30 seconds, shock in ice water, pat dry. Blend with 500 ml 1:1 sugar syrup, strain through a fine sieve or cloth. Bottle and refrigerate.",""],
+    ["Strawberry puree","Squeeze bottle","2 days","FR1 door C.","",""],
+    ["Passionfruit puree","Squeeze bottle","2 days","FR1 door C.","",""],
+    ["All speedrail juices, juiced at open","Rail bottles","72 hours maximum",
+     "FR1A middle shelf. Spares in FR1 and on the dry storage bottom shelves.","",""],
+    ["Cut garnish, caramelised pear, jalapeno slices","Tubs",
+     "Leaves and strawberries 24 hours if not same day. Lime wedges, pineapple chunks, grapes, jalapenos and orange zest 48 hours. Lychees, open question. In the end it is about discarding whatever no longer looks right.",
+     "Condiment boxes FR1 door B middle shelf. Fresh citrus and fruit in the big right cooler in the kitchen.","",
+     "Full garnish list is on the Rail tab, in the two steel condiment holders."],
+    ["Rosemary-lemon sea salt rim mix","Small bowl, enough for service","1 week in an airtight container",
+     "Sea salt in the dry drawer at the bar. Zester from the bar. Rosemary and lemon from the kitchen cooler.",
+     "Paper towel on a heatproof plate, rosemary spread on it, another sheet on top. Microwave 4 x 30 seconds on high until the leaves crumble to powder between your fingers but are still vibrant green. Grind coarse in a mortar, or with your fingers: some fine powder, some coarser bits. Measure 3 teaspoons of the powder into a small bowl with the sea salt, grate in a whole lemon zest, mix well. Airtight.",""]
+  ];
+
+  function prepHTML() {
+    return '<section class="section"><div class="section-head"><div class="smallcaps">Run sheet</div>' +
+      "<h2>Prep and FIFO</h2></div>" +
+      '<div class="warn"><strong>Label standard</strong>Every container carries a day dot plus tape with NAME, ' +
+      "MADE, USE BY. New stock goes behind old. Anything past date is binned at open.</div>" +
+      '<div class="tablewrap"><table class="wide"><thead><tr><th>Item</th><th>Yield</th><th>Keeps</th>' +
+      "<th>Home</th><th>Pre-batch instructions</th></tr></thead><tbody>" +
+      PREP2.map(function (r, i) {
+        var open = /OPEN QUESTION|Double check|to be confirmed/i.test(r[2]);
+        return '<tr' + (open ? ' class="par"' : "") + "><td><b>" + esc(r[0]) + "</b></td>" +
+          "<td>" + esc(r[1]) + "</td>" +
+          "<td" + (open ? ' class="qopen"' : "") + ">" + esc(r[2]) + "</td>" +
+          "<td>" + esc(r[3]) + "</td>" +
+          '<td class="qmethod">' + (r[4] ? esc(r[4]) : '<span class="qdash">Nothing to batch</span>') +
+          (r[5] ? '<div class="qflag">' + esc(r[5]) + "</div>" : "") +
+          noteBox("prep-" + i, "Note for " + r[0] + ".") + "</td></tr>";
+      }).join("") + "</tbody></table></div>" +
+      '<div class="flag"><strong>Still to confirm</strong>Three keep windows are open questions and one is a ' +
+      "contradiction: how long opened canned lychee juice keeps, how long lychees themselves keep, whether the " +
+      "Boiron cartons really are 3 weeks, and whether Jade's mint syrup keeps 1 week or months. " +
+      "Nothing here is guessed, the open ones are marked.</div>" +
+      noteBox("prep-general", "Anything that needs changing in prep, type it here. It saves and can be read back at revision.") +
+      "</section>";
+  }
+
+  document.addEventListener("click", function (e) {
+    var g = e.target.closest && e.target.closest("[data-goto]");
+    if (g && typeof TAB !== "undefined") { TAB = g.dataset.goto; render(); }
+  });
+
+  if (typeof TABS !== "undefined" && TABS) { TABS.rail = railHTML; TABS.prep = prepHTML; }
+
   if (typeof render === "function") render();
 })();
 </script>
