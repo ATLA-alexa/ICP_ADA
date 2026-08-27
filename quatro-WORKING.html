@@ -1766,7 +1766,11 @@ td.buy.ok { color: var(--ink-soft); }
 .qlink { border: none; background: none; color: var(--gold); font: inherit; text-decoration: underline;
   cursor: pointer; padding: 0; }
 /* booklet, rewritten for speed. One drink per page. */
-.bk-page { padding: 14mm 14mm 12mm; }
+/* The host already breaks after each .bk-page, so this only caps the height so
+   a drink can never spill onto a second sheet. No extra break here. */
+/* Plain block, never flex. A flex container fragments badly and Chrome emits
+   an extra blank sheet, which is what turned 10 pages into 11. */
+.bk-page { padding: 13mm 14mm 10mm; }
 .bk-head { border-bottom: 1px solid var(--gold); padding-bottom: 4mm; margin-bottom: 6mm; }
 .bk-head h2 { font-family: 'Marcellus', Georgia, serif; font-weight: 400; font-size: 25pt;
   letter-spacing: .04em; display: flex; align-items: center; gap: 10px; margin: 0; }
@@ -1783,8 +1787,15 @@ td.buy.ok { color: var(--ink-soft); }
 .bk-say { margin-top: 6mm; font-size: 11.5pt; line-height: 1.5; font-style: italic; color: var(--ink-soft); }
 .bk-flag { margin-top: 4mm; padding: 3mm 4mm; border-left: 3px solid #9E2B3B;
   background: rgba(158,43,59,.06); font-size: 10.5pt; line-height: 1.5; }
-.bk-notes { margin-top: 8mm; }
+.bk-house { margin-top: 2mm; font-size: 8.5pt; line-height: 1.35; color: var(--ink-soft); font-style: italic; }
+.bk-notes { margin-top: 7mm; }
 .bk-notes .bk-rule { border-bottom: 1px solid var(--gold-pale); height: 8mm; }
+.sl-b { width:26px;height:26px;border:1px solid var(--gold-pale);background:var(--limestone);
+  border-radius:6px;font:inherit;font-size:15px;line-height:1;cursor:pointer;color:var(--gold); }
+.sl-b:hover { background:rgba(168,134,60,.16); }
+.sl-i { width:56px;padding:4px 6px;margin:0 5px;font:inherit;font-size:14px;text-align:center;
+  border:1px solid var(--gold-pale);border-radius:6px;background:#fff; }
+.tablewrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
 </style>
 <script>
 (function () {
@@ -1976,7 +1987,7 @@ td.buy.ok { color: var(--ink-soft); }
      plus the two Boiron purees and the twelve bottled soft drinks.
      ================================================================== */
   var LS_ROWS = "quatro-inv-rows-v1", LS_HAVE = "quatro-inv-have-v1";
-  var U = { L:"L", KG:"kg", G:"g", P:"pcs", C:"cans", B:"bottle", J:"jar", PK:"pack", S:"set" };
+  var U = { L:"L", KG:"kg", G:"g", P:"pcs", C:"cans", B:"bottles", J:"jars", PK:"packs", S:"sets" };
 
   var SEED = [
     ["Liquids","Lychee juice",7,U.L,4.14,""],
@@ -2038,6 +2049,14 @@ td.buy.ok { color: var(--ink-soft); }
     return { id:"s"+i, cat:r[0], name:r[1], need:r[2], unit:r[3], cost:r[4], note:r[5], prep:false };
   });
 
+  /* Only these are actually made in house. Everything else is ordered, and an
+     ordered thing cannot be "prepped", so the chip is not offered on it. */
+  var PREPPABLE = ["Rosemary-lemon sea salt rim mix","Cut garnish, caramelised pear, jalapeno slices",
+    "Butterfly pea, dried","Hibiscus, dried","Limes","Lemons","Oranges","Strawberries","Green grapes",
+    "Mint","Basil","Rosemary","Thyme","Jalapenos","Pears, Conference","Passion fruit, fresh",
+    "Lychees in syrup, cordial","Coconut cream","Condensed milk"];
+  function canPrep(n) { return PREPPABLE.indexOf(n) !== -1; }
+
   function load(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
   function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
   var ROWS = load(LS_ROWS, null) || SEED.slice();
@@ -2081,8 +2100,10 @@ td.buy.ok { color: var(--ink-soft); }
           (need == null ? "set par" : short > 0 ? tidy(short) + " " + esc(r.unit) : "covered") + "</td>" +
         '<td class="num">' + (!priced ? '<span class="iv-tbd">price TBD</span>'
           : short > 0 ? n2(short * r.cost) : "-") + "</td>" +
-        '<td><span class="chip ' + (r.prep ? "due" : "yes") + '" data-prep="' + esc(r.id) + '">' +
-          (r.prep ? "Yes" : "No") + "</span>" +
+        "<td>" + (canPrep(r.name)
+          ? '<span class="chip ' + (r.prep ? "due" : "yes") + '" data-prep="' + esc(r.id) + '">' +
+            (r.prep ? "Yes" : "No") + "</span>"
+          : '<span class="qdash" title="Ordered in, nothing to prep">order</span>') +
           '<button class="iv-del" type="button" data-del="' + esc(r.id) + '" title="Delete row">&times;</button></td>' +
         "</tr>";
     }).join("");
@@ -2094,7 +2115,7 @@ td.buy.ok { color: var(--ink-soft); }
       'Use Add row for anything new and the cross to delete. Everything saves to this browser and survives a reload.</p>' +
       '<div class="inv-filters"><span class="smallcaps">Filter</span>' +
       '<select id="iv-filter">' +
-        ['all|All','short|Still to buy','covered|Covered','par|No par set','prep|Prep today','note|Has a note']
+        ['all|All','short|Still to buy','covered|Covered','prep|Prep today','note|Has a note']
           .map(function (o) { var p = o.split("|");
             return '<option value="' + p[0] + '"' + (FILTER === p[0] ? " selected" : "") + ">" + p[1] + "</option>"; }).join("") +
       "</select>" +
@@ -2103,13 +2124,16 @@ td.buy.ok { color: var(--ink-soft); }
       (unpriced ? '<div class="src-warn" style="margin:0 0 14px"><b>' + unpriced +
         " lines have no price yet.</b> They are counted in the quantities but not in the money below.</div>" : "") +
       '<div class="tablewrap"><table class="wide"><thead><tr><th>Category</th><th>Ingredient and note</th>' +
-      "<th>Needed per week</th><th>Have on hand</th><th>Still to buy</th><th>Cost of shortfall</th><th>Prep</th>" +
+      "<th>Needed per week</th><th>Have on hand</th><th>Still to buy</th>" +
+      '<th title="What the missing quantity will cost to order">What the shortfall costs</th><th>Prep</th>' +
       "</tr></thead><tbody>" + body + "</tbody></table></div>" +
-      '<div class="inv-sum"><div><dt>Full week, everything priced</dt><dd>' + n2(totNeed) + "</dd></div>" +
-      "<div><dt>Value on hand</dt><dd>" + n2(totHave) + "</dd></div>" +
-      '<div><dt>Still to buy</dt><dd class="hi">' + n2(totBuy) + "</dd></div></div>" +
-      '<p class="legend">Money ignores any line marked price TBD, so the real figure is higher until ' +
-      'the two Boiron purees are priced.</p>' +
+      '<div class="inv-sum"><div><dt>A full week, if you held nothing</dt><dd>' + n2(totNeed) + "</dd></div>" +
+      "<div><dt>Worth of what you already have</dt><dd>" + n2(totHave) + "</dd></div>" +
+      '<div><dt>What this week\'s order costs</dt><dd class="hi">' + n2(totBuy) + "</dd></div></div>" +
+      '<p class="legend">The last figure is the one to act on: it is the cost of everything still short. ' +
+      'Lines marked price TBD are counted in quantity but not in money, so the true order is higher ' +
+      'until the two Boiron purees are priced.</p>' +
+      salesHTML() +
       (typeof ownerBlockHTML === "function" ? ownerBlockHTML() : "") +
       "</section>";
   }
@@ -2186,36 +2210,31 @@ td.buy.ok { color: var(--ink-soft); }
   }, true);
 
   var RAIL2 = [
-    ["#3E7A32","Green","Apple and pear juice, Jumbo DUO smaak","The Hulk, Tropical Velvet"],
-    ["#D9C24E","Yellow","Passionfruit, pineapple, orange juice","Tropical Velvet, Pina Colada, Hibiscus Royale, Cosmopolitan, Amsterdam Sunrise"],
+    ["#4C4C9D","Blue","Butterfly pea tea","Lychee Siren, Ocean Mojito"],
     ["#FFFFFF","White","Coconut water and lychee juice","Lychee Siren"],
-    ["#9E2B3B","Red","Hibiscus tea, strong","Hibiscus Royale"],
+    ["#E8791D","Orange","Orange juice","Hibiscus Royale, Cosmopolitan, Amsterdam Sunrise"],
+    ["#D9C24E","Yellow","Passionfruit juice","Tropical Velvet"],
+    ["#C9973B","Gold","Pineapple juice","Pina Colada"],
+    ["#3E7A32","Green","Apple and pear juice, Jumbo DUO smaak","The Hulk, Tropical Velvet"],
     ["#23201C","Black","Cranberry juice","Cosmopolitan"],
-    ["#4C4C9D","Blue","Butterfly pea tea","Lychee Siren, Ocean Mojito"]
+    ["#9E2B3B","Red","Hibiscus tea, strong","Hibiscus Royale"]
   ];
 
   var STATION = [
-    ["1","In front of you","The speedrail. Six bottles, left to right as the photo: passionfruit, pineapple, apple-pear, orange, cranberry, hibiscus."],
-    ["2","Turn right","The Monin bottles, spouted and standing: sugar syrup, vanilla, grenadine."],
-    ["3","Next, the tray","Every squeeze bottle. Boiron lime, Boiron lemon, lychee cordial, lychee-lime cordial, mint syrup, cassis, coconut cream, condensed milk, concentrated butterfly pea."],
-    ["4","Back in front of the rail","Two steel condiment holders, the garnish and condiment dispensers. See the list below."],
-    ["5","Between the two holders","The two big squeeze bottles: strawberry puree and passionfruit puree."],
-    ["6","Directly behind","The crushed ice bucket, then the cubed ice bucket."]
+    ["In front of you","The speedrail, left to right: blue butterfly pea, white coconut and lychee, orange orange juice, yellow passionfruit, gold pineapple, green apple-pear, black cranberry, red hibiscus."],
+    ["Turn right","The Monin bottles, spouted and standing: sugar syrup, vanilla, grenadine."],
+    ["Next, the tray","Every squeeze bottle. Boiron lime, Boiron lemon, lychee cordial, lychee-lime cordial, rosemary-thyme maple cordial, Jade's mint syrup, cassis, coconut cream, condensed milk, concentrated butterfly pea."],
+    ["Back in front of the rail","The steel condiment holders, one bucket per item. See the list below."],
+    ["Between the two holders","The two big squeeze bottles, strawberry puree and passionfruit puree, and the two foamers: one pipette, one that gives drops."],
+    ["Directly behind","The crushed ice bucket, then the cubed ice bucket."]
   ];
 
   var GARNISH = [
-    "Lime wedges, cut fresh",
-    "Pineapple chunks, from the can",
-    "Mint sprigs for garnish, mint leaves for bashing and shaking",
-    "Basil leaves",
-    "Passion fruit, for cutting in half",
-    "Grapes, cut in half",
-    "Strawberries, cut in half",
-    "Jalapeno wheels cut in half, for muddling",
-    "Jalapeno wheels whole, for garnish. REMOVE THE SEEDS",
-    "Orange zests",
-    "Lychees, from the can",
-    "Pears, thinly sliced"
+    "Lime wedges, cut fresh","Pineapple chunks, from the can",
+    "Mint sprigs for garnish","Mint leaves for bashing and shaking","Basil leaves",
+    "Passion fruit, for cutting in half","Grapes, cut in half","Strawberries, cut in half",
+    "Jalapeno wheels cut in half, for muddling","Jalapeno wheels whole, for garnish. SEEDS OUT",
+    "Orange zests","Lychees, from the can","Pears, thinly sliced"
   ];
 
   function railHTML() {
@@ -2223,7 +2242,11 @@ td.buy.ok { color: var(--ink-soft); }
       "<h2>Rail</h2></div>" +
       '<div class="src-warn" style="margin:0 0 16px"><b>Lime and lemon are not on the rail.</b> ' +
       "Both are Boiron pasteurised puree and both live in squeeze bottles on the tray. " +
-      "Nothing on the rail is hand squeezed.</div>" +
+      "Nothing on the rail is hand squeezed." +
+      '<div style="margin-top:9px"><b>Every liquid container carries a day dot.</b> Speedrail bottle or ' +
+      "squeeze bottle, no exception. Tape with NAME and USE BY, written as the weekday then the date: " +
+      "<b>MO / TU / WED / THU / FR / SAT / SUN  DD.MM.YY</b>. Every open juice container from the store goes " +
+      "in front, and the old one is marked with an X in permanent marker. Anything past date is binned at open.</div></div>" +
       '<div class="tablewrap"><table class="wide"><thead><tr><th>Slot</th><th>Colour</th><th>Contents</th>' +
       "<th>Feeds</th></tr></thead><tbody>" +
       RAIL2.map(function (r, i) {
@@ -2232,11 +2255,13 @@ td.buy.ok { color: var(--ink-soft); }
             (r[0] === "#FFFFFF" ? ";border:1px solid var(--gold-pale)" : "") + '"></span>' + esc(r[1]) + "</span></td>" +
           "<td>" + esc(r[2]) + "</td><td>" + esc(r[3]) + "</td></tr>";
       }).join("") + "</tbody></table></div>" +
+      '<div class="qflag" style="margin-top:10px">Passionfruit and pineapple both read yellow in the photo. ' +
+      "They are written here as yellow and gold so they can be told apart at speed. Two distinct caps needed.</div>" +
       '<div class="panel"><h3>The station, clockwise</h3>' +
       '<ol class="qsteps">' + STATION.map(function (s) {
-        return "<li><b>" + esc(s[1]) + ".</b> " + esc(s[2]) + "</li>";
+        return "<li><b>" + esc(s[0]) + ".</b> " + esc(s[1]) + "</li>";
       }).join("") + "</ol>" +
-      '<h4 class="qsub">In the two steel condiment holders</h4><ul class="qgar">' +
+      '<h4 class="qsub">In each condiment holder, one bucket per item</h4><ul class="qgar">' +
       GARNISH.map(function (g) { return "<li>" + esc(g) + "</li>"; }).join("") + "</ul></div>" +
       '<div class="flag"><strong>Note</strong>The Hulk and Tropical Velvet both take apple and pear, ' +
       "which is what holds the green slot. The Eminence Matcha Mojito will take the same Jumbo apple-pear, " +
@@ -2254,34 +2279,36 @@ td.buy.ok { color: var(--ink-soft); }
      "Take the 500 ml pitcher, fill with hot water. 6 to 8 g dried flowers, same measure as above. This is the concentrate that floats on the Ocean Mojito.",""],
     ["Hibiscus tea, strong","2 L","48 HOURS MAX. Past that it turns bitter and Achraf will not be happy.",
      "Speedrail red bottle FR1A middle. 2 L brewing pitcher FR1B bottom.",
-     "Take the 2 L pitcher, fill with hot water. One loose handful, about three quarters of a cup, 15 to 20 g. Steep 5 to 7 minutes. Because it is diluted you can leave the flowers in.",
-     "You wrote blue bottle here. Changed to red to match the rail, where hibiscus is the red slot. Confirm."],
-    ["Rosemary-thyme maple cordial","Big squeeze bottle","Months in the fridge, to be confirmed",
-     "FR1 door C top shelf.",
-     "In a large pot combine 1 L of maple syrup, which is 4 bottles, with 4 to 5 big rosemary sprigs, 4 to 5 thyme sprigs and 500 ml water. Bring to a boil, then simmer. Let it cool completely before it goes in the fridge.",
-     "Your mint syrup row says one week, but this row says mint syrup keeps months. Both cannot be right. Decide which."],
-    ["Lychee cordial","Large squeeze bottle","OPEN QUESTION","FR1 door C top or middle shelf.","",
-     "How long does juice from the can keep once opened? General food safety guidance for decanted canned fruit juice is 3 to 5 days refrigerated in a clean sealed container, never in the opened can. Treat that as the working rule until it is confirmed."],
-    ["Lychee-lime cordial","Small squeeze bottle","OPEN QUESTION","FR1 door C top or middle shelf.",
+     "Take the 2 L pitcher, fill with hot water. One loose handful, about three quarters of a cup, 15 to 20 g. Steep 5 to 7 minutes. Because it is diluted you can leave the flowers in.",""],
+    ["Rosemary-thyme maple cordial","Big squeeze bottle","About 2 months refrigerated",
+     "FR1 door C top shelf. Maple syrup bottles in dry storage, lower shelf. Rosemary and thyme in the kitchen fridge.",
+     "In a large pot combine 1 L of maple syrup, which is 4 bottles, with 4 to 5 big rosemary sprigs, 4 to 5 thyme sprigs and 500 ml water. Bring to a boil, then simmer. Let it cool completely before it goes in the fridge.",""],
+    ["Lychee cordial","Large squeeze bottle","5 days, house rule",
+     "FR1 door C top or middle shelf. When it runs out, press fresh lychee juice from the can into the large squeeze bottle. Cans in dry storage. Make sure no lychee flesh blocks the neck, and put the lychees themselves into a condiment box.",
+     "",
+     "House rule is 5 days. The research in the same brief puts decanted canned lychee juice at 2 to 3 days. The shorter figure is the safer one if the bottle smells or tastes at all off."],
+    ["Lychee-lime cordial","Small squeeze bottle","5 days, house rule","FR1 door C top or middle shelf.",
      "Fill the small squeeze bottle half Boiron lime, half lychee cordial.",
-     "Inherits the shorter of the two keep windows, so it cannot outlast the lychee cordial."],
-    ["Coconut cream from the can","Small squeeze bottle","OPEN QUESTION","FR1 door C top or middle shelf.",
-     "Fill the small squeeze bottle using a funnel and a spoon. Tap the bottle on the board to help the cream go through.",
-     "General guidance for decanted canned coconut cream is 3 to 4 days refrigerated. Stir before every use, it separates."],
-    ["Boiron lemon juice","Squeeze bottle","Double check if 3 weeks","Big carton FR1 door A top. Small squeeze bottle at the station.","",
-     "Pasteurised, so it far outlasts hand squeezed. Confirm the figure on the carton, do not guess."],
-    ["Boiron lime juice","Squeeze bottle","Double check if 3 weeks","Big carton FR1 door A top. Small squeeze bottle at the station.","",
-     "Same as lemon. Confirm from the carton."],
-    ["Jade's homemade mint syrup","500 ml","1 week","FR1 door B.",
-     "Blanch 100 g mint leaves 30 seconds, shock in ice water, pat dry. Blend with 500 ml 1:1 sugar syrup, strain through a fine sieve or cloth. Bottle and refrigerate.",""],
-    ["Strawberry puree","Squeeze bottle","2 days","FR1 door C.","",""],
-    ["Passionfruit puree","Squeeze bottle","2 days","FR1 door C.","",""],
-    ["All speedrail juices, juiced at open","Rail bottles","72 hours maximum",
-     "FR1A middle shelf. Spares in FR1 and on the dry storage bottom shelves.","",""],
+     "Inherits the shorter of its two parts, so it can never outlast the lychee cordial."],
+    ["Coconut cream from the can","Small squeeze bottle","4 days","FR1 door C top or middle shelf.",
+     "Fill the small squeeze bottle using a funnel and a spoon. Tap the bottle on the board to help the cream go through. Stir before every use, it separates.",""],
+    ["Boiron lemon puree","Squeeze bottle","8 days once opened","Big carton FR1 door A top. Small squeeze bottle at the station.","",
+     "Boiron pasteurised puree is 8 days refrigerated once opened, not 3 weeks. Same for every Boiron line."],
+    ["Boiron lime puree","Squeeze bottle","8 days once opened","Big carton FR1 door A top. Small squeeze bottle at the station.","",""],
+    ["Boiron strawberry puree","Squeeze bottle","8 days once opened","Tub FR1 door C. Big squeeze bottle between the condiment holders.","",""],
+    ["Boiron passionfruit puree","Squeeze bottle","8 days once opened","Tub FR1 door C. Big squeeze bottle between the condiment holders.","",""],
+    ["Jade's homemade mint syrup","About 1.5 L","About 2 months refrigerated","FR1 door B.",
+     "The sugar is what pulls the flavour out of the mint, so this is a cooked syrup, not a blended one. 1 kg sugar, 500 g water, 100 g mint, all into the pot together. Lowest possible heat for 2 to 3 hours, never boiling. Cover it and leave it a further day. No blending, no straining. Stronger alternative: 500 g mint to 500 g sugar makes a natural syrup, much more intense, and more expensive.",
+     "Your note says 1 kg sugar with 1.5 kg water in one breath and 500 g water in the next. Written here as 500 g. Confirm."],
+    ["Condensed milk, decanted","Squeeze bottle","7 days","Wide-bore squeeze bottle, FR1 door C.",
+     "Too thick for a standard nozzle. Wide mouth and a large bore, or it will not pour in service.",""],
+    ["All speedrail juices, juiced or decanted at open","Rail bottles","72 hours maximum",
+     "FR1A middle shelf. Spares in FR1 and on the dry storage bottom shelves.",
+     "The eight: butterfly pea tea, coconut water and lychee juice, orange juice, passionfruit juice, pineapple juice, apple and pear juice, cranberry juice, hibiscus tea.",""],
     ["Cut garnish, caramelised pear, jalapeno slices","Tubs",
-     "Leaves and strawberries 24 hours if not same day. Lime wedges, pineapple chunks, grapes, jalapenos and orange zest 48 hours. Lychees, open question. In the end it is about discarding whatever no longer looks right.",
+     "Leaves and strawberries 24 hours if not same day. Lime wedges, pineapple chunks, grapes, jalapenos and orange zest 48 hours. Peeled lychees 2 to 3 days in a sealed airtight box. In the end it is about discarding whatever no longer looks right.",
      "Condiment boxes FR1 door B middle shelf. Fresh citrus and fruit in the big right cooler in the kitchen.","",
-     "Full garnish list is on the Rail tab, in the two steel condiment holders."],
+     "Full garnish list is on the Rail tab, one bucket per item."],
     ["Rosemary-lemon sea salt rim mix","Small bowl, enough for service","1 week in an airtight container",
      "Sea salt in the dry drawer at the bar. Zester from the bar. Rosemary and lemon from the kitchen cooler.",
      "Paper towel on a heatproof plate, rosemary spread on it, another sheet on top. Microwave 4 x 30 seconds on high until the leaves crumble to powder between your fingers but are still vibrant green. Grind coarse in a mortar, or with your fingers: some fine powder, some coarser bits. Measure 3 teaspoons of the powder into a small bowl with the sea salt, grate in a whole lemon zest, mix well. Airtight.",""]
@@ -2290,24 +2317,25 @@ td.buy.ok { color: var(--ink-soft); }
   function prepHTML() {
     return '<section class="section"><div class="section-head"><div class="smallcaps">Run sheet</div>' +
       "<h2>Prep and FIFO</h2></div>" +
-      '<div class="warn"><strong>Label standard</strong>Every container carries a day dot plus tape with NAME, ' +
-      "MADE, USE BY. New stock goes behind old. Anything past date is binned at open.</div>" +
+      '<div class="warn"><strong>Label standard</strong>Every container carries a day dot plus tape with NAME ' +
+      "and USE BY, written as the weekday then the date: MO / TU / WED / THU / FR / SAT / SUN  DD.MM.YY. " +
+      "New stock goes in front, the old one marked with an X. Anything past date is binned at open.</div>" +
       '<div class="tablewrap"><table class="wide"><thead><tr><th>Item</th><th>Yield</th><th>Keeps</th>' +
       "<th>Home</th><th>Pre-batch instructions</th></tr></thead><tbody>" +
       PREP2.map(function (r, i) {
-        var open = /OPEN QUESTION|Double check|to be confirmed/i.test(r[2]);
-        return '<tr' + (open ? ' class="par"' : "") + "><td><b>" + esc(r[0]) + "</b></td>" +
-          "<td>" + esc(r[1]) + "</td>" +
-          "<td" + (open ? ' class="qopen"' : "") + ">" + esc(r[2]) + "</td>" +
-          "<td>" + esc(r[3]) + "</td>" +
+        return "<tr><td><b>" + esc(r[0]) + "</b></td><td>" + esc(r[1]) + "</td>" +
+          "<td>" + esc(r[2]) + "</td><td>" + esc(r[3]) + "</td>" +
           '<td class="qmethod">' + (r[4] ? esc(r[4]) : '<span class="qdash">Nothing to batch</span>') +
           (r[5] ? '<div class="qflag">' + esc(r[5]) + "</div>" : "") +
           noteBox("prep-" + i, "Note for " + r[0] + ".") + "</td></tr>";
       }).join("") + "</tbody></table></div>" +
-      '<div class="flag"><strong>Still to confirm</strong>Three keep windows are open questions and one is a ' +
-      "contradiction: how long opened canned lychee juice keeps, how long lychees themselves keep, whether the " +
-      "Boiron cartons really are 3 weeks, and whether Jade's mint syrup keeps 1 week or months. " +
-      "Nothing here is guessed, the open ones are marked.</div>" +
+      '<div class="panel"><h3>Shelf lives, settled</h3><ul class="qgar" style="columns:1">' +
+      "<li><b>Boiron purees, all of them:</b> 8 days refrigerated once opened. Lime, lemon, strawberry, passionfruit alike. Not 3 weeks.</li>" +
+      "<li><b>Canned lychee, juice and fruit:</b> research says 2 to 3 days. House rule is 5 days for the cordial. Use your nose.</li>" +
+      "<li><b>Maple cordial and Jade's mint syrup:</b> about 2 months refrigerated. Both are high sugar.</li>" +
+      "<li><b>Condensed milk, decanted:</b> 7 days.</li>" +
+      "<li><b>Coconut cream, decanted:</b> 4 days.</li>" +
+      "<li><b>Hibiscus:</b> 48 hours, and that one is not negotiable.</li></ul></div>" +
       noteBox("prep-general", "Anything that needs changing in prep, type it here. It saves and can be read back at revision.") +
       "</section>";
   }
@@ -2325,113 +2353,207 @@ td.buy.ok { color: var(--ink-soft); }
      Station blocks instead of prose. Read the bold word, do the line.
      Builds keeps the long version as the reference; this is what prints.
      ================================================================== */
+  /* ---- booklet, EN and NL, station blocks ---- */
+  var HEADSPACE = { en:"Every glass finishes 1 cm below the rim. Lychee Siren is the exception: leave room for the 50 ml poured at the table.",
+                    nl:"Elk glas eindigt 1 cm onder de rand. Lychee Siren is de uitzondering: laat ruimte voor de 50 ml die aan tafel wordt geschonken." };
   var BK = [
     { id:"lychee-siren", name:"Lychee Siren", sw:"#4C4C9D",
-      spec:"Hurricane  ·  Crushed  ·  Build and float",
-      b:[["Glass","50 lychee juice · 20 lychee cordial · 70 coconut water"],
-         ["Ice","Crushed, up to the neck. Only after the liquids, never before"],
-         ["Float","40 butterfly pea tea, off the jigger"],
-         ["Garnish","Golden glitter lychee · lime wedge"],
-         ["Tray","50 lychee-lime cordial in a brute, carried out with the drink. That is 25 lychee cordial plus 25 Boiron lime"]],
-      tbl:["Set the glass down in front of the guest","Pour the lychee-lime cordial over the indigo","Straw in, guest stirs"],
-      say:"No colouring. The blue is butterfly pea and it reacts to citrus." },
+      spec:{en:"Hurricane  ·  Crushed  ·  Build and float", nl:"Hurricane  ·  Crushed  ·  Opbouwen en laten drijven"},
+      b:[[{en:"Glass",nl:"Glas"},{en:"50 lychee juice · 20 lychee cordial · 70 coconut water",nl:"50 lycheesap · 20 lycheecordial · 70 kokoswater"}],
+         [{en:"Ice",nl:"Ijs"},{en:"Crushed, up to the neck. Only after the liquids, never before",nl:"Crushed, tot aan de hals. Pas na de vloeistoffen, nooit ervoor"}],
+         [{en:"Float",nl:"Drijven"},{en:"40 butterfly pea tea, off the jigger",nl:"40 vlindererwtthee, van de jigger"}],
+         [{en:"Garnish",nl:"Garnering"},{en:"Golden glitter lychee · lime wedge",nl:"Gouden glitterlychee · limoenpartje"}],
+         [{en:"Tray",nl:"Blad"},{en:"50 lychee-lime cordial in a brute, carried out with the drink. That is 25 lychee cordial plus 25 Boiron lime",nl:"50 lychee-limoencordial in een brute, mee naar tafel. Dat is 25 lycheecordial plus 25 Boiron limoen"}]],
+      tbl:{en:["Set the glass down in front of the guest","Pour the 50 ml lychee-lime cordial from the brute over the indigo","Straw in, guest stirs"],
+           nl:["Zet het glas voor de gast neer","Giet de 50 ml lychee-limoencordial uit de brute over het indigo","Rietje erin, gast roert"]},
+      say:{en:"No colouring. The blue is butterfly pea and it reacts to citrus.",nl:"Geen kleurstof. Het blauw is vlindererwt en reageert op citrus."} },
 
     { id:"forest-fairy", name:"Forest Fairy", sw:"#3E5140",
-      spec:"Highball  ·  Cubed  ·  Stir and strain",
-      b:[["Rim","Lemon wedge round the rim · dip half the rim in rosemary-lemon salt · set aside"],
-         ["Mixing glass","25 lemon · 50 rosemary-thyme maple cordial · 10 to 15 soda"],
-         ["Stir","Ice in, 10 to 12 seconds"],
-         ["Glass","Cubed ice"],
-         ["Finish","Strain in · soda to 1 cm · blowtorch the rosemary 3 seconds, blow it out · rosemary and raw thyme between the cubes"]],
-      say:"For someone who does not want anything sweet. Maple instead of sugar, two herbs, nothing else." },
+      spec:{en:"Highball  ·  Cubed  ·  Stir and strain", nl:"Highball  ·  Blokjes  ·  Roeren en zeven"},
+      b:[[{en:"Rim",nl:"Rand"},{en:"Lemon wedge round the rim · dip the FULL rim in rosemary-lemon salt · set aside",nl:"Citroenpartje rond de rand · doop de HELE rand in rozemarijn-citroenzout · apart zetten"}],
+         [{en:"Mixing glass",nl:"Mengglas"},{en:"25 lemon · 50 rosemary-thyme maple cordial · 10 to 15 soda",nl:"25 citroen · 50 rozemarijn-tijm-ahorncordial · 10 tot 15 spa rood"}],
+         [{en:"Stir",nl:"Roeren"},{en:"Ice in, 10 to 12 seconds",nl:"Ijs erbij, 10 tot 12 seconden"}],
+         [{en:"Glass",nl:"Glas"},{en:"Cubed ice",nl:"Ijsblokjes"}],
+         [{en:"Finish",nl:"Afmaken"},{en:"Strain in · soda to 1 cm · blowtorch the rosemary 3 seconds, blow it out · rosemary and raw thyme between the cubes",nl:"Erin zeven · spa rood tot 1 cm · brand de rozemarijn 3 seconden met de brander, uitblazen · rozemarijn en rauwe tijm tussen de blokjes"}]],
+      say:{en:"For someone who does not want anything sweet. Maple instead of sugar, two herbs, nothing else.",nl:"Voor wie niets zoets wil. Ahorn in plaats van suiker, twee kruiden, meer niet."} },
 
     { id:"the-hulk", name:"The Hulk", sw:"#6E8C3A",
-      spec:"Chilled coupe  ·  No ice in the glass  ·  Shake and fine strain",
-      b:[["Prep","Ice into the coupe to chill it · spread brown sugar over the pear slice with a spoon"],
-         ["Tin","Muddle 10 grapes to a puree · 10 basil leaves, press ONCE · 120 apple-pear · 20 lime · 15 simple"],
-         ["Shake","Tip the coupe ice into the tin · cap · hard 12 seconds, until the chips sound smaller"],
-         ["Finish","Fine strain into the chilled coupe · pear slice on the rim"]],
-      say:"Short on liquid? 5 to 15 soda keeps the crispness.",
-      flag:"TESTING: oven-dried pear slices, to stop them falling into the glass. Until that is signed off, slice on the kitchen machine as now." },
+      spec:{en:"Chilled coupe  ·  No ice in the glass  ·  Shake and fine strain", nl:"Gekoelde coupe  ·  Geen ijs in het glas  ·  Shaken en fijn zeven"},
+      b:[[{en:"Prep",nl:"Voorbereiden"},{en:"Ice into the coupe to chill it · spread brown sugar over the pear slice with a spoon",nl:"Ijs in de coupe om te koelen · verdeel bruine suiker met een lepel over het perenschijfje"}],
+         [{en:"Tin",nl:"Tin"},{en:"Muddle 10 grapes to a puree · 10 basil leaves, press ONCE · 120 apple-pear · 20 lime · 15 simple",nl:"Kneus 10 druiven tot puree · 10 basilicumblaadjes, EEN keer persen · 120 appel-peer · 20 limoen · 15 suikersiroop"}],
+         [{en:"Shake",nl:"Shaken"},{en:"Tip the coupe ice into the tin · cap · hard 12 seconds, until the chips sound smaller",nl:"Kiep het ijs uit de coupe in de tin · sluiten · hard 12 seconden, tot de ijsstukjes kleiner klinken"}],
+         [{en:"Finish",nl:"Afmaken"},{en:"Fine strain into the chilled coupe · pear slice on the rim",nl:"Fijn zeven in de gekoelde coupe · perenschijfje op de rand"}]],
+      say:{en:"Short on liquid? 5 to 15 soda keeps the crispness.",nl:"Te weinig vloeistof? 5 tot 15 spa rood houdt de frisheid."},
+      flag:{en:"TESTING: oven-dried pear slices, to stop them falling into the glass. Until that is signed off, slice on the kitchen machine as now.",nl:"IN TEST: in de oven gedroogde perenschijfjes, zodat ze niet in het glas vallen. Tot dat is goedgekeurd, snijden op de machine in de keuken."} },
 
     { id:"hibiscus-royale", name:"Hibiscus Royale", sw:"#9E2B3B",
-      spec:"Coppa  ·  Cubed  ·  Dry shake then wet shake",
-      b:[["Glass","Cubed ice · 4 strawberry halves, tucked so they show through"],
-         ["Tin","6 to 8 foam drops · 50 strawberry puree · zest, 3 big or 6 small · 50 orange · 40 lemon · 40 vanilla · 120 hibiscus"],
-         ["Shake","Dry 15 seconds, no ice.  Then ice, wet 12 seconds"],
-         ["Finish","Fine strain slowly to 1 cm · 3 hibiscus petals"]],
-      say:"Tilt the strainer so the thick pink cream flows in and the fruit stays in the tin." },
+      spec:{en:"Coppa  ·  Cubed  ·  Dry shake then wet shake", nl:"Coppa  ·  Blokjes  ·  Droog shaken, dan nat shaken"},
+      b:[[{en:"Glass",nl:"Glas"},{en:"Cubed ice · 4 strawberry halves, tucked so they show through",nl:"Ijsblokjes · 4 halve aardbeien, zo gestoken dat ze zichtbaar zijn"}],
+         [{en:"Tin",nl:"Tin"},{en:"6 to 8 foam drops · 50 strawberry puree · zest, 3 big or 6 small · 50 orange · 40 lemon · 40 vanilla · 120 hibiscus tea, all of it in the tin",nl:"6 tot 8 druppels schuimer · 50 aardbeienpuree · zeste, 3 grote of 6 kleine · 50 sinaasappel · 40 citroen · 40 vanille · 120 hibiscusthee, alles in de tin"}],
+         [{en:"Shake",nl:"Shaken"},{en:"Dry 15 seconds, no ice.  Then ice, wet 12 seconds",nl:"Droog 15 seconden, zonder ijs.  Dan ijs, nat 12 seconden"}],
+         [{en:"Finish",nl:"Afmaken"},{en:"Fine strain slowly to 1 cm · 3 hibiscus petals",nl:"Langzaam fijn zeven tot 1 cm · 3 hibiscusblaadjes"}]],
+      say:{en:"Tilt the strainer so the thick pink cream flows in and the fruit stays in the tin.",nl:"Kantel de zeef zodat de dikke roze crème erin loopt en het fruit in de tin blijft."} },
 
     { id:"jalapeno-mule", name:"Spicy Jalapeno Mule", sw:"#5E8C4A",
-      spec:"Highball  ·  Crushed  ·  Stir and strain",
-      b:[["Mixing glass","3 jalapeno slices, seeds out · 20 lime · 10 simple · muddle"],
-         ["Stir","Ice in, 8 to 10"],
-         ["Glass","Crushed ice"],
-         ["Finish","Strain in · ginger beer to 1 cm · cap with crushed"],
-         ["Garnish","Mint sprig, slapped once · jalapeno wheel, seeds out"]],
-      say:"The heat lands first, the ginger finishes it. Ask before leaving the seeds in." },
+      spec:{en:"Highball  ·  Crushed  ·  Stir and strain", nl:"Highball  ·  Crushed  ·  Roeren en zeven"},
+      b:[[{en:"Mixing glass",nl:"Mengglas"},{en:"3 jalapeno slices, seeds out · 20 lime · 10 simple · muddle",nl:"3 jalapenoschijfjes, zonder zaadjes · 20 limoen · 10 suikersiroop · kneuzen"}],
+         [{en:"Stir",nl:"Roeren"},{en:"Ice in, 8 to 10",nl:"Ijs erbij, 8 tot 10 keer"}],
+         [{en:"Glass",nl:"Glas"},{en:"Crushed ice",nl:"Crushed ice"}],
+         [{en:"Finish",nl:"Afmaken"},{en:"Strain in · ginger beer to 1 cm · cap with crushed",nl:"Erin zeven · gemberbier tot 1 cm · afdekken met crushed"}],
+         [{en:"Garnish",nl:"Garnering"},{en:"Mint sprig, slapped once · jalapeno wheel, seeds out",nl:"Munttakje, een keer aangetikt · jalapenowiel, zonder zaadjes"}]],
+      say:{en:"The heat lands first, the ginger finishes it. Ask before leaving the seeds in.",nl:"De hitte komt eerst, de gember maakt het af. Vraag het voor je de zaadjes laat zitten."} },
 
     { id:"ocean-mojito", name:"Ocean Mojito", sw:"#5A5AA0",
-      spec:"Hurricane  ·  Crushed  ·  Muddle, shake, layer, top",
-      b:[["Glass","Muddle 4 lime wedges · bash 8 to 10 mint leaves"],
-         ["Tin","20 cassis · 20 Jade's mint syrup · 15 lime · ice · shake hard"],
-         ["Churn","Fill HALF with crushed · churn 8 to 10 with the bar spoon until it takes the mojito look"],
-         ["Build","Fine strain the purple over · more crushed until it is covered · soda to 2 cm"],
-         ["Float","15 to 20 concentrated butterfly pea, off the spoon, for the layer"],
-         ["Garnish","Mint sprig, slapped once · lime wedge on the ice"]],
-      say:"The layers are on purpose. One stir and the whole glass turns violet-blue." },
+      spec:{en:"Hurricane  ·  Crushed  ·  Muddle, shake, layer, top", nl:"Hurricane  ·  Crushed  ·  Kneuzen, shaken, laag, aanvullen"},
+      b:[[{en:"Glass",nl:"Glas"},{en:"Muddle 4 lime wedges · bash 8 to 10 mint leaves",nl:"Kneus 4 limoenpartjes · tik 8 tot 10 muntblaadjes aan"}],
+         [{en:"Tin",nl:"Tin"},{en:"20 cassis · 20 Jade's mint syrup · 15 lime · ice · shake hard",nl:"20 cassis · 20 muntsiroop van Jade · 15 limoen · ijs · hard shaken"}],
+         [{en:"Churn",nl:"Churnen"},{en:"Fill HALF with crushed · churn 8 to 10 with the bar spoon until it takes the mojito look",nl:"Vul HALF met crushed · churn 8 tot 10 keer met de barlepel tot het de mojito-look krijgt"}],
+         [{en:"Build",nl:"Opbouwen"},{en:"Fine strain the purple over · more crushed until it is covered · soda to 1 cm",nl:"Fijn zeef het paars eroverheen · meer crushed tot het bedekt is · spa rood tot 1 cm"}],
+         [{en:"Float",nl:"Drijven"},{en:"15 to 20 concentrated butterfly pea, off the spoon, for the layer",nl:"15 tot 20 geconcentreerde vlindererwt, van de lepel, voor de laag"}],
+         [{en:"Garnish",nl:"Garnering"},{en:"Mint sprig, slapped once · lime wedge on the ice",nl:"Munttakje, een keer aangetikt · limoenpartje op het ijs"}]],
+      say:{en:"The layers are on purpose. One stir and the whole glass turns violet-blue.",nl:"De lagen zijn met opzet. Een keer roeren en het hele glas wordt violetblauw."} },
 
     { id:"cosmopolitan", name:"Cosmopolitan", sw:"#C24D66",
-      spec:"Chilled coupe  ·  No ice in the glass  ·  Shake and fine strain",
-      b:[["Prep","Ice into the coupe"],
-         ["Tin","70 cranberry · 40 orange · 30 lime · 20 simple"],
-         ["Shake","Tip the coupe ice into the tin · cap · hard"],
-         ["Finish","Fine strain · twisted orange zest"]],
-      say:"Cranberry and lime do the work, the orange rounds the middle." },
+      spec:{en:"Chilled coupe  ·  No ice in the glass  ·  Shake and fine strain", nl:"Gekoelde coupe  ·  Geen ijs in het glas  ·  Shaken en fijn zeven"},
+      b:[[{en:"Prep",nl:"Voorbereiden"},{en:"Ice into the coupe",nl:"Ijs in de coupe"}],
+         [{en:"Tin",nl:"Tin"},{en:"70 cranberry · 40 orange · 30 lime · 20 simple",nl:"70 cranberry · 40 sinaasappel · 30 limoen · 20 suikersiroop"}],
+         [{en:"Shake",nl:"Shaken"},{en:"Tip the coupe ice into the tin · cap · hard",nl:"Kiep het ijs uit de coupe in de tin · sluiten · hard"}],
+         [{en:"Finish",nl:"Afmaken"},{en:"Fine strain to 1 cm · twisted orange zest",nl:"Fijn zeven tot 1 cm · gedraaide sinaasappelzeste"}]],
+      say:{en:"Cranberry and lime do the work, the orange rounds the middle.",nl:"Cranberry en limoen doen het werk, de sinaasappel rondt het midden af."} },
 
     { id:"amsterdam-sunrise", name:"Amsterdam Sunrise", sw:"#E8791D",
-      spec:"Highball  ·  Crushed  ·  Build and sink",
-      b:[["Glass","Crushed ice"],
-         ["Pour","180 orange juice"],
-         ["Sink","30 grenadine, slowly down the inside, so it settles and stays"],
-         ["Do not","Stir it"]],
-      say:"Leave it for first light. Stir once when you are ready for sunset." },
+      spec:{en:"Highball  ·  Crushed  ·  Build and sink", nl:"Highball  ·  Crushed  ·  Opbouwen en laten zakken"},
+      b:[[{en:"Glass",nl:"Glas"},{en:"Crushed ice",nl:"Crushed ice"}],
+         [{en:"Pour",nl:"Schenken"},{en:"180 orange juice, to 1 cm",nl:"180 sinaasappelsap, tot 1 cm"}],
+         [{en:"Sink",nl:"Laten zakken"},{en:"30 grenadine, slowly down the inside, so it settles and stays",nl:"30 grenadine, langzaam langs de binnenkant, zodat hij zakt en blijft liggen"}],
+         [{en:"Do not",nl:"Niet doen"},{en:"Stir it",nl:"Roeren"}]],
+      say:{en:"Leave it for first light. Stir once when you are ready for sunset.",nl:"Laat hem zo voor het eerste licht. Roer een keer als je klaar bent voor de zonsondergang."} },
 
     { id:"tropical-velvet", name:"Tropical Velvet", sw:"#C9973B",
-      spec:"Chilled coupe  ·  No ice in the glass  ·  Shake and fine strain",
-      b:[["Prep","Ice into the coupe"],
-         ["Tin","40 passionfruit juice · 30 apple-pear · 20 passionfruit puree · 20 lime · 10 vanilla"],
-         ["Shake","Ice · cap · hard 12 seconds"],
-         ["Finish","Fine strain · float half a passion fruit"]],
-      say:"Passionfruit alone is sharp. The apple and pear gives it somewhere to sit." },
+      spec:{en:"Chilled coupe  ·  No ice in the glass  ·  Shake and fine strain", nl:"Gekoelde coupe  ·  Geen ijs in het glas  ·  Shaken en fijn zeven"},
+      b:[[{en:"Prep",nl:"Voorbereiden"},{en:"Ice into the coupe",nl:"Ijs in de coupe"}],
+         [{en:"Tin",nl:"Tin"},{en:"40 passionfruit juice · 30 apple-pear · 20 passionfruit puree · 20 lime · 10 vanilla",nl:"40 passievruchtensap · 30 appel-peer · 20 passievruchtenpuree · 20 limoen · 10 vanille"}],
+         [{en:"Shake",nl:"Shaken"},{en:"Ice · cap · hard 12 seconds",nl:"Ijs · sluiten · hard 12 seconden"}],
+         [{en:"Finish",nl:"Afmaken"},{en:"Fine strain to 1 cm · float half a passion fruit",nl:"Fijn zeven tot 1 cm · een halve passievrucht laten drijven"}]],
+      say:{en:"Passionfruit alone is sharp. The apple and pear gives it somewhere to sit.",nl:"Passievrucht op zich is scherp. De appel-peer geeft hem een bodem."} },
 
     { id:"pina-colada", name:"Pina Colada", sw:"#E7DFCF",
-      spec:"Hurricane  ·  Blended in  ·  Blend",
-      b:[["Blender","150 pineapple · 80 coconut cream · 20 condensed milk · 10 lime · 100 g ice"],
-         ["Blend","Until creamy"],
-         ["Finish","Pour into the hurricane · 3 pineapple wedges"]],
-      say:"Blended, not shaken, so it pours thick. The condensed milk carries it." }
+      spec:{en:"Hurricane  ·  Blended in  ·  Blend", nl:"Hurricane  ·  Meegeblend  ·  Blenden"},
+      b:[[{en:"Blender",nl:"Blender"},{en:"150 pineapple · 80 coconut cream · 20 condensed milk · 10 lime · 100 g ice",nl:"150 ananas · 80 kokosroom · 20 gecondenseerde melk · 10 limoen · 100 g ijs"}],
+         [{en:"Blend",nl:"Blenden"},{en:"Until creamy",nl:"Tot het romig is"}],
+         [{en:"Finish",nl:"Afmaken"},{en:"Pour into the hurricane to 1 cm · 3 pineapple chunks",nl:"In de hurricane schenken tot 1 cm · 3 stukjes ananas"}]],
+      say:{en:"Blended, not shaken, so it pours thick. The condensed milk carries it.",nl:"Geblend, niet geshaket, dus hij schenkt dik. De gecondenseerde melk draagt hem."} }
   ];
 
   function bkPage(d) {
     var h = '<div class="bk-page"><div class="bk-head">' +
       '<h2><span class="bk-sw" style="background:' + d.sw + '"></span>' + esc(d.name) + "</h2>" +
-      '<div class="bk-spec">' + esc(d.spec) + "</div></div>";
+      '<div class="bk-spec">' + esc(t(d.spec)) + "</div>" +
+      '<div class="bk-house">' + esc(t(HEADSPACE)) + "</div></div>";
     h += '<div class="bk-blocks">' + d.b.map(function (r) {
-      return '<div class="bk-b"><span class="bk-k">' + esc(r[0]) + "</span>" +
-             '<span class="bk-v">' + esc(r[1]) + "</span></div>";
+      return '<div class="bk-b"><span class="bk-k">' + esc(t(r[0])) + "</span>" +
+             '<span class="bk-v">' + esc(t(r[1])) + "</span></div>";
     }).join("") + "</div>";
-    if (d.tbl) h += '<div class="bk-tbl"><span class="bk-k">At the table</span><ol>' +
-      d.tbl.map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ol></div>";
-    if (d.say) h += '<p class="bk-say"><b>Say.</b> ' + esc(d.say) + "</p>";
-    if (d.flag) h += '<p class="bk-flag"><b>Open.</b> ' + esc(d.flag) + "</p>";
-    h += '<div class="bk-notes"><span class="bk-k">My notes</span>' +
+    if (d.tbl) h += '<div class="bk-tbl"><span class="bk-k">' +
+      (LANG === "nl" ? "Aan tafel" : "At the table") + "</span><ol>" +
+      t(d.tbl).map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ol></div>";
+    if (d.say) h += '<p class="bk-say"><b>' + (LANG === "nl" ? "Zeg dit." : "Say.") + "</b> " + esc(t(d.say)) + "</p>";
+    if (d.flag) h += '<p class="bk-flag">' + esc(t(d.flag)) + "</p>";
+    h += '<div class="bk-notes"><span class="bk-k">' + (LANG === "nl" ? "Mijn aantekeningen" : "My notes") + "</span>" +
       '<div class="bk-rule"></div><div class="bk-rule"></div><div class="bk-rule"></div><div class="bk-rule"></div></div>';
     return h + "</div>";
   }
-  if (typeof bookletHTML === "function" || true) {
-    window.bookletHTML = function () { return BK.map(bkPage).join(""); };
+  window.bookletHTML = function () { return BK.map(bkPage).join(""); };
+
+
+  /* ==================================================================
+     6. STORAGE and the SALES COUNTER
+     ================================================================== */
+  var F1 = [
+    ["A","Top","Boiron lemon, Boiron lime, lychee juice, coconut water"],
+    ["A","Middle","Rail refills"],
+    ["A","Bottom","Open cartons and bottles"],
+    ["B","Middle","The two condiment boxes"],
+    ["C","All shelves","Purees, every squeeze bottle, and the open cans"]
+  ];
+  function storageHTML() {
+    var byDoor = {};
+    F1.forEach(function (r) { (byDoor[r[0]] = byDoor[r[0]] || []).push(r); });
+    var h = '<section class="section"><div class="section-head"><div class="smallcaps">Run sheet</div>' +
+      "<h2>Storage</h2></div>" +
+      '<div class="panel"><h3>Fridge 1, mocktail liquids</h3>' +
+      '<div class="tablewrap"><table class="wide"><thead><tr><th>Door</th><th>Shelf</th><th>What lives there</th>' +
+      "</tr></thead><tbody>" +
+      F1.map(function (r) {
+        return "<tr><td><b>F1" + r[0] + "</b></td><td>" + esc(r[1]) + "</td><td>" + esc(r[2]) + "</td></tr>";
+      }).join("") + "</tbody></table></div></div>" +
+      '<div class="panel"><h3>Bottled soft drinks</h3><p>F2C, and F3 doors A, B and C. ' +
+      "The twelve bottled lines live there, not in Fridge 1. Fridge 1 is mocktail liquids only.</p></div>" +
+      '<div class="panel"><h3>Ice</h3><p>Crushed bucket then cubed bucket, behind the condiment holders ' +
+      "at the station. Filled at open and again at the midpoint.</p></div>" +
+      noteBox("storage-1", "Storage notes.") +
+      "</section>";
+    return h;
   }
+
+  /* ---- sales counter: how many of each cocktail went out this week ---- */
+  var LS_SALES = "quatro-sales-v1";
+  var SALES = load(LS_SALES, {});
+  var WEEK0 = new Date(2026, 7, 27); /* Thursday 27.08.2026, the first counted week */
+  function weekKey(d) {
+    var ms = d - WEEK0, w = Math.floor(ms / (7 * 864e5));
+    return w < 0 ? 0 : w;
+  }
+  function weekLabel(w) {
+    var a = new Date(WEEK0.getTime() + w * 7 * 864e5), b = new Date(a.getTime() + 6 * 864e5);
+    function f(x) { return ("0" + x.getDate()).slice(-2) + "." + ("0" + (x.getMonth() + 1)).slice(-2) + "." + String(x.getFullYear()).slice(-2); }
+    return f(a) + " to " + f(b);
+  }
+  var CURW = weekKey(new Date());
+  function salesHTML() {
+    var wk = SALES["w" + CURW] || {};
+    var total = 0;
+    var rows = BK.map(function (d) {
+      var n = Number(wk[d.id] || 0); total += n;
+      return '<tr><td><span class="slot"><span class="slot-dot" style="background:' + d.sw +
+        '"></span>' + esc(d.name) + "</span></td>" +
+        '<td><button class="sl-b" type="button" data-sales="-|' + esc(d.id) + '">&minus;</button>' +
+        '<input class="sl-i" type="number" min="0" step="1" inputmode="numeric" data-salesin="' + esc(d.id) +
+        '" value="' + n + '" aria-label="' + esc(d.name) + '">' +
+        '<button class="sl-b" type="button" data-sales="+|' + esc(d.id) + '">+</button></td>' +
+        '<td class="num">' + (total ? Math.round(n / total * 100) : 0) + "%</td></tr>";
+    }).join("");
+    var best = BK.slice().sort(function (a, b) { return (wk[b.id] || 0) - (wk[a.id] || 0); })[0];
+    return '<div class="panel"><h3>Drinks sold this week</h3>' +
+      '<p class="legend">Week ' + (CURW + 1) + ", " + weekLabel(CURW) +
+      ". Counting started 27.08.26. Tap plus as they go out, or type the number at close. " +
+      "It saves in this browser and rolls into a new week automatically.</p>" +
+      '<div class="tablewrap"><table class="wide"><thead><tr><th>Cocktail</th><th>Sold</th><th>Share</th>' +
+      "</tr></thead><tbody>" + rows +
+      '<tr><td><b>Total</b></td><td class="num"><b>' + total + "</b></td><td></td></tr>" +
+      "</tbody></table></div>" +
+      (total ? '<p class="legend"><b>Best seller so far: ' + esc(best.name) + "</b>, " +
+        (wk[best.id] || 0) + " of " + total + ". That is the one to keep stocked deepest." : "") +
+      "</div>";
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest("[data-sales]");
+    if (!b) return;
+    var p = b.dataset.sales.split("|"), k = "w" + CURW;
+    SALES[k] = SALES[k] || {};
+    SALES[k][p[1]] = Math.max(0, Number(SALES[k][p[1]] || 0) + (p[0] === "+" ? 1 : -1));
+    save(LS_SALES, SALES); render();
+  });
+  document.addEventListener("input", function (e) {
+    var i = e.target.closest && e.target.closest("[data-salesin]");
+    if (!i) return;
+    var k = "w" + CURW;
+    SALES[k] = SALES[k] || {};
+    SALES[k][i.dataset.salesin] = Math.max(0, Number(i.value || 0));
+    save(LS_SALES, SALES);
+  });
+
+  if (typeof TABS !== "undefined" && TABS) TABS.storage = storageHTML;
 
   if (typeof render === "function") render();
 })();
