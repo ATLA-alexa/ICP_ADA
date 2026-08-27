@@ -1,0 +1,284 @@
+<!-- ==========================================================================
+     QUATRO PATCH BLOCK, sprint 1
+     Paste this whole block into quatro.html immediately before </body>.
+     It does not touch any of your existing data or render code, it hooks the
+     page after it has drawn itself. Safe to remove by deleting the block.
+
+     What it does
+       1. Makes every ingredient in Builds clickable, opening a card that says
+          where the item comes from, Albert Heijn, Jumbo, Amazing Oriental,
+          Boiron, Sligro, or in house, plus its prep and keep window.
+       2. Rewrites the Rail table to the sprint 1 layout.
+     ========================================================================== -->
+<style>
+/* clickable ingredient affordance */
+.ing li { cursor: pointer; border-radius: 8px; transition: background .12s; }
+.ing li:hover, .ing li:focus-visible { background: rgba(168,134,60,.10); outline: none; }
+.ing li .nm { text-decoration: underline; text-decoration-color: var(--gold-pale);
+              text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.ing li::after { content: "i"; float: right; font-size: 10px; line-height: 15px;
+  width: 15px; height: 15px; text-align: center; border-radius: 50%; margin-left: 6px;
+  border: 1px solid var(--gold-pale); color: var(--gold); font-style: italic; flex: none; }
+@media print { .ing li::after { display: none; } .ing li .nm { text-decoration: none; } }
+/* source card */
+.src-row { display: grid; grid-template-columns: 86px 1fr; gap: 4px 12px; margin: 0 0 10px; font-size: 14px; line-height: 1.5; }
+.src-row dt { color: var(--gold); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; padding-top: 3px; }
+.src-row dd { margin: 0; }
+.src-tag { display: inline-block; font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 999px; margin-bottom: 12px; }
+.src-tag.bought { background: rgba(168,134,60,.14); color: var(--gold); }
+.src-tag.house  { background: rgba(62,81,64,.14); color: #3E5140; }
+.src-note { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--gold-pale);
+  font-size: 13px; line-height: 1.6; color: var(--ink-soft); }
+.src-warn { margin-top: 10px; padding: 8px 10px; border-left: 3px solid #9E2B3B;
+  background: rgba(158,43,59,.06); font-size: 13px; line-height: 1.55; }
+</style>
+<script>
+(function () {
+  "use strict";
+
+  /* ---- 1. WHERE EVERY INGREDIENT COMES FROM ---------------------------
+     buy   = bought in, shows the shop and pack
+     house = we make it, shows yield, keep window and where it lives
+     Keys are matched loosely against the ingredient name shown in Builds. */
+  var SRC = {
+    "lychee juice":        { t:"buy", shop:"Amazing Oriental", pack:"350 ml bottle, 1.45", home:"Rail slot 3, spare carton F1A bottom" },
+    "lychee cordial":      { t:"house", from:"Amazing Oriental canned lychees, 2.59 a can", yield:"700 ml", keeps:"NOT SET IN THE FILE", home:"F1B top tier, 700 ml bottle",
+                             warn:"This has no keep window written anywhere. Write yield, keep time and method before anyone batches it. A day dot with no keep time is a guess with a date on it." },
+    "lychee-lime cordial": { t:"house", from:"25 ml lychee cordial squeeze plus 25 ml Boiron lime puree", yield:"50 ml per drink, made to order", keeps:"Made to order, not stored", home:"Built at the station",
+                             note:"Carried to the table in a brute and poured over the indigo. Current workaround: poured from a jigger." },
+    "coconut water":       { t:"buy", shop:"Albert Heijn", pack:"1 L carton, 2.29", home:"F1A bottom tier",
+                             warn:"NOT ON THE BUY LIST. Until it is bought, Lychee Siren cannot be made." },
+    "butterfly pea tea":   { t:"house", from:"Amazing Oriental dried butterfly pea flower, 3.15 per 50 g", yield:"500 ml, plus a 250 ml strong infusion", keeps:"5 days", home:"F1B top tier",
+                             note:"Two bottles in the fridge at all times: it is re-batched before the old one runs out. The strong infusion is the one that goes in the Ocean Mojito squeeze bottle." },
+    "lime juice":          { t:"buy", shop:"Boiron, via Sligro 217504", pack:"Pasteurised lime puree, 1 kg", home:"F1A rail slot 1",
+                             note:"Boiron pasteurised puree, not hand squeezed. Fresh limes are still bought, but only for wedges and garnish." },
+    "lemon juice":         { t:"buy", shop:"Boiron, via Sligro 217502", pack:"Pasteurised lemon puree, 1 kg", home:"F1A rail slot 2",
+                             note:"Boiron pasteurised puree, not hand squeezed. Fresh lemons are still bought for the rim wedge and garnish." },
+    "rosemary-lemon sea salt": { t:"house", from:"Sea salt, rosemary, lemon zest", yield:"Small bowl, enough for service", keeps:"1 week airtight", home:"Station 3 dry store",
+                             note:"Microwave the rosemary between paper towel, 4 x 30 seconds, until it crumbles but is still green. Grind coarse, mix 3 tsp with the salt and a whole lemon zest." },
+    "rosemary-thyme maple cordial": { t:"house", from:"Maple Gold syrup, 6.49 per 250 ml, plus fresh rosemary and thyme", yield:"1 L", keeps:"2 weeks", home:"F1B top tier, 2 x 700 ml bottles" },
+    "sparkling water":     { t:"buy", shop:"SPA Rood", pack:"330 ml bottles", home:"F1A bottom tier, 7 chilled" },
+    "rosemary":            { t:"buy", shop:"Albert Heijn", pack:"15 g pack, 1.19", home:"F2A top tier, damp cloth" },
+    "thyme":               { t:"buy", shop:"Albert Heijn", pack:"15 g pack, 1.19", home:"F2A top tier, damp cloth" },
+    "green grapes":        { t:"buy", shop:"Albert Heijn", pack:"500 g, 2.59", home:"F2A top tier" },
+    "basil":               { t:"buy", shop:"Albert Heijn", pack:"22 g pack, 1.19", home:"F2A top tier, damp cloth",
+                             note:"Press once only. A second press turns it bitter." },
+    "apple and pear juice":{ t:"buy", shop:"Jumbo", pack:"DUO smaak, 1 L", home:"F1A rail slot 5" },
+    "apple-pear":          { t:"buy", shop:"Jumbo", pack:"DUO smaak, 1 L", home:"F1A rail slot 5" },
+    "simple syrup":        { t:"buy", shop:"Monin", pack:"1 L, 18.00", home:"Squeeze bottle, second tier right of the rail",
+                             note:"Bought in. Do not batch this by hand." },
+    "caramelised pear":    { t:"house", from:"Conference pears, Albert Heijn, 4.83 per 2", yield:"Cut to order", keeps:"Same day", home:"F2A top tier, garnish tub",
+                             warn:"OPEN QUESTION: sliced thin the pear falls into the glass. Drying the slices in the oven first would hold the shape. Decide before service and write it here." },
+    "hibiscus tea":        { t:"house", from:"Amazing Oriental dried hibiscus, 3.89 per 125 g", yield:"2 L strong", keeps:"5 days", home:"F1B top tier, 4 x 700 ml bottles" },
+    "strawberries":        { t:"buy", shop:"Albert Heijn", pack:"500 g punnet", home:"F2A top tier",
+                             note:"Open question: check Sligro for a dried strawberry line as a fallback when fresh is out of season." },
+    "strawberry puree":    { t:"buy", shop:"Boiron, via A la Tarte", pack:"1 kg, 11.00", home:"Tub in F1C bottom, squeeze bottle in F1C top",
+                             warn:"Once decanted into a squeeze bottle it keeps 2 DAYS, not a week. Day dot it and bin it on day three." },
+    "foam drops":          { t:"buy", shop:"EKOPLAZA", pack:"Fee Foam, 250 g, 3.19", home:"Station 3 dry store",
+                             note:"Plant foamer. No eggs are stocked, so this is the foam in every drink that calls for one." },
+    "orange zest":         { t:"house", from:"Whole oranges, Albert Heijn, 3.29 per 2 kg", yield:"Cut to order", keeps:"Same day", home:"F2A bottom tier, cut from the whole fruit" },
+    "orange juice":        { t:"buy", shop:"Albert Heijn", pack:"2 L fresh with pulp, 3.99", home:"F1A rail slot 4" },
+    "vanilla syrup":       { t:"buy", shop:"Monin", pack:"1 L, 18.00", home:"Squeeze bottle, second tier right of the rail" },
+    "jalapeno":            { t:"buy", shop:"Albert Heijn", pack:"Each, 0.59", home:"F2A top tier, sliced into the garnish tub at open",
+                             note:"Seeds out as standard. Ask the guest before leaving them in." },
+    "ginger beer":         { t:"buy", shop:"Albert Heijn", pack:"Royal Club, 3 L for 9.96", home:"F1B bottom tier, laid on their side",
+                             note:"A 1 L bottle is 300 mm and will not stand under a 297 mm shelf. Lay it down, it is sealed." },
+    "mint":                { t:"buy", shop:"Albert Heijn", pack:"75 g family pack, 1.99", home:"F2A top tier, damp cloth" },
+    "cassis syrup":        { t:"buy", shop:"Boiron, via MAKRO", pack:"500 g, 10.63", home:"Tub in F1C bottom, squeeze bottle in F1C top",
+                             warn:"STAINS. This squeeze bottle is dedicated for life and never rotated onto another product." },
+    "fresh mint syrup":    { t:"house", from:"Jade's recipe, blanched mint and simple syrup", yield:"500 ml", keeps:"1 week", home:"F1B top tier",
+                             note:"Blanch 100 g mint 30 seconds, shock in ice water, pat dry, blend with 500 ml 1:1 syrup, strain fine." },
+    "cranberry juice":     { t:"buy", shop:"Albert Heijn", pack:"1 L, 2.49", home:"F1A bottom tier" },
+    "grenadine":           { t:"buy", shop:"Monin", pack:"1 L, 18.00", home:"DRY shelf 4, squeeze bottle in F1C top",
+                             warn:"The 1 L Monin bottle is 320 mm and fits no shelf in the cabinet. It stays in dry store and you decant from it. STAINS, dedicated squeeze bottle." },
+    "passionfruit juice":  { t:"buy", shop:"Albert Heijn", pack:"CoolBest, 500 ml, 3.39", home:"F1A bottom tier" },
+    "passionfruit puree":  { t:"buy", shop:"Boiron, via A la Tarte", pack:"1 kg, 14.00", home:"Tub in F1C bottom, squeeze bottle in F1C top" },
+    "fresh passion fruit": { t:"buy", shop:"Albert Heijn", pack:"6 for 3.99", home:"F2A top tier", note:"Garnish only. Never juiced." },
+    "pineapple juice":     { t:"buy", shop:"Albert Heijn", pack:"1 L, 2.59", home:"F1A bottom tier" },
+    "coconut cream":       { t:"buy", shop:"Amazing Oriental", pack:"400 ml, 1.89", home:"Open can F1C bottom tier",
+                             note:"Stir before every use, it separates in the can." },
+    "condensed milk":      { t:"buy", shop:"Albert Heijn", pack:"397 ml tin, 2.79", home:"Wide-bore squeeze bottle, F1C top",
+                             warn:"Too thick for a standard nozzle, it needs the wide mouth bottle. Keeps 2 DAYS once decanted." },
+    "ice cubes":           { t:"house", from:"The ice machine in the barista zone", yield:"Insulated bin at station 2", keeps:"Filled at open and again at the midpoint", home:"Station 2",
+                             warn:"Depends on the machine being repaired in time. If it is not, ice is a bought line at 0.89 per kg and someone has to carry it." },
+    "ice":                 { t:"house", from:"The ice machine in the barista zone", yield:"Insulated bin at station 2", keeps:"Filled at open and again at the midpoint", home:"Station 2",
+                             warn:"Depends on the machine being repaired in time." },
+    "cocktail cherries":   { t:"buy", shop:"Albert Heijn", pack:"Jar of about 20, 1.99", home:"Open jar, F1C bottom tier" }
+  };
+
+  var order = Object.keys(SRC).sort(function (a, b) { return b.length - a.length; });
+  function lookup(name) {
+    var n = String(name || "").toLowerCase();
+    for (var i = 0; i < order.length; i++) if (n.indexOf(order[i]) !== -1) return { key: order[i], v: SRC[order[i]] };
+    return null;
+  }
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  function row(label, val) { return val ? "<dt>" + esc(label) + "</dt><dd>" + esc(val) + "</dd>" : ""; }
+
+  var sheet = document.getElementById("sheet"), scrim = document.getElementById("scrim");
+  function openSrc(title, v) {
+    if (!sheet) return;
+    var head = v.t === "house"
+      ? '<span class="src-tag house">We make this</span>'
+      : '<span class="src-tag bought">Bought in</span>';
+    var body = '<dl class="src-row">' +
+      (v.t === "house" ? row("Made from", v.from) + row("Yield", v.yield) + row("Keeps", v.keeps)
+                       : row("Supplier", v.shop) + row("Pack", v.pack)) +
+      row("Lives in", v.home) + "</dl>";
+    if (v.note) body += '<p class="src-note">' + esc(v.note) + "</p>";
+    if (v.warn) body += '<div class="src-warn"><b>Note.</b> ' + esc(v.warn) + "</div>";
+    var sw = document.getElementById("sheet-swatch");
+    if (sw) sw.style.background = v.t === "house" ? "#3E5140" : "var(--gold)";
+    document.getElementById("sheet-name").textContent = title;
+    document.getElementById("sheet-body").innerHTML = head + body;
+    sheet.hidden = false;
+    requestAnimationFrame(function () {
+      sheet.classList.add("open");
+      if (scrim) scrim.classList.add("open");
+    });
+    var c = document.getElementById("sheet-close"); if (c) c.focus();
+  }
+
+  document.addEventListener("click", function (e) {
+    var li = e.target.closest && e.target.closest(".ing li");
+    if (!li) return;
+    e.stopPropagation();
+    var nmEl = li.querySelector(".nm");
+    var raw = nmEl ? nmEl.childNodes[0].nodeValue || nmEl.textContent : li.textContent;
+    var hit = lookup(raw);
+    var title = String(raw).trim();
+    if (!hit) {
+      openSrc(title, { t: "buy", shop: "Not yet recorded", pack: "Add this line to the patch block",
+                       home: "", warn: "No source recorded for this ingredient yet." });
+      return;
+    }
+    openSrc(title, hit.v);
+  }, true);
+
+  /* keyboard access */
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    var li = e.target.closest && e.target.closest(".ing li");
+    if (li) { e.preventDefault(); li.click(); }
+  });
+  function tagUp() {
+    document.querySelectorAll(".ing li:not([tabindex])").forEach(function (li) {
+      li.setAttribute("tabindex", "0");
+      li.setAttribute("role", "button");
+    });
+  }
+  new MutationObserver(tagUp).observe(document.body, { childList: true, subtree: true });
+  tagUp();
+
+
+  /* ---- 3. INVENTORY, the two Boiron purees ----------------------------
+     These are the single most important missing lines. Paste the two rows
+     under section 4 below into your INV_ITEMS array so they join the
+     totals and the saved stock counts. Until you do, this banner shows on
+     the Inventory tab so it cannot be forgotten. */
+  function invBanner() {
+    var root = document.getElementById("root");
+    if (!root) return;
+    var tab = document.querySelector('#subtabs button[data-tab="inventory"]');
+    var onInv = !!(tab && tab.getAttribute("aria-selected") === "true");
+    var existing = document.getElementById("boiron-banner");
+    if (!onInv) { if (existing) existing.remove(); return; }
+    /* look for the actual inventory row, not the old TBD note, which also
+       contains the words "Boiron lime" */
+    /* Scan the tables only. Scanning the whole of #root would match this
+       banner's own text and toggle it forever. */
+    var tables = root.querySelectorAll("table"), scan = "";
+    for (var i = 0; i < tables.length; i++) scan += tables[i].innerText.toLowerCase();
+    if (scan.indexOf("lime puree") !== -1) {
+      if (existing) existing.remove();
+      return;
+    }
+    if (existing) return;
+    var d = document.createElement("div");
+    d.id = "boiron-banner";
+    d.className = "src-warn";
+    d.style.margin = "0 0 18px";
+    d.innerHTML = "<b>Two lines are missing from this table.</b> Boiron lime puree, " +
+      "<b>19.6 L a week</b>, Sligro 217504, and Boiron lemon puree, <b>9.1 L a week</b>, " +
+      "Sligro 217502. Every drink that calls for lime or lemon juice pours these, not hand " +
+      "squeezed fruit, so the sheet is short by about 29 litres a week and neither has a " +
+      "price yet. Add them to INV_ITEMS, then this notice disappears.";
+    root.insertBefore(d, root.firstChild);
+  }
+  new MutationObserver(invBanner).observe(document.getElementById("root") || document.body,
+    { childList: true, subtree: true });
+  invBanner();
+
+  /* ---- 2. RAIL, SPRINT 1 ---------------------------------------------- */
+  if (typeof RAIL !== "undefined" && Array.isArray(RAIL)) {
+    RAIL.length = 0;
+    [
+      { n:1, colour:"#3E7A32", label:{en:"Green",  nl:"Groen"},  contents:{en:"Lime juice, Boiron",              nl:"Limoensap, Boiron"},            drinks:6 },
+      { n:2, colour:"#D9C24E", label:{en:"Yellow", nl:"Geel"},   contents:{en:"Lemon juice, Boiron",             nl:"Citroensap, Boiron"},           drinks:2 },
+      { n:3, colour:"#FFFFFF", label:{en:"White",  nl:"Wit"},    contents:{en:"Lychee juice and coconut water",   nl:"Lycheesap en kokoswater"},      drinks:1 },
+      { n:4, colour:"#E8791D", label:{en:"Orange", nl:"Oranje"}, contents:{en:"Orange juice",                     nl:"Sinaasappelsap"},               drinks:3 },
+      { n:5, colour:"#8A6134", label:{en:"Brown",  nl:"Bruin"},  contents:{en:"Apple and pear juice, Jumbo DUO",  nl:"Appel-perensap, Jumbo DUO"},    drinks:2 },
+      { n:6, colour:"#23201C", label:{en:"Black",  nl:"Zwart"},  contents:{en:"Cranberry juice",                  nl:"Cranberrysap"},                 drinks:1 },
+      { n:7, colour:"#9E2B3B", label:{en:"Red",    nl:"Rood"},   contents:{en:"Hibiscus tea, strong",             nl:"Hibiscusthee, sterk"},          drinks:1 },
+      { n:8, colour:"#4C4C9D", label:{en:"Blue",   nl:"Blauw"},  contents:{en:"Butterfly pea tea, concentrated",  nl:"Vlindererwtthee, geconcentreerd"}, drinks:2 }
+    ].forEach(function (r) { RAIL.push(r); });
+  }
+  if (typeof RAIL_SECOND !== "undefined") {
+    RAIL_SECOND.en = "Squeeze bottles, on the right of the rail: cane sugar syrup, vanilla syrup. Behind them: pineapple, passionfruit, grenadine, cassis, coconut cream, condensed milk.";
+    RAIL_SECOND.nl = "Knijpflessen, rechts van de speedrail: rietsuikersiroop, vanillesiroop. Daarachter: ananas, passievrucht, grenadine, cassis, kokosroom, gecondenseerde melk.";
+  }
+  if (typeof render === "function") render();
+})();
+</script>
+
+<!-- ==========================================================================
+     4. THE TWO MISSING INVENTORY ROWS
+
+     Paste these into your INV_ITEMS array. Match the key names to the ones
+     your other rows already use, the values are what matter.
+
+       category  : "Boiron purees"
+       name      : "Boiron lime puree, pasteurised"
+       need      : 19.6            unit: "L"
+       unitCost  : null            <- PRICE NOT KNOWN YET, Sligro 217504
+       prep      : false
+
+       category  : "Boiron purees"
+       name      : "Boiron lemon puree, pasteurised"
+       need      : 9.1             unit: "L"
+       unitCost  : null            <- PRICE NOT KNOWN YET, Sligro 217502
+       prep      : false
+
+     Where 19.6 L and 9.1 L come from, at 140 servings per drink per week:
+
+       LIME    Lychee Siren 25 ml, The Hulk 20, Jalapeno Mule 20,
+               Ocean Mojito 15, Cosmopolitan 30, Tropical Velvet 20,
+               Pina Colada 10.  Total 19,600 ml.
+       LEMON   Forest Fairy 25 ml, Hibiscus Royale 40 ml.  Total 9,100 ml.
+
+     TWO KNOCK-ON EDITS TO ROWS YOU ALREADY HAVE
+
+       Limes, row 23. The 75 pieces was sized for hand squeezing. With the
+       juice coming from Boiron the fresh fruit is garnish only: Ocean
+       Mojito 4 wedges and Lychee Siren 1 wedge, 5 x 140 = 700 wedges, at
+       8 wedges a lime = 88 limes. It goes UP to 88, not down.
+
+       Lemons, row 24. Garnish and zest only now, 1 wedge per Forest Fairy,
+       140 wedges = 18 lemons, about 1.6 kg. Effectively unchanged.
+
+     THREE ROWS THAT NEED A DECISION, NOT A NUMBER
+
+       Strawberries, row 26. Check Sligro for a dried strawberry line as
+       the out-of-season fallback before committing to 2 kg of fresh.
+
+       Ice, row 39. The 14 kg only becomes a purchase if the machine is not
+       repaired in time. If it is repaired, this row is zero and the cost
+       of 12.46 comes off the weekly total.
+
+       Alpro Barista oat milk, row 38. Coffee only. It is in the bar sheet
+       but no drink in the ten uses it.
+     ========================================================================== -->
