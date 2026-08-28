@@ -2287,19 +2287,48 @@ td.buy.ok { color: var(--ink-soft); }
   function n2(v) { return (Math.round(v * 100) / 100).toFixed(2); }
   function tidy(v) { return String(Math.round(v * 1000) / 1000); }
 
+  /* Accept both decimal separators. The field is type=text on purpose: a
+     type=number input silently DROPS a comma, so "1,4" arrives as 14 and the
+     count is ten times out with nothing on screen to show it went wrong. */
+  function parseQty(v) {
+    v = String(v == null ? "" : v).trim().replace(",", ".");
+    if (v === "") return undefined;
+    var n = parseFloat(v);
+    return isNaN(n) ? undefined : Math.max(0, n);
+  }
+
+  /* One source of truth for a row's derived numbers. invHTML draws from it and
+     the in-place updater recomputes from it, so they can never drift. */
+  function calcRow(r) {
+    var have = Number(HAVE[r.id] || 0);
+    var need = r.need == null ? null : Number(r.need);
+    var short = need == null ? null : Math.max(0, need - have);
+    return { have: have, need: need, short: short, priced: r.cost != null,
+             pct: need ? Math.min(100, Math.round(have / need * 100)) : 0,
+             cls: need == null ? "par" : (short > 0 ? "short" : "covered") };
+  }
+  function invTotals() {
+    var need = 0, have = 0, buy = 0;
+    ROWS.forEach(function (r) {
+      var c = calcRow(r);
+      if (c.need != null && c.priced) {
+        need += c.need * r.cost;
+        have += Math.min(c.have, c.need) * r.cost;
+        buy  += c.short * r.cost;
+      }
+    });
+    return { need: need, have: have, buy: buy };
+  }
+
   function invHTML() {
     var totNeed = 0, totHave = 0, totBuy = 0, unpriced = 0;
     var body = ROWS.map(function (r, i) {
-      var have = Number(HAVE[r.id] || 0);
-      var need = r.need == null ? null : Number(r.need);
-      var short = need == null ? null : Math.max(0, need - have);
-      var priced = r.cost != null;
+      var c = calcRow(r);
+      var have = c.have, need = c.need, short = c.short, priced = c.priced, pct = c.pct, cls = c.cls;
       if (need != null && priced) {
         totNeed += need * r.cost; totHave += Math.min(have, need) * r.cost; totBuy += short * r.cost;
       }
       if (!priced) unpriced++;
-      var pct = need ? Math.min(100, Math.round(have / need * 100)) : 0;
-      var cls = need == null ? "par" : (short > 0 ? "short" : "covered");
       if (FILTER === "short" && cls !== "short") return "";
       if (FILTER === "covered" && cls !== "covered") return "";
       if (FILTER === "prep" && !r.prep) return "";
@@ -2316,14 +2345,14 @@ td.buy.ok { color: var(--ink-soft); }
           esc(nt) + "</div></td>" +
         '<td class="num"><span class="iv-need" contenteditable="true" data-f="need">' +
           (need == null ? et(SETPAR) : tidy(need)) + "</span> " + esc(unitLabel(r.unit)) + "</td>" +
-        '<td><input class="inv-qty" type="number" min="0" step="any" inputmode="decimal" data-id="' + esc(r.id) +
+        '<td><input class="inv-qty" type="text" inputmode="decimal" autocomplete="off" data-id="' + esc(r.id) +
           '" value="' + (HAVE[r.id] != null ? esc(HAVE[r.id]) : "") + '" aria-label="' + esc(nm) +
           '"><span class="inv-unit">' + esc(unitLabel(r.unit)) + "</span></td>" +
-        '<td class="buy' + (short === 0 ? " ok" : "") + '">' +
+        '<td data-c="buy" class="buy' + (short === 0 ? " ok" : "") + '">' +
           (need == null ? et(SETPAR)
             : short > 0 ? tidy(short) + " " + esc(unitLabel(r.unit))
             : et({ en: "covered", nl: "gedekt" })) + "</td>" +
-        '<td class="num">' + (!priced ? '<span class="iv-tbd">' +
+        '<td data-c="cost" class="num">' + (!priced ? '<span class="iv-tbd">' +
             et({ en: "price TBD", nl: "prijs volgt" }) + "</span>"
           : short > 0 ? n2(short * r.cost) : "-") + "</td>" +
         "<td>" + (canPrep(r.key || r.name)
@@ -2393,15 +2422,69 @@ td.buy.ok { color: var(--ink-soft); }
       "</section>";
   }
 
-  function invRender() { var r = document.getElementById("root"); if (r) render(); }
+  /* A full re-render is fine for structural changes, but it must not throw the
+     reader back to the top of a long table. */
+  function invRender() {
+    var y = window.scrollY || document.documentElement.scrollTop || 0;
+    if (document.getElementById("root")) render();
+    window.scrollTo(0, y);
+  }
+
+  /* Typing a stock count repaints only the cells that actually changed. No
+     re-render, so the page does not jump and the caret stays where it is. */
+  function refreshRow(id) {
+    var tr = document.querySelector('tr[data-id="' + id + '"]');
+    var r = ROWS.filter(function (x) { return x.id === id; })[0];
+    if (!tr || !r) return;
+    var c = calcRow(r);
+    tr.className = c.cls;
+
+    var bar = tr.querySelector(".bar"), lbl = tr.querySelector(".barlbl");
+    if (bar) {
+      bar.className = "bar " + (c.pct >= 100 ? "" : c.pct > 0 ? "part" : "none");
+      if (bar.firstChild) bar.firstChild.style.width = c.pct + "%";
+    }
+    if (lbl) lbl.textContent = tidy(c.have) + " / " + tidy(c.need) + " " +
+      unitLabel(r.unit) + "  (" + c.pct + "%)";
+
+    var buy = tr.querySelector('[data-c="buy"]');
+    if (buy) {
+      buy.className = "buy" + (c.short === 0 ? " ok" : "");
+      buy.textContent = c.need == null ? tt(SETPAR)
+        : c.short > 0 ? tidy(c.short) + " " + unitLabel(r.unit)
+        : tt({ en: "covered", nl: "gedekt" });
+    }
+    var cost = tr.querySelector('[data-c="cost"]');
+    if (cost) {
+      cost.innerHTML = !c.priced
+        ? '<span class="iv-tbd">' + et({ en: "price TBD", nl: "prijs volgt" }) + "</span>"
+        : c.short > 0 ? n2(c.short * r.cost) : "-";
+    }
+    refreshTotals();
+  }
+  function refreshTotals() {
+    var t = invTotals(), dd = document.querySelectorAll(".inv-sum dd");
+    if (dd.length >= 3) {
+      dd[0].textContent = n2(t.need);
+      dd[1].textContent = n2(t.have);
+      dd[2].textContent = n2(t.buy);
+    }
+  }
 
   document.addEventListener("input", function (e) {
     var q = e.target.closest && e.target.closest(".inv-qty[data-id]");
-    if (q) { HAVE[q.dataset.id] = q.value === "" ? undefined : Number(q.value); persist();
-             var s = document.getElementById("iv-filter"); FILTER = s ? s.value : FILTER; invRender(); return; }
+    if (!q) return;
+    HAVE[q.dataset.id] = parseQty(q.value);
+    persist();
+    refreshRow(q.dataset.id);
   });
   document.addEventListener("change", function (e) {
-    if (e.target.id === "iv-filter") { FILTER = e.target.value; invRender(); }
+    if (e.target.id === "iv-filter") { FILTER = e.target.value; invRender(); return; }
+    var q = e.target.closest && e.target.closest(".inv-qty[data-id]");
+    /* Only once the field is committed can a row legitimately drop out of a
+       filtered view. Doing that mid-keystroke would pull the row away as you
+       type in it. */
+    if (q && (FILTER === "short" || FILTER === "covered" || FILTER === "note")) invRender();
   });
   document.addEventListener("blur", function (e) {
     var el = e.target;
@@ -2409,12 +2492,20 @@ td.buy.ok { color: var(--ink-soft); }
     var tr = el.closest("tr"); if (!tr) return;
     var row = ROWS.filter(function (r) { return r.id === tr.dataset.id; })[0]; if (!row) return;
     var val = el.textContent.trim();
+    /* Re-render only on a real change. Blurring a field you merely looked at
+       should not rebuild the table under the reader. */
     if (el.dataset.f === "need") {
-      row.need = isSetPar(val) ? null : (isNaN(parseFloat(val)) ? row.need : parseFloat(val));
+      var nv = isSetPar(val) ? null : parseQty(val);
+      if (nv === undefined) nv = row.need;
+      if (nv === row.need) return;
+      row.need = nv;
     } else if (el.dataset.f === "name") {
-      if (val) { if (isNl()) row.nameNl = val; else row.name = val; }
+      if (!val) return;
+      if (isNl()) { if (val === row.nameNl) return; row.nameNl = val; }
+      else { if (val === row.name) return; row.name = val; }
     } else if (el.dataset.f === "note") {
-      if (isNl()) row.noteNl = val; else row.note = val;
+      if (isNl()) { if (val === (row.noteNl || "")) return; row.noteNl = val; }
+      else { if (val === (row.note || "")) return; row.note = val; }
     }
     persist(); invRender();
   }, true);
