@@ -568,14 +568,14 @@ var SECTIONS = [
         "Only THEN fill the hurricane with crushed ice.",
         "Gently top with the pea tea by floating it with the jigger (over the back of a spoon).",
         "Re-mound the ice to the rim.",
-        "Garnish with a golden glitter lychee and a lime wedge.",
+        "Garnish with 2 golden glitter lychees and a lime wedge.",
         "TO BE DECIDED: Place 20 ml lime in a small carafe on the tray, OR have the guest squeeze the lime wedge from the garnish."
       ], nl: [
         "Lycheesap, lycheecordial, dan kokoswater in de hurricane.",
         "Pas DAN de hurricane vullen met crushed ice.",
         "Voorzichtig de vlindererwtthee erop laten drijven met de maatbeker (over de bolle kant van een lepel).",
         "Het ijs weer opstapelen tot de rand.",
-        "Garneren met een gouden glitterlychee en een limoenpartje.",
+        "Garneren met 2 gouden glitterlychees en een limoenpartje.",
         "NOG TE BESLISSEN: 20 ml limoen in een klein karafje op het blad, OF de gast het limoenpartje laten uitknijpen."
       ]},
       table: { en: [
@@ -658,7 +658,8 @@ var SECTIONS = [
         { ref: "grapes", ml: 0, note: { en: "10 green grapes, muddled to a puree", nl: "10 witte druiven, tot puree gekneusd" } },
         { ref: "basil", ml: 0, note: { en: "10 leaves, press ONCE only. Any more and it turns bitter", nl: "10 blaadjes, EEN keer persen. Meer en hij wordt bitter" } },
         { ref: "applepear", ml: 120 }, { ref: "lime", ml: 20 }, { ref: "simple", ml: 15 },
-        { ref: "pear_gar", ml: 0, note: { en: "Slice on the edge of the glass", nl: "Schijfje op de rand van het glas" } }
+        { ref: "basil", ml: 0, note: { en: "GARNISH NOW: 1 big, beautiful leaf, floated on top", nl: "GARNERING NU: 1 groot, mooi blad, drijvend bovenop" } },
+        { ref: "pear_gar", ml: 0, note: { en: "ON HOLD, not in use. Oven-dried slices are in testing because thin ones fall into the glass. The basil leaf is the garnish until that is signed off", nl: "ON HOLD, niet in gebruik. In de oven gedroogde schijfjes zijn in test omdat dunne in het glas vallen. Het basilicumblaadje is de garnering tot dat is goedgekeurd" } }
       ],
       bar: { en: [
         "Add ice to the martini coupe to chill it. That is what gives the glass its fogged silhouette.",
@@ -667,7 +668,7 @@ var SECTIONS = [
         "Apple and pear juice, lime, simple syrup.",
         "Tip the ice from the coupe into the small tin, cap with the large tin, shake hard 12 seconds or until the ice chips sound smaller.",
         "Fine strain into the chilled coupe.",
-        "Caramelised pear slice on the edge of the glass."
+        "Float the biggest, most beautiful basil leaf on top. TESTING: oven-dried pear slices, to stop them falling into the glass. Until that is signed off, the basil leaf is the garnish."
       ], nl: [
         "Doe ijs in de martini coupe om hem te koelen. Dat geeft het glas zijn beslagen silhouet.",
         "Kneus 10 witte druiven tot ze puree worden.",
@@ -675,7 +676,7 @@ var SECTIONS = [
         "Appel-perensap, limoen, suikersiroop.",
         "Kiep het ijs uit de coupe in de kleine tin, sluit met de grote tin, shake 12 seconden hard of tot het ijs kleiner klinkt.",
         "Fijn zeven in de gekoelde coupe.",
-        "Schijfje gekaramelliseerde peer op de rand van het glas."
+        "Laat het grootste, mooiste basilicumblaadje bovenop drijven. IN TEST: in de oven gedroogde perenschijfjes, zodat ze niet in het glas vallen. Tot dat is goedgekeurd, is het basilicumblaadje de garnering."
       ]},
       table: null,
       sayLabel: { en: "Nice to know", nl: "Handig om te weten" },
@@ -788,7 +789,7 @@ var SECTIONS = [
       ],
       bar: { en: [
         "In the hurricane glass: muddle 3 lime wedges and bash 8-10 mint leaves.",
-        "Fill the glass with crushed ice.",
+        "Fill the glass a QUARTER with crushed ice.",
         "In a shaker: combine 20 ml cassis syrup, 20 ml fresh mint syrup, and 15 ml fresh lime juice. Add ice and shake hard.",
         "Fine strain the purple mixture into the hurricane glass over the crushed ice.",
         "Add more crushed ice to the rim.",
@@ -797,7 +798,7 @@ var SECTIONS = [
         "Garnish with a mint sprig and a lime wedge."
       ], nl: [
         "In het hurricaneglas: kneus 3 limoenpartjes en 8-10 muntblaadjes.",
-        "Vul het glas met crushed ice.",
+        "Vul het glas voor een KWART met crushed ice.",
         "In een shaker: 20 ml cassissiroop, 20 ml verse muntsiroop en 15 ml vers limoensap. Ijs toevoegen en hard shaken.",
         "Fijn zeven over het crushed ice in het hurricaneglas.",
         "Meer crushed ice toevoegen tot de rand.",
@@ -845,8 +846,8 @@ var SECTIONS = [
     },
     {
       id: "amsterdam-sunrise", name: "Amsterdam Sunrise", price: null, tool: "glass",
-      swatch: "#E8791D", glass: { en: "Highball", nl: "Highball" }, ice: { en: "Cubed", nl: "Blokjes" },
-      method: { en: "Build and sink", nl: "Opbouwen en laten zakken" },
+      swatch: "#E8791D", glass: { en: "Highball", nl: "Highball" }, ice: { en: "Crushed", nl: "Crushed" },
+      method: { en: "Build and float", nl: "Opbouwen en laten drijven" },
       desc: {
         en: "Fresh orange over ice with grenadine sunk beneath it. Grenadine is denser than juice, so it settles and stays there, and the glass arrives as first light.",
         nl: "Verse sinaasappel over ijs met grenadine die eronder zakt. Grenadine is zwaarder dan sap, dus het zakt en blijft liggen: het glas komt binnen als het eerste licht."
@@ -854,22 +855,25 @@ var SECTIONS = [
       tag: { en: "Stir it when you are ready for sunset", nl: "Roer hem als je klaar bent voor de zonsondergang" },
       build: [
         { ref: "orange", ml: 180, note: { en: "Fill", nl: "Aanvullen" } },
-        { ref: "grenadine", ml: 20, note: { en: "Sink slowly down the inside", nl: "Langzaam langs de binnenkant laten zakken" } }
+        { ref: "grenadine", ml: 30, note: { en: "Floated over the top, it rides on the crushed ice", nl: "Erover laten drijven, hij blijft op het crushed ice liggen" } },
+        { ref: "orangezest", ml: 0, note: { en: "Half orange wheel, laid on top of the crushed ice", nl: "Halve sinaasappelschijf, op het crushed ice gelegd" } }
       ],
       bar: { en: [
-        "Fill the highball with cubed ice.",
-        "Fill with orange juice.",
-        "Sink 20 ml grenadine slowly down the inside of the glass so it settles and stays.",
+        "Fill the highball with crushed ice.",
+        "Fill with orange juice to 1 cm below the rim.",
+        "Float 30 ml grenadine over the top. On crushed ice it rides on the surface instead of sinking, so the sunrise runs the other way up.",
+        "Lay a half orange wheel on top of the crushed ice.",
         "Do not stir."
       ], nl: [
-        "Vul de highball met ijsblokjes.",
-        "Aanvullen met sinaasappelsap.",
-        "Laat 20 ml grenadine langzaam langs de binnenkant zakken zodat het blijft liggen.",
+        "Vul de highball met crushed ice.",
+        "Aanvullen met sinaasappelsap tot 1 cm onder de rand.",
+        "Laat 30 ml grenadine erover drijven. Op crushed ice blijft hij aan de oppervlakte in plaats van te zakken, dus de zonsopgang loopt andersom.",
+        "Leg een halve sinaasappelschijf op het crushed ice.",
         "Niet roeren."
       ]},
       table: null,
-      say: { en: ["Leave it as it comes for first light. When you are ready for sunset, stir it once."],
-             nl: ["Laat hem zoals hij komt voor het eerste licht. Als je klaar bent voor de zonsondergang, roer een keer."] }
+      say: { en: ["On crushed the grenadine rides on top, so it arrives as sunset. Stir it down when you want first light."],
+             nl: ["Op crushed blijft de grenadine bovenop liggen, dus hij komt binnen als zonsondergang. Roer hem naar beneden als je het eerste licht wilt."] }
     },
     {
       id: "tropical-velvet", name: "Tropical Velvet", price: null, tool: "shaker",

@@ -568,14 +568,14 @@ var SECTIONS = [
         "Only THEN fill the hurricane with crushed ice.",
         "Gently top with the pea tea by floating it with the jigger (over the back of a spoon).",
         "Re-mound the ice to the rim.",
-        "Garnish with a golden glitter lychee and a lime wedge.",
+        "Garnish with 2 golden glitter lychees and a lime wedge.",
         "TO BE DECIDED: Place 20 ml lime in a small carafe on the tray, OR have the guest squeeze the lime wedge from the garnish."
       ], nl: [
         "Lycheesap, lycheecordial, dan kokoswater in de hurricane.",
         "Pas DAN de hurricane vullen met crushed ice.",
         "Voorzichtig de vlindererwtthee erop laten drijven met de maatbeker (over de bolle kant van een lepel).",
         "Het ijs weer opstapelen tot de rand.",
-        "Garneren met een gouden glitterlychee en een limoenpartje.",
+        "Garneren met 2 gouden glitterlychees en een limoenpartje.",
         "NOG TE BESLISSEN: 20 ml limoen in een klein karafje op het blad, OF de gast het limoenpartje laten uitknijpen."
       ]},
       table: { en: [
@@ -658,7 +658,8 @@ var SECTIONS = [
         { ref: "grapes", ml: 0, note: { en: "10 green grapes, muddled to a puree", nl: "10 witte druiven, tot puree gekneusd" } },
         { ref: "basil", ml: 0, note: { en: "10 leaves, press ONCE only. Any more and it turns bitter", nl: "10 blaadjes, EEN keer persen. Meer en hij wordt bitter" } },
         { ref: "applepear", ml: 120 }, { ref: "lime", ml: 20 }, { ref: "simple", ml: 15 },
-        { ref: "pear_gar", ml: 0, note: { en: "Slice on the edge of the glass", nl: "Schijfje op de rand van het glas" } }
+        { ref: "basil", ml: 0, note: { en: "GARNISH NOW: 1 big, beautiful leaf, floated on top", nl: "GARNERING NU: 1 groot, mooi blad, drijvend bovenop" } },
+        { ref: "pear_gar", ml: 0, note: { en: "ON HOLD, not in use. Oven-dried slices are in testing because thin ones fall into the glass. The basil leaf is the garnish until that is signed off", nl: "ON HOLD, niet in gebruik. In de oven gedroogde schijfjes zijn in test omdat dunne in het glas vallen. Het basilicumblaadje is de garnering tot dat is goedgekeurd" } }
       ],
       bar: { en: [
         "Add ice to the martini coupe to chill it. That is what gives the glass its fogged silhouette.",
@@ -667,7 +668,7 @@ var SECTIONS = [
         "Apple and pear juice, lime, simple syrup.",
         "Tip the ice from the coupe into the small tin, cap with the large tin, shake hard 12 seconds or until the ice chips sound smaller.",
         "Fine strain into the chilled coupe.",
-        "Caramelised pear slice on the edge of the glass."
+        "Float the biggest, most beautiful basil leaf on top. TESTING: oven-dried pear slices, to stop them falling into the glass. Until that is signed off, the basil leaf is the garnish."
       ], nl: [
         "Doe ijs in de martini coupe om hem te koelen. Dat geeft het glas zijn beslagen silhouet.",
         "Kneus 10 witte druiven tot ze puree worden.",
@@ -675,7 +676,7 @@ var SECTIONS = [
         "Appel-perensap, limoen, suikersiroop.",
         "Kiep het ijs uit de coupe in de kleine tin, sluit met de grote tin, shake 12 seconden hard of tot het ijs kleiner klinkt.",
         "Fijn zeven in de gekoelde coupe.",
-        "Schijfje gekaramelliseerde peer op de rand van het glas."
+        "Laat het grootste, mooiste basilicumblaadje bovenop drijven. IN TEST: in de oven gedroogde perenschijfjes, zodat ze niet in het glas vallen. Tot dat is goedgekeurd, is het basilicumblaadje de garnering."
       ]},
       table: null,
       sayLabel: { en: "Nice to know", nl: "Handig om te weten" },
@@ -788,7 +789,7 @@ var SECTIONS = [
       ],
       bar: { en: [
         "In the hurricane glass: muddle 3 lime wedges and bash 8-10 mint leaves.",
-        "Fill the glass with crushed ice.",
+        "Fill the glass a QUARTER with crushed ice.",
         "In a shaker: combine 20 ml cassis syrup, 20 ml fresh mint syrup, and 15 ml fresh lime juice. Add ice and shake hard.",
         "Fine strain the purple mixture into the hurricane glass over the crushed ice.",
         "Add more crushed ice to the rim.",
@@ -797,7 +798,7 @@ var SECTIONS = [
         "Garnish with a mint sprig and a lime wedge."
       ], nl: [
         "In het hurricaneglas: kneus 3 limoenpartjes en 8-10 muntblaadjes.",
-        "Vul het glas met crushed ice.",
+        "Vul het glas voor een KWART met crushed ice.",
         "In een shaker: 20 ml cassissiroop, 20 ml verse muntsiroop en 15 ml vers limoensap. Ijs toevoegen en hard shaken.",
         "Fijn zeven over het crushed ice in het hurricaneglas.",
         "Meer crushed ice toevoegen tot de rand.",
@@ -845,8 +846,8 @@ var SECTIONS = [
     },
     {
       id: "amsterdam-sunrise", name: "Amsterdam Sunrise", price: null, tool: "glass",
-      swatch: "#E8791D", glass: { en: "Highball", nl: "Highball" }, ice: { en: "Cubed", nl: "Blokjes" },
-      method: { en: "Build and sink", nl: "Opbouwen en laten zakken" },
+      swatch: "#E8791D", glass: { en: "Highball", nl: "Highball" }, ice: { en: "Crushed", nl: "Crushed" },
+      method: { en: "Build and float", nl: "Opbouwen en laten drijven" },
       desc: {
         en: "Fresh orange over ice with grenadine sunk beneath it. Grenadine is denser than juice, so it settles and stays there, and the glass arrives as first light.",
         nl: "Verse sinaasappel over ijs met grenadine die eronder zakt. Grenadine is zwaarder dan sap, dus het zakt en blijft liggen: het glas komt binnen als het eerste licht."
@@ -854,22 +855,25 @@ var SECTIONS = [
       tag: { en: "Stir it when you are ready for sunset", nl: "Roer hem als je klaar bent voor de zonsondergang" },
       build: [
         { ref: "orange", ml: 180, note: { en: "Fill", nl: "Aanvullen" } },
-        { ref: "grenadine", ml: 20, note: { en: "Sink slowly down the inside", nl: "Langzaam langs de binnenkant laten zakken" } }
+        { ref: "grenadine", ml: 30, note: { en: "Floated over the top, it rides on the crushed ice", nl: "Erover laten drijven, hij blijft op het crushed ice liggen" } },
+        { ref: "orangezest", ml: 0, note: { en: "Half orange wheel, laid on top of the crushed ice", nl: "Halve sinaasappelschijf, op het crushed ice gelegd" } }
       ],
       bar: { en: [
-        "Fill the highball with cubed ice.",
-        "Fill with orange juice.",
-        "Sink 20 ml grenadine slowly down the inside of the glass so it settles and stays.",
+        "Fill the highball with crushed ice.",
+        "Fill with orange juice to 1 cm below the rim.",
+        "Float 30 ml grenadine over the top. On crushed ice it rides on the surface instead of sinking, so the sunrise runs the other way up.",
+        "Lay a half orange wheel on top of the crushed ice.",
         "Do not stir."
       ], nl: [
-        "Vul de highball met ijsblokjes.",
-        "Aanvullen met sinaasappelsap.",
-        "Laat 20 ml grenadine langzaam langs de binnenkant zakken zodat het blijft liggen.",
+        "Vul de highball met crushed ice.",
+        "Aanvullen met sinaasappelsap tot 1 cm onder de rand.",
+        "Laat 30 ml grenadine erover drijven. Op crushed ice blijft hij aan de oppervlakte in plaats van te zakken, dus de zonsopgang loopt andersom.",
+        "Leg een halve sinaasappelschijf op het crushed ice.",
         "Niet roeren."
       ]},
       table: null,
-      say: { en: ["Leave it as it comes for first light. When you are ready for sunset, stir it once."],
-             nl: ["Laat hem zoals hij komt voor het eerste licht. Als je klaar bent voor de zonsondergang, roer een keer."] }
+      say: { en: ["On crushed the grenadine rides on top, so it arrives as sunset. Stir it down when you want first light."],
+             nl: ["Op crushed blijft de grenadine bovenop liggen, dus hij komt binnen als zonsondergang. Roer hem naar beneden als je het eerste licht wilt."] }
     },
     {
       id: "tropical-velvet", name: "Tropical Velvet", price: null, tool: "shaker",
@@ -1740,6 +1744,37 @@ td.buy.ok { color: var(--ink-soft); }
   border: 1px solid var(--gold-pale); }
 .chip.due { background: rgba(158,43,59,.12); color: #9E2B3B; }
 @media print { .iv-del, .inv-filters, .iv-note.empty { display: none; } }
+/* Inventory table. Six columns, a banded row per category, and no min-width,
+   so on a phone it reflows into stacked blocks instead of scrolling sideways. */
+.inv-t { width: 100%; border-collapse: collapse; font-size: 13px; }
+.inv-t th { background: var(--limestone-deep); font-size: 10px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink-soft); text-align: left; padding: 8px 10px; white-space: nowrap; }
+.inv-t td { padding: 9px 10px; border-bottom: 1px solid var(--limestone-deep); vertical-align: top; }
+.inv-t .num { text-align: right; font-variant-numeric: tabular-nums; }
+.inv-cat td { background: rgba(168,134,60,.16); border-bottom: 1px solid var(--gold-pale);
+  font-family: 'Marcellus', Georgia, serif; font-size: 12px; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--gold); padding: 8px 10px; }
+.inv-cat .cat-r { float: right; font-family: var(--body); letter-spacing: .04em;
+  text-transform: none; font-size: 11.5px; color: var(--ink-soft); }
+.sup { display: inline-block; font-size: 10px; letter-spacing: .08em; padding: 2px 7px;
+  border-radius: 999px; border: 1px solid var(--gold-pale); background: var(--limestone);
+  color: var(--gold); white-space: nowrap; }
+.sup.tbd { border-color: #E0B3AA; color: #9E2B3B; background: rgba(158,43,59,.06); }
+@media (max-width: 719px) {
+  .inv-t, .inv-t tbody, .inv-t tr, .inv-t td { display: block; width: 100%; }
+  .inv-t thead { display: none; }
+  .inv-t tr.inv-r { border-bottom: 1px solid var(--gold-pale); padding: 9px 0; }
+  .inv-t tr.inv-r td { border: 0; padding: 2px 0; display: grid;
+    grid-template-columns: 8.5em 1fr; gap: 10px; align-items: baseline; }
+  .inv-t tr.inv-r td::before { content: attr(data-l); font-size: 10px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--gold); }
+  .inv-t tr.inv-r td.num { text-align: left; }
+  /* The editable fields carry margin:0 -3px so the hover pad sits flush with
+     the text. Stacked, that bleeds 3px past the container and reintroduces a
+     sideways scroll, so drop the pull on a phone. */
+  .inv-t tr.inv-r .iv-name, .inv-t tr.inv-r .iv-need { margin-left: 0; margin-right: 0; }
+  .inv-cat td { display: block; }
+}
 /* editable notes anywhere */
 .qn-wrap { margin-top: 8px; }
 .qn-lbl { display: block; font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
@@ -1833,8 +1868,8 @@ td.buy.ok { color: var(--ink-soft); }
     "simple syrup":        { t:"buy", shop:"Monin", pack:"1 L, 18.00", home:"Squeeze bottle, second tier right of the rail",
                              note:"Bought in. Do not batch this by hand." },
     "caramelised pear":    { t:"house", from:"Conference pears, Albert Heijn, 4.83 per 2", yield:"Cut to order", keeps:"Same day", home:"F2A top tier, garnish tub",
-                             note:"Brown sugar spread over the slice with a spoon before it goes on the rim.",
-                             warn:"TESTING: oven-dried slices, because thin ones fall into the glass. Until signed off, slice on the kitchen machine." },
+                             note:"Brown sugar spread over the slice with a spoon, for when the pear returns to the build.",
+                             warn:"TESTING: oven-dried slices, because thin ones fall into the glass. Until signed off this is NOT the garnish, a big basil leaf is floated on top instead." },
     "hibiscus tea":        { t:"house", from:"Amazing Oriental dried hibiscus, 3.89 per 125 g", yield:"2 L strong", keeps:"5 days", home:"F1B top tier, 4 x 700 ml bottles" },
     "strawberries":        { t:"buy", shop:"Albert Heijn", pack:"500 g punnet", home:"F2A top tier",
                              note:"Open question: check Sligro for a dried strawberry line as a fallback when fresh is out of season." },
@@ -2023,7 +2058,7 @@ td.buy.ok { color: var(--ink-soft); }
     "Boiron pasteurised puree, not hand squeezed. Fresh lemons are still bought for the rim wedge and garnish.": "Gepasteuriseerde Boiron-puree, niet met de hand geperst. Er worden nog steeds verse citroenen gekocht voor het randpartje en de garnering.",
     "Boiron pasteurised puree, not hand squeezed. Fresh limes are still bought, but only for wedges and garnish.": "Gepasteuriseerde Boiron-puree, niet met de hand geperst. Er worden nog steeds verse limoenen gekocht, maar alleen voor partjes en garnering.",
     "Bought in. Do not batch this by hand.": "Wordt ingekocht. Niet zelf maken.",
-    "Brown sugar spread over the slice with a spoon before it goes on the rim.": "Bruine suiker met een lepel over het schijfje verdeeld voordat het op de rand gaat.",
+    "Brown sugar spread over the slice with a spoon, for when the pear returns to the build.": "Bruine suiker met een lepel over het schijfje verdeeld, voor als de peer terugkomt in de opbouw.",
     "Carried to the table in a brute and poured over the indigo. Current workaround: poured from a jigger.": "In een brute mee naar tafel en over het indigo geschonken. Huidige tussenoplossing: uit een jigger geschonken.",
     "Garnish only. Never juiced.": "Alleen garnering. Nooit uitgeperst.",
     "Microwave the rosemary between paper towel, 4 x 30 seconds, until it crumbles but is still green. Grind coarse, mix 3 tsp with the salt and a whole lemon zest.": "Rozemarijn tussen keukenpapier in de magnetron, 4 x 30 seconden, tot hij verkruimelt maar nog groen is. Grof malen, meng 3 theelepels met het zout en een hele citroenzeste.",
@@ -2038,7 +2073,7 @@ td.buy.ok { color: var(--ink-soft); }
     "NOT ON THE BUY LIST. Until it is bought, Lychee Siren cannot be made.": "STAAT NIET OP DE INKOOPLIJST. Tot dit gekocht is, kan de Lychee Siren niet gemaakt worden.",
     "Once decanted into a squeeze bottle it keeps 2 DAYS, not a week. Day dot it and bin it on day three.": "Eenmaal afgetapt in een knijpfles is hij 2 DAGEN houdbaar, geen week. Zet er een dagsticker op en gooi hem op dag drie weg.",
     "STAINS. This squeeze bottle is dedicated for life and never rotated onto another product.": "GEEFT VLEKKEN. Deze knijpfles blijft hier voorgoed voor en wordt nooit voor iets anders gebruikt.",
-    "TESTING: oven-dried slices, because thin ones fall into the glass. Until signed off, slice on the kitchen machine.": "IN TEST: in de oven gedroogde schijfjes, omdat dunne in het glas vallen. Tot dat is goedgekeurd, snijden op de machine in de keuken.",
+    "TESTING: oven-dried slices, because thin ones fall into the glass. Until signed off this is NOT the garnish, a big basil leaf is floated on top instead.": "IN TEST: in de oven gedroogde schijfjes, omdat dunne in het glas vallen. Tot dat is goedgekeurd is dit NIET de garnering, er drijft dan een groot basilicumblad bovenop.",
     "The 1 L Monin bottle is 320 mm and fits no shelf in the cabinet. It stays in dry store and you decant from it. STAINS, dedicated squeeze bottle.": "De Monin-fles van 1 L is 320 mm en past op geen enkele plank in de kast. Hij blijft in de droogvoorraad en je tapt eruit af. GEEFT VLEKKEN, eigen knijpfles.",
     "This has no keep window written anywhere. Write yield, keep time and method before anyone batches it. A day dot with no keep time is a guess with a date on it.": "Hiervan staat nergens een houdbaarheid opgeschreven. Leg opbrengst, houdbaarheid en methode vast voordat iemand dit maakt. Een dagsticker zonder houdbaarheid is een gok met een datum erop.",
     "Too thick for a standard nozzle, it needs the wide mouth bottle. Keeps 2 DAYS once decanted.": "Te dik voor een standaardtuit, hier hoort de fles met wijde hals bij. Na aftappen 2 DAGEN houdbaar.",
@@ -2170,68 +2205,137 @@ td.buy.ok { color: var(--ink-soft); }
   var LS_ROWS = "quatro-inv-rows-v1", LS_HAVE = "quatro-inv-have-v1";
   var U = { L:"L", KG:"kg", G:"g", P:"pcs", C:"cans", B:"bottles", J:"jars", PK:"packs", S:"sets" };
 
+  function slug(s) {
+    return String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  }
+
   var SEED = [
-    ["Liquids","Lychee juice",7,U.L,4.14,"","Lycheesap",""],
-    ["Liquids","Lychees in syrup, cordial",2.8,U.L,17.27,"","Lychees op siroop, voor cordial",""],
-    ["Liquids","Coconut water",9.8,U.L,2.29,"NOT ON THE BUY LIST. Lychee Siren cannot be made until this is bought.","Kokoswater","STAAT NIET OP DE INKOOPLIJST. De Lychee Siren kan niet gemaakt worden tot dit gekocht is."],
-    ["Liquids","Apple-pear juice, Jumbo DUO smaak",16.8,U.L,2.49,"Jumbo DUO smaak, not the Albert Heijn one.","Appel-perensap, Jumbo DUO smaak","Jumbo DUO smaak, niet die van Albert Heijn."],
-    ["Liquids","Orange juice, fresh with pulp",25.2,U.L,2.00,"","Sinaasappelsap, vers met vruchtvlees",""],
-    ["Liquids","Pineapple juice, carton",21,U.L,2.59,"","Ananassap, pak",""],
-    ["Liquids","Pineapple chunks, canned",4,U.C,2.15,"Garnish only.","Ananasstukjes, uit blik","Alleen voor de garnering."],
-    ["Liquids","Coconut cream",11.2,U.L,4.73,"","Kokosroom",""],
-    ["Liquids","Condensed milk",2.8,U.L,7.03,"Two days once decanted. Wide bore bottle.","Gecondenseerde melk","Twee dagen na aftappen. Fles met wijde opening."],
-    ["Liquids","Cranberry juice",9.8,U.L,2.49,"","Cranberrysap",""],
-    ["Liquids","Passion fruit juice",5.6,U.L,6.78,"","Passievruchtensap",""],
-    ["Liquids","Ginger beer, Royal Club",21,U.L,3.32,"1 L bottles are 300 mm. They lie down in F1B bottom.","Ginger beer, Royal Club","Flessen van 1 L zijn 300 mm. Die liggen plat in F1B onderin."],
-    ["Liquids","Soda water, Spa Rood",16.1,U.L,0.50,"","Bruiswater, Spa Rood",""],
-    ["Boiron purees","Boiron lime puree, pasteurised",19.6,U.L,null,"Sligro 217504. PRICE NOT KNOWN. Every lime dose in the ten drinks pours this, not hand squeezed fruit.","Boiron limoenpuree, gepasteuriseerd","Sligro 217504. PRIJS ONBEKEND. Elke limoendosering in de tien drankjes komt hieruit, niet uit met de hand geperst fruit."],
-    ["Boiron purees","Boiron lemon puree, pasteurised",9.1,U.L,null,"Sligro 217502. PRICE NOT KNOWN. Forest Fairy 25 ml and Hibiscus Royale 40 ml.","Boiron citroenpuree, gepasteuriseerd","Sligro 217502. PRIJS ONBEKEND. Forest Fairy 25 ml en Hibiscus Royale 40 ml."],
-    ["Boiron purees","Cassis puree",2.8,U.L,21.26,"STAINS. Dedicated squeeze bottle, never rotated.","Cassispuree","GEEFT VLEKKEN. Eigen knijpfles, nooit wisselen."],
-    ["Boiron purees","Strawberry puree",4.2,U.L,11.00,"Two days once decanted into a squeeze bottle.","Aardbeienpuree","Twee dagen na aftappen in een knijpfles."],
-    ["Boiron purees","Passion fruit puree",2.8,U.L,14.00,"","Passievruchtenpuree",""],
-    ["Syrups and sugar","Monin vanilla syrup",4.2,U.L,18.00,"","Monin vanillesiroop",""],
-    ["Syrups and sugar","Monin sugar syrup",8.4,U.L,18.00,"Bought in. Do not batch by hand.","Monin suikersiroop","Wordt ingekocht. Niet zelf maken."],
-    ["Syrups and sugar","Maple syrup, Maple Gold",7,U.L,25.96,"Goes into the rosemary-thyme cordial.","Ahornsiroop, Maple Gold","Gaat in de rozemarijn-tijm-cordial."],
-    ["Syrups and sugar","Crystal sugar",2,U.KG,1.50,"","Kristalsuiker",""],
-    ["Syrups and sugar","Monin grenadine",2.8,U.L,18.00,"1 L bottle is 320 mm, fits no shelf. Stays dry, decant from it. STAINS.","Monin grenadine","Fles van 1 L is 320 mm, past op geen enkele plank. Blijft droog staan, tap eruit af. GEEFT VLEKKEN."],
-    ["Teas and dried flowers","Butterfly pea, dried",56,U.G,0.063,"Makes the tea and the concentrated squeeze bottle.","Vlindererwt, gedroogd","Hiervan komen de thee en de geconcentreerde knijpfles."],
-    ["Teas and dried flowers","Hibiscus, dried",168,U.G,0.031,"","Hibiscus, gedroogd",""],
-    ["Fresh produce","Limes",88,U.P,0.3625,"GARNISH ONLY now the juice is Boiron. 4 wedges Ocean Mojito plus 1 Lychee Siren, 700 wedges at 8 a lime.","Limoenen","ALLEEN GARNERING nu het sap Boiron is. 4 partjes Ocean Mojito plus 1 Lychee Siren, 700 partjes bij 8 per limoen."],
-    ["Fresh produce","Lemons",1.6,U.KG,3.18,"Rim wedge for Forest Fairy and zest. Juice is Boiron.","Citroenen","Partje voor de rand van de Forest Fairy en zeste. Het sap is Boiron."],
-    ["Fresh produce","Oranges",3,U.KG,1.645,"Juice and zest.","Sinaasappels","Sap en zeste."],
-    ["Fresh produce","Strawberries",2,U.KG,5.00,"TESTING 29-08-2026: freeze dried strawberry slices, Droogfruit, 40 g pot, as the replacement. Fresh decays too fast.","Aardbeien","IN TEST 29-08-2026: gevriesdroogde aardbeienschijfjes, Droogfruit, potje van 40 g, als vervanging. Vers bederft te snel."],
-    ["Fresh produce","Green grapes",2,U.KG,5.18,"","Witte druiven",""],
-    ["Fresh produce","Mint",450,U.G,0.0265,"","Munt",""],
-    ["Fresh produce","Basil",88,U.G,0.0541,"Press once only.","Basilicum","Slechts een keer persen."],
-    ["Fresh produce","Rosemary",60,U.G,0.0793,"First out of F2A to a damp cloth if the door tightens.","Rozemarijn","Als eerste uit F2A naar een vochtige doek als de deur te vol wordt."],
-    ["Fresh produce","Thyme",60,U.G,0.0793,"Second out of F2A if the door tightens.","Tijm","Als tweede uit F2A als de deur te vol wordt."],
-    ["Fresh produce","Jalapenos",10,U.P,0.59,"Seeds out as standard.","Jalapenos","Standaard zonder zaadjes."],
-    ["Fresh produce","Pears, Conference",6,U.P,2.415,"OPEN: thin slices fall into the glass. Test drying them in the oven.","Peren, Conference","OPEN: dunne schijfjes vallen in het glas. Test om ze in de oven te drogen."],
-    ["Fresh produce","Passion fruit, fresh",4,U.P,0.665,"Garnish only, never juiced.","Passievrucht, vers","Alleen garnering, nooit uitgeperst."],
-    ["Dry goods and specials","Fee Foam or aquafaba",1,U.B,3.19,"This is the foam. No eggs are stocked.","Fee Foam of aquafaba","Dit is de schuimer. Er liggen geen eieren op voorraad."],
-    ["Dry goods and specials","Cocktail cherries",1,U.J,1.99,"","Cocktailkersen",""],
-    ["Dry goods and specials","Fine sea salt",1,U.PK,3.69,"Goes into the rosemary-lemon rim mix.","Fijn zeezout","Gaat in het rozemarijn-citroenzout voor de rand."],
-    ["Dry goods and specials","Alpro Barista oat milk",10,U.L,2.79,"Coffee only. No drink in the ten uses it.","Alpro Barista havermelk","Alleen voor koffie. Geen van de tien drankjes gebruikt het."],
-    ["Bar consumables","Ice, cubed and crushed",14,U.KG,0.89,"Only a purchase if the machine is not repaired in time. If it is, set this to 0.","IJs, blokjes en crushed","Alleen een aankoop als de machine niet op tijd gemaakt is. Lukt dat wel, zet dit dan op 0."],
-    ["Bar consumables","Straws, cloths, wipes",1,U.S,5.00,"","Rietjes, doeken, doekjes",""],
-    ["Bottled and chilled","Coca-Cola",null,U.B,null,"Set your own par.","Coca-Cola","Stel je eigen par in."],
-    ["Bottled and chilled","Cola Zero",null,U.B,null,"Set your own par.","Cola Zero","Stel je eigen par in."],
-    ["Bottled and chilled","Fanta",null,U.B,null,"Set your own par.","Fanta","Stel je eigen par in."],
-    ["Bottled and chilled","Sprite or Red Bull",null,U.B,null,"DECIDE WHICH. The menu lists them as one line.","Sprite of Red Bull","KIES WELKE. Op de kaart staan ze als een regel."],
-    ["Bottled and chilled","Royal Bliss Ginger Ale",null,U.B,null,"Not the same as the Royal Club ginger beer in the Mule.","Royal Bliss Ginger Ale","Niet hetzelfde als de Royal Club ginger beer in de Mule."],
-    ["Bottled and chilled","Tonic water",null,U.B,null,"Set your own par.","Tonic","Stel je eigen par in."],
-    ["Bottled and chilled","Lipton Iced Tea Lemon, sparkling",null,U.B,null,"Set your own par.","Lipton Ice Tea Lemon, bruisend","Stel je eigen par in."],
-    ["Bottled and chilled","Lipton Iced Tea Peach, still",null,U.B,null,"Set your own par.","Lipton Ice Tea Peach, plat","Stel je eigen par in."],
-    ["Bottled and chilled","SPA Rood, sparkling",null,U.B,null,"Also the soda for Forest Fairy and Ocean Mojito. Counted twice on purpose, bar and bottled service.","SPA Rood, bruisend","Ook het bruiswater voor de Forest Fairy en de Ocean Mojito. Met opzet dubbel geteld, bar en flessenservice."],
-    ["Bottled and chilled","SPA Blauw, still",null,U.B,null,"Set your own par.","SPA Blauw, plat","Stel je eigen par in."],
-    ["Bottled and chilled","De Appelaere, 200 ml",null,U.B,null,"Set your own par.","De Appelaere, 200 ml","Stel je eigen par in."],
-    ["Bottled and chilled","Royal Club Bitter Lemon",null,U.B,null,"Set your own par.","Royal Club Bitter Lemon","Stel je eigen par in."]
-  ].map(function (r, i) {
-    /* key is the English name and never changes, so PREPPABLE keeps matching
-       after someone renames a row or switches the page to Dutch. */
-    return { id:"s"+i, key:r[1], cat:r[0], name:r[1], nameNl:r[6] || r[1],
-             need:r[2], unit:r[3], cost:r[4], note:r[5], noteNl:r[7] || "", prep:false };
+    ["Liquids","Lychee juice","AO",7,U.L,4.14,"","Lycheesap",""],
+    ["Liquids","Lychees in syrup, cordial","AO",2.8,U.L,17.27,"","Lychees op siroop, voor cordial",""],
+    ["Liquids","Coconut water","AH",9.8,U.L,2.29,"NOT ON THE BUY LIST. Lychee Siren cannot be made until this is bought.","Kokoswater","STAAT NIET OP DE INKOOPLIJST. De Lychee Siren kan niet gemaakt worden tot dit gekocht is."],
+    ["Liquids","Apple-pear juice, Jumbo DUO smaak","JUMBO",16.8,U.L,2.49,"Jumbo DUO smaak, not the Albert Heijn one.","Appel-perensap, Jumbo DUO smaak","Jumbo DUO smaak, niet die van Albert Heijn."],
+    ["Liquids","Orange juice, fresh with pulp","AH",25.2,U.L,2.00,"","Sinaasappelsap, vers met vruchtvlees",""],
+    ["Liquids","Pineapple juice, carton","AH",21,U.L,2.59,"","Ananassap, pak",""],
+    ["Liquids","Pineapple chunks, canned","AH",4,U.C,2.15,"Garnish only.","Ananasstukjes, uit blik","Alleen voor de garnering."],
+    ["Liquids","Coconut cream","AO",11.2,U.L,4.73,"","Kokosroom",""],
+    ["Liquids","Condensed milk","AH",2.8,U.L,7.03,"Two days once decanted. Wide bore bottle.","Gecondenseerde melk","Twee dagen na aftappen. Fles met wijde opening."],
+    ["Liquids","Cranberry juice","AH",9.8,U.L,2.49,"","Cranberrysap",""],
+    ["Liquids","Passion fruit juice","AH",5.6,U.L,6.78,"","Passievruchtensap",""],
+    ["Liquids","Ginger beer, Royal Club","AH",21,U.L,3.32,"1 L bottles are 300 mm. They lie down in F1B bottom.","Ginger beer, Royal Club","Flessen van 1 L zijn 300 mm. Die liggen plat in F1B onderin."],
+    ["Liquids","Soda water, Spa Rood","AH",16.1,U.L,0.50,"","Bruiswater, Spa Rood",""],
+    ["Boiron purees","Boiron lime puree, pasteurised","Sligro",19.6,U.L,null,"Sligro 217504. PRICE NOT KNOWN. Every lime dose in the ten drinks pours this, not hand squeezed fruit.","Boiron limoenpuree, gepasteuriseerd","Sligro 217504. PRIJS ONBEKEND. Elke limoendosering in de tien drankjes komt hieruit, niet uit met de hand geperst fruit."],
+    ["Boiron purees","Boiron lemon puree, pasteurised","Sligro",9.1,U.L,null,"Sligro 217502. PRICE NOT KNOWN. Forest Fairy 25 ml and Hibiscus Royale 40 ml.","Boiron citroenpuree, gepasteuriseerd","Sligro 217502. PRIJS ONBEKEND. Forest Fairy 25 ml en Hibiscus Royale 40 ml."],
+    ["Boiron purees","Cassis puree","MAKRO",2.8,U.L,21.26,"STAINS. Dedicated squeeze bottle, never rotated.","Cassispuree","GEEFT VLEKKEN. Eigen knijpfles, nooit wisselen."],
+    ["Boiron purees","Strawberry puree","A la Tarte",4.2,U.L,11.00,"Two days once decanted into a squeeze bottle.","Aardbeienpuree","Twee dagen na aftappen in een knijpfles."],
+    ["Boiron purees","Passion fruit puree","A la Tarte",2.8,U.L,14.00,"","Passievruchtenpuree",""],
+    ["Syrups and sugar","Monin vanilla syrup","Monin",4.2,U.L,18.00,"","Monin vanillesiroop",""],
+    ["Syrups and sugar","Monin sugar syrup","Monin",8.4,U.L,18.00,"Bought in. Do not batch by hand.","Monin suikersiroop","Wordt ingekocht. Niet zelf maken."],
+    ["Syrups and sugar","Maple syrup, Maple Gold","TBD",7,U.L,25.96,"Goes into the rosemary-thyme cordial.","Ahornsiroop, Maple Gold","Gaat in de rozemarijn-tijm-cordial."],
+    ["Syrups and sugar","Crystal sugar","AH",2,U.KG,1.50,"","Kristalsuiker",""],
+    ["Syrups and sugar","Monin grenadine","Monin",2.8,U.L,18.00,"1 L bottle is 320 mm, fits no shelf. Stays dry, decant from it. STAINS.","Monin grenadine","Fles van 1 L is 320 mm, past op geen enkele plank. Blijft droog staan, tap eruit af. GEEFT VLEKKEN."],
+    ["Teas and dried flowers","Butterfly pea, dried","AO",56,U.G,0.063,"Makes the tea and the concentrated squeeze bottle.","Vlindererwt, gedroogd","Hiervan komen de thee en de geconcentreerde knijpfles."],
+    ["Teas and dried flowers","Hibiscus, dried","AO",168,U.G,0.031,"","Hibiscus, gedroogd",""],
+    ["Fresh produce","Limes","AH",88,U.P,0.3625,"GARNISH ONLY now the juice is Boiron. 4 wedges Ocean Mojito plus 1 Lychee Siren, 700 wedges at 8 a lime.","Limoenen","ALLEEN GARNERING nu het sap Boiron is. 4 partjes Ocean Mojito plus 1 Lychee Siren, 700 partjes bij 8 per limoen."],
+    ["Fresh produce","Lemons","AH",1.6,U.KG,3.18,"Rim wedge for Forest Fairy and zest. Juice is Boiron.","Citroenen","Partje voor de rand van de Forest Fairy en zeste. Het sap is Boiron."],
+    ["Fresh produce","Oranges","AH",3,U.KG,1.645,"Juice and zest.","Sinaasappels","Sap en zeste."],
+    ["Fresh produce","Strawberries","AH",2,U.KG,5.00,"TESTING 29-08-2026: freeze dried strawberry slices, Droogfruit, 40 g pot, as the replacement. Fresh decays too fast.","Aardbeien","IN TEST 29-08-2026: gevriesdroogde aardbeienschijfjes, Droogfruit, potje van 40 g, als vervanging. Vers bederft te snel."],
+    ["Fresh produce","Green grapes","AH",2,U.KG,5.18,"","Witte druiven",""],
+    ["Fresh produce","Mint","AH",450,U.G,0.0265,"","Munt",""],
+    ["Fresh produce","Basil","AH",88,U.G,0.0541,"Press once only.","Basilicum","Slechts een keer persen."],
+    ["Fresh produce","Rosemary","AH",60,U.G,0.0793,"First out of F2A to a damp cloth if the door tightens.","Rozemarijn","Als eerste uit F2A naar een vochtige doek als de deur te vol wordt."],
+    ["Fresh produce","Thyme","AH",60,U.G,0.0793,"Second out of F2A if the door tightens.","Tijm","Als tweede uit F2A als de deur te vol wordt."],
+    ["Fresh produce","Jalapenos","AH",10,U.P,0.59,"Seeds out as standard.","Jalapenos","Standaard zonder zaadjes."],
+    ["Fresh produce","Pears, Conference","AH",6,U.P,2.415,"OPEN: thin slices fall into the glass. Test drying them in the oven.","Peren, Conference","OPEN: dunne schijfjes vallen in het glas. Test om ze in de oven te drogen."],
+    ["Fresh produce","Passion fruit, fresh","AH",4,U.P,0.665,"Garnish only, never juiced.","Passievrucht, vers","Alleen garnering, nooit uitgeperst."],
+    ["Dry goods and specials","Fee Foam or aquafaba","EKOPLAZA",1,U.B,3.19,"This is the foam. No eggs are stocked.","Fee Foam of aquafaba","Dit is de schuimer. Er liggen geen eieren op voorraad."],
+    ["Dry goods and specials","Cocktail cherries","AH",1,U.J,1.99,"","Cocktailkersen",""],
+    ["Dry goods and specials","Fine sea salt","AH",1,U.PK,3.69,"Goes into the rosemary-lemon rim mix.","Fijn zeezout","Gaat in het rozemarijn-citroenzout voor de rand."],
+    ["Dry goods and specials","Alpro Barista oat milk","AH",10,U.L,2.79,"Coffee only. No drink in the ten uses it.","Alpro Barista havermelk","Alleen voor koffie. Geen van de tien drankjes gebruikt het."],
+    ["Bar consumables","Ice, crushed","AH",14,U.KG,0.89,"CUBED IS OFF THE LIST, the machine makes it now. Crushed is still ordered. The 14 kg covered both, so confirm the crushed-only figure.","IJs, crushed","BLOKJES STAAN NIET MEER OP DE LIJST, die maakt de machine nu. Crushed wordt nog wel besteld. De 14 kg was voor allebei, dus bevestig het aantal voor alleen crushed."],
+    ["Bar consumables","Straws, small 15 cm","TBD",1,U.PK,null,"Was bundled into one Straws, cloths, wipes line. Split out, so the price needs setting per line.","Rietjes, klein 15 cm","Zat in een verzamelregel Rietjes, doeken, doekjes. Nu apart, dus de prijs moet per regel worden ingevuld."],
+    ["Bar consumables","Straws, big 24 cm","TBD",1,U.PK,null,"For the hurricanes and the highballs.","Rietjes, groot 24 cm","Voor de hurricanes en de highballs."],
+    ["Bar consumables","Wipes, yellow","TBD",1,U.PK,null,"General cleaning.","Doekjes, geel","Algemene reiniging."],
+    ["Bar consumables","Wipes, polish","TBD",1,U.PK,null,"Glassware only. Never the same cloth as the yellow.","Doekjes, polish","Alleen voor glaswerk. Nooit dezelfde doek als de gele."],
+    ["Bottled and chilled","Coca-Cola","TBD",null,U.B,null,"Set your own par.","Coca-Cola","Stel je eigen par in."],
+    ["Bottled and chilled","Cola Zero","TBD",null,U.B,null,"Set your own par.","Cola Zero","Stel je eigen par in."],
+    ["Bottled and chilled","Fanta","TBD",null,U.B,null,"Set your own par.","Fanta","Stel je eigen par in."],
+    ["Bottled and chilled","Sprite or Red Bull","TBD",null,U.B,null,"DECIDE WHICH. The menu lists them as one line.","Sprite of Red Bull","KIES WELKE. Op de kaart staan ze als een regel."],
+    ["Bottled and chilled","Royal Bliss Ginger Ale","TBD",null,U.B,null,"Not the same as the Royal Club ginger beer in the Mule.","Royal Bliss Ginger Ale","Niet hetzelfde als de Royal Club ginger beer in de Mule."],
+    ["Bottled and chilled","Tonic water","TBD",null,U.B,null,"Set your own par.","Tonic","Stel je eigen par in."],
+    ["Bottled and chilled","Lipton Iced Tea Lemon, sparkling","TBD",null,U.B,null,"Set your own par.","Lipton Ice Tea Lemon, bruisend","Stel je eigen par in."],
+    ["Bottled and chilled","Lipton Iced Tea Peach, still","TBD",null,U.B,null,"Set your own par.","Lipton Ice Tea Peach, plat","Stel je eigen par in."],
+    ["Bottled and chilled","SPA Rood, sparkling","TBD",null,U.B,null,"Also the soda for Forest Fairy and Ocean Mojito. Counted twice on purpose, bar and bottled service.","SPA Rood, bruisend","Ook het bruiswater voor de Forest Fairy en de Ocean Mojito. Met opzet dubbel geteld, bar en flessenservice."],
+    ["Bottled and chilled","SPA Blauw, still","TBD",null,U.B,null,"Set your own par.","SPA Blauw, plat","Stel je eigen par in."],
+    ["Bottled and chilled","De Appelaere, 200 ml","TBD",null,U.B,null,"Set your own par.","De Appelaere, 200 ml","Stel je eigen par in."],
+    ["Bottled and chilled","Royal Club Bitter Lemon","TBD",null,U.B,null,"Set your own par.","Royal Club Bitter Lemon","Stel je eigen par in."]
+  ].map(function (r) {
+    /* The id is derived from the English name, not from the row's position, so
+       adding or removing a line never shifts the saved counts of every line
+       below it. key stays the English name for the same reason. */
+    return { id:slug(r[1]), key:r[1], cat:r[0], name:r[1], nameNl:r[7] || r[1],
+             supplier:r[2], need:r[3], unit:r[4], cost:r[5],
+             note:r[6], noteNl:r[8] || "", prep:false };
   });
+
+  /* The row order as it stood when ids were positional. Saved data keyed s0..s54
+     is remapped through this once, so nobody loses their stock counts. */
+  var OLD_ORDER = [
+    "Lychee juice",
+    "Lychees in syrup, cordial",
+    "Coconut water",
+    "Apple-pear juice, Jumbo DUO smaak",
+    "Orange juice, fresh with pulp",
+    "Pineapple juice, carton",
+    "Pineapple chunks, canned",
+    "Coconut cream",
+    "Condensed milk",
+    "Cranberry juice",
+    "Passion fruit juice",
+    "Ginger beer, Royal Club",
+    "Soda water, Spa Rood",
+    "Boiron lime puree, pasteurised",
+    "Boiron lemon puree, pasteurised",
+    "Cassis puree",
+    "Strawberry puree",
+    "Passion fruit puree",
+    "Monin vanilla syrup",
+    "Monin sugar syrup",
+    "Maple syrup, Maple Gold",
+    "Crystal sugar",
+    "Monin grenadine",
+    "Butterfly pea, dried",
+    "Hibiscus, dried",
+    "Limes",
+    "Lemons",
+    "Oranges",
+    "Strawberries",
+    "Green grapes",
+    "Mint",
+    "Basil",
+    "Rosemary",
+    "Thyme",
+    "Jalapenos",
+    "Pears, Conference",
+    "Passion fruit, fresh",
+    "Fee Foam or aquafaba",
+    "Cocktail cherries",
+    "Fine sea salt",
+    "Alpro Barista oat milk",
+    "Ice, cubed and crushed",
+    "Straws, cloths, wipes",
+    "Coca-Cola",
+    "Cola Zero",
+    "Fanta",
+    "Sprite or Red Bull",
+    "Royal Bliss Ginger Ale",
+    "Tonic water",
+    "Lipton Iced Tea Lemon, sparkling",
+    "Lipton Iced Tea Peach, still",
+    "SPA Rood, sparkling",
+    "SPA Blauw, still",
+    "De Appelaere, 200 ml",
+    "Royal Club Bitter Lemon"
+  ];
 
   /* Only these are actually made in house. Everything else is ordered, and an
      ordered thing cannot be "prepped", so the chip is not offered on it. */
@@ -2265,23 +2369,91 @@ td.buy.ok { color: var(--ink-soft); }
   function hasNote(r)   { return !!(r.note || r.noteNl); }
   function isSetPar(v)  { return v === "" || v === SETPAR.en || v === SETPAR.nl; }
 
+  /* One definition of the column labels, used by the header on a wide screen
+     and by the per-cell labels when the table stacks on a phone. */
+  function INVCOL() {
+    return {
+      item:  tt({ en: "Ingredient and note", nl: "Ingredient en notitie" }),
+      need:  tt({ en: "Per week",     nl: "Per week" }),
+      have:  tt({ en: "Have",         nl: "Voorraad" }),
+      buy:   tt({ en: "Still to buy", nl: "Nog kopen" }),
+      cost:  tt({ en: "Cost",         nl: "Kosten" }),
+      where: tt({ en: "Buy at",       nl: "Waar" })
+    };
+  }
+  function supTag(s) {
+    s = s || "TBD";
+    var tbd = s === "TBD";
+    return '<span class="sup' + (tbd ? " tbd" : "") + '" title="' +
+      et(tbd ? { en: "Supplier not decided yet", nl: "Leverancier nog niet bepaald" }
+             : { en: "Where this is bought", nl: "Waar dit gekocht wordt" }) + '">' + esc(s) + "</span>";
+  }
+  /* Every supplier actually present, so the filter offers real choices only. */
+  function suppliers() {
+    var seen = {}, out = [];
+    ROWS.forEach(function (r) {
+      var s = r.supplier || "TBD";
+      if (!seen[s]) { seen[s] = 1; out.push(s); }
+    });
+    return out.sort();
+  }
+
   function load(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
   function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
   var ROWS = load(LS_ROWS, null) || SEED.slice();
-  /* Rows saved before this pass carry no key and no Dutch strings. Backfill
-     them from the seed by id, so saved pars, notes and counts all survive. */
+  var HAVE = load(LS_HAVE, {});
+
+  /* Bring saved data forward. Two shapes exist in the wild: rows from before
+     the Dutch pass (no key, no Dutch strings) and rows keyed by position
+     (s0..s54) from before ids were derived from the name. Both are migrated in
+     place so nobody loses a par, a note or a stock count. */
   (function () {
-    var byId = {}, patched = false;
-    SEED.forEach(function (s) { byId[s.id] = s; });
+    var seedByKey = {}, patched = false;
+    SEED.forEach(function (s) { seedByKey[s.key] = s; });
+
+    /* positional id -> name -> new id */
+    function newIdFor(oldId) {
+      var m = /^s(\d+)$/.exec(oldId || "");
+      if (!m) return null;
+      var nm = OLD_ORDER[Number(m[1])];
+      return nm ? slug(nm) : null;
+    }
+
+    var remap = {};
     ROWS.forEach(function (r) {
-      var s = byId[r.id];
-      if (r.key == null)    { r.key = s ? s.key : r.name; patched = true; }
-      if (r.nameNl == null) { r.nameNl = s ? s.nameNl : r.name; patched = true; }
-      if (r.noteNl == null) { r.noteNl = s ? s.noteNl : ""; patched = true; }
+      var nid = newIdFor(r.id);
+      if (nid) { remap[r.id] = nid; r.id = nid; patched = true; }
     });
+    if (Object.keys(remap).length) {
+      var moved = {};
+      Object.keys(HAVE).forEach(function (k) { moved[remap[k] || k] = HAVE[k]; });
+      HAVE = moved;
+      save(LS_HAVE, HAVE);
+    }
+
+    ROWS.forEach(function (r) {
+      var s = seedByKey[r.key] || seedByKey[r.name];
+      if (r.key == null)      { r.key = s ? s.key : r.name; patched = true; }
+      if (r.nameNl == null)   { r.nameNl = s ? s.nameNl : r.name; patched = true; }
+      if (r.noteNl == null)   { r.noteNl = s ? s.noteNl : ""; patched = true; }
+      if (r.supplier == null) { r.supplier = s ? s.supplier : "TBD"; patched = true; }
+    });
+
+    /* Lines added to the seed after someone's copy was saved, and lines the
+       seed has dropped. Straws and wipes were split into four, and cubed ice
+       was retired, so an older saved copy must be reconciled or the new lines
+       simply never appear. */
+    var have = {};
+    ROWS.forEach(function (r) { have[r.key] = true; });
+    SEED.forEach(function (s, i) {
+      if (!have[s.key]) { ROWS.splice(Math.min(i, ROWS.length), 0, s); patched = true; }
+    });
+    var gone = { "Straws, cloths, wipes": 1, "Ice, cubed and crushed": 1 };
+    var kept = ROWS.filter(function (r) { return !gone[r.key]; });
+    if (kept.length !== ROWS.length) { ROWS = kept; patched = true; }
+
     if (patched) save(LS_ROWS, ROWS);
   })();
-  var HAVE = load(LS_HAVE, {});
   var FILTER = "all";
   function persist() { save(LS_ROWS, ROWS); save(LS_HAVE, HAVE); }
   function n2(v) { return (Math.round(v * 100) / 100).toFixed(2); }
@@ -2329,48 +2501,63 @@ td.buy.ok { color: var(--ink-soft); }
         totNeed += need * r.cost; totHave += Math.min(have, need) * r.cost; totBuy += short * r.cost;
       }
       if (!priced) unpriced++;
-      if (FILTER === "short" && cls !== "short") return "";
-      if (FILTER === "covered" && cls !== "covered") return "";
-      if (FILTER === "prep" && !r.prep) return "";
-      if (FILTER === "note" && !hasNote(r)) return "";
+      if (FILTER === "short" && cls !== "short") return null;
+      if (FILTER === "covered" && cls !== "covered") return null;
+      if (FILTER === "note" && !hasNote(r)) return null;
+      if (FILTER.indexOf("sup:") === 0 && (r.supplier || "TBD") !== FILTER.slice(4)) return null;
       var bar = need == null ? "" :
         '<div class="bar ' + (pct >= 100 ? "" : pct > 0 ? "part" : "none") + '"><span style="width:' + pct + '%"></span></div>' +
         '<span class="barlbl">' + tidy(have) + " / " + tidy(need) + " " + esc(unitLabel(r.unit)) + "  (" + pct + "%)</span>";
       var nm = rowName(r), nt = rowNote(r);
-      return '<tr class="' + cls + '" data-id="' + esc(r.id) + '">' +
-        "<td>" + esc(catLabel(r.cat)) + "</td>" +
-        '<td><span class="iv-name" contenteditable="true" data-f="name">' + esc(nm) + "</span>" + bar +
+      var L = INVCOL();
+      var html = '<tr class="inv-r ' + cls + '" data-id="' + esc(r.id) + '">' +
+        '<td data-l="' + esc(L.item) + '">' +
+          '<span class="iv-name" contenteditable="true" data-f="name">' + esc(nm) + "</span>" + bar +
           '<div class="iv-note' + (nt ? "" : " empty") + '" contenteditable="true" data-f="note" ' +
           'data-ph="' + et({ en: "Add a note, dated", nl: "Voeg een notitie toe, met datum" }) + '">' +
           esc(nt) + "</div></td>" +
-        '<td class="num"><span class="iv-need" contenteditable="true" data-f="need">' +
+        '<td class="num" data-l="' + esc(L.need) + '"><span class="iv-need" contenteditable="true" data-f="need">' +
           (need == null ? et(SETPAR) : tidy(need)) + "</span> " + esc(unitLabel(r.unit)) + "</td>" +
-        '<td><input class="inv-qty" type="text" inputmode="decimal" autocomplete="off" data-id="' + esc(r.id) +
+        '<td data-l="' + esc(L.have) + '"><input class="inv-qty" type="text" inputmode="decimal" autocomplete="off" data-id="' + esc(r.id) +
           '" value="' + (HAVE[r.id] != null ? esc(HAVE[r.id]) : "") + '" aria-label="' + esc(nm) +
           '"><span class="inv-unit">' + esc(unitLabel(r.unit)) + "</span></td>" +
-        '<td data-c="buy" class="buy' + (short === 0 ? " ok" : "") + '">' +
+        '<td data-c="buy" data-l="' + esc(L.buy) + '" class="buy' + (short === 0 ? " ok" : "") + '">' +
           (need == null ? et(SETPAR)
             : short > 0 ? tidy(short) + " " + esc(unitLabel(r.unit))
             : et({ en: "covered", nl: "gedekt" })) + "</td>" +
-        '<td data-c="cost" class="num">' + (!priced ? '<span class="iv-tbd">' +
+        '<td data-c="cost" class="num" data-l="' + esc(L.cost) + '">' + (!priced ? '<span class="iv-tbd">' +
             et({ en: "price TBD", nl: "prijs volgt" }) + "</span>"
           : short > 0 ? n2(short * r.cost) : "-") + "</td>" +
-        "<td>" + (canPrep(r.key || r.name)
-          ? '<span class="chip ' + (r.prep ? "due" : "yes") + '" data-prep="' + esc(r.id) + '">' +
-            et(r.prep ? { en: "Yes", nl: "Ja" } : { en: "No", nl: "Nee" }) + "</span>"
-          : '<span class="qdash" title="' +
-            et({ en: "Ordered in, nothing to prep", nl: "Wordt besteld, niets voor te bereiden" }) + '">' +
-            et({ en: "order", nl: "besteld" }) + "</span>") +
+        '<td data-l="' + esc(L.where) + '">' + supTag(r.supplier) +
           '<button class="iv-del" type="button" data-del="' + esc(r.id) + '" title="' +
           et({ en: "Delete row", nl: "Regel verwijderen" }) + '">&times;</button></td>' +
         "</tr>";
+      return { cat: r.cat, html: html, buyCost: (priced && short > 0) ? short * r.cost : 0 };
+    });
+
+    /* Rows come out of the map as objects so they can be grouped; a category
+       band is only drawn if something under it survived the filter. */
+    var groups = [], seen = {};
+    body.forEach(function (x) {
+      if (!x) return;
+      if (!seen[x.cat]) { seen[x.cat] = { cat: x.cat, rows: [], buy: 0 }; groups.push(seen[x.cat]); }
+      seen[x.cat].rows.push(x.html);
+      seen[x.cat].buy += x.buyCost;
+    });
+    var L = INVCOL();
+    var tbody = groups.map(function (g) {
+      var n = g.rows.length;
+      return '<tr class="inv-cat"><td colspan="6">' + esc(catLabel(g.cat)) +
+        '<span class="cat-r">' + n + " " +
+        tt(n === 1 ? { en: "line", nl: "regel" } : { en: "lines", nl: "regels" }) +
+        (g.buy > 0 ? "  ·  " + n2(g.buy) + tt({ en: " to buy", nl: " te kopen" }) : "") +
+        "</span></td></tr>" + g.rows.join("");
     }).join("");
 
     var FILTERS = [
       ["all",     { en: "All",           nl: "Alles" }],
       ["short",   { en: "Still to buy",  nl: "Nog kopen" }],
       ["covered", { en: "Covered",       nl: "Gedekt" }],
-      ["prep",    { en: "Prep today",    nl: "Vandaag prepping" }],
       ["note",    { en: "Has a note",    nl: "Heeft een notitie" }]
     ];
     return '<section class="section"><div class="section-head"><div class="smallcaps">' +
@@ -2386,6 +2573,11 @@ td.buy.ok { color: var(--ink-soft); }
         FILTERS.map(function (o) {
           return '<option value="' + o[0] + '"' + (FILTER === o[0] ? " selected" : "") + ">" +
                  et(o[1]) + "</option>"; }).join("") +
+        '<optgroup label="' + et({ en: "Buy at", nl: "Waar te koop" }) + '">' +
+        suppliers().map(function (s) {
+          var v = "sup:" + s;
+          return '<option value="' + esc(v) + '"' + (FILTER === v ? " selected" : "") + ">" +
+                 esc(s) + "</option>"; }).join("") + "</optgroup>" +
       "</select>" +
       '<button type="button" id="iv-add">' +
       et({ en: "Add row", nl: "Regel toevoegen" }) + "</button>" +
@@ -2396,17 +2588,16 @@ td.buy.ok { color: var(--ink-soft); }
                 : unpriced + " lines have no price yet.") + "</b> " +
         et({ en: "They are counted in the quantities but not in the money below.",
              nl: "Ze tellen mee in de aantallen, maar niet in de bedragen hieronder." }) + "</div>" : "") +
-      '<div class="tablewrap"><table class="wide"><thead><tr>' +
-      "<th>" + et({ en: "Category", nl: "Categorie" }) + "</th>" +
-      "<th>" + et({ en: "Ingredient and note", nl: "Ingredient en notitie" }) + "</th>" +
-      "<th>" + et({ en: "Needed per week", nl: "Nodig per week" }) + "</th>" +
-      "<th>" + et({ en: "Have on hand", nl: "Op voorraad" }) + "</th>" +
-      "<th>" + et({ en: "Still to buy", nl: "Nog kopen" }) + "</th>" +
-      '<th title="' + et({ en: "What the missing quantity will cost to order",
-                           nl: "Wat het ontbrekende aantal kost om te bestellen" }) + '">' +
-      et({ en: "What the shortfall costs", nl: "Wat het tekort kost" }) + "</th>" +
-      "<th>" + et({ en: "Prep", nl: "Prep" }) + "</th>" +
-      "</tr></thead><tbody>" + body + "</tbody></table></div>" +
+      '<div class="tablewrap"><table class="inv-t"><thead><tr>' +
+      "<th>" + esc(L.item) + "</th>" +
+      '<th class="num">' + esc(L.need) + "</th>" +
+      "<th>" + esc(L.have) + "</th>" +
+      "<th>" + esc(L.buy) + "</th>" +
+      '<th class="num" title="' + et({ en: "What the missing quantity will cost to order",
+                                       nl: "Wat het ontbrekende aantal kost om te bestellen" }) + '">' +
+      esc(L.cost) + "</th>" +
+      "<th>" + esc(L.where) + "</th>" +
+      "</tr></thead><tbody>" + tbody + "</tbody></table></div>" +
       '<div class="inv-sum"><div><dt>' +
       et({ en: "A full week, if you held nothing", nl: "Een hele week, als je niets had" }) +
       "</dt><dd>" + n2(totNeed) + "</dd></div>" +
@@ -2510,9 +2701,6 @@ td.buy.ok { color: var(--ink-soft); }
     persist(); invRender();
   }, true);
   document.addEventListener("click", function (e) {
-    var p = e.target.closest && e.target.closest("[data-prep]");
-    if (p) { var r1 = ROWS.filter(function (r) { return r.id === p.dataset.prep; })[0];
-             if (r1) { r1.prep = !r1.prep; persist(); invRender(); } return; }
     var d = e.target.closest && e.target.closest("[data-del]");
     if (d) { var dr = ROWS.filter(function (r) { return r.id === d.dataset.del; })[0];
              var nm = dr ? rowName(dr) : tt({ en: "this row", nl: "deze regel" });
@@ -2529,8 +2717,10 @@ td.buy.ok { color: var(--ink-soft); }
                                     nl: "Eenheid, bijvoorbeeld L, kg, g, st, fles" }), "L") || "L";
       /* A row typed in by hand has one name, and it shows in both languages
          until someone edits it while the other language is on screen. */
-      ROWS.push({ id:"u" + Date.now(), key:name, cat:cat, name:name, nameNl:name,
-                  need:null, unit:unit, cost:null, note:"", noteNl:"", prep:false });
+      var where = window.prompt(tt({ en: "Buy at, for example AH, AO, JUMBO, Sligro",
+                                     nl: "Waar te koop, bijvoorbeeld AH, AO, JUMBO, Sligro" }), "TBD") || "TBD";
+      ROWS.push({ id:slug(name) || ("u" + Date.now()), key:name, cat:cat, name:name, nameNl:name,
+                  supplier:where, need:null, unit:unit, cost:null, note:"", noteNl:"", prep:false });
       persist(); invRender(); return;
     }
     if (e.target.id === "iv-reset") {
@@ -2883,7 +3073,7 @@ td.buy.ok { color: var(--ink-soft); }
       b:[[{en:"Glass",nl:"Glas"},{en:"50 lychee juice · 20 lychee cordial · 70 coconut water",nl:"50 lycheesap · 20 lycheecordial · 70 kokoswater"}],
          [{en:"Ice",nl:"Ijs"},{en:"Crushed, up to the neck. Only after the liquids, never before",nl:"Crushed, tot aan de hals. Pas na de vloeistoffen, nooit ervoor"}],
          [{en:"Float",nl:"Drijven"},{en:"40 butterfly pea tea, off the jigger",nl:"40 vlindererwtthee, van de jigger"}],
-         [{en:"Garnish",nl:"Garnering"},{en:"Golden glitter lychee · lime wedge",nl:"Gouden glitterlychee · limoenpartje"}],
+         [{en:"Garnish",nl:"Garnering"},{en:"2 golden glitter lychees · lime wedge",nl:"2 gouden glitterlychees · limoenpartje"}],
          [{en:"Tray",nl:"Blad"},{en:"50 lychee-lime cordial in a brute, carried out with the drink. That is 25 lychee cordial plus 25 Boiron lime",nl:"50 lychee-limoencordial in een brute, mee naar tafel. Dat is 25 lycheecordial plus 25 Boiron limoen"}]],
       tbl:{en:["Set the glass down in front of the guest","Pour the 50 ml lychee-lime cordial from the brute over the indigo","Straw in, guest stirs"],
            nl:["Zet het glas voor de gast neer","Giet de 50 ml lychee-limoencordial uit de brute over het indigo","Rietje erin, gast roert"]},
@@ -2900,12 +3090,12 @@ td.buy.ok { color: var(--ink-soft); }
 
     { id:"the-hulk", name:"The Hulk", sw:"#6E8C3A",
       spec:{en:"Chilled coupe  ·  No ice in the glass  ·  Shake and fine strain", nl:"Gekoelde coupe  ·  Geen ijs in het glas  ·  Shaken en fijn zeven"},
-      b:[[{en:"Prep",nl:"Voorbereiden"},{en:"Ice into the coupe to chill it · spread brown sugar over the pear slice with a spoon",nl:"Ijs in de coupe om te koelen · verdeel bruine suiker met een lepel over het perenschijfje"}],
+      b:[[{en:"Prep",nl:"Voorbereiden"},{en:"Ice into the coupe to chill it",nl:"Ijs in de coupe om te koelen"}],
          [{en:"Tin",nl:"Tin"},{en:"Muddle 10 grapes to a puree · 10 basil leaves, press ONCE · 120 apple-pear · 20 lime · 15 simple",nl:"Kneus 10 druiven tot puree · 10 basilicumblaadjes, EEN keer persen · 120 appel-peer · 20 limoen · 15 suikersiroop"}],
          [{en:"Shake",nl:"Shaken"},{en:"Tip the coupe ice into the tin · cap · hard 12 seconds, until the chips sound smaller",nl:"Kiep het ijs uit de coupe in de tin · sluiten · hard 12 seconden, tot de ijsstukjes kleiner klinken"}],
-         [{en:"Finish",nl:"Afmaken"},{en:"Fine strain into the chilled coupe · pear slice on the rim",nl:"Fijn zeven in de gekoelde coupe · perenschijfje op de rand"}]],
+         [{en:"Finish",nl:"Afmaken"},{en:"Fine strain into the chilled coupe · float the biggest, best basil leaf on top",nl:"Fijn zeven in de gekoelde coupe · laat het grootste, mooiste basilicumblaadje bovenop drijven"}]],
       say:{en:"Short on liquid? 5 to 15 soda keeps the crispness.",nl:"Te weinig vloeistof? 5 tot 15 spa rood houdt de frisheid."},
-      flag:{en:"TESTING: oven-dried pear slices, to stop them falling into the glass. Until that is signed off, slice on the kitchen machine as now.",nl:"IN TEST: in de oven gedroogde perenschijfjes, zodat ze niet in het glas vallen. Tot dat is goedgekeurd, snijden op de machine in de keuken."} },
+      flag:{en:"TESTING: oven-dried pear slices, to stop them falling into the glass. Until that is signed off, the garnish is the biggest, most beautiful basil leaf, floated on top.",nl:"IN TEST: in de oven gedroogde perenschijfjes, zodat ze niet in het glas vallen. Tot dat is goedgekeurd, is de garnering het grootste, mooiste basilicumblaadje, drijvend bovenop."} },
 
     { id:"hibiscus-royale", name:"Hibiscus Royale", sw:"#9E2B3B",
       spec:{en:"Coppa  ·  Cubed  ·  Dry shake then wet shake", nl:"Coppa  ·  Blokjes  ·  Droog shaken, dan nat shaken"},
@@ -2928,7 +3118,7 @@ td.buy.ok { color: var(--ink-soft); }
       spec:{en:"Hurricane  ·  Crushed  ·  Muddle, shake, layer, top", nl:"Hurricane  ·  Crushed  ·  Kneuzen, shaken, laag, aanvullen"},
       b:[[{en:"Glass",nl:"Glas"},{en:"Muddle 4 lime wedges · bash 8 to 10 mint leaves",nl:"Kneus 4 limoenpartjes · tik 8 tot 10 muntblaadjes aan"}],
          [{en:"Tin",nl:"Tin"},{en:"20 cassis · 20 Jade's mint syrup · 15 lime · ice · shake hard",nl:"20 cassis · 20 muntsiroop van Jade · 15 limoen · ijs · hard shaken"}],
-         [{en:"Churn",nl:"Churnen"},{en:"Fill HALF with crushed · churn 8 to 10 with the bar spoon until it takes the mojito look",nl:"Vul HALF met crushed · churn 8 tot 10 keer met de barlepel tot het de mojito-look krijgt"}],
+         [{en:"Churn",nl:"Churnen"},{en:"Fill a QUARTER with crushed · churn 8 to 10 with the bar spoon until it takes the mojito look",nl:"Vul een KWART met crushed · churn 8 tot 10 keer met de barlepel tot het de mojito-look krijgt"}],
          [{en:"Build",nl:"Opbouwen"},{en:"Fine strain the purple over · more crushed until it is covered · soda to 1 cm",nl:"Fijn zeef het paars eroverheen · meer crushed tot het bedekt is · spa rood tot 1 cm"}],
          [{en:"Float",nl:"Drijven"},{en:"15 to 20 concentrated butterfly pea, for the layer",nl:"15 tot 20 geconcentreerde vlindererwt, voor de laag"}],
          [{en:"Garnish",nl:"Garnering"},{en:"Mint sprig, slapped once · lime wedge on the ice",nl:"Munttakje, een keer aangetikt · limoenpartje op het ijs"}]],
@@ -2943,12 +3133,13 @@ td.buy.ok { color: var(--ink-soft); }
       say:{en:"Cranberry and lime do the work, the orange rounds the middle.",nl:"Cranberry en limoen doen het werk, de sinaasappel rondt het midden af."} },
 
     { id:"amsterdam-sunrise", name:"Amsterdam Sunrise", sw:"#E8791D",
-      spec:{en:"Highball  ·  Crushed  ·  Build and sink", nl:"Highball  ·  Crushed  ·  Opbouwen en laten zakken"},
+      spec:{en:"Highball  ·  Crushed  ·  Build and float", nl:"Highball  ·  Crushed  ·  Opbouwen en laten drijven"},
       b:[[{en:"Glass",nl:"Glas"},{en:"Crushed ice",nl:"Crushed ice"}],
          [{en:"Pour",nl:"Schenken"},{en:"180 orange juice, to 1 cm",nl:"180 sinaasappelsap, tot 1 cm"}],
-         [{en:"Sink",nl:"Laten zakken"},{en:"30 grenadine, slowly down the inside, so it settles and stays",nl:"30 grenadine, langzaam langs de binnenkant, zodat hij zakt en blijft liggen"}],
+         [{en:"Float",nl:"Drijven"},{en:"30 grenadine over the top. On crushed it stays up instead of sinking, so the sunrise runs the other way",nl:"30 grenadine erover. Op crushed blijft hij boven liggen in plaats van te zakken, dus de zonsopgang loopt andersom"}],
+         [{en:"Garnish",nl:"Garnering"},{en:"Half orange wheel laid on top of the crushed ice",nl:"Halve sinaasappelschijf op het crushed ice gelegd"}],
          [{en:"Do not",nl:"Niet doen"},{en:"Stir it",nl:"Roeren"}]],
-      say:{en:"Leave it for first light. Stir once when you are ready for sunset.",nl:"Laat hem zo voor het eerste licht. Roer een keer als je klaar bent voor de zonsondergang."} },
+      say:{en:"On crushed the grenadine rides on top, so it arrives as sunset. Stir it down for first light.",nl:"Op crushed blijft de grenadine bovenop liggen, dus hij komt binnen als zonsondergang. Roer hem naar beneden voor het eerste licht."} },
 
     { id:"tropical-velvet", name:"Tropical Velvet", sw:"#C9973B",
       spec:{en:"Chilled coupe  ·  No ice in the glass  ·  Shake and fine strain", nl:"Gekoelde coupe  ·  Geen ijs in het glas  ·  Shaken en fijn zeven"},
