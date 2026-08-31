@@ -1775,6 +1775,39 @@ td.buy.ok { color: var(--ink-soft); }
   .inv-t tr.inv-r .iv-name, .inv-t tr.inv-r .iv-need { margin-left: 0; margin-right: 0; }
   .inv-cat td { display: block; }
 }
+/* price book */
+.pb-t { width: 100%; border-collapse: collapse; font-size: 13px; }
+.pb-t th { background: var(--limestone-deep); font-size: 10px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink-soft); text-align: left; padding: 8px 10px; white-space: nowrap; }
+.pb-t td { padding: 8px 10px; border-bottom: 1px solid var(--limestone-deep); vertical-align: top; }
+.pb-t .num { text-align: right; font-variant-numeric: tabular-nums; }
+.pb-art { font-family: var(--mono); font-size: 11.5px; color: var(--ink-soft); }
+.pb-link { color: var(--gold); text-decoration: underline; text-underline-offset: 2px; }
+.owner-h .cat-r { float: right; font-family: var(--body); font-size: 12px; color: var(--ink-soft); }
+.rcpt { background: #fff; border: 1px solid var(--gold-pale); border-radius: var(--arch); padding: 14px 16px; margin-top: 12px; }
+.rcpt-h { font-size: 12px; line-height: 1.6; color: var(--ink-soft); padding-bottom: 10px;
+  border-bottom: 1px dashed var(--gold-pale); }
+.rcpt-t { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 12px; margin-top: 8px; }
+.rcpt-t td { padding: 3px 6px; }
+.rcpt-t td:first-child { width: 2em; color: var(--ink-soft); }
+.rcpt-t .num { text-align: right; font-variant-numeric: tabular-nums; }
+.rcpt-tot td { border-top: 1px solid var(--gold-pale); padding-top: 7px; }
+.rcpt-f { margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--gold-pale);
+  font-size: 12px; color: var(--ink-soft); }
+/* price provenance inside the inventory cost cell */
+.pv { display: block; font-size: 10.5px; color: var(--ink-soft); margin-top: 2px; }
+.pv a { color: var(--gold); }
+.pv.cheaper { color: #9E2B3B; }
+@media (max-width: 719px) {
+  .pb-t, .pb-t tbody, .pb-t tr, .pb-t td { display: block; width: 100%; }
+  .pb-t thead { display: none; }
+  .pb-t tr { border-bottom: 1px solid var(--gold-pale); padding: 8px 0; }
+  .pb-t td { border: 0; padding: 2px 0; display: grid; grid-template-columns: 8.5em 1fr;
+    gap: 10px; align-items: baseline; }
+  .pb-t td::before { content: attr(data-l); font-size: 10px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--gold); }
+  .pb-t td.num { text-align: left; }
+}
 /* editable notes anywhere */
 .qn-wrap { margin-top: 8px; }
 .qn-lbl { display: block; font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
@@ -2272,6 +2305,8 @@ td.buy.ok { color: var(--ink-soft); }
     /* The id is derived from the English name, not from the row's position, so
        adding or removing a line never shifts the saved counts of every line
        below it. key stays the English name for the same reason. */
+    /* Costs are filled in by applyPrices() further down, once the price book
+       itself has been defined. This runs first, so it cannot read it. */
     return { id:slug(r[1]), key:r[1], cat:r[0], name:r[1], nameNl:r[7] || r[1],
              supplier:r[2], need:r[3], unit:r[4], cost:r[5],
              note:r[6], noteNl:r[8] || "", prep:false };
@@ -2381,12 +2416,35 @@ td.buy.ok { color: var(--ink-soft); }
       where: tt({ en: "Buy at",       nl: "Waar" })
     };
   }
+  /* Where this row's number came from. A price with a pack and a shop behind
+     it says so and links out; a number with nothing behind it says THAT too,
+     rather than passing for a sourced figure. */
+  function provenance(r) {
+    var e = rowEntry(r);
+    if (e) {
+      var s = STORES[e.sup], txt = e.sup + " · " + e.pack + " @ " + n2(e.price);
+      var out = '<span class="pv">' + (s
+        ? '<a href="' + esc(s.url(e)) + '" target="_blank" rel="noopener">' + esc(txt) + "</a>"
+        : esc(txt)) + (e.art ? ' <span class="pb-art">' + esc(e.art) + "</span>" : "") + "</span>";
+      var ch = rowCheaper(r);
+      if (ch) out += '<span class="pv cheaper">' +
+        et({ en: "cheaper at ", nl: "goedkoper bij " }) + esc(ch.e.sup) + " " + n2(ch.c) +
+        " / " + esc(unitLabel(r.unit)) + "</span>";
+      return out;
+    }
+    if (r.cost != null) return '<span class="pv cheaper">' +
+      et({ en: "estimate, no source on file", nl: "schatting, geen bron vastgelegd" }) + "</span>";
+    return "";
+  }
+
   function supTag(s) {
     s = s || "TBD";
     var tbd = s === "TBD";
-    return '<span class="sup' + (tbd ? " tbd" : "") + '" title="' +
-      et(tbd ? { en: "Supplier not decided yet", nl: "Leverancier nog niet bepaald" }
-             : { en: "Where this is bought", nl: "Waar dit gekocht wordt" }) + '">' + esc(s) + "</span>";
+    return '<span class="sup' + (tbd ? " tbd" : "") + '" contenteditable="true" data-f="supplier" title="' +
+      et(tbd ? { en: "Supplier not decided yet. Click to set one.",
+                 nl: "Leverancier nog niet bepaald. Klik om er een te kiezen." }
+             : { en: "Where this is bought. Click to change it, and the price follows.",
+                 nl: "Waar dit gekocht wordt. Klik om te wijzigen, de prijs volgt." }) + '">' + esc(s) + "</span>";
   }
   /* Every supplier actually present, so the filter offers real choices only. */
   function suppliers() {
@@ -2456,8 +2514,11 @@ td.buy.ok { color: var(--ink-soft); }
   })();
   var FILTER = "all";
   function persist() { save(LS_ROWS, ROWS); save(LS_HAVE, HAVE); }
-  function n2(v) { return (Math.round(v * 100) / 100).toFixed(2); }
-  function tidy(v) { return String(Math.round(v * 1000) / 1000); }
+  /* Dutch writes 1,4 where English writes 1.4. Input already accepts either,
+     so the display should match the language the reader is in. */
+  function dec(s) { return (typeof LANG !== "undefined" && LANG === "nl") ? String(s).replace(".", ",") : String(s); }
+  function n2(v) { return dec((Math.round(v * 100) / 100).toFixed(2)); }
+  function tidy(v) { return dec(String(Math.round(v * 1000) / 1000)); }
 
   /* Accept both decimal separators. The field is type=text on purpose: a
      type=number input silently DROPS a comma, so "1,4" arrives as 14 and the
@@ -2519,7 +2580,7 @@ td.buy.ok { color: var(--ink-soft); }
         '<td class="num" data-l="' + esc(L.need) + '"><span class="iv-need" contenteditable="true" data-f="need">' +
           (need == null ? et(SETPAR) : tidy(need)) + "</span> " + esc(unitLabel(r.unit)) + "</td>" +
         '<td data-l="' + esc(L.have) + '"><input class="inv-qty" type="text" inputmode="decimal" autocomplete="off" data-id="' + esc(r.id) +
-          '" value="' + (HAVE[r.id] != null ? esc(HAVE[r.id]) : "") + '" aria-label="' + esc(nm) +
+          '" value="' + (HAVE[r.id] != null ? esc(dec(HAVE[r.id])) : "") + '" aria-label="' + esc(nm) +
           '"><span class="inv-unit">' + esc(unitLabel(r.unit)) + "</span></td>" +
         '<td data-c="buy" data-l="' + esc(L.buy) + '" class="buy' + (short === 0 ? " ok" : "") + '">' +
           (need == null ? et(SETPAR)
@@ -2527,7 +2588,7 @@ td.buy.ok { color: var(--ink-soft); }
             : et({ en: "covered", nl: "gedekt" })) + "</td>" +
         '<td data-c="cost" class="num" data-l="' + esc(L.cost) + '">' + (!priced ? '<span class="iv-tbd">' +
             et({ en: "price TBD", nl: "prijs volgt" }) + "</span>"
-          : short > 0 ? n2(short * r.cost) : "-") + "</td>" +
+          : short > 0 ? n2(short * r.cost) : "-") + provenance(r) + "</td>" +
         '<td data-l="' + esc(L.where) + '">' + supTag(r.supplier) +
           '<button class="iv-del" type="button" data-del="' + esc(r.id) + '" title="' +
           et({ en: "Delete row", nl: "Regel verwijderen" }) + '">&times;</button></td>' +
@@ -2584,8 +2645,8 @@ td.buy.ok { color: var(--ink-soft); }
       '<button type="button" id="iv-reset">' +
       et({ en: "Reset to defaults", nl: "Terug naar standaard" }) + "</button></div>" +
       (unpriced ? '<div class="src-warn" style="margin:0 0 14px"><b>' +
-        (isNl() ? unpriced + " regels hebben nog geen prijs."
-                : unpriced + " lines have no price yet.") + "</b> " +
+        (isNl() ? (unpriced === 1 ? "1 regel heeft nog geen prijs." : unpriced + " regels hebben nog geen prijs.")
+                : (unpriced === 1 ? "1 line has no price yet." : unpriced + " lines have no price yet.")) + "</b> " +
         et({ en: "They are counted in the quantities but not in the money below.",
              nl: "Ze tellen mee in de aantallen, maar niet in de bedragen hieronder." }) + "</div>" : "") +
       '<div class="tablewrap"><table class="inv-t"><thead><tr>' +
@@ -2697,6 +2758,13 @@ td.buy.ok { color: var(--ink-soft); }
     } else if (el.dataset.f === "note") {
       if (isNl()) { if (val === (row.noteNl || "")) return; row.noteNl = val; }
       else { if (val === (row.note || "")) return; row.note = val; }
+    } else if (el.dataset.f === "supplier") {
+      var sup = val || "TBD";
+      if (sup === row.supplier) return;
+      row.supplier = sup;
+      /* The shop decides the price, so re-read it from the book. */
+      var e = rowEntry(row);
+      if (e) row.cost = costIn(e, row.unit);
     }
     persist(); invRender();
   }, true);
@@ -2876,19 +2944,20 @@ td.buy.ok { color: var(--ink-soft); }
 
   var PREP2 = [
     [{en:"Butterfly pea tea",nl:"Vlindererwtthee"},
-     {en:"2 L",nl:"2 L"},
+     {en:"2.5 L",nl:"2,5 L"},
      {en:"5 days",nl:"5 dagen"},
-     {en:"Speedrail blue bottle FR1A middle. 2 L brewing pitcher FR1B bottom.",
-      nl:"Blauwe speedrailfles FR1A midden. Brouwkan van 2 L FR1B onderin."},
-     {en:"Take the 2 L pitcher, fill with hot water. 6 to 8 g dried flowers, which is roughly 4 to 5 teaspoons, or 30 to 40 individual flowers, or one loose handful.",
-      nl:"Neem de kan van 2 L en vul hem met heet water. 6 tot 8 g gedroogde bloemen, dat is ongeveer 4 tot 5 theelepels, of 30 tot 40 losse bloemen, of een losse handvol."},
-     ""],
+     {en:"Speedrail blue bottle FR1A middle. Semi-clear plastic measuring jug, or a mixing jug with a handle, FR1B bottom.",
+      nl:"Blauwe speedrailfles FR1A midden. Semi-transparante kunststof maatbeker, of mengkan met handvat, FR1B onderin."},
+     {en:"BOILED water, straight off the boil, into the semi-clear plastic measuring jug. Fill to 2.5 litres. 6 to 8 g dried flowers, that is roughly 4 to 5 teaspoons, or 30 to 40 individual flowers, or one loose handful.",
+      nl:"GEKOOKT water, direct van de kook, in de semi-transparante kunststof maatbeker. Vul tot 2,5 liter. 6 tot 8 g gedroogde bloemen, dat is ongeveer 4 tot 5 theelepels, of 30 tot 40 losse bloemen, of een losse handvol."},
+     {en:"The jug is semi-clear on purpose: you watch the blue come up and stop when it is right.",
+      nl:"De maatbeker is met opzet semi-transparant: je ziet het blauw opkomen en stopt wanneer het goed is."}],
     [{en:"Butterfly pea, strong infusion for depth",nl:"Vlindererwt, sterke infusie voor diepte"},
      {en:"500 ml",nl:"500 ml"},
      {en:"5 days",nl:"5 dagen"},
      {en:"Squeeze bottle, FR1C top shelf.",nl:"Knijpfles, FR1C bovenste plank."},
-     {en:"Take the 500 ml pitcher, fill with hot water. 6 to 8 g dried flowers, same measure as above. This is the concentrate that floats on the Ocean Mojito.",
-      nl:"Neem de kan van 500 ml en vul hem met heet water. 6 tot 8 g gedroogde bloemen, dezelfde maat als hierboven. Dit is het concentraat dat op de Ocean Mojito drijft."},
+     {en:"Same boiled water as the 2.5 L batch, but in the 500 ml pitcher. 6 to 8 g dried flowers, same measure as above. This is the concentrate that floats on the Ocean Mojito.",
+      nl:"Zelfde gekookte water als de batch van 2,5 L, maar in de kan van 500 ml. 6 tot 8 g gedroogde bloemen, dezelfde maat als hierboven. Dit is het concentraat dat op de Ocean Mojito drijft."},
      ""],
     [{en:"Hibiscus tea, strong",nl:"Hibiscusthee, sterk"},
      {en:"2 L",nl:"2 L"},
@@ -2896,9 +2965,10 @@ td.buy.ok { color: var(--ink-soft); }
       nl:"MAXIMAAL 48 UUR. Daarna wordt hij bitter en is Achraf niet blij."},
      {en:"Speedrail red bottle FR1A middle. 2 L brewing pitcher FR1B bottom.",
       nl:"Rode speedrailfles FR1A midden. Brouwkan van 2 L FR1B onderin."},
-     {en:"Take the 2 L pitcher, fill with hot water. One loose handful, about three quarters of a cup, 15 to 20 g. Steep 5 to 7 minutes. Because it is diluted you can leave the flowers in.",
-      nl:"Neem de kan van 2 L en vul hem met heet water. Een losse handvol, ongeveer driekwart kop, 15 tot 20 g. Laat 5 tot 7 minuten trekken. Omdat hij verdund wordt, mogen de bloemen erin blijven."},
-     ""],
+     {en:"10 g dried hibiscus. WARM water, not hot: boiling water is what draws the bitterness out. Leave it to macerate OVERNIGHT rather than steeping it fast, and it comes out deep and tart instead of harsh.",
+      nl:"10 g gedroogde hibiscus. WARM water, niet heet: kokend water trekt juist de bitterheid eruit. Laat het een NACHT macereren in plaats van snel te laten trekken, dan wordt hij diep en zuur in plaats van scherp."},
+     {en:"Overnight and warm, not fast and hot. This is the opposite of how the butterfly pea is made, which does take boiled water.",
+      nl:"Een nacht en warm, niet snel en heet. Dit is precies andersom dan de vlindererwt, die juist gekookt water nodig heeft."}],
     [{en:"Rosemary-thyme maple cordial",nl:"Rozemarijn-tijm-ahornsiroop"},
      {en:"Big squeeze bottle",nl:"Grote knijpfles"},
      {en:"About 2 months refrigerated",nl:"Ongeveer 2 maanden gekoeld"},
@@ -3178,6 +3248,433 @@ td.buy.ok { color: var(--ink-soft); }
   window.bookletHTML = function () { return BK.map(bkPage).join(""); };
 
 
+
+  /* ==================================================================
+     7. THE PRICE BOOK
+     Every price the bar actually has, with the pack it came in, the
+     article number and where it was seen. Nothing here is estimated: a
+     line either has a source or it says TBD.
+
+     Costing follows Milo and Jade's sheet, kostprijs dranken.xlsx:
+       price per serving = pack price / pack size * amount needed
+     plus a flat 0.05 per drink for consumables and spill.
+
+     m = the match key. Several shops sell the same thing, so entries
+     that share an m are alternatives for one another and the cheapest
+     per unit can be pointed out.
+     ================================================================== */
+  var SPILL = 0.05;
+
+  /* id, supplier, match, product, article nr, pack as written, qty, unit, price, note */
+  var PRICEBOOK = [
+    /* ---- Amazing Oriental, from the receipt of 17.08.26 ---- */
+    ["ao-grenadine","AO","grenadine-molasses","Grenadine Molasses","94937","500 ml",500,"ml",3.89,""],
+    ["ao-coconut-cream","AO","coconut-cream","Coconut Cream 20-22% fat (EOL)","29332","400 ml",400,"ml",1.89,""],
+    ["ao-lychee-drink","AO","lychee-juice","Lychee Drink","89885","350 ml, plus 0.15 deposit",350,"ml",1.45,""],
+    ["ao-mangosteen","AO","mangosteen","Mangosteen Drink","89551","330 ml, plus 0.15 deposit",330,"ml",1.69,
+     {en:"Was on offer at 1.39.",nl:"Was in de actie voor 1,39."}],
+    ["ao-lychees-syrup","AO","lychees-canned","Lychees in Syrup","21282","567 g tin",567,"g",2.59,""],
+    ["ao-markoeza","AO","colouring","Aroma en Kleurstof Markoeza","28890","50 ml",50,"ml",3.59,""],
+    ["ao-passionfruit","AO","passionfruit-juice","Passion Fruit Juice Drink, Tetra","31056","1 L",1000,"ml",2.69,""],
+    ["ao-hibiscus","AO","hibiscus","Sun Dried Red Hibiscus Flowers","54377","125 g",125,"g",3.89,""],
+    ["ao-rose","AO","rose","Dried Rose Flower","65012","50 g",50,"g",1.65,""],
+    ["ao-butterfly-pea","AO","butterfly-pea","Dried Butterfly Pea","96567","50 g",50,"g",3.15,""],
+    ["ao-bags","AO","bags","HDPE Hemdtassen 30x10x60","7066","1 stuk",1,"pcs",0.20,""],
+
+    /* ---- Albert Heijn ---- */
+    ["ah-maaza-lychee","AH","lychee-juice","Maaza Fruit drink lychee","","330 ml",330,"ml",1.29,""],
+    ["ah-orange-fresh","AH","orange-juice","AH Vers geperst sap sinaasappel","","500 ml",500,"ml",2.49,""],
+    ["ah-viscose","AH","wipes-yellow","AH Viscosedoekjes","","10 stuks",1,"pcs",1.99,""],
+    ["ah-straws","AH","straws-any","AH Rietjes","","10 stuks",1,"pcs",1.29,""],
+    ["ah-oat","AH","oat-milk","AH Terra Plantaardige barista haver","","1 L, premium 10 percent off, was 1.69",1000,"ml",1.52,""],
+    ["ah-sugar","AH","sugar","AH Kristalsuiker","","1 kg",1000,"g",0.75,""],
+    ["ah-maple","AH","maple","Maple Gold Ahornsiroop","","250 ml",250,"ml",6.49,""],
+    ["ah-condensed","AH","condensed-milk","Friesche Vlag Volle melk gecondenseerd","","397 g",397,"ml",2.79,
+     {en:"Priced per ml on the assumption 397 g is about 397 ml.",nl:"Per ml gerekend, aangenomen dat 397 g ongeveer 397 ml is."}],
+    ["ah-gingerbeer","AH","ginger-beer","Royal Club Ginger beer 4-pack","","4 stuks, 10 percent volume, was 9.96",4,"pcs",8.96,
+     {en:"BOTTLE SIZE NOT ON THE LIST. Priced per bottle, not per litre, until someone confirms it.",
+      nl:"FLESFORMAAT STAAT NIET OP DE LIJST. Per fles gerekend, niet per liter, tot iemand het bevestigt."}],
+    ["ah-cranberry","AH","cranberry","Ocean Spray Cranberry classic","","1 L",1000,"ml",2.49,""],
+    ["ah-pineapple","AH","pineapple-juice","AH Ananassap","","1 L",1000,"ml",2.59,""],
+    ["ah-pineapple-chunks","AH","pineapple-chunks","AH Stukjes ananas op sap","","567 g tin",1,"pcs",2.15,""],
+    ["ah-passionfruit-fresh","AH","passionfruit-fresh","AH Passievruchten zak","","6 stuks",6,"pcs",3.99,""],
+    ["ah-pears","AH","pears","AH Conference schaal 2-pack","","2 stuks, 3 percent volume, was 4.98",2,"pcs",4.83,""],
+    ["ah-jalapeno","AH","jalapeno","AH Jalapeno peper groen","","per stuk",1,"pcs",0.59,""],
+    ["ah-thyme","AH","thyme","AH Tijm","","15 g",15,"g",1.25,""],
+    ["ah-rosemary","AH","rosemary","AH Rozemarijn","","15 g",15,"g",1.25,""],
+    ["ah-basil","AH","basil","AH Basilicum","","22 g",22,"g",1.25,""],
+    ["ah-mint","AH","mint","AH Munt grootverpakking","","75 g",75,"g",1.99,""],
+    ["ah-grapes","AH","grapes","AH Pitloze witte druiven","","500 g",500,"g",2.59,""],
+    ["ah-oranges","AH","oranges","AH Handsinaasappelen","","2 kg, on offer, was 3.29",2000,"g",2.49,""],
+    ["ah-lemons","AH","lemons","AH Citroen","","500 g",500,"g",1.59,""],
+    ["ah-limes","AH","limes","AH Limoenen","","4 stuks",4,"pcs",1.29,""],
+    ["ah-applepear-bio","AH","apple-pear","Het sapgilde Appel-perensap bio","","0,75 L, premium 10 percent, was 2.99",750,"ml",2.69,""],
+    ["ah-pear-apple","AH","apple-pear","Van de Boom Peer met appel","","1 L, 2 for 3.99",1000,"ml",2.49,""],
+    ["ah-glitter","AH","gold-glitter","AH Bakfeest glitterspray goud","","4 g",4,"g",3.99,""],
+
+    /* ---- Jumbo ---- */
+    ["jumbo-duo","JUMBO","apple-pear","Jumbo Duo Drank Peer Appel","","1 L",1000,"ml",1.49,""],
+
+    /* ---- Sligro, Bar Soft Opening list, 29.08.26 ---- */
+    ["sl-ginger","Sligro","ginger","Gember","174662","Zak 500 g",500,"g",3.17,""],
+    ["sl-jalapeno","Sligro","jalapeno-g","Jalapeno peper","204506","Bak 200 g",200,"g",3.03,""],
+    ["sl-strawberries","Sligro","strawberries","Aardbeien Hoogstraten","507714","Bakje 500 g",500,"g",4.32,""],
+    ["sl-lemon","Sligro","lemons","Citroen","668696","Krat 6 kg",6000,"g",19.20,""],
+    ["sl-pears","Sligro","pears-g","Conference peren 65/75","173559","Zak 2 kg",2000,"g",4.32,""],
+    ["sl-grapes","Sligro","grapes","Druiven wit pitloos","137373","Bak 500 g",500,"g",2.68,""],
+    ["sl-limes","Sligro","limes","Limoenen","183226","Doos 48 stuks",48,"pcs",14.38,""],
+    ["sl-passionfruit","Sligro","passionfruit-g","Passievrucht","515194","Doos 2 kg",2000,"g",15.39,""],
+    ["sl-oranges","Sligro","oranges","Perssinaasappel","676241","Doos 15 kg",15000,"g",18.30,""],
+    ["sl-basil","Sligro","basil","Basilicum DeliHerbs","517269","Zakje 70 g",70,"g",1.99,""],
+    ["sl-mint","Sligro","mint","Munt DeliHerbs","185323","Bak 200 g",200,"g",5.05,""],
+    ["sl-rosemary","Sligro","rosemary","Rozemarijn DeliHerbs","517366","Zakje 70 g",70,"g",2.09,""],
+    ["sl-thyme","Sligro","thyme","Tijm DeliHerbs","514627","Zakje 70 g",70,"g",2.09,""],
+    ["sl-milk","Sligro","milk","Volle melk Campina Langlekker","109347","Doos 12 x 1 L",12000,"ml",20.64,""],
+    ["sl-condensed","Sligro","condensed-milk","Gecondenseerde melk Melkan","32347","Tray 12 x 30,5 cl",3660,"ml",16.05,""],
+    ["sl-oat","Sligro","oat-milk","Haverdrank barista lactosevrij Oatly","26375","Doos 6 x 1 L",6000,"ml",16.24,""],
+    ["sl-crushed-ice","Sligro","crushed-ice","Crushed ice 528","216777","Zak 2 kg",2000,"g",2.65,""],
+    ["sl-salt","Sligro","sea-salt","Sea salt flakes Maldon","48724","Pak 250 g",250,"g",5.43,
+     {en:"Sligro flags this as possibly unavailable.",nl:"Sligro geeft aan dat dit mogelijk niet leverbaar is."}],
+    ["sl-coconut-cream","Sligro","coconut-cream","Zuivere kokosroom Kara","416507","Pak 1 L",1000,"ml",6.06,""],
+    ["sl-straw-puree","Sligro","strawberry-puree","Fruitpuree aardbei Boiron","412540","1 kg",1000,"ml",9.56,
+     {en:"Priced per ml, taking 1 kg of puree as about 1 L.",nl:"Per ml gerekend, 1 kg puree als ongeveer 1 L."}],
+    ["sl-passion-puree","Sligro","passionfruit-puree","Puree passievrucht Boiron","98831","Bak 1 kg",1000,"ml",12.50,
+     {en:"Priced per ml, taking 1 kg of puree as about 1 L.",nl:"Per ml gerekend, 1 kg puree als ongeveer 1 L."}],
+    ["sl-freeze-straw","Sligro","freeze-dried-strawberry","Gevriesdroogde aardbei schijfjes Droogfruit","185424","Pot 40 g",40,"g",5.16,""],
+    ["sl-pineapple-chunks","Sligro","pineapple-chunks","Ananasstukjes tidbits op lichte siroop Grand Gerard","924128","Krimp 6 blikken x 567 g",6,"pcs",10.07,""],
+    ["sl-lychees","Sligro","lychees-canned","Lychees op lichte siroop Grand Gerard","119699","Krimp 3 blikken x 567 g",1701,"g",6.42,""],
+    ["sl-dried-apple","Sligro","dried-apple","Gedroogde appel Zitromac","186418","Zak 120 g",120,"g",14.93,
+     {en:"Available from 07.09.26.",nl:"Leverbaar vanaf 07-09-2026."}],
+    ["sl-cassis","Sligro","cassis","Coulis des fruits zwarte bes Boiron","148497","Fles 500 g",500,"ml",7.19,
+     {en:"Priced per ml, taking 500 g of coulis as about 500 ml.",nl:"Per ml gerekend, 500 g coulis als ongeveer 500 ml."}],
+    ["sl-gold-spray","Sligro","gold-glitter","Goud spray Culifine","134663","Busje 10 cl",100,"ml",19.08,""],
+    ["sl-cola","Sligro","cola","Cola regular Coca-Cola","192603","Krat 24 flesjes x 20 cl",24,"pcs",13.13,""],
+    ["sl-cola-zero","Sligro","cola-zero","Cola zero sugar Coca-Cola","940174","Krat 24 flesjes x 20 cl",24,"pcs",13.13,""],
+    ["sl-fanta","Sligro","fanta","Fanta Orange","115994","Krat 24 flesjes x 20 cl",24,"pcs",13.13,""],
+    ["sl-icetea-peach","Sligro","icetea-peach","Lipton Ice Tea peach","180113","Tray 28 flesjes x 20 cl",28,"pcs",17.69,""],
+    ["sl-icetea-sparkling","Sligro","icetea-sparkling","Lipton Ice Tea sparkling","935409","Krat 28 flesjes x 20 cl",28,"pcs",17.69,""],
+    ["sl-bitter-lemon","Sligro","bitter-lemon","Royal Bliss Bitter lemon","190886","Krat 24 flesjes x 20 cl",24,"pcs",14.23,""],
+    ["sl-ginger-ale","Sligro","ginger-ale","Royal Bliss Ginger ale","195112","Krat 24 flesjes x 20 cl",24,"pcs",14.23,""],
+    ["sl-tonic","Sligro","tonic","Royal Bliss Signature tonic water","195115","Krat 24 flesjes x 20 cl",24,"pcs",14.23,""],
+    ["sl-gingerbeer","Sligro","ginger-beer-l","Ginger beer Royal Club","155571","Krimp 6 petflessen x 1 L",6000,"ml",8.32,""],
+    ["sl-sprite","Sligro","sprite","Sprite Zero sugar","180496","Krat 24 flesjes x 20 cl",24,"pcs",13.13,""],
+    ["sl-spa-rood","Sligro","spa-rood","Spa Intense, bruisend","164317","Krat 28 flesjes x 25 cl",28,"pcs",9.27,""],
+    ["sl-spa-blauw","Sligro","spa-blauw","Spa Reine, koolzuurvrij","164367","Krat 28 flesjes x 25 cl",28,"pcs",9.27,""],
+    ["sl-spa-rood-l","Sligro","spa-rood-l","Spa Intense, bruisend, by the litre","164317","Krat 28 x 25 cl is 7 L",7000,"ml",9.27,
+     {en:"Same crate as the bottled line, counted in litres for the bar.",nl:"Zelfde krat als de flessenregel, in liters geteld voor de bar."}],
+    ["sl-spa-blauw-l","Sligro","spa-blauw-l","Spa Reine, koolzuurvrij, by the litre","164367","Krat 28 x 25 cl is 7 L",7000,"ml",9.27,
+     {en:"Same crate as the bottled line, counted in litres for the bar.",nl:"Zelfde krat als de flessenregel, in liters geteld voor de bar."}],
+    ["sl-pineapple","Sligro","pineapple-juice","Sap ananas Appelsientje","223812","Doos 8 pakken x 1 L",8000,"ml",20.39,""],
+    ["sl-passionfruit-juice","Sligro","passionfruit-juice","Coolbest Passionfruit Heaven","167971","Pak 1 L",1000,"ml",2.54,""],
+    ["sl-appelaere","Sligro","appelaere","De Appelaere appelsap","266614","Krat 24 flesjes x 20 cl",24,"pcs",24.90,""],
+    ["sl-coconut-water","Sligro","coconut-water","Kokoswater Healthy People","57133","Pak 1 L",1000,"ml",2.37,""],
+    ["sl-orange-fresh","Sligro","orange-juice","Sinaasappelsap vers Hoogesteger","780074","Fles 2 L",2000,"ml",7.65,""],
+    ["sl-lychee-drink","Sligro","lychee-juice","Fruitdrank lychee Maaza","149110","Krimp 12 petflessen x 50 cl",6000,"ml",20.95,""],
+    ["sl-cranberry","Sligro","cranberry","Cranberrysap Prominent","203732","Krimp 6 flessen x 1 L",6000,"ml",19.84,""],
+    ["sl-redbull","Sligro","red-bull","Red Bull Energydrink","178786","Tray 24 blikjes x 25 cl",24,"pcs",29.70,""],
+    ["sl-boiron-lemon","Sligro","boiron-lemon","Gepasteuriseerde citroen puree Boiron","217502","Pak 1 L",1000,"ml",7.49,""],
+    ["sl-boiron-lime","Sligro","boiron-lime","Gepasteuriseerde limoen puree Boiron","217504","Pak 1 L",1000,"ml",8.00,""],
+    ["sl-magic-foamer","Sligro","foamer","Magic foamer Dr. Yanni's","226343","Flesje 10 cl",1,"pcs",21.64,""],
+    ["sl-fee-foam","Sligro","foamer","Cocktail foam The Fee Brothers","198174","Flesje 15 cl",1,"pcs",12.23,""],
+    ["sl-monin-sugar","Sligro","monin-sugar","Rietsuiker siroop Monin","399836","Fles 1 L",1000,"ml",11.06,""],
+    ["sl-monin-vanilla","Sligro","monin-vanilla","Vanille siroop Monin","399789","Fles 1 L",1000,"ml",12.69,""],
+    ["sl-maple","Sligro","maple","Siroop ahorn Sprague's Maple Farms","66308","Flesje 23,7 cl",237,"ml",10.60,""],
+    ["sl-straw-15","Sligro","straws-15","Cocktailrietje zwart papier 15 cm, Take Dis","118644","Doos 250 stuks",1,"pcs",4.80,""],
+    ["sl-straw-24","Sligro","straws-24","Cocktailrietje zwart papier 24 cm, Take Dis","118648","Pak 250 stuks",1,"pcs",5.25,""],
+    ["sl-picks","Sligro","picks","Prikker bamboe met krul zwart 9 cm, Take Dis","204561","Pak 100 stuks",1,"pcs",5.10,""],
+    ["sl-wipes-yellow","Sligro","wipes-yellow","Viscosedoeken, geel, Felicia","108546","Pak 50 stuks",1,"pcs",13.44,""],
+
+    /* ---- Sligro, one-off equipment, not a weekly line ---- */
+    ["sl-torch","Sligro","kit","Koksbrander met gasbus Hendi","154124","per stuk",1,"pcs",24.78,"KIT"],
+    ["sl-barmat","Sligro","kit","Barmat 45 x 30 cm, Bar Professional","950027","per stuk",1,"pcs",14.98,"KIT"],
+    ["sl-icebucket","Sligro","kit","IJsemmer 4 liter, Bar Professional","622336","per stuk",1,"pcs",24.78,"KIT"],
+    ["sl-icescoop","Sligro","kit","IJsschep, Bar Professional","806024","per stuk",1,"pcs",7.48,"KIT"],
+    ["sl-mixingglass","Sligro","kit","Mixing glass, Bar Professional","861587","per stuk",1,"pcs",19.88,"KIT"],
+    ["sl-muddler","Sligro","kit","Muddler, Bar Professional","260587","per stuk",1,"pcs",6.18,"KIT"],
+    ["sl-pourset","Sligro","kit","Save pour set, Bar Professional","806079","per stuk",1,"pcs",6.97,"KIT"],
+    ["sl-milkjug","Sligro","kit","Melkkan 8 cm 0,35 cl zwart, APS","200742","per stuk",1,"pcs",13.03,"KIT"],
+    ["sl-garnish-holder","Sligro","kit","Garnituur houder 6 delig, Bar Professional","543121","per stuk",1,"pcs",35.10,"KIT"],
+    ["sl-container","Sligro","kit","Vershouddoos 1/2 6,5 liter, The FoodCare Company","157658","per stuk",1,"pcs",17.44,"KIT"]
+  ].map(function (r) {
+    return { id:r[0], sup:r[1], m:r[2], name:r[3], art:r[4], pack:r[5],
+             qty:r[6], u:r[7], price:r[8], note:(r[9] === "KIT" ? "" : r[9]), kit:(r[9] === "KIT") };
+  });
+
+  var PB = {};
+  PRICEBOOK.forEach(function (e) { PB[e.id] = e; });
+
+  /* Inventory line -> price book match key. A line with no entry here has no
+     price on record and says so rather than carrying a guess. */
+  var ROW_PRICE = {
+    "Lychee juice":"lychee-juice",
+    "Lychees in syrup, cordial":"lychees-canned",
+    "Coconut water":"coconut-water",
+    "Apple-pear juice, Jumbo DUO smaak":"apple-pear",
+    "Orange juice, fresh with pulp":"orange-juice",
+    "Pineapple juice, carton":"pineapple-juice",
+    "Pineapple chunks, canned":"pineapple-chunks",
+    "Coconut cream":"coconut-cream",
+    "Condensed milk":"condensed-milk",
+    "Cranberry juice":"cranberry",
+    "Passion fruit juice":"passionfruit-juice",
+    "Ginger beer, Royal Club":"ginger-beer-l",
+    "Soda water, Spa Rood":"spa-rood-l",
+    "Boiron lime puree, pasteurised":"boiron-lime",
+    "Boiron lemon puree, pasteurised":"boiron-lemon",
+    "Cassis puree":"cassis",
+    "Strawberry puree":"strawberry-puree",
+    "Passion fruit puree":"passionfruit-puree",
+    "Monin vanilla syrup":"monin-vanilla",
+    "Monin sugar syrup":"monin-sugar",
+    "Maple syrup, Maple Gold":"maple",
+    "Crystal sugar":"sugar",
+    "Butterfly pea, dried":"butterfly-pea",
+    "Hibiscus, dried":"hibiscus",
+    "Limes":"limes",
+    "Lemons":"lemons",
+    "Oranges":"oranges",
+    "Strawberries":"strawberries",
+    "Green grapes":"grapes",
+    "Mint":"mint",
+    "Basil":"basil",
+    "Rosemary":"rosemary",
+    "Thyme":"thyme",
+    "Jalapenos":"jalapeno",
+    "Pears, Conference":"pears",
+    "Passion fruit, fresh":"passionfruit-fresh",
+    "Fee Foam or aquafaba":"foamer",
+    "Fine sea salt":"sea-salt",
+    "Alpro Barista oat milk":"oat-milk",
+    "Ice, crushed":"crushed-ice",
+    "Straws, small 15 cm":"straws-15",
+    "Straws, big 24 cm":"straws-24",
+    "Wipes, yellow":"wipes-yellow",
+    "Coca-Cola":"cola",
+    "Cola Zero":"cola-zero",
+    "Fanta":"fanta",
+    "Sprite or Red Bull":"sprite",
+    "Royal Bliss Ginger Ale":"ginger-ale",
+    "Tonic water":"tonic",
+    "Lipton Iced Tea Lemon, sparkling":"icetea-sparkling",
+    "Lipton Iced Tea Peach, still":"icetea-peach",
+    "SPA Rood, sparkling":"spa-rood",
+    "SPA Blauw, still":"spa-blauw",
+    "De Appelaere, 200 ml":"appelaere",
+    "Royal Club Bitter Lemon":"bitter-lemon"
+  };
+
+  /* The entry a row actually buys: the one at the row's own supplier if that
+     shop stocks it, otherwise whoever does. */
+  function rowEntry(r) {
+    var key = ROW_PRICE[r.key];
+    if (!key) return null;
+    var alts = alternatives(key, r.unit);
+    if (!alts.length) return null;
+    var mine = alts.filter(function (a) { return a.e.sup === r.supplier; })[0];
+    return (mine || alts[0]).e;
+  }
+  /* The price book is the source of truth wherever it has a line, so every
+     number on the Inventory tab can be traced back to a pack and a shop.
+     On the seed it also sets the supplier. On saved rows it does not: someone
+     may have changed where a line is bought, and that choice decides the
+     price, not the other way round. */
+  function applyPrices() {
+    SEED.forEach(function (row) {
+      var e = rowEntry(row);
+      if (e) { row.supplier = e.sup; row.cost = costIn(e, row.unit); }
+    });
+    ROWS.forEach(function (row) {
+      var e = rowEntry(row);
+      if (e) row.cost = costIn(e, row.unit);
+    });
+  }
+
+  function rowCheaper(r) {
+    var key = ROW_PRICE[r.key];
+    if (!key) return null;
+    var alts = alternatives(key, r.unit);
+    if (alts.length < 2) return null;
+    var used = rowEntry(r), best = alts[0].e;
+    if (!used || best.id === used.id) return null;
+    var uc = costIn(used, r.unit), bc = alts[0].c;
+    return (bc < uc - 0.0005) ? { e: best, c: bc, save: uc - bc } : null;
+  }
+
+  /* Where each shop's own search lives. These are search URLs, not deep links
+     to a product, so they keep working when a shop reshuffles its catalogue.
+     The article number is always shown as well, so a line can be found by hand
+     if a link ever goes stale. */
+  var STORES = {
+    "AH":     { name: "Albert Heijn",     url: function (e) { return "https://www.ah.nl/zoeken?query=" + encodeURIComponent(e.name); } },
+    "AO":     { name: "Amazing Oriental", url: function (e) { return "https://www.amazingoriental.com/nl/catalogsearch/result/?q=" + encodeURIComponent(e.name); } },
+    "JUMBO":  { name: "Jumbo",            url: function (e) { return "https://www.jumbo.com/zoeken?searchTerms=" + encodeURIComponent(e.name); } },
+    "Sligro": { name: "Sligro",           url: function (e) { return "https://www.sligro.nl/zoeken?searchTerm=" + encodeURIComponent(e.art || e.name); } }
+  };
+
+  /* The receipt the Amazing Oriental prices come from, transcribed so the
+     numbers can be checked against the paper without hunting for it. */
+  var RECEIPTS = [{
+    id: "ao-17-08-26",
+    shop: "Amazing Oriental, Oriental Enterprise Tong Fong Amsterdam B.V.",
+    addr: "De Flinesstraat 6, 1114 AL Duivendrecht  ·  +31 20 694 1016",
+    reg:  "KVK 33218826  ·  BTW NL008836127B01",
+    inv:  "9608010866220",
+    date: "17.08.26 14:37",
+    bon:  "Bonnr 803086622  ·  Winkelnr 0801",
+    lines: [
+      ["1","Grenadine Molasses 500 ml","94937",3.89,3.89],
+      ["1","Coconut Cream 20-22% fat (EOL) 400 ml","29332",1.89,1.89],
+      ["1","Lychee Drink 350","89885",1.45,1.45],
+      ["1","Statiegeld","",0.15,0.15],
+      ["1","Mangosteen Drink 330 ml","89551",1.69,1.69],
+      ["1","Statiegeld","",0.15,0.15],
+      ["","Actie","",null,-0.30],
+      ["1","Mangosteen Drink 330 ml","89551",1.69,1.69],
+      ["1","Statiegeld","",0.15,0.15],
+      ["","Actie","",null,-0.30],
+      ["1","Lychees in Syrup 567 g","21282",2.59,2.59],
+      ["1","HDPE Hemdtassen 30x10x60","7066",0.20,0.20],
+      ["1","Lychee Drink 350","89885",1.45,1.45],
+      ["1","Statiegeld","",0.15,0.15],
+      ["3","Aroma en Kleurstof Markoeza 50 ml","28890",3.59,10.77],
+      ["2","Passion Fruit Juice Drink 1 L, Tetra","31056",2.69,5.38],
+      ["1","HDPE Hemdtassen 30x10x60","7066",0.20,0.20],
+      ["1","Dried Rose Flower 50 g","65012",1.65,1.65],
+      ["3","Sun Dried Red Hibiscus Flowers 125 g","54377",3.89,11.67],
+      ["6","Dried Butterfly Pea 50 g","96567",3.15,18.90]
+    ],
+    total: 63.42,
+    paid: { en: "Pin, V Pay card", nl: "Pin, V Pay kaart" },
+    disc: 0.60,
+    vat: [["0,00%",0.60,0.00,0.60],["9,00%",57.27,5.15,62.42],["21,00%",0.34,0.06,0.40]],
+    vatTotal: [58.21,5.21,63.42]
+  }];
+
+  /* Convert a price book entry into the unit the inventory row counts in.
+     Base units are ml, g and pcs; a row counting in L or kg scales by 1000.
+     Anything that cannot be converted, litres against grams say, returns null
+     rather than a number that looks right and is not. */
+  function unitBase(u) {
+    if (u === "L") return { b: "ml", f: 1000 };
+    if (u === "kg") return { b: "g", f: 1000 };
+    if (u === "g") return { b: "g", f: 1 };
+    if (u === "ml") return { b: "ml", f: 1 };
+    return { b: "pcs", f: 1 };          /* pcs, cans, bottles, jars, packs, sets */
+  }
+  function costIn(entry, unit) {
+    if (!entry) return null;
+    var t = unitBase(unit);
+    if (entry.u !== t.b) return null;
+    return entry.price / entry.qty * t.f;
+  }
+  /* Every entry that sells the same thing, cheapest per unit first. */
+  function alternatives(matchKey, unit) {
+    return PRICEBOOK
+      .filter(function (e) { return e.m === matchKey && !e.kit && costIn(e, unit) != null; })
+      .map(function (e) { return { e: e, c: costIn(e, unit) }; })
+      .sort(function (a, b) { return a.c - b.c; });
+  }
+
+  function storeLink(e) {
+    var s = STORES[e.sup];
+    if (!s) return esc(e.sup);
+    return '<a class="pb-link" href="' + esc(s.url(e)) + '" target="_blank" rel="noopener">' +
+           esc(e.sup) + "</a>";
+  }
+  function unitPriceText(e) {
+    var per = e.price / e.qty;
+    if (e.u === "pcs") return n2(per) + tt({ en: " each", nl: " per stuk" });
+    if (e.u === "ml")  return n2(per * 1000) + " / L";
+    return n2(per * 1000) + " / kg";
+  }
+
+  applyPrices();
+
+  function pricesHTML() {
+    var L = {
+      prod:  tt({ en: "Product",      nl: "Product" }),
+      art:   tt({ en: "Article nr",   nl: "Artikelnr" }),
+      pack:  tt({ en: "Pack",         nl: "Verpakking" }),
+      price: tt({ en: "Pack price",   nl: "Prijs per verpakking" }),
+      unit:  tt({ en: "Per unit",     nl: "Per eenheid" }),
+      look:  tt({ en: "Look up",      nl: "Opzoeken" })
+    };
+    var h = '<section class="section"><div class="section-head"><div class="smallcaps">' +
+      esc(ui("runsheet")) + "</div><h2>" + et({ en: "Prices", nl: "Prijzen" }) + "</h2>" +
+      '<p class="section-note">' +
+      et({ en: "Every price the bar has on record, with the pack it came in and the article number. Costing follows Milo and Jade's sheet: pack price divided by pack size, times the amount a drink needs, plus " + n2(SPILL) + " a drink for consumables and spill.",
+           nl: "Elke prijs die de bar op papier heeft, met de verpakking en het artikelnummer. De kostprijs volgt het bestand van Milo en Jade: prijs per verpakking gedeeld door de inhoud, maal wat een drankje nodig heeft, plus " + n2(SPILL) + " per drankje voor verbruik en morsen." }) +
+      "</p></div>";
+
+    h += '<div class="qflag" style="margin:0 0 16px">' +
+      et({ en: "The shop links are searches, not links to one product page, so they survive a catalogue reshuffle. They could not be reached from where this file was built, so treat them as a shortcut and the article number as the real reference.",
+           nl: "De winkellinks zijn zoekopdrachten, geen links naar een productpagina, zodat ze een herindeling van de catalogus overleven. Ze konden niet getest worden vanaf de plek waar dit bestand gemaakt is, dus gebruik ze als snelkoppeling en het artikelnummer als de echte referentie." }) + "</div>";
+
+    ["AO", "AH", "JUMBO", "Sligro"].forEach(function (sup) {
+      var rows = PRICEBOOK.filter(function (e) { return e.sup === sup && !e.kit; });
+      if (!rows.length) return;
+      h += '<h3 class="owner-h">' + esc(STORES[sup] ? STORES[sup].name : sup) +
+        '<span class="cat-r">' + rows.length + " " +
+        tt(rows.length === 1 ? { en: "line", nl: "regel" } : { en: "lines", nl: "regels" }) + "</span></h3>" +
+        '<div class="tablewrap"><table class="pb-t"><thead><tr>' +
+        "<th>" + esc(L.prod) + "</th><th>" + esc(L.art) + "</th><th>" + esc(L.pack) + "</th>" +
+        '<th class="num">' + esc(L.price) + '</th><th class="num">' + esc(L.unit) + "</th>" +
+        "<th>" + esc(L.look) + "</th></tr></thead><tbody>" +
+        rows.map(function (e) {
+          return '<tr data-l0="' + esc(L.prod) + '">' +
+            '<td data-l="' + esc(L.prod) + '"><b>' + esc(e.name) + "</b>" +
+              (e.note ? '<div class="qflag">' + et(e.note) + "</div>" : "") + "</td>" +
+            '<td data-l="' + esc(L.art) + '" class="pb-art">' + (e.art ? esc(e.art) : "&mdash;") + "</td>" +
+            '<td data-l="' + esc(L.pack) + '">' + esc(e.pack) + "</td>" +
+            '<td data-l="' + esc(L.price) + '" class="num">' + n2(e.price) + "</td>" +
+            '<td data-l="' + esc(L.unit) + '" class="num">' + esc(unitPriceText(e)) + "</td>" +
+            '<td data-l="' + esc(L.look) + '">' + storeLink(e) + "</td></tr>";
+        }).join("") + "</tbody></table></div>";
+    });
+
+    /* one-off kit, kept apart from the weekly shop */
+    var kit = PRICEBOOK.filter(function (e) { return e.kit; });
+    var kitTotal = kit.reduce(function (a, e) { return a + e.price; }, 0);
+    h += '<h3 class="owner-h">' + et({ en: "One-off kit, not a weekly line", nl: "Eenmalige uitrusting, geen weeklijst" }) +
+      '<span class="cat-r">' + n2(kitTotal) + "</span></h3>" +
+      '<div class="tablewrap"><table class="pb-t"><thead><tr>' +
+      "<th>" + esc(L.prod) + "</th><th>" + esc(L.art) + "</th><th>" + esc(L.pack) + "</th>" +
+      '<th class="num">' + esc(L.price) + "</th><th>" + esc(L.look) + "</th></tr></thead><tbody>" +
+      kit.map(function (e) {
+        return "<tr>" +
+          '<td data-l="' + esc(L.prod) + '"><b>' + esc(e.name) + "</b></td>" +
+          '<td data-l="' + esc(L.art) + '" class="pb-art">' + esc(e.art) + "</td>" +
+          '<td data-l="' + esc(L.pack) + '">' + esc(e.pack) + "</td>" +
+          '<td data-l="' + esc(L.price) + '" class="num">' + n2(e.price) + "</td>" +
+          '<td data-l="' + esc(L.look) + '">' + storeLink(e) + "</td></tr>";
+      }).join("") + "</tbody></table></div>";
+
+    /* the receipt, transcribed */
+    RECEIPTS.forEach(function (r) {
+      h += '<h3 class="owner-h">' + et({ en: "Receipt", nl: "Bon" }) + " " + esc(r.date) + "</h3>" +
+        '<div class="rcpt"><div class="rcpt-h"><b>' + esc(r.shop) + "</b><br>" + esc(r.addr) +
+        "<br>" + esc(r.reg) + "<br>" +
+        et({ en: "Invoice", nl: "Factuur" }) + " " + esc(r.inv) + "  ·  " + esc(r.bon) + "</div>" +
+        '<table class="rcpt-t"><tbody>' +
+        r.lines.map(function (l) {
+          return "<tr><td>" + esc(l[0]) + "</td><td>" + esc(l[1]) +
+            (l[2] ? ' <span class="pb-art">' + esc(l[2]) + "</span>" : "") + "</td>" +
+            '<td class="num">' + (l[3] == null ? "" : n2(l[3])) + "</td>" +
+            '<td class="num">' + n2(l[4]) + "</td></tr>";
+        }).join("") +
+        '<tr class="rcpt-tot"><td></td><td><b>' + et({ en: "Total", nl: "Totaal" }) +
+        '</b></td><td></td><td class="num"><b>' + n2(r.total) + "</b></td></tr>" +
+        "</tbody></table>" +
+        '<div class="rcpt-f">' + et(r.paid) + "  ·  " +
+        et({ en: "Discount", nl: "Korting" }) + " " + n2(r.disc) + "  ·  " +
+        et({ en: "VAT", nl: "BTW" }) + " " + n2(r.vatTotal[1]) + "</div></div>";
+    });
+
+    h += noteBox("prices-1", { en: "Price notes. A new receipt, a changed pack size, a supplier swap.",
+                               nl: "Notities over prijzen. Een nieuwe bon, een ander verpakkingsformaat, een andere leverancier." });
+    return h + "</section>";
+  }
+
   /* ==================================================================
      6. STORAGE and the SALES COUNTER
      ================================================================== */
@@ -3286,7 +3783,29 @@ td.buy.ok { color: var(--ink-soft); }
     save(LS_SALES, SALES);
   });
 
-  if (typeof TABS !== "undefined" && TABS) TABS.storage = storageHTML;
+  if (typeof TABS !== "undefined" && TABS) {
+    TABS.storage = storageHTML;
+    TABS.prices  = pricesHTML;
+  }
+  /* Add Prices to the subtab bar and give it a label in both languages. */
+  if (typeof UI !== "undefined" && UI) UI.prices = { en: "Prices", nl: "Prijzen" };
+  (function () {
+    var draw = window.renderChrome;
+    if (typeof draw !== "function") return;
+    window.renderChrome = function () {
+      draw.apply(this, arguments);
+      var bar = document.getElementById("subtabs");
+      if (!bar || bar.hidden || bar.querySelector('[data-tab="prices"]')) return;
+      var after = bar.querySelector('[data-tab="inventory"]');
+      var b = document.createElement("button");
+      b.type = "button"; b.setAttribute("role", "tab");
+      b.dataset.tab = "prices";
+      b.setAttribute("aria-selected", String(TAB === "prices"));
+      b.textContent = tt({ en: "Prices", nl: "Prijzen" });
+      if (after && after.nextSibling) bar.insertBefore(b, after.nextSibling);
+      else bar.appendChild(b);
+    };
+  })();
 
   if (typeof render === "function") render();
 })();
