@@ -126,6 +126,23 @@ td.buy.ok { color: var(--ink-soft); }
 .rcpt-tot td { border-top: 1px solid var(--gold-pale); padding-top: 7px; }
 .rcpt-f { margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--gold-pale);
   font-size: 12px; color: var(--ink-soft); }
+/* shop strip on the price list */
+.shop-strip { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
+.shop-b { display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
+  border: 1px solid var(--gold-pale); background: #fff; border-radius: var(--arch-sm);
+  padding: 7px 12px; font-size: 13px; line-height: 1.3; cursor: pointer; }
+.shop-b span { font-size: 11px; color: var(--ink-soft); }
+.shop-b[aria-pressed="true"] { border-color: var(--gold); background: var(--limestone-deep); font-weight: 600; }
+/* day dot converter */
+.dd { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 0 0 16px;
+  background: #fff; border: 1px solid var(--gold-pale); border-radius: var(--arch); padding: 11px 14px; }
+.dd label { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+.dd input { width: 96px; padding: 5px 8px; font: inherit; font-size: 15px; font-variant-numeric: tabular-nums;
+  letter-spacing: .06em; border: 1px solid var(--gold-pale); border-radius: 6px; background: var(--limestone); }
+.dd-out { font-family: 'Marcellus', Georgia, serif; font-size: 20px; letter-spacing: .04em; color: var(--ink); }
+.dd-out.bad { color: #9E2B3B; font-size: 14px; font-family: var(--body); }
+.dd-hint { font-size: 12px; color: var(--ink-soft); }
+@media print { .dd, .shop-strip { display: none; } }
 /* price provenance inside the inventory cost cell */
 .pv { display: block; font-size: 10.5px; color: var(--ink-soft); margin-top: 2px; }
 .pv a { color: var(--gold); }
@@ -616,11 +633,11 @@ td.buy.ok { color: var(--ink-soft); }
     ["Dry goods and specials","Cocktail cherries","AH",1,U.J,1.99,"","Cocktailkersen",""],
     ["Dry goods and specials","Fine sea salt","AH",1,U.PK,3.69,"Goes into the rosemary-lemon rim mix.","Fijn zeezout","Gaat in het rozemarijn-citroenzout voor de rand."],
     ["Dry goods and specials","Alpro Barista oat milk","AH",10,U.L,2.79,"Coffee only. No drink in the ten uses it.","Alpro Barista havermelk","Alleen voor koffie. Geen van de tien drankjes gebruikt het."],
-    ["Bar consumables","Ice, crushed","AH",14,U.KG,0.89,"CUBED IS OFF THE LIST, the machine makes it now. Crushed is still ordered. The 14 kg covered both, so confirm the crushed-only figure.","IJs, crushed","BLOKJES STAAN NIET MEER OP DE LIJST, die maakt de machine nu. Crushed wordt nog wel besteld. De 14 kg was voor allebei, dus bevestig het aantal voor alleen crushed."],
-    ["Bar consumables","Straws, small 15 cm","TBD",1,U.PK,null,"Was bundled into one Straws, cloths, wipes line. Split out, so the price needs setting per line.","Rietjes, klein 15 cm","Zat in een verzamelregel Rietjes, doeken, doekjes. Nu apart, dus de prijs moet per regel worden ingevuld."],
-    ["Bar consumables","Straws, big 24 cm","TBD",1,U.PK,null,"For the hurricanes and the highballs.","Rietjes, groot 24 cm","Voor de hurricanes en de highballs."],
-    ["Bar consumables","Wipes, yellow","TBD",1,U.PK,null,"General cleaning.","Doekjes, geel","Algemene reiniging."],
-    ["Bar consumables","Wipes, polish","TBD",1,U.PK,null,"Glassware only. Never the same cloth as the yellow.","Doekjes, polish","Alleen voor glaswerk. Nooit dezelfde doek als de gele."],
+    ["Bar consumables","Ice, crushed","AH",14,U.KG,0.89,"","IJs, crushed",""],
+    ["Bar consumables","Straws, small 15 cm","TBD",1,U.PK,null,"","Rietjes, klein 15 cm",""],
+    ["Bar consumables","Straws, big 24 cm","TBD",1,U.PK,null,"","Rietjes, groot 24 cm",""],
+    ["Bar consumables","Wipes, yellow","TBD",1,U.PK,null,"","Doekjes, geel",""],
+    ["Bar consumables","Wipes, polish","TBD",1,U.PK,null,"","Doekjes, polish",""],
     ["Bottled and chilled","Coca-Cola","TBD",null,U.B,null,"Set your own par.","Coca-Cola","Stel je eigen par in."],
     ["Bottled and chilled","Cola Zero","TBD",null,U.B,null,"Set your own par.","Cola Zero","Stel je eigen par in."],
     ["Bottled and chilled","Fanta","TBD",null,U.B,null,"Set your own par.","Fanta","Stel je eigen par in."],
@@ -738,6 +755,45 @@ td.buy.ok { color: var(--ink-soft); }
 
   /* One definition of the column labels, used by the header on a wide screen
      and by the per-cell labels when the table stacks on a phone. */
+  /* Type the date, get the label that goes on the tape. The house standard is
+     the weekday then the date, so this saves counting on a calendar mid-count. */
+  var DD_EN = ["MO","TU","WED","THU","FR","SAT","SUN"];
+  var DD_NL = ["MA","DI","WO","DO","VR","ZA","ZO"];
+  var DDVAL = "";
+  function dayDot(v) {
+    var d = String(v || "").replace(/\D/g, "");
+    if (!d) return null;
+    if (d.length !== 6 && d.length !== 8) return false;
+    var day = +d.slice(0, 2), mon = +d.slice(2, 4);
+    var yr = d.length === 6 ? 2000 + +d.slice(4, 6) : +d.slice(4, 8);
+    if (mon < 1 || mon > 12 || day < 1 || day > 31) return false;
+    var x = new Date(yr, mon - 1, day);
+    if (x.getDate() !== day || x.getMonth() !== mon - 1) return false;   /* 31.02 and friends */
+    var wd = (x.getDay() + 6) % 7;                                       /* JS counts from Sunday */
+    var p2 = function (n) { return ("0" + n).slice(-2); };
+    return (isNl() ? DD_NL : DD_EN)[wd] + " " + p2(day) + "." + p2(mon) + "." + String(yr).slice(-2);
+  }
+  function dayDotHTML() {
+    var out = dayDot(DDVAL);
+    return '<div class="dd">' +
+      '<label for="dd-in">' + et({ en: "Day dot", nl: "Dagsticker" }) + "</label>" +
+      '<input id="dd-in" type="text" inputmode="numeric" maxlength="10" autocomplete="off" ' +
+        'placeholder="DDMMYY" value="' + esc(DDVAL) + '">' +
+      '<span class="dd-out' + (out === false ? " bad" : "") + '" id="dd-out">' +
+        (out === false ? et({ en: "not a date", nl: "geen datum" }) : (out || "")) + "</span>" +
+      '<span class="dd-hint">' +
+      et({ en: "Type the date, get the label for the tape.",
+           nl: "Typ de datum, krijg het label voor op de tape." }) + "</span></div>";
+  }
+  document.addEventListener("input", function (e) {
+    if (!e.target || e.target.id !== "dd-in") return;
+    DDVAL = e.target.value;
+    var out = document.getElementById("dd-out"), v = dayDot(DDVAL);
+    if (!out) return;
+    out.textContent = v === false ? tt({ en: "not a date", nl: "geen datum" }) : (v || "");
+    out.classList.toggle("bad", v === false);
+  });
+
   function INVCOL() {
     return {
       item:  tt({ en: "Ingredient and note", nl: "Ingredient en notitie" }),
@@ -760,8 +816,10 @@ td.buy.ok { color: var(--ink-soft); }
         : esc(txt)) + (e.art ? ' <span class="pb-art">' + esc(e.art) + "</span>" : "") + "</span>";
       var ch = rowCheaper(r);
       if (ch) out += '<span class="pv cheaper">' +
-        et({ en: "cheaper at ", nl: "goedkoper bij " }) + esc(ch.e.sup) + " " + n2(ch.c) +
-        " / " + esc(unitLabel(r.unit)) + "</span>";
+        et({ en: "cheaper at ", nl: "goedkoper bij " }) + esc(ch.e.sup) + " " + nUnit(ch.c) +
+        " / " + esc(unitLabel(r.unit)) + ", " +
+        et({ en: "saves ", nl: "scheelt " }) + n2(ch.week) +
+        et({ en: " a week", nl: " per week" }) + "</span>";
       return out;
     }
     if (r.cost != null) return '<span class="pv cheaper">' +
@@ -850,6 +908,13 @@ td.buy.ok { color: var(--ink-soft); }
      so the display should match the language the reader is in. */
   function dec(s) { return (typeof LANG !== "undefined" && LANG === "nl") ? String(s).replace(".", ",") : String(s); }
   function n2(v) { return dec((Math.round(v * 100) / 100).toFixed(2)); }
+  /* Per-gram prices live in the third and fourth decimal, where two decimals
+     round two different numbers to the same thing and the comparison stops
+     meaning anything. */
+  function nUnit(v) {
+    if (v >= 1) return n2(v);
+    return dec(v.toFixed(4).replace(/0+$/, "").replace(/\.$/, ""));
+  }
   function tidy(v) { return dec(String(Math.round(v * 1000) / 1000)); }
 
   /* Accept both decimal separators. The field is type=text on purpose: a
@@ -960,6 +1025,7 @@ td.buy.ok { color: var(--ink-soft); }
       '<p class="legend">' +
       et({ en: "Every field on this page is editable. Click a name, a quantity or a note and type. Use Add row for anything new and the cross to delete. Everything saves to this browser and survives a reload.",
            nl: "Elk veld op deze pagina is aan te passen. Klik op een naam, een aantal of een notitie en typ. Gebruik Regel toevoegen voor iets nieuws en het kruisje om te verwijderen. Alles wordt in deze browser bewaard en blijft na herladen staan." }) + "</p>" +
+      dayDotHTML() +
       '<div class="inv-filters"><span class="smallcaps">' +
       et({ en: "Filter", nl: "Filter" }) + "</span>" +
       '<select id="iv-filter">' +
@@ -1427,6 +1493,7 @@ td.buy.ok { color: var(--ink-soft); }
       " " + et(DAYDOT.days) + ". " +
       et({ en: "New stock goes in front, the old one marked with an X. Anything past date is binned at open.",
            nl: "Nieuwe voorraad gaat vooraan, de oude wordt met een X gemarkeerd. Alles over datum gaat bij opening weg." }) + "</div>" +
+      dayDotHTML() +
       '<div class="tablewrap"><table class="wide"><thead><tr>' +
       "<th>" + et({ en: "Item", nl: "Item" }) + "</th>" +
       "<th>" + et({ en: "Yield", nl: "Opbrengst" }) + "</th>" +
@@ -1599,19 +1666,11 @@ td.buy.ok { color: var(--ink-soft); }
 
   /* id, supplier, match, product, article nr, pack as written, qty, unit, price, note */
   var PRICEBOOK = [
-    /* ---- Amazing Oriental, from the receipt of 17.08.26 ---- */
-    ["ao-grenadine","AO","grenadine-molasses","Grenadine Molasses","94937","500 ml",500,"ml",3.89,""],
-    ["ao-coconut-cream","AO","coconut-cream","Coconut Cream 20-22% fat (EOL)","29332","400 ml",400,"ml",1.89,""],
-    ["ao-lychee-drink","AO","lychee-juice","Lychee Drink","89885","350 ml, plus 0.15 deposit",350,"ml",1.45,""],
-    ["ao-mangosteen","AO","mangosteen","Mangosteen Drink","89551","330 ml, plus 0.15 deposit",330,"ml",1.69,
-     {en:"Was on offer at 1.39.",nl:"Was in de actie voor 1,39."}],
-    ["ao-lychees-syrup","AO","lychees-canned","Lychees in Syrup","21282","567 g tin",567,"g",2.59,""],
-    ["ao-markoeza","AO","colouring","Aroma en Kleurstof Markoeza","28890","50 ml",50,"ml",3.59,""],
-    ["ao-passionfruit","AO","passionfruit-juice","Passion Fruit Juice Drink, Tetra","31056","1 L",1000,"ml",2.69,""],
+    /* ---- Amazing Oriental. Only these two: the butterfly pea and the
+           hibiscus. The rest of the 17.08.26 receipt was a one-off shop, not
+           a line the bar reorders, so it is not carried here. ---- */
     ["ao-hibiscus","AO","hibiscus","Sun Dried Red Hibiscus Flowers","54377","125 g",125,"g",3.89,""],
-    ["ao-rose","AO","rose","Dried Rose Flower","65012","50 g",50,"g",1.65,""],
     ["ao-butterfly-pea","AO","butterfly-pea","Dried Butterfly Pea","96567","50 g",50,"g",3.15,""],
-    ["ao-bags","AO","bags","HDPE Hemdtassen 30x10x60","7066","1 stuk",1,"pcs",0.20,""],
 
     /* ---- Albert Heijn ---- */
     ["ah-maaza-lychee","AH","lychee-juice","Maaza Fruit drink lychee","","330 ml",330,"ml",1.29,""],
@@ -1623,9 +1682,7 @@ td.buy.ok { color: var(--ink-soft); }
     ["ah-maple","AH","maple","Maple Gold Ahornsiroop","","250 ml",250,"ml",6.49,""],
     ["ah-condensed","AH","condensed-milk","Friesche Vlag Volle melk gecondenseerd","","397 g",397,"ml",2.79,
      {en:"Priced per ml on the assumption 397 g is about 397 ml.",nl:"Per ml gerekend, aangenomen dat 397 g ongeveer 397 ml is."}],
-    ["ah-gingerbeer","AH","ginger-beer","Royal Club Ginger beer 4-pack","","4 stuks, 10 percent volume, was 9.96",4,"pcs",8.96,
-     {en:"BOTTLE SIZE NOT ON THE LIST. Priced per bottle, not per litre, until someone confirms it.",
-      nl:"FLESFORMAAT STAAT NIET OP DE LIJST. Per fles gerekend, niet per liter, tot iemand het bevestigt."}],
+    ["ah-gingerbeer","AH","ginger-beer-l","Royal Club Ginger beer 4-pack","","4 x 1 L, 10 percent volume, was 9.96",4000,"ml",8.96,""],
     ["ah-cranberry","AH","cranberry","Ocean Spray Cranberry classic","","1 L",1000,"ml",2.49,""],
     ["ah-pineapple","AH","pineapple-juice","AH Ananassap","","1 L",1000,"ml",2.59,""],
     ["ah-pineapple-chunks","AH","pineapple-chunks","AH Stukjes ananas op sap","","567 g tin",1,"pcs",2.15,""],
@@ -1829,7 +1886,12 @@ td.buy.ok { color: var(--ink-soft); }
     var used = rowEntry(r), best = alts[0].e;
     if (!used || best.id === used.id) return null;
     var uc = costIn(used, r.unit), bc = alts[0].c;
-    return (bc < uc - 0.0005) ? { e: best, c: bc, save: uc - bc } : null;
+    if (bc >= uc) return null;
+    /* Judge the swap on what it saves in a week, not on the per-unit gap. A
+       tenth of a cent a gram is noise on 60 g of thyme and real money on 450 g
+       of mint. */
+    var week = (uc - bc) * (r.need == null ? 0 : Number(r.need));
+    return week >= 0.25 ? { e: best, c: bc, week: week } : null;
   }
 
   /* Where each shop's own search lives. These are search URLs, not deep links
@@ -1915,12 +1977,20 @@ td.buy.ok { color: var(--ink-soft); }
   }
   function unitPriceText(e) {
     var per = e.price / e.qty;
-    if (e.u === "pcs") return n2(per) + tt({ en: " each", nl: " per stuk" });
-    if (e.u === "ml")  return n2(per * 1000) + " / L";
-    return n2(per * 1000) + " / kg";
+    if (e.u === "pcs") return nUnit(per) + tt({ en: " each", nl: " per stuk" });
+    if (e.u === "ml")  return nUnit(per * 1000) + " / L";
+    return nUnit(per * 1000) + " / kg";
   }
 
   applyPrices();
+
+  var PBSHOP = "";   /* which shop the price list is narrowed to, blank for all */
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest("[data-shop]");
+    if (!b) return;
+    PBSHOP = b.dataset.shop || "";
+    if (typeof render === "function") render();
+  });
 
   function pricesHTML() {
     var L = {
@@ -1934,38 +2004,64 @@ td.buy.ok { color: var(--ink-soft); }
     var h = '<section class="section"><div class="section-head"><div class="smallcaps">' +
       esc(ui("runsheet")) + "</div><h2>" + et({ en: "Prices", nl: "Prijzen" }) + "</h2>" +
       '<p class="section-note">' +
-      et({ en: "Every price the bar has on record, with the pack it came in and the article number. Costing follows Milo and Jade's sheet: pack price divided by pack size, times the amount a drink needs, plus " + n2(SPILL) + " a drink for consumables and spill.",
-           nl: "Elke prijs die de bar op papier heeft, met de verpakking en het artikelnummer. De kostprijs volgt het bestand van Milo en Jade: prijs per verpakking gedeeld door de inhoud, maal wat een drankje nodig heeft, plus " + n2(SPILL) + " per drankje voor verbruik en morsen." }) +
+      et({ en: "Every price the bar has on record, cheapest pack first, with the shop, the article number and the cost per litre, kilo or piece. Tap a shop to see only that shop's list. Costing follows Milo and Jade's sheet: pack price divided by pack size, times the amount a drink needs, plus " + n2(SPILL) + " a drink for consumables and spill.",
+           nl: "Elke prijs die de bar op papier heeft, goedkoopste verpakking eerst, met de winkel, het artikelnummer en de prijs per liter, kilo of stuk. Tik op een winkel om alleen die lijst te zien. De kostprijs volgt het bestand van Milo en Jade: prijs per verpakking gedeeld door de inhoud, maal wat een drankje nodig heeft, plus " + n2(SPILL) + " per drankje voor verbruik en morsen." }) +
       "</p></div>";
 
     h += '<div class="qflag" style="margin:0 0 16px">' +
       et({ en: "The shop links are searches, not links to one product page, so they survive a catalogue reshuffle. They could not be reached from where this file was built, so treat them as a shortcut and the article number as the real reference.",
            nl: "De winkellinks zijn zoekopdrachten, geen links naar een productpagina, zodat ze een herindeling van de catalogus overleven. Ze konden niet getest worden vanaf de plek waar dit bestand gemaakt is, dus gebruik ze als snelkoppeling en het artikelnummer als de echte referentie." }) + "</div>";
 
-    ["AO", "AH", "JUMBO", "Sligro"].forEach(function (sup) {
-      var rows = PRICEBOOK.filter(function (e) { return e.sup === sup && !e.kit; });
-      if (!rows.length) return;
-      h += '<h3 class="owner-h">' + esc(STORES[sup] ? STORES[sup].name : sup) +
-        '<span class="cat-r">' + rows.length + " " +
-        tt(rows.length === 1 ? { en: "line", nl: "regel" } : { en: "lines", nl: "regels" }) + "</span></h3>" +
-        '<div class="tablewrap"><table class="pb-t"><thead><tr>' +
-        "<th>" + esc(L.prod) + "</th><th>" + esc(L.art) + "</th><th>" + esc(L.pack) + "</th>" +
-        '<th class="num">' + esc(L.price) + '</th><th class="num">' + esc(L.unit) + "</th>" +
-        "<th>" + esc(L.look) + "</th></tr></thead><tbody>" +
-        rows.map(function (e) {
-          return '<tr data-l0="' + esc(L.prod) + '">' +
-            '<td data-l="' + esc(L.prod) + '"><b>' + esc(e.name) + "</b>" +
-              (e.note ? '<div class="qflag">' + et(e.note) + "</div>" : "") + "</td>" +
-            '<td data-l="' + esc(L.art) + '" class="pb-art">' + (e.art ? esc(e.art) : "&mdash;") + "</td>" +
-            '<td data-l="' + esc(L.pack) + '">' + esc(e.pack) + "</td>" +
-            '<td data-l="' + esc(L.price) + '" class="num">' + n2(e.price) + "</td>" +
-            '<td data-l="' + esc(L.unit) + '" class="num">' + esc(unitPriceText(e)) + "</td>" +
-            '<td data-l="' + esc(L.look) + '">' + storeLink(e) + "</td></tr>";
-        }).join("") + "</tbody></table></div>";
+    /* One list, cheapest pack first. The shop is a column rather than a
+       heading, so the whole spend can be read top to bottom and it stays
+       obvious what each line costs and who it comes from. */
+    var shops = {};
+    PRICEBOOK.forEach(function (e) {
+      if (e.kit) return;
+      (shops[e.sup] = shops[e.sup] || { n: 0, sum: 0 });
+      shops[e.sup].n++; shops[e.sup].sum += e.price;
     });
+    h += '<div class="shop-strip">' + Object.keys(shops).sort(function (a, b) {
+      return shops[b].n - shops[a].n;
+    }).map(function (s) {
+      return '<button type="button" class="shop-b" data-shop="' + esc(s) + '"' +
+        (PBSHOP === s ? ' aria-pressed="true"' : ' aria-pressed="false"') + '>' +
+        esc(s) + '<span>' + shops[s].n + " " +
+        tt(shops[s].n === 1 ? { en: "line", nl: "regel" } : { en: "lines", nl: "regels" }) +
+        "  ·  " + n2(shops[s].sum) + "</span></button>";
+    }).join("") +
+    '<button type="button" class="shop-b" data-shop=""' +
+      (PBSHOP ? ' aria-pressed="false"' : ' aria-pressed="true"') + '>' +
+      et({ en: "All shops", nl: "Alle winkels" }) + "<span>" +
+      PRICEBOOK.filter(function (e) { return !e.kit; }).length + " " +
+      tt({ en: "lines", nl: "regels" }) + "</span></button></div>";
+
+    var listed = PRICEBOOK
+      .filter(function (e) { return !e.kit && (!PBSHOP || e.sup === PBSHOP); })
+      .slice()
+      .sort(function (a, b) { return a.price - b.price; });
+
+    h += '<div class="tablewrap"><table class="pb-t"><thead><tr>' +
+      "<th>" + esc(L.prod) + "</th>" +
+      "<th>" + et({ en: "Shop", nl: "Winkel" }) + "</th>" +
+      "<th>" + esc(L.art) + "</th><th>" + esc(L.pack) + "</th>" +
+      '<th class="num">' + esc(L.price) + '</th><th class="num">' + esc(L.unit) + "</th>" +
+      "<th>" + esc(L.look) + "</th></tr></thead><tbody>" +
+      listed.map(function (e) {
+        return "<tr>" +
+          '<td data-l="' + esc(L.prod) + '"><b>' + esc(e.name) + "</b>" +
+            (e.note ? '<div class="qflag">' + et(e.note) + "</div>" : "") + "</td>" +
+          '<td data-l="' + et({ en: "Shop", nl: "Winkel" }) + '"><span class="sup">' + esc(e.sup) + "</span></td>" +
+          '<td data-l="' + esc(L.art) + '" class="pb-art">' + (e.art ? esc(e.art) : "&mdash;") + "</td>" +
+          '<td data-l="' + esc(L.pack) + '">' + esc(e.pack) + "</td>" +
+          '<td data-l="' + esc(L.price) + '" class="num">' + n2(e.price) + "</td>" +
+          '<td data-l="' + esc(L.unit) + '" class="num">' + esc(unitPriceText(e)) + "</td>" +
+          '<td data-l="' + esc(L.look) + '">' + storeLink(e) + "</td></tr>";
+      }).join("") + "</tbody></table></div>";
 
     /* one-off kit, kept apart from the weekly shop */
-    var kit = PRICEBOOK.filter(function (e) { return e.kit; });
+    var kit = PRICEBOOK.filter(function (e) { return e.kit; })
+      .slice().sort(function (a, b) { return a.price - b.price; });
     var kitTotal = kit.reduce(function (a, e) { return a + e.price; }, 0);
     h += '<h3 class="owner-h">' + et({ en: "One-off kit, not a weekly line", nl: "Eenmalige uitrusting, geen weeklijst" }) +
       '<span class="cat-r">' + n2(kitTotal) + "</span></h3>" +
