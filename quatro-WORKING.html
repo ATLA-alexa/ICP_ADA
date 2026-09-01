@@ -1802,6 +1802,32 @@ td.buy.ok { color: var(--ink-soft); }
 .rcpt-tot td { border-top: 1px solid var(--gold-pale); padding-top: 7px; }
 .rcpt-f { margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--gold-pale);
   font-size: 12px; color: var(--ink-soft); }
+/* order of operations */
+.ops-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 18px; }
+.ops-tabs button { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--gold-pale);
+  background: #fff; border-radius: 999px; padding: 8px 16px; font-size: 13px; cursor: pointer; }
+.ops-tabs button[aria-pressed="true"] { background: var(--ink); color: var(--limestone); border-color: var(--ink); }
+.ops-n { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(168,134,60,.18); color: var(--gold); font-size: 11px; font-weight: 600; }
+.ops-tabs button[aria-pressed="true"] .ops-n { background: rgba(255,255,255,.18); color: #fff; }
+.ops-h { font-family: 'Marcellus', Georgia, serif; font-size: 24px; margin: 0 0 4px; }
+.ops-d { margin: 0 0 16px; font-size: 14px; color: var(--ink-soft); }
+.ops-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 719px) { .ops-grid { grid-template-columns: 1fr; } }
+.ops-c { background: #fff; border: 1px solid var(--limestone-deep); border-radius: var(--arch); padding: 16px 18px; }
+.ops-c h4 { font-family: 'Marcellus', Georgia, serif; font-size: 16px; color: var(--gold); margin: 0 0 8px; }
+.ops-c ul { margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.6; }
+.ops-c li { margin-bottom: 6px; }
+.ops-x { margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--gold-pale);
+  font-size: 13px; line-height: 1.55; color: var(--ink-soft); }
+.fruit { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 18px; margin-top: 10px; padding-top: 9px;
+  border-top: 1px solid var(--gold-pale); font-size: 13px; }
+@media (max-width: 900px) { .fruit { grid-template-columns: 1fr; } }
+.fr { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.fr-l { color: var(--ink-soft); }
+.fr-q { font-weight: 500; text-align: right; white-space: nowrap; }
+.fr-u { font-weight: 400; color: var(--ink-soft); font-size: 11.5px; }
+.fr-note { margin-top: 9px; font-size: 12px; color: var(--ink-soft); line-height: 1.5; }
 /* shop strip on the price list */
 .shop-strip { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
 .shop-b { display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
@@ -4066,29 +4092,235 @@ td.buy.ok { color: var(--ink-soft); }
     save(LS_SALES, SALES);
   });
 
+
+  /* ==================================================================
+     8. ORDER OF OPERATIONS
+     The shift in three moves: what is done the night before, what
+     happens on arrival, and what keeps happening between drinks.
+     ================================================================== */
+  var FRUIT = [
+    [{en:"Limes",nl:"Limoenen"},                    {en:"13 pieces",nl:"13 stuks"},          {en:"about 2 bags",nl:"ongeveer 2 zakken"}],
+    [{en:"Lemons",nl:"Citroenen"},                  {en:"3 pieces",nl:"3 stuks"},            ""],
+    [{en:"Oranges, zest and juice",nl:"Sinaasappels, zeste en sap"}, {en:"5 pieces",nl:"5 stuks"}, ""],
+    [{en:"Strawberries",nl:"Aardbeien"},            {en:"about a third of a kilo",nl:"ongeveer een derde kilo"}, {en:"2 punnets",nl:"2 bakjes"}],
+    [{en:"Green grapes",nl:"Witte druiven"},        {en:"about a third of a kilo",nl:"ongeveer een derde kilo"}, {en:"1 small bunch",nl:"1 kleine tros"}],
+    [{en:"Mint",nl:"Munt"},                         {en:"a small bunch",nl:"een klein bosje"},   {en:"15 to 20 sprigs",nl:"15 tot 20 takjes"}],
+    [{en:"Basil",nl:"Basilicum"},                   {en:"a small handful",nl:"een kleine handvol"}, {en:"10 to 12 leaves",nl:"10 tot 12 blaadjes"}],
+    [{en:"Rosemary",nl:"Rozemarijn"},               {en:"a few sprigs",nl:"een paar takjes"},    {en:"4 to 5",nl:"4 tot 5"}],
+    [{en:"Thyme",nl:"Tijm"},                        {en:"a few sprigs",nl:"een paar takjes"},    {en:"4 to 5",nl:"4 tot 5"}],
+    [{en:"Jalapenos",nl:"Jalapenos"},               {en:"2 pieces",nl:"2 stuks"},            ""],
+    [{en:"Pears, Conference",nl:"Peren, Conference"}, {en:"1 piece",nl:"1 stuk"},            ""],
+    [{en:"Passion fruit, fresh",nl:"Passievrucht, vers"}, {en:"1 piece",nl:"1 stuk"},        ""],
+    [{en:"Lychees, from the can",nl:"Lychees, uit blik"}, {en:"6 pieces",nl:"6 stuks"},      ""]
+  ];
+  function fruitHTML() {
+    return '<div class="fruit">' + FRUIT.map(function (f) {
+      return '<div class="fr"><span class="fr-l">' + et(f[0]) + '</span><span class="fr-q">' +
+        et(f[1]) + (tt(f[2]) ? ' <span class="fr-u">' + et(f[2]) + "</span>" : "") + "</span></div>";
+    }).join("") + '</div><div class="fr-note">' +
+    et({ en: "Per day, on 140 servings a drink a week. Whole fruit in FR2 A, cut fruit in FR2 B top shelf in labelled boxes.",
+         nl: "Per dag, op 140 porties per drankje per week. Heel fruit in FR2 A, gesneden fruit in FR2 B bovenste plank in gelabelde bakjes." }) + "</div>";
+  }
+
+  var OPS = [
+    { key: "night",
+      label: { en: "Night before", nl: "Avond ervoor" },
+      desc:  { en: "Set the next shift up so it can just open. All of this happens the evening before.",
+               nl: "Zorg dat de volgende dienst gewoon open kan. Dit gebeurt allemaal de avond ervoor." },
+      cards: [
+        { title: { en: "Batch the teas and syrups", nl: "Thee en siropen maken" },
+          items: {
+            en: ["Butterfly pea tea. 2.5 L, boiled water, up to 10 g or a loose handful, steep 20 minutes, then drain into one prebatch bottle and one large squeeze bottle.",
+                 "Hibiscus tea. Two 2.5 L pitchers, 10 g each, 5 L in all. WARM water, not hot, left to macerate overnight so it does not draw bitter.",
+                 "Pre-batch 1 L rosemary-thyme maple cordial if needed. There always has to be one big squeeze bottle ready for the next day.",
+                 "Pre-batch 1 L of Jade's mint syrup on the same rule.",
+                 "Lychee cordial, decanted from the can.",
+                 "Rosemary-lemon salt rim mix if it is running low."],
+            nl: ["Vlindererwtthee. 2,5 L, gekookt water, tot 10 g of een losse handvol, 20 minuten laten trekken, dan afgieten in een prebatchfles en een grote knijpfles.",
+                 "Hibiscusthee. Twee kannen van 2,5 L, 10 g per kan, 5 L in totaal. WARM water, niet heet, een nacht laten macereren zodat hij niet bitter trekt.",
+                 "Prebatch 1 L rozemarijn-tijm-ahornsiroop als het nodig is. Er moet altijd een grote knijpfles klaarstaan voor de volgende dag.",
+                 "Prebatch 1 L muntsiroop van Jade, zelfde regel.",
+                 "Lycheecordial, afgetapt uit blik.",
+                 "Rozemarijn-citroen-zoutrand als die bijna op is."] },
+          extra: function () {
+            return '<div class="ops-x">' +
+              et({ en: "Salt rim: microwave the rosemary 4 x 30 seconds until it crumbles but is still green, then mix 3 teaspoons with the sea salt and a whole lemon zest.",
+                   nl: "Zoutrand: rozemarijn 4 x 30 seconden in de magnetron tot hij verkruimelt maar nog groen is, meng dan 3 theelepels met het zeezout en een hele citroenzeste." }) + "</div>";
+          } },
+        { title: { en: "Set the station up", nl: "Station opruimen en klaarzetten" },
+          items: {
+            en: ["Wash the two white ice buckets and leave them to dry overnight.",
+                 "Check there is enough crushed ice in the kitchen freezer.",
+                 "Dishwasher station: sink cleared of rests and garnish, bin bag renewed.",
+                 "Sort the empties: Coca-Cola in its own crate, Appelaere in its own crate, SPA red and blue in theirs.",
+                 "Dishwasher: clean the filter under the spinning arm, take the separating surfaces out and clean them.",
+                 "Speedrail bay: take the pour sets down, neck part into the dishwasher, check the label date and bin anything overdue.",
+                 "Into the dishwasher: multilevel jigger, pour sets, bar spoons, muddler, cutting board, bar mats.",
+                 "Wipe the whole surface down. Pico bello.",
+                 "Coffee station: press rinse and the leftmost button on all three, clean the espresso holders. The rubber handle does NOT go in the chemical water.",
+                 "Mop the floor."],
+            nl: ["Was de twee witte ijsbakken en laat ze een nacht drogen.",
+                 "Controleer of er genoeg crushed ice in de vriezer van de keuken ligt.",
+                 "Afwasstation: spoelbak vrij van resten en garnering, vuilniszak vernieuwd.",
+                 "Sorteer het leeggoed: Coca-Cola in het eigen krat, Appelaere in het eigen krat, SPA rood en blauw in die van hen.",
+                 "Afwasmachine: maak het filter onder de draaiarm schoon, haal de scheidingsvlakken eruit en maak ze schoon.",
+                 "Speedrail-bay: haal de pour sets eraf, het halsdeel gaat in de vaatwasser, controleer de labeldatum en gooi weg wat over datum is.",
+                 "In de vaatwasser: multilevel jigger, pour sets, barlepels, muddler, snijplank, barmats.",
+                 "Veeg het hele oppervlak af. Pico bello.",
+                 "Koffiestation: druk op rinse en de meest linkse knop bij alle drie, maak de espressohouders schoon. Het rubberen handvat gaat NIET in het chemische water.",
+                 "Dweil de vloer."] } }
+      ] },
+
+    { key: "arrival",
+      label: { en: "On arrival", nl: "Bij aankomst" },
+      desc:  { en: "First things when you walk in, in this order.",
+               nl: "Het eerste als je binnenkomt, in deze volgorde." },
+      cards: [
+        { title: { en: "Open and check", nl: "Openen en controleren" },
+          items: {
+            en: ["Turn on the espresso machine and the ice machine.",
+                 "Check every speedrail bottle is full.",
+                 "Every container carries a day dot plus tape with NAME and USE BY, written as the weekday then the date: MO / TU / WED / THU / FR / SAT / SUN DD.MM.YY. New stock goes in front, the old one gets an X.",
+                 "Anything past its date is binned at open, not later."],
+            nl: ["Zet de espressomachine en de ijsmachine aan.",
+                 "Controleer of elke speedrailfles vol is.",
+                 "Elke bak draagt een dagsticker plus tape met NAAM en THT, geschreven als de weekdag en dan de datum: MA / DI / WO / DO / VR / ZA / ZO DD.MM.JJ. Nieuwe voorraad gaat vooraan, de oude krijgt een X.",
+                 "Alles over datum gaat bij opening weg, niet later."] } },
+        { title: { en: "Fruit for today", nl: "Fruit voor vandaag" },
+          items: {
+            en: ["Check the quantities for the day, listed below.",
+                 "Cut lime wedges, lemon wedges, orange zests.",
+                 "Slice the jalapenos, seeds out as standard.",
+                 "Fill the garnish tubs: mint, basil, grapes, strawberries.",
+                 "Halve the passion fruit, open the pineapple chunks.",
+                 "Whole fruit in FR2 A, cut fruit in FR2 B top shelf in labelled boxes."],
+            nl: ["Controleer de hoeveelheden voor de dag, hieronder.",
+                 "Snijd limoenpartjes, citroenpartjes, sinaasappelzestes.",
+                 "Snijd de jalapenos, standaard zonder zaadjes.",
+                 "Vul de garneringsbakjes: munt, basilicum, druiven, aardbeien.",
+                 "Halveer de passievruchten, open de ananasstukjes.",
+                 "Heel fruit in FR2 A, gesneden fruit in FR2 B bovenste plank in gelabelde bakjes."] },
+          extra: fruitHTML },
+        { title: { en: "Ice and glassware", nl: "IJs en glaswerk" },
+          items: {
+            en: ["Fill the insulated bins: one cubed from the machine, one crushed. Spare bags are in the kitchen fridge.",
+                 "Glassware is already set up at station 2."],
+            nl: ["Vul de geisoleerde bakken: een met blokjes uit de machine, een met crushed. Reservezakken liggen in de keukenkoeling.",
+                 "Glaswerk staat al klaar op station 2."] } }
+      ] },
+
+    { key: "between",
+      label: { en: "Between drinks", nl: "Tussen de drankjes" },
+      desc:  { en: "Keep the station clean and stocked. Speed is nothing without consistency.",
+               nl: "Houd het station schoon en gevuld. Snelheid is niets zonder consistentie." },
+      cards: [
+        { title: { en: "Clean as you go", nl: "Schoonhouden tijdens de service" },
+          items: {
+            en: ["Wipe the station down after every drink.",
+                 "Rinse tins, strainers and bar spoons straight away.",
+                 "Change cloths regularly. Yellow for cleaning, polish for glassware, never the same cloth."],
+            nl: ["Veeg het station na elk drankje af.",
+                 "Spoel tins, zeven en barlepels meteen om.",
+                 "Wissel doeken regelmatig. Geel voor schoonmaken, polish voor glaswerk, nooit dezelfde doek."] } },
+        { title: { en: "Restock", nl: "Aanvullen" },
+          items: {
+            en: ["Speedrail bottles: top up as they go down.",
+                 "Squeeze bottles: lime, lemon, the cordials.",
+                 "Garnish tubs: keep them fresh, top them up.",
+                 "Ice: refill the bin at the midpoint, spare bags from the kitchen fridge."],
+            nl: ["Speedrailflessen: bijvullen zodra ze zakken.",
+                 "Knijpflessen: limoen, citroen, de cordials.",
+                 "Garneringsbakjes: vers houden, bijvullen.",
+                 "IJs: de bak halverwege bijvullen, reservezakken uit de keukenkoeling."] } },
+        { title: { en: "FIFO and waste", nl: "FIFO en afval" },
+          items: {
+            en: ["Date everything. New stock goes behind the old.",
+                 "Mark the old container with an X so nobody has to guess which is which.",
+                 "At close, bin anything whose use-by is tomorrow. It will not survive the shift."],
+            nl: ["Zet overal een datum op. Nieuwe voorraad gaat achter de oude.",
+                 "Markeer de oude bak met een X, zodat niemand hoeft te raden welke welke is.",
+                 "Gooi bij sluiting alles weg waarvan de THT morgen is. Dat haalt de dienst niet."] } }
+      ] }
+  ];
+
+  var OPSTEP = 0;
+  function opsHTML() {
+    var s = OPS[OPSTEP] || OPS[0];
+    return '<section class="section"><div class="section-head"><div class="smallcaps">' +
+      esc(ui("runsheet")) + "</div><h2>" +
+      et({ en: "Order of operations", nl: "Volgorde van werken" }) + "</h2></div>" +
+      '<div class="ops-tabs">' + OPS.map(function (o, i) {
+        return '<button type="button" data-ops="' + i + '" aria-pressed="' + (i === OPSTEP) + '">' +
+          '<span class="ops-n">' + (i + 1) + "</span>" + et(o.label) + "</button>";
+      }).join("") + "</div>" +
+      '<h3 class="ops-h">' + et(s.label) + "</h3>" +
+      '<p class="ops-d">' + et(s.desc) + "</p>" +
+      '<div class="ops-grid">' + s.cards.map(function (c) {
+        return '<div class="ops-c"><h4>' + et(c.title) + "</h4><ul>" +
+          t(c.items).map(function (it) { return "<li>" + esc(it) + "</li>"; }).join("") + "</ul>" +
+          (c.extra ? c.extra() : "") + "</div>";
+      }).join("") + "</div>" +
+      noteBox("ops-" + s.key, { en: "Notes for this part of the shift.",
+                                nl: "Notities voor dit deel van de dienst." }) +
+      "</section>";
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest("[data-ops]");
+    if (!b) return;
+    OPSTEP = Number(b.dataset.ops) || 0;
+    if (typeof render === "function") render();
+  });
+
   if (typeof TABS !== "undefined" && TABS) {
     TABS.storage = storageHTML;
     TABS.prices  = pricesHTML;
+    TABS.ops     = opsHTML;
   }
-  /* Add Prices to the subtab bar and give it a label in both languages. */
-  if (typeof UI !== "undefined" && UI) UI.prices = { en: "Prices", nl: "Prijzen" };
+  /* Two tabs are added to the bar the base file draws. CREW is the cut-down
+     build for whoever is covering the bar: prep, inventory and the order of
+     operations, without the guest menu, the money or the drink reference. */
+  var CREW = (typeof window !== "undefined" && window.QUATRO_CREW === true);
+  var CREW_TABS = ["prep", "inventory", "ops"];
+
   (function () {
     var draw = window.renderChrome;
     if (typeof draw !== "function") return;
+    function add(bar, key, label, afterKey) {
+      if (bar.querySelector('[data-tab="' + key + '"]')) return;
+      var b = document.createElement("button");
+      b.type = "button"; b.setAttribute("role", "tab");
+      b.dataset.tab = key;
+      b.setAttribute("aria-selected", String(TAB === key));
+      b.textContent = tt(label);
+      var after = afterKey && bar.querySelector('[data-tab="' + afterKey + '"]');
+      if (after && after.nextSibling) bar.insertBefore(b, after.nextSibling);
+      else bar.appendChild(b);
+    }
     window.renderChrome = function () {
       draw.apply(this, arguments);
       var bar = document.getElementById("subtabs");
-      if (!bar || bar.hidden || bar.querySelector('[data-tab="prices"]')) return;
-      var after = bar.querySelector('[data-tab="inventory"]');
-      var b = document.createElement("button");
-      b.type = "button"; b.setAttribute("role", "tab");
-      b.dataset.tab = "prices";
-      b.setAttribute("aria-selected", String(TAB === "prices"));
-      b.textContent = tt({ en: "Prices", nl: "Prijzen" });
-      if (after && after.nextSibling) bar.insertBefore(b, after.nextSibling);
-      else bar.appendChild(b);
+      if (!bar) return;
+      if (CREW) bar.hidden = false;
+      add(bar, "prices", { en: "Prices", nl: "Prijzen" }, "inventory");
+      add(bar, "ops", { en: "Order of operations", nl: "Volgorde van werken" }, "prices");
+      if (!CREW) return;
+      /* Crew build: drop every tab that is not theirs, and the mode switch
+         with it, so there is one thing on screen and no way to get lost. */
+      Array.prototype.slice.call(bar.querySelectorAll("[data-tab]")).forEach(function (b) {
+        if (CREW_TABS.indexOf(b.dataset.tab) === -1) b.remove();
+      });
+      var modes = document.getElementById("modes");
+      if (modes) modes.style.display = "none";
     };
   })();
+
+  if (CREW) {
+    /* Force the crew build onto the run sheet, on a tab they actually have. */
+    if (typeof MODE !== "undefined") MODE = "runsheet";
+    if (typeof TAB === "undefined" || CREW_TABS.indexOf(TAB) === -1) TAB = "prep";
+    try { localStorage.setItem("quatro-mode", "runsheet"); } catch (e) {}
+    document.title = "Quatro · Prep, FIFO and inventory";
+  }
 
   if (typeof render === "function") render();
 })();
