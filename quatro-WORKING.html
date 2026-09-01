@@ -1760,6 +1760,14 @@ td.buy.ok { color: var(--ink-soft); }
   border-radius: 999px; border: 1px solid var(--gold-pale); background: var(--limestone);
   color: var(--gold); white-space: nowrap; }
 .sup.tbd { border-color: #E0B3AA; color: #9E2B3B; background: rgba(158,43,59,.06); }
+/* The shop is a real control with a proper hit area, not a tiny editable tag. */
+.sup-sel { font: inherit; font-size: 12px; padding: 4px 8px; min-height: 32px;
+  border: 1px solid var(--gold-pale); border-radius: 999px; background: var(--limestone);
+  color: var(--gold); cursor: pointer; max-width: 128px; }
+.sup-sel:hover { background: rgba(168,134,60,.14); }
+.sup-sel:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+.sup-sel.tbd { border-color: #E0B3AA; color: #9E2B3B; background: rgba(158,43,59,.06); }
+@media print { .sup-sel { border: 0; background: none; -webkit-appearance: none; appearance: none; } }
 @media (max-width: 719px) {
   .inv-t, .inv-t tbody, .inv-t tr, .inv-t td { display: block; width: 100%; }
   .inv-t thead { display: none; }
@@ -1801,6 +1809,18 @@ td.buy.ok { color: var(--ink-soft); }
   padding: 7px 12px; font-size: 13px; line-height: 1.3; cursor: pointer; }
 .shop-b span { font-size: 11px; color: var(--ink-soft); }
 .shop-b[aria-pressed="true"] { border-color: var(--gold); background: var(--limestone-deep); font-weight: 600; }
+/* date made and use by, in the prep table */
+.mk { display: flex; flex-direction: column; gap: 4px; min-width: 104px; }
+.mk-in { width: 96px; padding: 5px 7px; font: inherit; font-size: 13px; text-align: center;
+  font-variant-numeric: tabular-nums; letter-spacing: .06em;
+  border: 1px solid var(--gold-pale); border-radius: 6px; background: #fff; }
+.mk-in:focus { border-color: var(--gold); outline: none; }
+.mk-out { font-size: 11.5px; font-weight: 600; min-height: 16px; line-height: 1.35; }
+.mk-out.ok   { color: #2F6B3A; }
+.mk-out.warn { color: #B26A05; }
+.mk-out.due  { color: #9E2B3B; }
+.mk-out.bad  { color: #9E2B3B; font-weight: 400; font-style: italic; }
+@media print { .mk-in { border: 0; background: none; padding: 0; text-align: left; } }
 /* day dot converter */
 .dd { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 0 0 16px;
   background: #fff; border: 1px solid var(--gold-pale); border-radius: var(--arch); padding: 11px 14px; }
@@ -1898,8 +1918,8 @@ td.buy.ok { color: var(--ink-soft); }
                              note:"Carried to the table in a brute and poured over the indigo. Current workaround: poured from a jigger." },
     "coconut water":       { t:"buy", shop:"Albert Heijn", pack:"1 L carton, 2.29", home:"F1A bottom tier",
                              warn:"NOT ON THE BUY LIST. Until it is bought, Lychee Siren cannot be made." },
-    "butterfly pea tea":   { t:"house", from:"Amazing Oriental dried butterfly pea flower, 3.15 per 50 g", yield:"500 ml, plus a 250 ml strong infusion", keeps:"5 days", home:"F1B top tier",
-                             note:"Two bottles in the fridge at all times: it is re-batched before the old one runs out. The strong infusion is the one that goes in the Ocean Mojito squeeze bottle." },
+    "butterfly pea tea":   { t:"house", from:"Amazing Oriental dried butterfly pea flower, 3.15 per 50 g", yield:"2.5 L, and the squeeze bottle is drawn off the same batch", keeps:"5 days", home:"F1B top tier",
+                             note:"Two bottles in the fridge at all times: it is re-batched before the old one runs out. Steep 20 minutes, then drain into one prebatch bottle and one large squeeze bottle, and that squeeze bottle is what the Ocean Mojito floats." },
     "lime juice":          { t:"buy", shop:"Boiron, via Sligro 217504", pack:"Pasteurised lime puree, 1 kg", home:"F1A rail slot 1",
                              note:"Boiron pasteurised puree, not hand squeezed. Fresh limes are still bought, but only for wedges and garnish." },
     "lemon juice":         { t:"buy", shop:"Boiron, via Sligro 217502", pack:"Pasteurised lemon puree, 1 kg", home:"F1A rail slot 2",
@@ -2091,7 +2111,7 @@ td.buy.ok { color: var(--ink-soft); }
     "Whole oranges, Albert Heijn, 3.29 per 2 kg": "Hele sinaasappels, Albert Heijn, 3,29 per 2 kg",
     "2 L strong": "2 L sterk",
     "50 ml per drink, made to order": "50 ml per drankje, op bestelling gemaakt",
-    "500 ml, plus a 250 ml strong infusion": "500 ml, plus een sterke infusie van 250 ml",
+    "2.5 L, and the squeeze bottle is drawn off the same batch": "2,5 L, en de knijpfles komt uit dezelfde batch",
     "Cut to order": "Op bestelling gesneden",
     "Insulated bin at station 2": "Geisoleerde bak op station 2",
     "Small bowl, enough for service": "Klein bakje, genoeg voor een service",
@@ -2117,7 +2137,7 @@ td.buy.ok { color: var(--ink-soft); }
     "Press once only. A second press turns it bitter.": "Slechts een keer persen. Een tweede keer maakt het bitter.",
     "Seeds out as standard. Ask the guest before leaving them in.": "Standaard zonder zaadjes. Vraag het de gast voor je ze laat zitten.",
     "Stir before every use, it separates in the can.": "Voor elk gebruik doorroeren, hij scheidt in het blik.",
-    "Two bottles in the fridge at all times: it is re-batched before the old one runs out. The strong infusion is the one that goes in the Ocean Mojito squeeze bottle.": "Altijd twee flessen in de koeling: er wordt bijgemaakt voordat de oude op is. De sterke infusie is degene die in de knijpfles voor de Ocean Mojito gaat.",
+    "Two bottles in the fridge at all times: it is re-batched before the old one runs out. Steep 20 minutes, then drain into one prebatch bottle and one large squeeze bottle, and that squeeze bottle is what the Ocean Mojito floats.": "Altijd twee flessen in de koeling: er wordt bijgemaakt voordat de oude op is. 20 minuten laten trekken, dan afgieten in een prebatchfles en een grote knijpfles, en die knijpfles is wat op de Ocean Mojito drijft.",
     "Depends on the machine being repaired in time.": "Hangt ervan af of de machine op tijd gemaakt is.",
     "Depends on the machine being repaired in time. If it is not, ice is a bought line at 0.89 per kg and someone has to carry it.": "Hangt ervan af of de machine op tijd gemaakt is. Zo niet, dan is ijs een inkooppost van 0,89 per kg en moet iemand het sjouwen.",
     "NOT ON THE BUY LIST. Until it is bought, Lychee Siren cannot be made.": "STAAT NIET OP DE INKOOPLIJST. Tot dit gekocht is, kan de Lychee Siren niet gemaakt worden.",
@@ -2495,14 +2515,48 @@ td.buy.ok { color: var(--ink-soft); }
     return "";
   }
 
-  function supTag(s) {
-    s = s || "TBD";
-    var tbd = s === "TBD";
-    return '<span class="sup' + (tbd ? " tbd" : "") + '" contenteditable="true" data-f="supplier" title="' +
-      et(tbd ? { en: "Supplier not decided yet. Click to set one.",
-                 nl: "Leverancier nog niet bepaald. Klik om er een te kiezen." }
-             : { en: "Where this is bought. Click to change it, and the price follows.",
-                 nl: "Waar dit gekocht wordt. Klik om te wijzigen, de prijs volgt." }) + '">' + esc(s) + "</span>";
+  /* The list of shops. Seeded from the price book and whatever the rows
+     already use, then kept in this browser so it can be added to and pruned. */
+  var LS_SUPS = "quatro-suppliers-v1";
+  var SUPS = load(LS_SUPS, null);
+  function seedSups() {
+    var seen = {}, out = [];
+    PRICEBOOK.forEach(function (e) { if (!seen[e.sup]) { seen[e.sup] = 1; out.push(e.sup); } });
+    (typeof ROWS !== "undefined" ? ROWS : []).forEach(function (r) {
+      var s = r.supplier || "TBD";
+      if (!seen[s]) { seen[s] = 1; out.push(s); }
+    });
+    if (!seen.TBD) out.push("TBD");
+    return out.sort();
+  }
+  function supList() {
+    if (!SUPS || !SUPS.length) { SUPS = seedSups(); save(LS_SUPS, SUPS); }
+    return SUPS;
+  }
+  function addSup(name) {
+    name = String(name || "").trim();
+    if (!name) return null;
+    var list = supList();
+    var hit = list.filter(function (s) { return s.toLowerCase() === name.toLowerCase(); })[0];
+    if (hit) return hit;
+    list.push(name); list.sort(); save(LS_SUPS, SUPS);
+    return name;
+  }
+
+  /* A select, not a contenteditable span. A 10px inline tag is a miserable
+     target with a finger, and typing into one cannot add a shop or drop one. */
+  function supTag(r) {
+    var cur = r.supplier || "TBD";
+    var list = supList().slice();
+    if (list.indexOf(cur) === -1) list.push(cur);
+    return '<select class="sup-sel' + (cur === "TBD" ? " tbd" : "") + '" data-sup="' + esc(r.id) + '" title="' +
+      et({ en: "Where this is bought. Change it and the price follows.",
+           nl: "Waar dit gekocht wordt. Wijzig het en de prijs volgt." }) + '">' +
+      list.map(function (s) {
+        return '<option value="' + esc(s) + '"' + (s === cur ? " selected" : "") + ">" + esc(s) + "</option>";
+      }).join("") +
+      '<option value="__add">' + et({ en: "+ Add a shop…", nl: "+ Winkel toevoegen…" }) + "</option>" +
+      "</select>";
   }
   /* Every supplier actually present, so the filter offers real choices only. */
   function suppliers() {
@@ -2654,7 +2708,7 @@ td.buy.ok { color: var(--ink-soft); }
         '<td data-c="cost" class="num" data-l="' + esc(L.cost) + '">' + (!priced ? '<span class="iv-tbd">' +
             et({ en: "price TBD", nl: "prijs volgt" }) + "</span>"
           : short > 0 ? n2(short * r.cost) : "-") + provenance(r) + "</td>" +
-        '<td data-l="' + esc(L.where) + '">' + supTag(r.supplier) +
+        '<td data-l="' + esc(L.where) + '">' + supTag(r) +
           '<button class="iv-del" type="button" data-del="' + esc(r.id) + '" title="' +
           et({ en: "Delete row", nl: "Regel verwijderen" }) + '">&times;</button></td>' +
         "</tr>";
@@ -2709,7 +2763,9 @@ td.buy.ok { color: var(--ink-soft); }
       '<button type="button" id="iv-add">' +
       et({ en: "Add row", nl: "Regel toevoegen" }) + "</button>" +
       '<button type="button" id="iv-reset">' +
-      et({ en: "Reset to defaults", nl: "Terug naar standaard" }) + "</button></div>" +
+      et({ en: "Reset to defaults", nl: "Terug naar standaard" }) + "</button>" +
+      '<button type="button" id="iv-shops">' +
+      et({ en: "Shops", nl: "Winkels" }) + "</button></div>" +
       (unpriced ? '<div class="src-warn" style="margin:0 0 14px"><b>' +
         (isNl() ? (unpriced === 1 ? "1 regel heeft nog geen prijs." : unpriced + " regels hebben nog geen prijs.")
                 : (unpriced === 1 ? "1 line has no price yet." : unpriced + " lines have no price yet.")) + "</b> " +
@@ -2797,6 +2853,23 @@ td.buy.ok { color: var(--ink-soft); }
     refreshRow(q.dataset.id);
   });
   document.addEventListener("change", function (e) {
+    var sel = e.target.closest && e.target.closest("[data-sup]");
+    if (sel) {
+      var row = ROWS.filter(function (r) { return r.id === sel.dataset.sup; })[0];
+      if (!row) return;
+      var pick = sel.value;
+      if (pick === "__add") {
+        var name = window.prompt(tt({ en: "Name of the shop, for example Sligro or AH",
+                                      nl: "Naam van de winkel, bijvoorbeeld Sligro of AH" }));
+        pick = addSup(name);
+        if (!pick) { invRender(); return; }          /* cancelled, put the select back */
+      }
+      row.supplier = pick;
+      var pe = rowEntry(row);
+      if (pe) row.cost = costIn(pe, row.unit);
+      persist(); invRender();
+      return;
+    }
     if (e.target.id === "iv-filter") { FILTER = e.target.value; invRender(); return; }
     var q = e.target.closest && e.target.closest(".inv-qty[data-id]");
     /* Only once the field is committed can a row legitimately drop out of a
@@ -2824,13 +2897,6 @@ td.buy.ok { color: var(--ink-soft); }
     } else if (el.dataset.f === "note") {
       if (isNl()) { if (val === (row.noteNl || "")) return; row.noteNl = val; }
       else { if (val === (row.note || "")) return; row.note = val; }
-    } else if (el.dataset.f === "supplier") {
-      var sup = val || "TBD";
-      if (sup === row.supplier) return;
-      row.supplier = sup;
-      /* The shop decides the price, so re-read it from the book. */
-      var e = rowEntry(row);
-      if (e) row.cost = costIn(e, row.unit);
     }
     persist(); invRender();
   }, true);
@@ -2856,6 +2922,35 @@ td.buy.ok { color: var(--ink-soft); }
       ROWS.push({ id:slug(name) || ("u" + Date.now()), key:name, cat:cat, name:name, nameNl:name,
                   supplier:where, need:null, unit:unit, cost:null, note:"", noteNl:"", prep:false });
       persist(); invRender(); return;
+    }
+    if (e.target.id === "iv-shops") {
+      /* Add a shop, or drop one that nothing is bought from any more. */
+      var list = supList();
+      var inUse = {};
+      ROWS.forEach(function (r) { inUse[r.supplier || "TBD"] = (inUse[r.supplier || "TBD"] || 0) + 1; });
+      var lines = list.map(function (s) {
+        return s + " (" + (inUse[s] || 0) + ")";
+      }).join("\n");
+      var ans = window.prompt(
+        tt({ en: "Shops, with how many lines use each:\n\n", nl: "Winkels, met hoeveel regels elk gebruikt:\n\n" }) +
+        lines +
+        tt({ en: "\n\nType a name to ADD it, or type  -Name  to remove one that nothing uses.",
+             nl: "\n\nTyp een naam om die TOE TE VOEGEN, of typ  -Naam  om er een te verwijderen die nergens gebruikt wordt." }), "");
+      if (!ans) return;
+      ans = ans.trim();
+      if (ans.charAt(0) === "-") {
+        var kill = ans.slice(1).trim();
+        var hit = list.filter(function (s) { return s.toLowerCase() === kill.toLowerCase(); })[0];
+        if (!hit) { window.alert(tt({ en: "No shop by that name.", nl: "Geen winkel met die naam." })); return; }
+        if (inUse[hit]) {
+          window.alert(tt({ en: "Cannot remove " + hit + ", " + inUse[hit] + " line(s) still buy from it. Move them first.",
+                            nl: "Kan " + hit + " niet verwijderen, " + inUse[hit] + " regel(s) kopen daar nog. Verplaats die eerst." }));
+          return;
+        }
+        SUPS = list.filter(function (s) { return s !== hit; });
+        save(LS_SUPS, SUPS); invRender(); return;
+      }
+      addSup(ans); invRender(); return;
     }
     if (e.target.id === "iv-reset") {
       if (window.confirm(tt({ en: "Reset every row and every stock count back to the defaults?",
@@ -3014,25 +3109,18 @@ td.buy.ok { color: var(--ink-soft); }
      {en:"5 days",nl:"5 dagen"},
      {en:"Speedrail blue bottle FR1A middle. Semi-clear plastic measuring jug, or a mixing jug with a handle, FR1B bottom.",
       nl:"Blauwe speedrailfles FR1A midden. Semi-transparante kunststof maatbeker, of mengkan met handvat, FR1B onderin."},
-     {en:"BOILED water, straight off the boil, into the semi-clear plastic measuring jug. Fill to 2.5 litres. 6 to 8 g dried flowers, that is roughly 4 to 5 teaspoons, or 30 to 40 individual flowers, or one loose handful.",
-      nl:"GEKOOKT water, direct van de kook, in de semi-transparante kunststof maatbeker. Vul tot 2,5 liter. 6 tot 8 g gedroogde bloemen, dat is ongeveer 4 tot 5 theelepels, of 30 tot 40 losse bloemen, of een losse handvol."},
-     {en:"The jug is semi-clear on purpose: you watch the blue come up and stop when it is right.",
-      nl:"De maatbeker is met opzet semi-transparant: je ziet het blauw opkomen en stopt wanneer het goed is."}],
-    [{en:"Butterfly pea, strong infusion for depth",nl:"Vlindererwt, sterke infusie voor diepte"},
-     {en:"500 ml",nl:"500 ml"},
-     {en:"5 days",nl:"5 dagen"},
-     {en:"Squeeze bottle, FR1C top shelf.",nl:"Knijpfles, FR1C bovenste plank."},
-     {en:"Same boiled water as the 2.5 L batch, but in the 500 ml pitcher. 6 to 8 g dried flowers, same measure as above. This is the concentrate that floats on the Ocean Mojito.",
-      nl:"Zelfde gekookte water als de batch van 2,5 L, maar in de kan van 500 ml. 6 tot 8 g gedroogde bloemen, dezelfde maat als hierboven. Dit is het concentraat dat op de Ocean Mojito drijft."},
-     ""],
+     {en:"BOILED water, straight off the boil, into the semi-clear plastic measuring jug. Fill to 2.5 litres. Up to 10 g dried flowers, or one loose handful. Steep 20 minutes, then drain into one prebatch bottle AND one large butterfly pea squeeze bottle.",
+      nl:"GEKOOKT water, direct van de kook, in de semi-transparante kunststof maatbeker. Vul tot 2,5 liter. Tot 10 g gedroogde bloemen, of een losse handvol. 20 minuten laten trekken, dan afgieten in een prebatchfles EN een grote vlindererwt-knijpfles."},
+     {en:"The squeeze bottle is filled from this same batch. There is no separate strong infusion to make any more.",
+      nl:"De knijpfles wordt uit dezelfde batch gevuld. Er hoeft geen aparte sterke infusie meer gemaakt te worden."}],
     [{en:"Hibiscus tea, strong",nl:"Hibiscusthee, sterk"},
-     {en:"2 L",nl:"2 L"},
+     {en:"2.5 L per pitcher, two pitchers, 5 L in all",nl:"2,5 L per kan, twee kannen, 5 L in totaal"},
      {en:"48 HOURS MAX. Past that it turns bitter and Achraf will not be happy.",
       nl:"MAXIMAAL 48 UUR. Daarna wordt hij bitter en is Achraf niet blij."},
-     {en:"Speedrail red bottle FR1A middle. 2 L brewing pitcher FR1B bottom.",
-      nl:"Rode speedrailfles FR1A midden. Brouwkan van 2 L FR1B onderin."},
-     {en:"10 g dried hibiscus. WARM water, not hot: boiling water is what draws the bitterness out. Leave it to macerate OVERNIGHT rather than steeping it fast, and it comes out deep and tart instead of harsh.",
-      nl:"10 g gedroogde hibiscus. WARM water, niet heet: kokend water trekt juist de bitterheid eruit. Laat het een NACHT macereren in plaats van snel te laten trekken, dan wordt hij diep en zuur in plaats van scherp."},
+     {en:"Speedrail red bottle FR1A middle. Two 2.5 L brewing pitchers FR1B bottom.",
+      nl:"Rode speedrailfles FR1A midden. Twee brouwkannen van 2,5 L FR1B onderin."},
+     {en:"10 g dried hibiscus PER PITCHER, two pitchers of 2.5 L, 5 L in all. WARM water, not hot: boiling water is what draws the bitterness out. Leave it to macerate OVERNIGHT rather than steeping it fast, and it comes out deep and tart instead of harsh.",
+      nl:"10 g gedroogde hibiscus PER KAN, twee kannen van 2,5 L, 5 L in totaal. WARM water, niet heet: kokend water trekt juist de bitterheid eruit. Laat het een NACHT macereren in plaats van snel te laten trekken, dan wordt hij diep en zuur in plaats van scherp."},
      {en:"Overnight and warm, not fast and hot. This is the opposite of how the butterfly pea is made, which does take boiled water.",
       nl:"Een nacht en warm, niet snel en heet. Dit is precies andersom dan de vlindererwt, die juist gekookt water nodig heeft."}],
     [{en:"Rosemary-thyme maple cordial",nl:"Rozemarijn-tijm-ahornsiroop"},
@@ -3134,6 +3222,79 @@ td.buy.ok { color: var(--ink-soft); }
      ""]
   ];
 
+  /* How long a keeps line actually is, read off the English text so the maths
+     does not change with the language on screen. */
+  function keepsDays(keeps) {
+    var s = String((keeps && keeps.en) || keeps || "").toLowerCase();
+    var m = s.match(/\d+/);
+    if (!m) return null;
+    var n = parseInt(m[0], 10);
+    if (isNaN(n)) return null;
+    if (/hour|hr\b|uur/.test(s))  return n / 24;
+    if (/month|maand/.test(s))     return n * 30;
+    if (/week|weken/.test(s))      return n * 7;
+    return n;
+  }
+
+  /* When each batch was made, kept in this browser, keyed by the row's own id
+     so adding or dropping a prep line never shifts anyone else's date. */
+  var LS_MADE = "quatro-prep-made-v1";
+  var MADE = load(LS_MADE, {});
+
+  function useBy(madeStr, keeps) {
+    var d = String(madeStr || "").replace(/\D/g, "");
+    if (d.length !== 6 && d.length !== 8) return null;
+    var day = +d.slice(0, 2), mon = +d.slice(2, 4);
+    var yr = d.length === 6 ? 2000 + +d.slice(4, 6) : +d.slice(4, 8);
+    var made = new Date(yr, mon - 1, day);
+    if (made.getDate() !== day || made.getMonth() !== mon - 1) return false;
+    var days = keepsDays(keeps);
+    if (days == null) return { made: made, exp: null };
+    var exp = new Date(made.getTime() + days * 86400000);
+    return { made: made, exp: exp };
+  }
+  /* The use-by is shown in the same weekday-then-date shape that goes on the
+     tape, so the screen and the label read identically. */
+  function dotOf(d) {
+    var p2 = function (n) { return ("0" + n).slice(-2); };
+    return (isNl() ? DD_NL : DD_EN)[(d.getDay() + 6) % 7] + " " +
+      p2(d.getDate()) + "." + p2(d.getMonth() + 1) + "." + String(d.getFullYear()).slice(-2);
+  }
+  function madeCell(id, keeps) {
+    var v = MADE[id] || "";
+    var r = useBy(v, keeps);
+    var out = "", cls = "";
+    if (r === false) { out = tt({ en: "not a date", nl: "geen datum" }); cls = "bad"; }
+    else if (r && r.exp) {
+      var left = (r.exp - new Date()) / 86400000;
+      cls = left < 0 ? "due" : left < 1 ? "warn" : "ok";
+      out = tt({ en: "Use by ", nl: "THT " }) + dotOf(r.exp);
+    } else if (r) { out = tt({ en: "no keep window set", nl: "geen houdbaarheid ingesteld" }); cls = "bad"; }
+    return '<div class="mk"><input class="mk-in" type="text" inputmode="numeric" maxlength="10" ' +
+      'autocomplete="off" data-made="' + esc(id) + '" value="' + esc(v) + '" placeholder="DDMMYY" ' +
+      'aria-label="' + et({ en: "Date made", nl: "Datum gemaakt" }) + '">' +
+      '<span class="mk-out ' + cls + '">' + esc(out) + "</span></div>";
+  }
+  document.addEventListener("input", function (e) {
+    var i = e.target.closest && e.target.closest("[data-made]");
+    if (!i) return;
+    MADE[i.dataset.made] = i.value;
+    save(LS_MADE, MADE);
+    /* Repaint only this cell's readout, so the caret stays put. */
+    var wrap = i.parentNode, out = wrap && wrap.querySelector(".mk-out");
+    if (!out) return;
+    var row = PREP2.filter(function (r) { return prepId(r) === i.dataset.made; })[0];
+    var res = useBy(i.value, row && row[2]);
+    var txt = "", cls = "mk-out";
+    if (res === false) { txt = tt({ en: "not a date", nl: "geen datum" }); cls += " bad"; }
+    else if (res && res.exp) {
+      var left = (res.exp - new Date()) / 86400000;
+      cls += left < 0 ? " due" : left < 1 ? " warn" : " ok";
+      txt = tt({ en: "Use by ", nl: "THT " }) + dotOf(res.exp);
+    } else if (res) { txt = tt({ en: "no keep window set", nl: "geen houdbaarheid ingesteld" }); cls += " bad"; }
+    out.className = cls; out.textContent = txt;
+  });
+
   /* Settled shelf lives, the summary panel under the prep table. */
   var SHELF = [
     [{en:"Boiron purees, all of them:",nl:"Boiron-purees, allemaal:"},
@@ -3151,6 +3312,29 @@ td.buy.ok { color: var(--ink-soft); }
      {en:"48 hours, and that one is not negotiable.",nl:"48 uur, en daar valt niet over te praten."}]
   ];
 
+  function prepId(r) { return "prep-" + slug(r[0].en); }
+
+  /* Notes used to be keyed by row position. Move them onto the row's own id
+     once, so the strong-infusion line can come out without shifting the rest. */
+  (function () {
+    var OLD = ["Butterfly pea tea","Butterfly pea, strong infusion for depth","Hibiscus tea, strong",
+      "Rosemary-thyme maple cordial","Lychee cordial","Lychee-lime cordial","Coconut cream from the can",
+      "Boiron lemon puree","Boiron lime puree","Boiron strawberry puree","Boiron passionfruit puree",
+      "Jade's homemade mint syrup","Condensed milk, decanted",
+      "All speedrail juices, juiced or decanted at open",
+      "Cut garnish, caramelised pear, jalapeno slices","Rosemary-lemon sea salt rim mix"];
+    var moved = false;
+    OLD.forEach(function (name, i) {
+      var oldKey = "prep-" + i, newKey = "prep-" + slug(name);
+      if (NOTES[oldKey] != null && NOTES[newKey] == null) {
+        NOTES[newKey] = NOTES[oldKey];
+        delete NOTES[oldKey];
+        moved = true;
+      }
+    });
+    if (moved) save(LS_NOTES, NOTES);
+  })();
+
   function prepHTML() {
     return '<section class="section"><div class="section-head"><div class="smallcaps">' +
       esc(ui("runsheet")) + "</div><h2>" + esc(ui("prep")) + "</h2></div>" +
@@ -3167,14 +3351,17 @@ td.buy.ok { color: var(--ink-soft); }
       "<th>" + et({ en: "Yield", nl: "Opbrengst" }) + "</th>" +
       "<th>" + et({ en: "Keeps", nl: "Houdbaar" }) + "</th>" +
       "<th>" + et({ en: "Home", nl: "Plek" }) + "</th>" +
+      "<th>" + et({ en: "Date made and use by", nl: "Gemaakt op en THT" }) + "</th>" +
       "<th>" + et({ en: "Pre-batch instructions", nl: "Voorbereiding vooraf" }) + "</th></tr></thead><tbody>" +
-      PREP2.map(function (r, i) {
+      PREP2.map(function (r) {
+        var id = prepId(r);
         return "<tr><td><b>" + et(r[0]) + "</b></td><td>" + et(r[1]) + "</td>" +
           "<td>" + et(r[2]) + "</td><td>" + et(r[3]) + "</td>" +
+          "<td>" + madeCell(id, r[2]) + "</td>" +
           '<td class="qmethod">' + (tt(r[4]) ? et(r[4])
             : '<span class="qdash">' + et({ en: "Nothing to batch", nl: "Niets voor te bereiden" }) + "</span>") +
           (tt(r[5]) ? '<div class="qflag">' + et(r[5]) + "</div>" : "") +
-          noteBox("prep-" + i, { en: "Note for " + tt(r[0]) + ".", nl: "Notitie voor " + tt(r[0]) + "." }) +
+          noteBox(id, { en: "Note for " + tt(r[0]) + ".", nl: "Notitie voor " + tt(r[0]) + "." }) +
           "</td></tr>";
       }).join("") + "</tbody></table></div>" +
       '<div class="panel"><h3>' +
