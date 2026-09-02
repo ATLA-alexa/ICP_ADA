@@ -272,8 +272,8 @@ td.buy.ok { color: var(--ink-soft); }
     "lychee juice":        { t:"buy", shop:"Amazing Oriental", pack:"350 ml bottle, 1.45", home:"Rail slot 3, spare carton F1A bottom" },
     "lychee cordial":      { t:"house", from:"Amazing Oriental canned lychees, 2.59 a can", yield:"700 ml", keeps:"NOT SET IN THE FILE", home:"F1B top tier, 700 ml bottle",
                              warn:"This has no keep window written anywhere. Write yield, keep time and method before anyone batches it. A day dot with no keep time is a guess with a date on it." },
-    "lychee-lime cordial": { t:"house", from:"25 ml lychee cordial squeeze plus 25 ml Boiron lime puree", yield:"50 ml per drink, made to order", keeps:"Made to order, not stored", home:"Built at the station",
-                             note:"Carried to the table in a brute and poured over the indigo. Current workaround: poured from a jigger." },
+    "lychee-lime cordial": { t:"house", from:"35 ml lychee cordial squeeze plus 15 ml Boiron lime puree", yield:"55 ml per drink, made to order", keeps:"Made to order, not stored", home:"Built at the station",
+                             note:"Carried to the table in the brute and poured over the indigo, leaving 1 cm at the top." },
     "coconut water":       { t:"buy", shop:"Albert Heijn", pack:"1 L carton, 2.29", home:"F1A bottom tier",
                              warn:"NOT ON THE BUY LIST. Until it is bought, Lychee Siren cannot be made." },
     "butterfly pea tea":   { t:"house", from:"Amazing Oriental dried butterfly pea flower, 3.15 per 50 g", yield:"2.5 L, and the squeeze bottle is drawn off the same batch", keeps:"5 days", home:"F1B top tier",
@@ -332,7 +332,11 @@ td.buy.ok { color: var(--ink-soft); }
                              warn:"Depends on the machine being repaired in time. If it is not, ice is a bought line at 0.89 per kg and someone has to carry it." },
     "ice":                 { t:"house", from:"The ice machine in the barista zone", yield:"Insulated bin at station 2", keeps:"Filled at open and again at the midpoint", home:"Station 2",
                              warn:"Depends on the machine being repaired in time." },
-    "cocktail cherries":   { t:"buy", shop:"Albert Heijn", pack:"Jar of about 20, 1.99", home:"Open jar, F1C bottom tier" }
+    "cocktail cherries":   { t:"buy", shop:"Albert Heijn", pack:"Jar of about 20, 1.99", home:"Open jar, F1C bottom tier" },
+    "golden glitter lychees": { t:"house", from:"Canned lychees from Sligro 119699, rolled in Culifine gold spray 134663", yield:"Cut to order", keeps:"2 to 3 days sealed", home:"F2A top tier, garnish tub",
+                             note:"Garnish only. Two to a glass, laid on the crushed ice." },
+    "lime wedge":          { t:"buy", shop:"Albert Heijn", pack:"4 for 1.29, 8 wedges a lime", home:"F2A top tier, cut into the garnish tub at open",
+                             note:"Garnish only now the juice is Boiron. Cut fresh, do not hold overnight." }
   };
 
   var order = Object.keys(SRC).sort(function (a, b) { return b.length - a.length; });
@@ -381,7 +385,9 @@ td.buy.ok { color: var(--ink-soft); }
     "gecondenseerde melk": "condensed milk",
     "ijsblokjes": "ice cubes",
     "cocktailkersen": "cocktail cherries",
-    "munt": "mint"
+    "munt": "mint",
+    "gouden glitterlychees": "golden glitter lychees",
+    "limoenpartje": "lime wedge"
   };
   var nlOrder = Object.keys(NL_ING).sort(function (a, b) { return b.length - a.length; });
 
@@ -452,12 +458,18 @@ td.buy.ok { color: var(--ink-soft); }
     "F2A top tier, sliced into the garnish tub at open": "F2A bovenste plank, bij opening in het garneringsbakje gesneden",
     "Open can F1C bottom tier": "Aangebroken blik F1C onderste plank",
     "Open jar, F1C bottom tier": "Aangebroken pot, F1C onderste plank",
+    "F2A top tier, cut into the garnish tub at open": "F2A bovenste plank, bij opening in het garneringsbakje gesneden",
+    "Canned lychees from Sligro 119699, rolled in Culifine gold spray 134663": "Lychees uit blik van Sligro 119699, door Culifine goudspray 134663 gerold",
+    "4 for 1.29, 8 wedges a lime": "4 voor 1,29, 8 partjes per limoen",
+    "2 to 3 days sealed": "2 tot 3 dagen afgesloten",
+    "Garnish only. Two to a glass, laid on the crushed ice.": "Alleen garnering. Twee per glas, op het crushed ice gelegd.",
+    "Garnish only now the juice is Boiron. Cut fresh, do not hold overnight.": "Alleen garnering nu het sap Boiron is. Vers snijden, niet een nacht bewaren.",
     "Rail slot 3, spare carton F1A bottom": "Speedrail slot 3, reservepak F1A onderin",
     "Squeeze bottle, second tier right of the rail": "Knijpfles, tweede rij rechts van de speedrail",
     "Station 3 dry store": "Station 3 droogvoorraad",
     "Tub in F1C bottom, squeeze bottle in F1C top": "Emmer in F1C onderin, knijpfles in F1C boven",
     "Wide-bore squeeze bottle, F1C top": "Knijpfles met wijde opening, F1C boven",
-    "25 ml lychee cordial squeeze plus 25 ml Boiron lime puree": "25 ml lycheecordial uit de knijpfles plus 25 ml Boiron limoenpuree",
+    "35 ml lychee cordial squeeze plus 15 ml Boiron lime puree": "35 ml lycheecordial uit de knijpfles plus 15 ml Boiron limoenpuree",
     "Amazing Oriental canned lychees, 2.59 a can": "Amazing Oriental lychees uit blik, 2,59 per blik",
     "Amazing Oriental dried butterfly pea flower, 3.15 per 50 g": "Amazing Oriental gedroogde vlindererwtbloem, 3,15 per 50 g",
     "Amazing Oriental dried hibiscus, 3.89 per 125 g": "Amazing Oriental gedroogde hibiscus, 3,89 per 125 g",
@@ -468,7 +480,7 @@ td.buy.ok { color: var(--ink-soft); }
     "The ice machine in the barista zone": "De ijsmachine in de baristazone",
     "Whole oranges, Albert Heijn, 3.29 per 2 kg": "Hele sinaasappels, Albert Heijn, 3,29 per 2 kg",
     "2 L strong": "2 L sterk",
-    "50 ml per drink, made to order": "50 ml per drankje, op bestelling gemaakt",
+    "55 ml per drink, made to order": "55 ml per drankje, op bestelling gemaakt",
     "2.5 L, and the squeeze bottle is drawn off the same batch": "2,5 L, en de knijpfles komt uit dezelfde batch",
     "Cut to order": "Op bestelling gesneden",
     "Insulated bin at station 2": "Geisoleerde bak op station 2",
@@ -487,7 +499,7 @@ td.buy.ok { color: var(--ink-soft); }
     "Boiron pasteurised puree, not hand squeezed. Fresh limes are still bought, but only for wedges and garnish.": "Gepasteuriseerde Boiron-puree, niet met de hand geperst. Er worden nog steeds verse limoenen gekocht, maar alleen voor partjes en garnering.",
     "Bought in. Do not batch this by hand.": "Wordt ingekocht. Niet zelf maken.",
     "Brown sugar spread over the slice with a spoon, for when the pear returns to the build.": "Bruine suiker met een lepel over het schijfje verdeeld, voor als de peer terugkomt in de opbouw.",
-    "Carried to the table in a brute and poured over the indigo. Current workaround: poured from a jigger.": "In een brute mee naar tafel en over het indigo geschonken. Huidige tussenoplossing: uit een jigger geschonken.",
+    "Carried to the table in the brute and poured over the indigo, leaving 1 cm at the top.": "In de brute mee naar tafel en over het indigo geschonken, met 1 cm ruimte tot de rand.",
     "Garnish only. Never juiced.": "Alleen garnering. Nooit uitgeperst.",
     "Microwave the rosemary between paper towel, 4 x 30 seconds, until it crumbles but is still green. Grind coarse, mix 3 tsp with the salt and a whole lemon zest.": "Rozemarijn tussen keukenpapier in de magnetron, 4 x 30 seconden, tot hij verkruimelt maar nog groen is. Grof malen, meng 3 theelepels met het zout en een hele citroenzeste.",
     "Open question: check Sligro for a dried strawberry line as a fallback when fresh is out of season.": "Openstaande vraag: kijk bij Sligro of er een gedroogde aardbeienlijn is als terugvaloptie buiten het seizoen.",
@@ -1747,18 +1759,18 @@ td.buy.ok { color: var(--ink-soft); }
      Builds keeps the long version as the reference; this is what prints.
      ================================================================== */
   /* ---- booklet, EN and NL, station blocks ---- */
-  var HEADSPACE = { en:"Every glass finishes 1 cm below the rim. Lychee Siren is the exception: leave room for the 50 ml poured at the table.",
-                    nl:"Elk glas eindigt 1 cm onder de rand. Lychee Siren is de uitzondering: laat ruimte voor de 50 ml die aan tafel wordt geschonken." };
+  var HEADSPACE = { en:"Every glass finishes 1 cm below the rim. Lychee Siren is the exception: leave room for the 55 ml poured at the table.",
+                    nl:"Elk glas eindigt 1 cm onder de rand. Lychee Siren is de uitzondering: laat ruimte voor de 55 ml die aan tafel wordt geschonken." };
   var BK = [
     { id:"lychee-siren", name:"Lychee Siren", sw:"#4C4C9D",
       spec:{en:"Hurricane  ·  Crushed  ·  Build and float", nl:"Hurricane  ·  Crushed  ·  Opbouwen en laten drijven"},
-      b:[[{en:"Glass",nl:"Glas"},{en:"50 lychee juice · 20 lychee cordial · 70 coconut water",nl:"50 lycheesap · 20 lycheecordial · 70 kokoswater"}],
-         [{en:"Ice",nl:"Ijs"},{en:"Crushed, up to the neck. Only after the liquids, never before",nl:"Crushed, tot aan de hals. Pas na de vloeistoffen, nooit ervoor"}],
-         [{en:"Float",nl:"Drijven"},{en:"40 butterfly pea tea, off the jigger",nl:"40 vlindererwtthee, van de jigger"}],
+      b:[[{en:"Glass",nl:"Glas"},{en:"120 lychee juice",nl:"120 lycheesap"}],
+         [{en:"Ice",nl:"Ijs"},{en:"Crushed, packed tight to the neck. Only after the juice, never before",nl:"Crushed, compact tot aan de hals. Pas na het sap, nooit ervoor"}],
+         [{en:"Float",nl:"Drijven"},{en:"80 BPT-infused coconut water, off the jigger. Stop 3 cm below the rim",nl:"80 met BPT geinfuseerd kokoswater, van de jigger. Stop 3 cm onder de rand"}],
          [{en:"Garnish",nl:"Garnering"},{en:"2 golden glitter lychees · lime wedge",nl:"2 gouden glitterlychees · limoenpartje"}],
-         [{en:"Tray",nl:"Blad"},{en:"50 lychee-lime cordial in a brute, carried out with the drink. That is 25 lychee cordial plus 25 Boiron lime",nl:"50 lychee-limoencordial in een brute, mee naar tafel. Dat is 25 lycheecordial plus 25 Boiron limoen"}]],
-      tbl:{en:["Set the glass down in front of the guest","Pour the 50 ml lychee-lime cordial from the brute over the indigo","Straw in, guest stirs"],
-           nl:["Zet het glas voor de gast neer","Giet de 50 ml lychee-limoencordial uit de brute over het indigo","Rietje erin, gast roert"]},
+         [{en:"Tray",nl:"Blad"},{en:"55 lychee-lime cordial in a brute, carried out with the drink. That is 35 lychee cordial plus 15 Boiron lime",nl:"55 lychee-limoencordial in een brute, mee naar tafel. Dat is 35 lycheecordial plus 15 Boiron limoen"}]],
+      tbl:{en:["Set the glass down in front of the guest","Pour the 55 ml lychee-lime cordial from the brute over the indigo, leaving 1 cm","Straw in, guest stirs"],
+           nl:["Zet het glas voor de gast neer","Giet de 55 ml lychee-limoencordial uit de brute over het indigo, laat 1 cm over","Rietje erin, gast roert"]},
       say:{en:"No colouring. The blue is butterfly pea and it reacts to citrus.",nl:"Geen kleurstof. Het blauw is vlindererwt en reageert op citrus."} },
 
     { id:"forest-fairy", name:"Forest Fairy", sw:"#3E5140",

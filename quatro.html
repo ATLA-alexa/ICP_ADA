@@ -548,52 +548,57 @@ var SECTIONS = [
       ice: { en: "Crushed", nl: "Crushed" },
       method: { en: "Build and float", nl: "Opbouwen en laten drijven" },
       desc: {
-        en: "Lychee and coconut water under an indigo crown of butterfly pea flower.",
-        nl: "Lychee en kokoswater onder een indigo kroon van vlindererwtbloem."
+        en: "Lychee under an indigo crown of butterfly pea flower infused coconut water.",
+        nl: "Lychee onder een indigo kroon van met vlindererwtbloem geinfuseerd kokoswater."
       },
       story: {
         en: "Lychee on its own is all perfume and no spine, so it reads as sweet and then goes nowhere. Coconut water gives it a body to sit in, and the pinch of salt underneath makes the fruit taste more like itself, the way salt does with watermelon. The flower is not stirred in. It floats, because it is waiting for acid. In Taipei, lychee is what you drink because it is hot outside; the rest of this glass is what happened to that habit in Amsterdam.",
         nl: "Lychee op zich is alleen parfum en geen ruggengraat, dus het smaakt zoet en verdwijnt dan. Kokoswater geeft het een lichaam om in te rusten, en de snuf zout eronder laat de vrucht meer naar zichzelf smaken, zoals zout bij watermeloen. De bloem wordt niet geroerd. Hij drijft, omdat hij op zuur wacht. In Taipei drink je lychee omdat het heet is buiten; de rest van dit glas is wat er met die gewoonte in Amsterdam is gebeurd."
       },
-      tag: { en: "Squeeze the lime wedge and watch the siren do its magic", nl: "Knijp het limoenpartje uit en zie de sirene haar magie doen" },
+      tag: { en: "Pour the tableside cordial and watch the siren do its magic", nl: "Schenk de cordial aan tafel in en zie de sirene haar magie doen" },
       build: [
-        { ref: "lychee", ml: 50 },
-        { ref: "lycheecordial", ml: 20 },
-        { ref: "coconutw", ml: 70 },
-        { ref: "peatea", ml: 40, note: { en: "Floated last", nl: "Als laatste erop" } },
-        { ref: "lime", ml: 20, note: { en: "Carried to the table separately or served as a garnish wedge", nl: "Apart naar tafel gebracht of als garneringpartje" } }
+        { ref: "lychee", ml: 120, name: { en: "Lychee juice", nl: "Lycheesap" } },
+        { ref: "coconutw", ml: 80, name: { en: "BPT-infused coconut water", nl: "Met BPT geinfuseerd kokoswater" } },
+        { ref: "lycheecordial", ml: 55, name: { en: "Lychee-lime cordial mix", nl: "Lychee-limoencordial mix" },
+          note: { en: "Carried to the table in the brute. 35 ml lychee cordial plus 15 ml Boiron lime",
+                  nl: "In de brute mee naar tafel. 35 ml lycheecordial plus 15 ml Boiron limoen" } },
+        /* Garnish, so no volume: an ml figure here would print 2 ml of lychees. */
+        { ref: "glitterlychees", ml: 0, name: { en: "Golden glitter lychees", nl: "Gouden glitterlychees" },
+          note: { en: "2, garnish", nl: "2, garnering" } },
+        { ref: "limewedge", ml: 0, name: { en: "Lime wedge", nl: "Limoenpartje" },
+          note: { en: "1, garnish", nl: "1, garnering" } }
       ],
       bar: { en: [
-        "Lychee juice, lychee cordial, then coconut water into the hurricane.",
-        "Only THEN fill the hurricane with crushed ice.",
-        "Gently top with the pea tea by floating it with the jigger (over the back of a spoon).",
-        "Re-mound the ice to the rim.",
+        "Pour 120 ml lychee juice into the bottom of the hurricane glass.",
+        "Only THEN tightly pack the hurricane bowl with crushed ice.",
+        "Gently layer 80 ml BPT-infused coconut water over the ice using a jigger.",
+        "Stop the liquid 3 cm below the rim to leave room for the table pour.",
         "Garnish with 2 golden glitter lychees and a lime wedge.",
-        "TO BE DECIDED: Place 20 ml lime in a small carafe on the tray, OR have the guest squeeze the lime wedge from the garnish."
+        "Put the brute holding the 55 ml lychee-lime cordial mix on the tray."
       ], nl: [
-        "Lycheesap, lycheecordial, dan kokoswater in de hurricane.",
-        "Pas DAN de hurricane vullen met crushed ice.",
-        "Voorzichtig de vlindererwtthee erop laten drijven met de maatbeker (over de bolle kant van een lepel).",
-        "Het ijs weer opstapelen tot de rand.",
-        "Garneren met 2 gouden glitterlychees en een limoenpartje.",
-        "NOG TE BESLISSEN: 20 ml limoen in een klein karafje op het blad, OF de gast het limoenpartje laten uitknijpen."
+        "Schenk 120 ml lycheesap onderin het hurricaneglas.",
+        "Pas DAN de bol van het hurricaneglas compact vullen met crushed ice.",
+        "Schenk voorzichtig 80 ml met BPT geinfuseerd kokoswater met de jigger over het ijs om een laag te vormen.",
+        "Stop 3 cm onder de rand zodat er ruimte blijft voor de schenking aan tafel.",
+        "Garneer met 2 gouden glitterlychees en een limoenpartje.",
+        "Zet de brute met de 55 ml lychee-limoencordial mix op het dienblad."
       ]},
       table: { en: [
         "Set the glass down in front of the guest.",
-        "Have the guest squeeze the lime wedge, or pour the 20 ml lime from the carafe over the indigo.",
-        "Hand the guest the straw and have them stir."
+        "Pour the 55 ml lychee-lime cordial mix from the brute over the indigo layer, leaving 1 cm at the top.",
+        "Hand the guest the straw and have them stir to trigger the colour change."
       ], nl: [
         "Zet het glas voor de gast neer.",
-        "Laat de gast het limoenpartje uitknijpen, of giet de 20 ml limoen uit het karafje over het indigo.",
-        "Geef de gast het rietje en laat hen roeren."
+        "Giet de 55 ml lychee-limoencordial mix vanuit de brute over de indigo laag, laat 1 cm tot de rand over.",
+        "Geef de gast het rietje en laat hen roeren om de kleurverandering in gang te zetten."
       ]},
       sayLabel: { en: "If the customer asks", nl: "Als de gast het vraagt" },
       say: { en: [
-        "There is no colouring in this, the blue is butterfly pea flower. We have kept the lime out on purpose. Watch.",
-        "That flower reacts to citrus. If you stir it, the whole glass follows."
+        "There is no artificial colouring in this, the blue comes from butterfly pea tea. We kept the citrus separate on purpose.",
+        "That tea reacts to citrus. Watch the colour shift when you stir the cordial in."
       ], nl: [
-        "Hier zit geen kleurstof in, het blauw is vlindererwtbloem. Wij hebben de limoen er met opzet uit gelaten. Kijk.",
-        "Die bloem reageert op citrus. Als je roert, volgt het hele glas."
+        "Hier zit geen kunstmatige kleurstof in, het blauw komt van vlindererwtthee. We hebben de citrus met opzet apart gehouden.",
+        "Die thee reageert op citrus. Kijk hoe de kleur verandert zodra u de cordial erdoorheen roert."
       ]}
     },
     {
@@ -1371,12 +1376,23 @@ function renderMenu() {
 }
 /* ---------------- run sheet: builds ---------------- */
 
+/* A build line names itself in one of two ways: it points at ING with ref, or
+   it carries its own name because the line is a mix or a garnish that has no
+   entry of its own. Take whichever is there, and never silently drop a line:
+   a missing ref used to erase the ingredient from the recipe with nothing on
+   screen to say so. */
+function lineName(b) {
+  if (b.name) return t(b.name);
+  var ing = ING[b.ref];
+  return ing ? t(ing.name) : "";
+}
+
 function ingList(d) {
   return '<ul class="ing">' + d.build.map(function (b) {
-    var ing = ING[b.ref];
-    if (!ing) return "";
+    var nm = lineName(b);
+    if (!nm) return "";
     return "<li><span class=\"ml\">" + (b.ml ? b.ml + " ml" : "") + "</span>" +
-      '<span class="nm">' + esc(t(ing.name)) +
+      '<span class="nm">' + esc(nm) +
       (b.note ? "<small>" + esc(t(b.note)) + "</small>" : "") + "</span></li>";
   }).join("") + "</ul>";
 }
@@ -1564,8 +1580,9 @@ function bookletHTML() {
       '<div class="bk-spec">' + esc(t(d.glass)) + "  /  " + esc(t(d.ice)) + "  /  " + esc(t(d.method)) + "</div></div>";
     h += '<div class="bk-sec"><h3>' + esc(ui("ingredients")) + "</h3><ul>" +
       d.build.map(function (b) {
-        var ing = ING[b.ref];
-        return "<li>" + (b.ml ? b.ml + " ml " : "") + esc(t(ing.name)) + (b.note ? ". " + esc(t(b.note)) : "") + "</li>";
+        var nm = lineName(b);
+        if (!nm) return "";
+        return "<li>" + (b.ml ? b.ml + " ml " : "") + esc(nm) + (b.note ? ". " + esc(t(b.note)) : "") + "</li>";
       }).join("") + "</ul></div>";
     h += '<div class="bk-sec"><h3>' + esc(ui("atBar")) + "</h3><ol>" +
       t(d.bar).map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ol></div>";
@@ -1588,7 +1605,16 @@ var TABS = { builds: renderBuilds, rail: renderRail, prep: renderPrep, inventory
 
 function render() {
   renderChrome();
-  $("#root").innerHTML = MODE === "menu" ? renderMenu() : guideHTML() + (TABS[TAB] || renderBuilds)();
+  /* If one tab throws, say so on the page instead of leaving it blank. A tab
+     that will not open is otherwise indistinguishable from a tab that is
+     empty, and behind the bar nobody is going to open a console. */
+  try {
+    $("#root").innerHTML = MODE === "menu" ? renderMenu() : guideHTML() + (TABS[TAB] || renderBuilds)();
+  } catch (err) {
+    $("#root").innerHTML = '<div class="warn" style="margin-top:24px"><strong>' +
+      (LANG === "nl" ? "Dit tabblad kon niet geopend worden" : "This tab could not be opened") +
+      "</strong>" + esc(String(err && err.message ? err.message : err)) + "</div>";
+  }
   try {
     localStorage.setItem("quatro-lang", LANG);
     localStorage.setItem("quatro-mode", MODE);
