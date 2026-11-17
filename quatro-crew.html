@@ -4613,6 +4613,15 @@ body.cmt-on #root { cursor: crosshair; }
         '<button type="button" id="cmt-dl"></button>' +
         '<button type="button" id="cmt-clear"></button></div>';
       document.body.appendChild(panel);
+      /* Inside the artifact viewer a page cannot hand the viewer a file, so the
+         download button would be a button that does nothing. Copy all works
+         everywhere, and download comes back in the downloaded file. */
+      var framed = true;
+      try { framed = (window.self !== window.top); } catch (e) { framed = true; }
+      if (framed) {
+        var dl = document.getElementById("cmt-dl");
+        if (dl) dl.style.display = "none";
+      }
     }
   }
 
