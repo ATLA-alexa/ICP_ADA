@@ -1938,6 +1938,88 @@ td.buy.ok { color: var(--ink-soft); }
 .sl-i { width:56px;padding:4px 6px;margin:0 5px;font:inherit;font-size:14px;text-align:center;
   border:1px solid var(--gold-pale);border-radius:6px;background:#fff; }
 .tablewrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+
+/* ---- comments ------------------------------------------------------------
+   A layer over the whole file: turn it on, click anything, leave a note.
+   Nothing here prints and nothing here touches the app's own data.         */
+#cmt-fab { position: fixed; right: 16px; bottom: 16px; z-index: 60;
+  display: inline-flex; align-items: center; gap: 8px; padding: 10px 15px;
+  border: 1px solid var(--gold-pale); border-radius: 999px; background: #fff;
+  box-shadow: 0 6px 22px rgba(26,22,16,.16); cursor: pointer;
+  font: inherit; font-size: 13px; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--gold); }
+#cmt-fab:hover { background: rgba(168,134,60,.10); }
+#cmt-fab .cf-i { font-size: 15px; line-height: 1; }
+#cmt-fab .cf-n { min-width: 18px; height: 18px; border-radius: 999px; background: var(--gold);
+  color: #fff; font-size: 11px; line-height: 18px; text-align: center; padding: 0 4px;
+  letter-spacing: 0; }
+body.cmt-on #cmt-fab { background: var(--gold); color: #fff; border-color: var(--gold); }
+body.cmt-on #cmt-fab .cf-n { background: #fff; color: var(--gold); }
+
+/* In comment mode every block that can take a note says so on hover. */
+body.cmt-on #root tr:hover, body.cmt-on #root .ops-c:hover, body.cmt-on #root .build:hover,
+body.cmt-on #root .panel:hover, body.cmt-on #root .bk-page:hover, body.cmt-on #root .warn:hover,
+body.cmt-on #root .flag:hover, body.cmt-on #root .qflag:hover, body.cmt-on #root .rcpt:hover,
+body.cmt-on #root .section-head:hover, body.cmt-on #root .inv-sum:hover {
+  outline: 2px solid rgba(168,134,60,.55); outline-offset: 1px; cursor: text; }
+body.cmt-on #root { cursor: crosshair; }
+
+/* A block that already carries a note keeps a mark, mode on or off. */
+#root .has-cmt { position: relative; box-shadow: inset 3px 0 0 var(--gold); }
+#root .has-cmt::after { content: attr(data-cmt-n); position: absolute; top: 2px; right: 2px;
+  min-width: 15px; height: 15px; border-radius: 999px; background: var(--gold); color: #fff;
+  font-size: 10px; line-height: 15px; text-align: center; padding: 0 3px; z-index: 2; }
+
+#cmt-compose { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%) translateY(140%);
+  z-index: 80; width: min(560px, calc(100vw - 24px)); background: #fff;
+  border: 1px solid var(--gold-pale); border-radius: 14px; padding: 14px;
+  box-shadow: 0 14px 44px rgba(26,22,16,.26); transition: transform .18s ease; }
+#cmt-compose.open { transform: translateX(-50%) translateY(0); }
+#cmt-compose .cc-on { font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--gold); }
+#cmt-compose .cc-q { margin: 3px 0 9px; font-size: 13px; line-height: 1.45; color: var(--ink-soft); }
+#cmt-compose textarea { width: 100%; box-sizing: border-box; font: inherit; font-size: 15px;
+  padding: 9px 10px; border: 1px solid var(--gold-pale); border-radius: 9px; resize: vertical; }
+#cmt-compose .cc-b { display: flex; gap: 8px; margin-top: 10px; }
+#cmt-compose .cc-b button, #cmt-panel .cp-f button { font: inherit; font-size: 13px;
+  padding: 8px 13px; border-radius: 9px; border: 1px solid var(--gold-pale);
+  background: var(--limestone); color: var(--ink); cursor: pointer; }
+#cmt-compose #cc-save { background: var(--gold); border-color: var(--gold); color: #fff; }
+#cmt-compose .cc-prev { margin-bottom: 9px; display: grid; gap: 5px; }
+#cmt-compose .cc-p { display: flex; gap: 7px; align-items: flex-start; font-size: 13.5px;
+  line-height: 1.4; background: rgba(168,134,60,.08); border-radius: 8px; padding: 6px 8px; }
+.cc-x { margin-left: auto; flex: none; border: 0; background: none; font: inherit; font-size: 16px;
+  line-height: 1; color: var(--ink-soft); cursor: pointer; padding: 0 2px; }
+.cc-x:hover { color: #9E2B3B; }
+
+#cmt-panel { position: fixed; right: 0; top: 0; bottom: 0; z-index: 30;
+  width: min(360px, 92vw); background: #fff; border-left: 1px solid var(--gold-pale);
+  box-shadow: -8px 0 30px rgba(26,22,16,.14); transform: translateX(105%);
+  transition: transform .2s ease; display: flex; flex-direction: column; }
+#cmt-panel.open { transform: none; }
+#cmt-panel .cp-h { display: flex; align-items: center; gap: 8px; padding: 13px 14px;
+  border-bottom: 1px solid var(--gold-pale); }
+#cmt-panel .cp-h b { font-family: 'Marcellus', Georgia, serif; letter-spacing: .12em;
+  text-transform: uppercase; font-size: 13px; color: var(--gold); }
+#cmt-panel #cmt-close { margin-left: auto; border: 0; background: none; font: inherit;
+  font-size: 22px; line-height: 1; color: var(--ink-soft); cursor: pointer; }
+#cmt-panel .cp-body { flex: 1; overflow-y: auto; padding: 12px 14px; }
+#cmt-panel .cp-empty { font-size: 13.5px; line-height: 1.5; color: var(--ink-soft); }
+#cmt-panel .cp-g { margin-bottom: 16px; }
+#cmt-panel .cp-g h4 { margin: 0 0 7px; font-size: 10px; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--gold); }
+#cmt-panel .cp-i { border-left: 2px solid var(--gold-pale); padding: 0 0 0 9px; margin-bottom: 11px; }
+#cmt-panel .cp-q { font-size: 11.5px; line-height: 1.4; color: var(--ink-soft); }
+#cmt-panel .cp-t { font-size: 14px; line-height: 1.45; margin: 2px 0; }
+#cmt-panel .cp-m { display: flex; align-items: center; font-size: 10.5px; color: var(--ink-soft); }
+#cmt-panel .cp-f { display: flex; gap: 7px; padding: 11px 14px; border-top: 1px solid var(--gold-pale); }
+#cmt-panel .cp-f button { flex: 1; padding: 8px 6px; font-size: 12px; }
+@media (max-width: 720px) {
+  #cmt-panel { width: 100vw; border-left: 0; }
+  #cmt-fab { right: 10px; bottom: 10px; padding: 9px 13px; font-size: 12px; }
+}
+@media print { #cmt-fab, #cmt-panel, #cmt-compose { display: none !important; }
+  #root .has-cmt { box-shadow: none; } #root .has-cmt::after { display: none; } }
 </style>
 <script>
 (function () {
@@ -2224,6 +2306,9 @@ td.buy.ok { color: var(--ink-soft); }
   }
 
   document.addEventListener("click", function (e) {
+    /* This one listens on the way down, so a stopPropagation from the comment
+       layer cannot reach it. It stands aside itself while commenting. */
+    if (CMTMODE) return;
     var li = e.target.closest && e.target.closest(".ing li");
     if (!li) return;
     e.stopPropagation();
@@ -4332,6 +4417,336 @@ td.buy.ok { color: var(--ink-soft); }
     try { localStorage.setItem("quatro-mode", "runsheet"); } catch (e) {}
     document.title = "Quatro · Prep, FIFO and inventory";
   }
+
+  /* ==================================================================
+     9. COMMENTS
+     Turn comment mode on and anything on the page can be clicked and
+     annotated. A note is anchored to what the block says, not to where it
+     sits, so it stays put when the page redraws or the language changes.
+     Notes save in this browser and come back out as one block of plain
+     text, ready to paste into a message.
+     ================================================================== */
+  var LS_CMT = "quatro-comments-v1";
+  var CMT = load(LS_CMT, []);
+  var CMTMODE = false;
+  var CMTOPEN = null;
+
+  function cmtHash(s) {
+    var h = 5381, i;
+    s = String(s || "").replace(/\s+/g, " ").trim().slice(0, 200);
+    for (i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0;
+    return "a" + (h >>> 0).toString(36);
+  }
+  var CMT_SEL = "tr, .ops-c, .build, .bk-page, .panel, .warn, .flag, .qflag, " +
+                ".section-head, .rcpt, .inv-sum, .src-warn, .card, li";
+  function cmtRoot() { return document.getElementById("root"); }
+  function cmtBlock(el) {
+    var root = cmtRoot();
+    if (!root || !el.closest) return null;
+    var hit = el.closest(CMT_SEL);
+    if (hit && root.contains(hit) && cmtLabel(hit)) return hit;
+    var sec = el.closest(".section");
+    return (sec && root.contains(sec)) ? sec : null;
+  }
+  function cmtWhere() {
+    if (typeof MODE !== "undefined" && MODE === "menu") return tt({ en: "Menu", nl: "Menu" });
+    return (typeof TAB !== "undefined" && typeof ui === "function") ? ui(TAB) : "Quatro";
+  }
+  function cmtLabel(el) {
+    var s = (el.innerText || el.textContent || "").replace(/\s+/g, " ").trim();
+    return s.length > 95 ? s.slice(0, 92) + "..." : s;
+  }
+  function cmtFor(id) { return CMT.filter(function (c) { return c.id === id; }); }
+  function cmtSave() { save(LS_CMT, CMT); }
+  function cmtStamp() {
+    var d = new Date(), p2 = function (n) { return ("0" + n).slice(-2); };
+    return p2(d.getDate()) + "." + p2(d.getMonth() + 1) + "." + String(d.getFullYear()).slice(-2);
+  }
+
+  /* ---- the composer ---- */
+  function cmtCompose(el) {
+    var label = cmtLabel(el);
+    CMTOPEN = { el: el, id: cmtHash(label), label: label, where: cmtWhere() };
+    var box = document.getElementById("cmt-compose");
+    if (!box) {
+      box = document.createElement("div");
+      box.id = "cmt-compose";
+      document.body.appendChild(box);
+    }
+    var mine = cmtFor(CMTOPEN.id);
+    box.innerHTML =
+      '<div class="cc-on">' + et({ en: "Comment on", nl: "Opmerking bij" }) + "</div>" +
+      '<div class="cc-q">' + esc(label) + "</div>" +
+      (mine.length ? '<div class="cc-prev">' + mine.map(function (c) {
+        return '<div class="cc-p"><span>' + esc(c.text) + "</span>" +
+          '<button type="button" class="cc-x" data-cmtdel="' + esc(c.k) + '" title="' +
+          et({ en: "Delete", nl: "Verwijderen" }) + '">&times;</button></div>';
+      }).join("") + "</div>" : "") +
+      '<textarea id="cc-t" rows="3" placeholder="' +
+      et({ en: "What should change here?", nl: "Wat moet hier anders?" }) + '"></textarea>' +
+      '<div class="cc-b"><button type="button" id="cc-save">' +
+      et({ en: "Save comment", nl: "Opmerking opslaan" }) + "</button>" +
+      '<button type="button" id="cc-cancel">' + et({ en: "Cancel", nl: "Annuleren" }) + "</button></div>";
+    box.classList.add("open");
+    var ta = document.getElementById("cc-t");
+    if (ta) ta.focus();
+  }
+  function cmtCloseCompose() {
+    var box = document.getElementById("cmt-compose");
+    if (box) box.classList.remove("open");
+    CMTOPEN = null;
+  }
+
+  /* ---- the list ---- */
+  function cmtGroup() {
+    var by = {}, order = [];
+    CMT.forEach(function (c) {
+      if (!by[c.where]) { by[c.where] = []; order.push(c.where); }
+      by[c.where].push(c);
+    });
+    return { by: by, order: order };
+  }
+  function cmtPanelHTML() {
+    if (!CMT.length) {
+      return '<p class="cp-empty">' +
+        et({ en: "No comments yet. Turn comment mode on, then click any row, card or block on the page.",
+             nl: "Nog geen opmerkingen. Zet de opmerkingenmodus aan en klik dan op een regel, kaart of blok." }) + "</p>";
+    }
+    var g = cmtGroup();
+    return g.order.map(function (w) {
+      return '<div class="cp-g"><h4>' + esc(w) + "</h4>" + g.by[w].map(function (c) {
+        return '<div class="cp-i"><div class="cp-q">' + esc(c.label) + "</div>" +
+          '<div class="cp-t">' + esc(c.text) + "</div>" +
+          '<div class="cp-m">' + esc(c.when) +
+          '<button type="button" class="cc-x" data-cmtdel="' + esc(c.k) + '" title="' +
+          et({ en: "Delete", nl: "Verwijderen" }) + '">&times;</button></div></div>';
+      }).join("") + "</div>";
+    }).join("");
+  }
+  function cmtAsText() {
+    var out = "QUATRO " + tt({ en: "comments", nl: "opmerkingen" }) + ", " + cmtStamp() +
+      " (" + CMT.length + ")\n";
+    var g = cmtGroup();
+    g.order.forEach(function (w) {
+      out += "\n## " + w + "\n";
+      g.by[w].forEach(function (c) {
+        out += '\n- on "' + c.label + '"\n  -> ' + c.text + "\n";
+      });
+    });
+    return out;
+  }
+  function cmtRenderPanel() {
+    var p = document.getElementById("cmt-panel");
+    if (p) {
+      var b = p.querySelector(".cp-body");
+      if (b) b.innerHTML = cmtPanelHTML();
+    }
+    var n = document.getElementById("cmt-n");
+    if (n) { n.textContent = CMT.length; n.style.display = CMT.length ? "" : "none"; }
+    cmtMark();
+  }
+
+  /* A mark on every block that carries a note, so it can be found again. */
+  function cmtMark() {
+    var root = cmtRoot();
+    if (!root) return;
+    Array.prototype.slice.call(root.querySelectorAll(".has-cmt")).forEach(function (e) {
+      e.classList.remove("has-cmt"); e.removeAttribute("data-cmt-n");
+    });
+    if (!CMT.length) return;
+    var want = {};
+    CMT.forEach(function (c) { want[c.id] = (want[c.id] || 0) + 1; });
+    Array.prototype.slice.call(root.querySelectorAll(CMT_SEL + ", .section")).forEach(function (el) {
+      var h = cmtHash(cmtLabel(el));
+      if (want[h] && !el.querySelector(".has-cmt")) {
+        el.classList.add("has-cmt");
+        el.setAttribute("data-cmt-n", want[h]);
+      }
+    });
+  }
+
+  function cmtLabels() {
+    var f = document.querySelector("#cmt-fab .cf-l");
+    if (f) f.textContent = tt(CMTMODE ? { en: "Commenting", nl: "Opmerkingen aan" }
+                                      : { en: "Comment", nl: "Opmerking" });
+    var t = document.querySelector("#cmt-panel .cp-title");
+    if (t) t.textContent = tt({ en: "Comments", nl: "Opmerkingen" });
+    var m = { "cmt-copy":  { en: "Copy all",  nl: "Alles kopieren" },
+              "cmt-dl":    { en: "Download",  nl: "Downloaden" },
+              "cmt-clear": { en: "Clear all", nl: "Alles wissen" } };
+    Object.keys(m).forEach(function (k) {
+      var b = document.getElementById(k); if (b) b.textContent = tt(m[k]);
+    });
+    var fab = document.getElementById("cmt-fab");
+    if (fab) fab.title = tt({ en: "Click anything on the page to leave a note on it.",
+                              nl: "Klik ergens op de pagina om er een opmerking bij te zetten." });
+  }
+
+  /* The top bar is sticky and its height changes with the tab row and with
+     wrapping, so the panel is told where to start rather than guessing. */
+  function cmtFit() {
+    var panel = document.getElementById("cmt-panel");
+    var head = document.querySelector(".topbar");
+    if (!panel || !head) return;
+    var h = Math.round(head.getBoundingClientRect().bottom);
+    panel.style.top = Math.max(0, h) + "px";
+  }
+  window.addEventListener("resize", cmtFit, false);
+  window.addEventListener("scroll", cmtFit, true);
+
+  function cmtUI() {
+    if (!document.getElementById("cmt-fab")) {
+      var fab = document.createElement("button");
+      fab.id = "cmt-fab"; fab.type = "button";
+      fab.setAttribute("aria-pressed", "false");
+      fab.innerHTML = '<span class="cf-i">&#9998;</span><span class="cf-l"></span>' +
+        '<span id="cmt-n" class="cf-n"></span>';
+      document.body.appendChild(fab);
+    }
+    if (!document.getElementById("cmt-panel")) {
+      var panel = document.createElement("div");
+      panel.id = "cmt-panel";
+      panel.innerHTML = '<div class="cp-h"><b class="cp-title"></b>' +
+        '<button type="button" id="cmt-close" aria-label="Close">&times;</button></div>' +
+        '<div class="cp-body"></div>' +
+        '<div class="cp-f"><button type="button" id="cmt-copy"></button>' +
+        '<button type="button" id="cmt-dl"></button>' +
+        '<button type="button" id="cmt-clear"></button></div>';
+      document.body.appendChild(panel);
+    }
+  }
+
+  function cmtCopy(btn) {
+    var txt = cmtAsText();
+    var done = function () {
+      btn.textContent = tt({ en: "Copied", nl: "Gekopieerd" });
+      setTimeout(cmtLabels, 1500);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(done, done);
+    } else {
+      var ta = document.createElement("textarea");
+      ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); } catch (err) {}
+      document.body.removeChild(ta); done();
+    }
+  }
+
+  /* ---- wiring: the comment layer's own controls ---- */
+  document.addEventListener("click", function (e) {
+    var t = e.target;
+    if (!t.closest) return;
+
+    if (t.closest("#cmt-fab")) {
+      CMTMODE = !CMTMODE;
+      document.body.classList.toggle("cmt-on", CMTMODE);
+      var fab = document.getElementById("cmt-fab");
+      if (fab) fab.setAttribute("aria-pressed", String(CMTMODE));
+      var p = document.getElementById("cmt-panel");
+      if (p) p.classList.toggle("open", CMTMODE);
+      if (!CMTMODE) cmtCloseCompose();
+      cmtLabels(); cmtRenderPanel(); cmtFit();
+      e.preventDefault(); e.stopPropagation();
+      return;
+    }
+    if (t.closest("#cmt-close")) {
+      var p2 = document.getElementById("cmt-panel");
+      if (p2) p2.classList.remove("open");
+      e.preventDefault(); e.stopPropagation();
+      return;
+    }
+    var del = t.closest("[data-cmtdel]");
+    if (del) {
+      CMT = CMT.filter(function (c) { return c.k !== del.dataset.cmtdel; });
+      cmtSave(); cmtRenderPanel();
+      if (CMTOPEN && CMTOPEN.el) cmtCompose(CMTOPEN.el);
+      e.preventDefault(); e.stopPropagation();
+      return;
+    }
+    if (t.closest("#cc-cancel")) {
+      cmtCloseCompose(); e.preventDefault(); e.stopPropagation(); return;
+    }
+    if (t.closest("#cc-save")) {
+      var ta = document.getElementById("cc-t");
+      var txt = ta ? ta.value.trim() : "";
+      if (txt && CMTOPEN) {
+        CMT.push({ k: "c" + Date.now() + Math.random().toString(36).slice(2, 6),
+                   id: CMTOPEN.id, label: CMTOPEN.label, where: CMTOPEN.where,
+                   text: txt, when: cmtStamp() });
+        cmtSave();
+      }
+      cmtCloseCompose(); cmtRenderPanel();
+      e.preventDefault(); e.stopPropagation();
+      return;
+    }
+    if (t.closest("#cmt-copy")) {
+      cmtCopy(t.closest("#cmt-copy")); e.preventDefault(); e.stopPropagation(); return;
+    }
+    if (t.closest("#cmt-dl")) {
+      var blob = new Blob([cmtAsText()], { type: "text/plain;charset=utf-8" });
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "quatro-comments-" + cmtStamp().replace(/\./g, "") + ".txt";
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+      e.preventDefault(); e.stopPropagation();
+      return;
+    }
+    if (t.closest("#cmt-clear")) {
+      if (CMT.length && window.confirm(tt({
+            en: "Delete all " + CMT.length + " comments? This cannot be undone.",
+            nl: "Alle " + CMT.length + " opmerkingen verwijderen? Dit kan niet terug." }))) {
+        CMT = []; cmtSave(); cmtCloseCompose(); cmtRenderPanel();
+      }
+      e.preventDefault(); e.stopPropagation();
+      return;
+    }
+  }, false);
+
+  /* In comment mode a click in the content picks a block to annotate instead of
+     doing what it normally would. The top bar and the tabs stay live, so the
+     whole file can still be walked through while commenting. */
+  document.addEventListener("click", function (e) {
+    if (!CMTMODE) return;
+    var t = e.target;
+    if (!t.closest) return;
+    if (t.closest("#cmt-fab") || t.closest("#cmt-panel") ||
+        t.closest("#cmt-compose") || t.closest(".topbar") || t.closest(".sheet")) return;
+    var root = cmtRoot();
+    if (!root || !root.contains(t)) return;
+    var block = cmtBlock(t);
+    if (!block) return;
+    e.preventDefault(); e.stopPropagation();
+    cmtCompose(block);
+  }, true);
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape") return;
+    if (CMTOPEN) { cmtCloseCompose(); return; }
+    if (CMTMODE) {
+      var fab = document.getElementById("cmt-fab");
+      if (fab) fab.click();
+    }
+  }, false);
+
+  /* Keep the marks, the count and the panel right across every re-render and
+     every language switch, without touching the app's own render code. */
+  (function () {
+    var r = window.render;
+    if (typeof r !== "function") return;
+    window.render = function () {
+      var out = r.apply(this, arguments);
+      try {
+        /* renderChrome assigns body.className outright, so the mode class has
+           to be put back after every draw or comment mode dies on a tab or
+           language change. */
+        document.body.classList.toggle("cmt-on", CMTMODE);
+        cmtUI(); cmtLabels(); cmtRenderPanel(); cmtFit();
+      } catch (err) {}
+      return out;
+    };
+  })();
 
   if (typeof render === "function") render();
 })();
