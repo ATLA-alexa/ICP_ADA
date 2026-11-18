@@ -452,6 +452,12 @@ var ING = {
   whitechoc:    { name: { en: "White chocolate sauce", nl: "Witte chocoladesaus" }, pack: "In house", cost: null, supplier: "In house", home: "FR3 door C", inStock: true, prep: false },
   sparklemon:   { name: { en: "Sparkling lemonade", nl: "Bruisende limonade" }, pack: "1 L", cost: null, supplier: "TODO", home: "FR1 door A", inStock: true, prep: false },
   lycheecordial:{ name: { en: "Lychee cordial", nl: "Lycheecordial" }, pack: "700 ml", cost: null, supplier: "TODO", home: "FR1 door B", inStock: false, prep: true },
+  cocolopez:    { name: { en: "Coco Lopez, cream of coconut", nl: "Coco Lopez, kokosroom" }, pack: "NOT PRICED YET", cost: null, supplier: "TBD", home: "Second tier, FR1 C", inStock: false, prep: false },
+  pineapplewedge:{ name: { en: "Pineapple wedges, garnish", nl: "Ananasstukken, garnering" }, pack: "AH garnish", cost: null, supplier: "AH", home: "FR2 door C, garnish tub", inStock: true, prep: true },
+  lycheescan:   { name: { en: "Lychees, from the can", nl: "Lychees, uit blik" }, pack: "567 g can", cost: null, supplier: "AO, or Sligro 119699", home: "Dry store, open can FR1 door C", inStock: true, prep: false },
+  glitterlychee:{ name: { en: "Golden glitter lychee", nl: "Gouden glitterlychee" }, pack: "Canned lychee, sprayed", cost: null, supplier: "In house", home: "FR1 door C, garnish tub", inStock: false, prep: true },
+  bptcoconut:   { name: { en: "BPT-infused coconut water", nl: "Kokoswater met vlindererwt" }, pack: "NOT SET YET", cost: null, supplier: "In house", home: "FR1 door B", inStock: false, prep: true },
+  lycheelime:   { name: { en: "Lychee-lime cordial mix", nl: "Lychee-limoencordialmix" }, pack: "Made to order, in the brute", cost: null, supplier: "In house", home: "Built at the station", inStock: false, prep: true },
   applepear:    { name: { en: "Apple and pear juice", nl: "Appel-perensap" }, pack: "1 L", cost: null, supplier: "TODO", home: "Rail slot 5", inStock: true, prep: false },
   orangezest:   { name: { en: "Orange zest", nl: "Sinaasappelzeste" }, pack: "Fresh, cut to order", cost: null, supplier: "Market, daily", home: "FR2 door A, whole fruit", inStock: true, prep: false },
   eggfoam:      { name: { en: "Egg whites or Fee Foam drops", nl: "Eiwit of Fee Foam druppels" }, pack: "Eggs by tray, foamer 250 ml", cost: null, supplier: "DECISION OPEN, see the flag on Hibiscus Royale", home: "FR2 door C for egg, dry store for foamer", inStock: false, prep: false },
@@ -557,7 +563,7 @@ var SECTIONS = [
       swatch: "#4C4C9D",
       glass: { en: "Hurricane", nl: "Hurricane" },
       ice: { en: "Crushed", nl: "Crushed" },
-      method: { en: "Build and float", nl: "Opbouwen en laten drijven" },
+      method: { en: "Shake, strain, then layer", nl: "Shaken, zeven, dan de laag" },
       desc: {
         en: "Lychee and coconut water under an indigo crown of butterfly pea flower.",
         nl: "Lychee en kokoswater onder een indigo kroon van vlindererwtbloem."
@@ -568,43 +574,49 @@ var SECTIONS = [
       },
       tag: { en: "Squeeze the lime wedge and watch the siren do its magic", nl: "Knijp het limoenpartje uit en zie de sirene haar magie doen" },
       build: [
-        { ref: "lychee", ml: 50 },
-        { ref: "lycheecordial", ml: 20 },
-        { ref: "coconutw", ml: 70 },
-        { ref: "peatea", ml: 40, note: { en: "Floated last", nl: "Als laatste erop" } },
-        { ref: "lime", ml: 20, note: { en: "Carried to the table separately or served as a garnish wedge", nl: "Apart naar tafel gebracht of als garneringpartje" } }
+        { ref: "lycheescan", ml: 0, note: { en: "2 from the can, muddled in the shaker", nl: "2 uit blik, gekneusd in de shaker" } },
+        { ref: "lychee", ml: 80 },
+        { ref: "lycheecordial", ml: 40 },
+        { ref: "bptcoconut", ml: 80, note: { en: "Or until 2.5 cm below the rim", nl: "Of tot 2,5 cm onder de rand" } },
+        { ref: "lycheelime", ml: 40, note: { en: "Carried to the table in the brute. 25 ml lychee cordial plus 15 ml Boiron lime", nl: "In de brute mee naar tafel. 25 ml lycheecordial plus 15 ml Boiron limoen" } },
+        { ref: "glitterlychee", ml: 0, note: { en: "1, garnish", nl: "1, garnering" } },
+        { ref: "lime", ml: 0, note: { en: "1 wedge, garnish", nl: "1 partje, garnering" } }
       ],
       bar: { en: [
-        "Lychee juice, lychee cordial, then coconut water into the hurricane.",
-        "Only THEN fill the hurricane with crushed ice.",
-        "Gently top with the pea tea by floating it with the jigger (over the back of a spoon).",
-        "Re-mound the ice to the rim.",
-        "Garnish with 2 golden glitter lychees and a lime wedge.",
-        "TO BE DECIDED: Place 20 ml lime in a small carafe on the tray, OR have the guest squeeze the lime wedge from the garnish."
+        "FIRST. Put the brute holding the lychee-lime cordial mix on the tray NEXT TO the drink, with the ticket. Bar and floor both need to see there is a Lychee Siren in the making, so the ticket and the tray do not get cleared away.",
+        "Muddle 2 lychees from the can in the shaker.",
+        "Add 80 ml lychee juice and 40 ml lychee cordial, then ice. Cap and shake hard.",
+        "Fine strain into the hurricane glass.",
+        "Fill the glass with crushed ice until the belly is full. A two thirds scoop is usually enough.",
+        "Turn a barspoon upside down into the ice and pour the BPT-infused coconut water down the back of it, to 2.5 cm below the rim, roughly 80 ml. Use your middle and ring finger as the gauge.",
+        "Garnish with 1 golden glitter lychee and a lime wedge."
       ], nl: [
-        "Lycheesap, lycheecordial, dan kokoswater in de hurricane.",
-        "Pas DAN de hurricane vullen met crushed ice.",
-        "Voorzichtig de vlindererwtthee erop laten drijven met de maatbeker (over de bolle kant van een lepel).",
-        "Het ijs weer opstapelen tot de rand.",
-        "Garneren met 2 gouden glitterlychees en een limoenpartje.",
-        "NOG TE BESLISSEN: 20 ml limoen in een klein karafje op het blad, OF de gast het limoenpartje laten uitknijpen."
+        "EERST. Zet de brute met de lychee-limoencordialmix op het blad NAAST het drankje, met de bon erbij. Bar en bediening moeten allebei zien dat er een Lychee Siren onderweg is, zodat de bon en het blad niet worden opgeruimd.",
+        "Kneus 2 lychees uit blik in de shaker.",
+        "Voeg 80 ml lycheesap en 40 ml lycheecordial toe, dan ijs. Sluiten en hard shaken.",
+        "Fijn zeven in het hurricaneglas.",
+        "Vul het glas met crushed ice tot de buik vol is. Een schep van tweederde is meestal genoeg.",
+        "Zet een barlepel omgekeerd in het ijs en schenk het kokoswater met vlindererwt langs de bolle kant naar beneden, tot 2,5 cm onder de rand, ongeveer 80 ml. Gebruik je middel- en ringvinger als maat.",
+        "Garneer met 1 gouden glitterlychee en een limoenpartje."
       ]},
       table: { en: [
-        "Set the glass down in front of the guest.",
-        "Have the guest squeeze the lime wedge, or pour the 20 ml lime from the carafe over the indigo.",
+        "Set the glass down in front of the guest, with the brute beside it.",
+        "Pour the lychee-lime cordial mix from the brute over the indigo.",
         "Hand the guest the straw and have them stir."
       ], nl: [
-        "Zet het glas voor de gast neer.",
-        "Laat de gast het limoenpartje uitknijpen, of giet de 20 ml limoen uit het karafje over het indigo.",
+        "Zet het glas voor de gast neer, met de brute ernaast.",
+        "Giet de lychee-limoencordialmix uit de brute over het indigo.",
         "Geef de gast het rietje en laat hen roeren."
       ]},
       sayLabel: { en: "If the customer asks", nl: "Als de gast het vraagt" },
       say: { en: [
         "There is no colouring in this, the blue is butterfly pea flower. We have kept the lime out on purpose. Watch.",
-        "That flower reacts to citrus. If you stir it, the whole glass follows."
+        "That flower reacts to citrus. If you stir it, the whole glass follows.",
+        "FLOOR STAFF. Carry it out and pour the cordial from the brute over the indigo. It should turn from dark blue to purple."
       ], nl: [
         "Hier zit geen kleurstof in, het blauw is vlindererwtbloem. Wij hebben de limoen er met opzet uit gelaten. Kijk.",
-        "Die bloem reageert op citrus. Als je roert, volgt het hele glas."
+        "Die bloem reageert op citrus. Als je roert, volgt het hele glas.",
+        "BEDIENING. Loop hem naar tafel en giet de cordial uit de brute over het indigo. Hij hoort van donkerblauw naar paars te gaan."
       ]}
     },
     {
@@ -614,8 +626,8 @@ var SECTIONS = [
       tool: "jigger",
       swatch: "#3E5140",
       glass: { en: "Highball", nl: "Highball" },
-      ice: { en: "Cubed", nl: "Blokjes" },
-      method: { en: "Stir and strain if a mixing glass is free, otherwise shake and strain", nl: "Roeren en zeven als er een mengglas vrij is, anders shaken en zeven" },
+      ice: { en: "Crushed", nl: "Crushed" },
+      method: { en: "Stir and strain", nl: "Roeren en zeven" },
       desc: {
         en: "Rosemary-lemon salt rim, smoked rosemary and raw thyme over dark maple, cut with lemon. Herbal, smoky, quietly bitter at the edges.",
         nl: "Rozemarijn-citroen-zoutrand, gerookte rozemarijn en rauwe tijm over donkere ahorn, met citroen. Kruidig, rokerig, licht bitter aan de randen."
@@ -627,34 +639,34 @@ var SECTIONS = [
       tag: { en: "Want it extra herby? We bash in more thyme", nl: "Extra kruidig? Wij kneuzen er meer tijm bij" },
       build: [
         { ref: "saltrim", ml: 0, note: { en: "Rosemary-lemon sea salt rim, half oval", nl: "Rozemarijn-citroen-zeezoutrand, half ovaal" } },
-        { ref: "lemon", ml: 25 },
+        { ref: "lemon", ml: 15 },
         { ref: "cordial", ml: 35 },
-        { ref: "soda", ml: 0, note: { en: "Top up", nl: "Aanvullen" } },
+        { ref: "soda", ml: 10, note: { en: "In the mixing glass. The highball is also filled half with sparkling water when building", nl: "In het mengglas. De highball wordt bij het opbouwen ook half met bruisend water gevuld" } },
         { ref: "rosemary", ml: 0, note: { en: "1 sprig, smoked 3 seconds", nl: "1 takje, 3 seconden gerookt" } },
         { ref: "thyme", ml: 0, note: { en: "1 sprig, raw", nl: "1 takje, rauw" } }
       ],
       bar: { en: [
         "Run a lemon wedge around half the rim of the highball to moisten it.",
-        "Dip the moistened rim into the rosemary-lemon sea salt to create a half-oval salt rim. Set aside.",
-        "Smoke the rosemary sprig 3 seconds, blow it out.",
-        "Fill the highball with cubed ice.",
-        "Lemon juice, then rosemary-thyme maple cordial, then 10 to 15 ml sparkling water.",
-        "In a mixing glass, add ice and stir 10 to 12 seconds. In a tin, add ice and shake 12 seconds.",
-        "Strain into the highball, then top with sparkling water down the barspoon.",
-        "Gently set the smoked rosemary and the raw thyme between the ice cubes."
+        "Dip the moistened rim into the rosemary-lemon sea salt for a half-oval rim. Lift the bowl slightly and press the glass in. Set aside.",
+        "In a mixing glass: 15 ml lemon juice, 35 ml rosemary-thyme maple cordial, 10 ml sparkling water.",
+        "Add ice and stir 10 to 12 seconds.",
+        "Open a Spa Rood. Fill the highball half with sparkling water, then crushed ice, about a third of a metal scoop, until there is roughly 1 cm left.",
+        "Top up with the cordial mixture from the mixing glass, so it draws a clean silhouette.",
+        "Smoke the rosemary 3 seconds ONLY once floor staff are there to carry this table, never before. Blow it out and set it, with the raw thyme, between the ice."
       ], nl: [
-        "Wrijf een limoenpartje langs de helft van de rand van het highballglas om hem te bevochtigen.",
-        "Doop de bevochtigde rand in het rozemarijn-citroenzout voor een half-ovale zoutrand. Zet apart.",
-        "Rook het rozemarijntakje 3 seconden, blaas het uit.",
-        "Vul de highball met ijsblokjes.",
-        "Citroensap, dan rozemarijn-tijm-ahornsiroop, dan 10 tot 15 ml bruisend water.",
-        "In een mengglas: ijs erbij en 10 tot 12 seconden roeren. In een tin: ijs erbij en 12 seconden shaken.",
-        "Zeef in de highball en vul aan met bruisend water langs de barlepel.",
-        "Zet de gerookte rozemarijn en de rauwe tijm voorzichtig tussen de ijsblokjes."
+        "Wrijf een citroenpartje langs de helft van de rand van het highballglas om hem te bevochtigen.",
+        "Doop de bevochtigde rand in het rozemarijn-citroenzout voor een half-ovale rand. Til het bakje iets op en druk het glas erin. Zet apart.",
+        "In een mengglas: 15 ml citroensap, 35 ml rozemarijn-tijm-ahornsiroop, 10 ml bruisend water.",
+        "Ijs erbij en 10 tot 12 seconden roeren.",
+        "Open een Spa Rood. Vul de highball half met bruisend water, dan crushed ice, ongeveer een derde van een metalen schep, tot er ongeveer 1 cm over is.",
+        "Vul aan met het cordialmengsel uit het mengglas, zodat er een mooi silhouet ontstaat.",
+        "Rook de rozemarijn 3 seconden, ALLEEN als de bediening klaarstaat om deze tafel te lopen, nooit eerder. Blaas hem uit en zet hem, met de rauwe tijm, tussen het ijs."
       ]},
       table: null,
-      say: { en: ["This is the one for someone who does not want anything sweet. Maple instead of sugar, two herbs, nothing else."],
-             nl: ["Dit is de drank voor wie niets zoets wil. Ahornsiroop in plaats van suiker, twee kruiden, niets anders."] }
+      say: { en: ["This is the one for someone who does not want anything sweet. Maple instead of sugar, two herbs, nothing else.",
+                  "BAR AND FLOOR. This drink has to be carried while the rosemary is still smoking. Do not light it until someone is there to take it."],
+             nl: ["Dit is de drank voor wie niets zoets wil. Ahornsiroop in plaats van suiker, twee kruiden, niets anders.",
+                  "BAR EN BEDIENING. Dit drankje moet gelopen worden terwijl de rozemarijn nog rookt. Steek hem pas aan als iemand klaarstaat om hem mee te nemen."] }
     },
     {
       id: "the-hulk", name: "The Hulk", price: null, tool: "shaker",
@@ -666,38 +678,39 @@ var SECTIONS = [
       },
       tag: { en: "On the sour side, very refreshing", nl: "Aan de zure kant, heel verfrissend" },
       build: [
-        { ref: "grapes", ml: 0, note: { en: "10 green grapes, muddled to a puree", nl: "10 witte druiven, tot puree gekneusd" } },
-        { ref: "basil", ml: 0, note: { en: "10 leaves, press ONCE only. Any more and it turns bitter", nl: "10 blaadjes, EEN keer persen. Meer en hij wordt bitter" } },
-        { ref: "applepear", ml: 120 }, { ref: "lime", ml: 20 }, { ref: "simple", ml: 15 },
-        { ref: "basil", ml: 0, note: { en: "GARNISH NOW: 1 big, beautiful leaf, floated on top", nl: "GARNERING NU: 1 groot, mooi blad, drijvend bovenop" } },
-        { ref: "pear_gar", ml: 0, note: { en: "ON HOLD, not in use. Oven-dried slices are in testing because thin ones fall into the glass. The basil leaf is the garnish until that is signed off", nl: "ON HOLD, niet in gebruik. In de oven gedroogde schijfjes zijn in test omdat dunne in het glas vallen. Het basilicumblaadje is de garnering tot dat is goedgekeurd" } }
+        { ref: "grapes", ml: 0, note: { en: "5 to 8 full green grapes, muddled to a puree", nl: "5 tot 8 hele witte druiven, tot puree gekneusd" } },
+        { ref: "basil", ml: 0, note: { en: "10 BIG leaves, or 2 big stems, press ONCE only. Any more and it turns bitter", nl: "10 GROTE blaadjes, of 2 grote stelen, EEN keer persen. Meer en hij wordt bitter" } },
+        { ref: "applepear", ml: 120 }, { ref: "lime", ml: 25 }, { ref: "simple", ml: 15 },
+        { ref: "basil", ml: 0, note: { en: "GARNISH: 1 big, beautiful leaf, floated on top. Check the basil box", nl: "GARNERING: 1 groot, mooi blad, drijvend bovenop. Kijk in de basilicumbak" } }
       ],
       bar: { en: [
         "Add ice to the martini coupe to chill it. That is what gives the glass its fogged silhouette.",
-        "Muddle 10 green grapes until they turn to puree.",
-        "Add 10 basil leaves and press once only.",
+        "Muddle 5 to 8 green grapes until they turn to puree.",
+        "Add 10 big basil leaves, or 2 big stems, and press once only.",
         "Apple and pear juice, lime, simple syrup.",
         "Tip the ice from the coupe into the small tin, cap with the large tin, shake hard 12 seconds or until the ice chips sound smaller.",
         "Fine strain into the chilled coupe.",
-        "Float the biggest, most beautiful basil leaf on top. TESTING: oven-dried pear slices, to stop them falling into the glass. Until that is signed off, the basil leaf is the garnish."
+        "Float the biggest, most beautiful basil leaf on top. Check the basil box."
       ], nl: [
         "Doe ijs in de martini coupe om hem te koelen. Dat geeft het glas zijn beslagen silhouet.",
-        "Kneus 10 witte druiven tot ze puree worden.",
-        "Voeg 10 basilicumblaadjes toe en pers ze een keer.",
+        "Kneus 5 tot 8 witte druiven tot ze puree worden.",
+        "Voeg 10 grote basilicumblaadjes toe, of 2 grote stelen, en pers ze een keer.",
         "Appel-perensap, limoen, suikersiroop.",
         "Kiep het ijs uit de coupe in de kleine tin, sluit met de grote tin, shake 12 seconden hard of tot het ijs kleiner klinkt.",
         "Fijn zeven in de gekoelde coupe.",
-        "Laat het grootste, mooiste basilicumblaadje bovenop drijven. IN TEST: in de oven gedroogde perenschijfjes, zodat ze niet in het glas vallen. Tot dat is goedgekeurd, is het basilicumblaadje de garnering."
+        "Laat het grootste, mooiste basilicumblaadje bovenop drijven. Kijk in de basilicumbak."
       ]},
       table: null,
       sayLabel: { en: "Nice to know", nl: "Handig om te weten" },
-      say: { en: ["Not enough liquid? Add 5 to 15 ml sparkling water to keep the crispness the drink is known for."],
-             nl: ["Te weinig vloeistof? Voeg 5 tot 15 ml spa rood toe om de frisheid te behouden waar de drank om bekend staat."] }
+      say: { en: ["Not enough liquid? Add 5 to 15 ml sparkling water to keep the crispness the drink is known for.",
+                  "FLOOR STAFF. The Hulk is extremely underrated. It is extremely refreshing and sweeter than the Lychee Siren. The other drinks lean Asian; this one is purely European ingredients. Please sell it."],
+             nl: ["Te weinig vloeistof? Voeg 5 tot 15 ml spa rood toe om de frisheid te behouden waar de drank om bekend staat.",
+                  "BEDIENING. The Hulk wordt enorm onderschat. Hij is heel verfrissend en zoeter dan de Lychee Siren. De andere drankjes leunen Aziatisch; deze is puur Europese ingredienten. Verkoop hem alsjeblieft."] }
     },
     {
       id: "hibiscus-royale", name: "Hibiscus Royale", price: null, tool: "shaker",
       swatch: "#9E2B3B", glass: { en: "Coppa", nl: "Coppa" }, ice: { en: "Cubed", nl: "Blokjes" },
-      method: { en: "Dry shake then wet shake", nl: "Droog shaken, dan met ijs" },
+      method: { en: "Muddle, dry shake, then wet shake and strain", nl: "Kneuzen, droog shaken, dan nat shaken en zeven" },
       desc: {
         en: "Hibiscus steeps deep red and properly tart; strawberry rounds that acid with sweetness and body. Shaken above it, orange, lemon and vanilla settle into a pale silk that holds as its own layer. Sharp below, soft on top.",
         nl: "Hibiscus trekt diep rood en echt zuur; aardbei rondt dat zuur af met zoetheid en body. Daarboven zakken sinaasappel, citroen en vanille in een bleke zijde die als eigen laag blijft liggen. Scherp onder, zacht boven."
@@ -705,33 +718,35 @@ var SECTIONS = [
       tag: { en: "Layered, tart red under a citrus silk", nl: "Gelaagd, zuur rood onder een citruszijde" },
       build: [
         { ref: "hibiscus", ml: 120, note: { en: "GLASS FIRST, over ice and strawberries", nl: "EERST HET GLAS, over ijs en aardbeien" } },
-        { ref: "strawberry", ml: 0, note: { en: "4 halved, tucked so they show through the glass", nl: "4 gehalveerd, zo geplaatst dat ze door het glas zichtbaar zijn" } },
+        { ref: "strawberry", ml: 0, note: { en: "3 to 4 halved, tucked so they show through the glass", nl: "3 tot 4 gehalveerd, zo geplaatst dat ze door het glas zichtbaar zijn" } },
         { ref: "strawpuree", ml: 30, note: { en: "In the shaker", nl: "In de shaker" } },
-        { ref: "eggfoam", ml: 0, note: { en: "30 ml egg white OR 6 to 8 drops of foamer. See the flag", nl: "30 ml eiwit OF 6 tot 8 druppels schuimer. Zie de vlag" } },
-        { ref: "orangezest", ml: 0, note: { en: "3 to 6 pieces, in the shaker", nl: "3 tot 6 stukjes, in de shaker" } },
+        { ref: "eggfoam", ml: 0, note: { en: "15 ml egg white OR 6 to 8 drops of foamer", nl: "15 ml eiwit OF 6 tot 8 druppels schuimer" } },
+        { ref: "orangezest", ml: 0, note: { en: "3 to 6 pieces, muddled in the shaker", nl: "3 tot 6 stukjes, gekneusd in de shaker" } },
         { ref: "orange", ml: 55, note: { en: "In the shaker", nl: "In de shaker" } },
         { ref: "lemon", ml: 30, note: { en: "In the shaker", nl: "In de shaker" } },
-        { ref: "vanilla", ml: 30, note: { en: "In the shaker", nl: "In de shaker" } }
+        { ref: "vanilla", ml: 40, note: { en: "In the shaker", nl: "In de shaker" } }
       ],
       bar: { en: [
-        "Glass first: cubed ice, then 4 halved strawberries tucked so they show through the glass.",
+        "Glass first: cubed ice, then 3 to 4 halved strawberries tucked so they show through the glass.",
         "Add roughly 120 ml hibiscus tea. Set the glass down.",
-        "Shaker: egg white or foam drops, 30 strawberry puree, 3 to 6 pieces of orange zest, 55 orange, 30 lemon, 30 vanilla syrup.",
+        "Shaker: 15 ml egg white or 6 to 8 foam drops, 30 strawberry puree, 3 to 6 pieces of orange zest muddled, 55 orange, 30 lemon, 40 vanilla syrup.",
         "Dry shake 15 seconds, no ice.",
         "Add ice, wet shake 12 seconds.",
-        "Fine strain slowly over the hibiscus tea. Garnish with 3 hibiscus petals."
+        "Strain slowly over the hibiscus tea, Hawthorne held tight so no fruit drops into the glass. Garnish with crushed hibiscus petals and a straw."
       ], nl: [
-        "Eerst het glas: ijsblokjes, dan 4 gehalveerde aardbeien zo geplaatst dat ze door het glas zichtbaar zijn.",
+        "Eerst het glas: ijsblokjes, dan 3 tot 4 gehalveerde aardbeien zo geplaatst dat ze door het glas zichtbaar zijn.",
         "Voeg ongeveer 120 ml hibiscusthee toe. Zet het glas neer.",
-        "Shaker: eiwit of schuimdruppels, 30 aardbeienpuree, 3 tot 6 stukjes sinaasappelzeste, 55 sinaasappel, 30 citroen, 30 vanillesiroop.",
+        "Shaker: 15 ml eiwit of 6 tot 8 druppels schuimer, 30 aardbeienpuree, 3 tot 6 stukjes sinaasappelzeste gekneusd, 55 sinaasappel, 30 citroen, 40 vanillesiroop.",
         "15 seconden droog shaken, zonder ijs.",
         "Ijs toevoegen, 12 seconden shaken.",
-        "Langzaam fijn zeven over de hibiscusthee. Garneer met 3 hibiscusblaadjes."
+        "Langzaam zeven over de hibiscusthee, met de Hawthorne stevig dicht zodat er geen fruit in het glas valt. Garneer met gekneusde hibiscusblaadjes en een rietje."
       ]},
       table: null,
       sayLabel: { en: "Nice to know", nl: "Handig om te weten" },
-      say: { en: ["When fine straining, tilt the strainer to help the thick pink cream flow in. Keep the fruit from dropping out of the shaker. Done right, the red stays at the bottom and the cream on top, and they do not mix until the guest drinks."],
-             nl: ["Kantel de zeef bij het fijn zeven zodat de dikke roze room goed doorloopt. Zorg dat het fruit niet uit de shaker valt. Goed gedaan blijft het rood onderin en de room bovenop, en mengen ze pas als de gast drinkt."] }
+      say: { en: ["We no longer fine strain this one. Keep the Hawthorne held tight instead, so the fruit does not spill into the glass.",
+                  "Done right, the red stays at the bottom and the cream on top, and they do not mix until the guest drinks."],
+             nl: ["Deze zeven we niet meer fijn. Houd in plaats daarvan de Hawthorne stevig dicht, zodat het fruit niet in het glas valt.",
+                  "Goed gedaan blijft het rood onderin en de room bovenop, en mengen ze pas als de gast drinkt."] }
     }
   ]
 },
@@ -748,24 +763,24 @@ var SECTIONS = [
       },
       tag: { en: "Not a jalapeno fan? Feel free to ask without", nl: "Geen jalapeno-liefhebber? Vraag hem gerust zonder" },
       build: [
-        { ref: "jalapeno", ml: 0, note: { en: "3 slices, seeds out as standard, into the mixing glass or tin", nl: "3 schijfjes, standaard zonder zaadjes, in het mengglas of de tin" } },
+        { ref: "jalapeno", ml: 0, note: { en: "3 whole, or 6 slices, seeds out as standard, into the mixing glass or tin", nl: "3 hele, of 6 schijfjes, standaard zonder zaadjes, in het mengglas of de tin" } },
         { ref: "lime", ml: 20 },
         { ref: "simple", ml: 10 },
-        { ref: "gingerbeer", ml: 0, note: { en: "Top, fill to 1 cm below the rim", nl: "Aanvullen tot 1 cm onder de rand" } },
+        { ref: "gingerbeer", ml: 0, note: { en: "In FIRST, to 1.5 cm below the rim", nl: "ALS EERSTE erin, tot 1,5 cm onder de rand" } },
         { ref: "mint", ml: 0, note: { en: "Sprig, with a jalapeno wheel", nl: "Takje, met een schijfje jalapeno" } }
       ],
       bar: { en: [
-        "Muddle 3 jalapeno slices, seeds out as standard, with the lime and simple syrup in the mixing glass or tin.",
+        "Muddle 3 whole jalapenos, or 6 slices, seeds out as standard, with the lime and simple syrup in the mixing glass or tin.",
         "Add ice and stir 8 to 10 times.",
-        "Fill the highball with crushed ice.",
-        "Strain in, then top with ginger beer to 1 cm below the rim.",
-        "Cap with crushed ice, slap the mint sprig, add the jalapeno wheel."
+        "Fill the highball two thirds with crushed ice.",
+        "Ginger beer FIRST, to 1.5 cm below the rim. Then strain the jalapeno cordial mix in on top.",
+        "Cap with crushed ice if necessary, slap the mint sprig, add the jalapeno wheel."
       ], nl: [
-        "Kneus 3 schijfjes jalapeno, standaard zonder zaadjes, met de limoen en suikersiroop in het mengglas of de tin.",
+        "Kneus 3 hele jalapenos, of 6 schijfjes, standaard zonder zaadjes, met de limoen en suikersiroop in het mengglas of de tin.",
         "Ijs erbij en 8 tot 10 keer roeren.",
-        "Vul de highball met crushed ice.",
-        "Zeef erin en vul aan met ginger beer tot 1 cm onder de rand.",
-        "Afdekken met crushed ice, tik het munttakje aan, schijfje jalapeno erbij."
+        "Vul de highball voor tweederde met crushed ice.",
+        "EERST ginger beer, tot 1,5 cm onder de rand. Zeef daarna de jalapenocordialmix erbovenop.",
+        "Indien nodig afdekken met crushed ice, tik het munttakje aan, schijfje jalapeno erbij."
       ]},
       table: null,
       say: { en: ["Seeds are out as standard, so it is tingly rather than painfully hot."],
@@ -795,26 +810,26 @@ var SECTIONS = [
         { ref: "cassis", ml: 20, note: { en: "Boiron cassis syrup", nl: "Boiron cassissiroop" } },
         { ref: "mintsyrup", ml: 20, note: { en: "Homemade fresh mint syrup (Jade)", nl: "Zelfgemaakte verse muntsiroop (Jade)" } },
         { ref: "lime", ml: 15, note: { en: "Fresh lime juice (Boiron), in the shaker", nl: "Vers limoensap (Boiron), in de shaker" } },
-        { ref: "peatea", ml: 10, note: { en: "Floated on top for the layer", nl: "Erbovenop gedreven voor de laag" } },
-        { ref: "soda", ml: 0, note: { en: "Top up", nl: "Aanvullen" } }
+        { ref: "soda", ml: 0, note: { en: "Around 100 ml, in BEFORE the butterfly pea", nl: "Ongeveer 100 ml, erin VOOR de vlindererwt" } },
+        { ref: "peatea", ml: 0, note: { en: "30 to 40 ml, floated last, after the soda", nl: "30 tot 40 ml, als laatste erop, na het bruiswater" } }
       ],
       bar: { en: [
-        "In the hurricane glass: muddle 3 lime wedges and bash 8-10 mint leaves.",
-        "Fill the glass a QUARTER with crushed ice.",
-        "In a shaker: combine 20 ml cassis syrup, 20 ml fresh mint syrup, and 15 ml fresh lime juice. Add ice and shake hard.",
+        "In the hurricane glass: muddle 3 lime wedges and bash 8 to 10 mint leaves.",
+        "In a shaker: 20 ml cassis syrup, 20 ml fresh mint syrup, 15 ml fresh lime juice. Add ice and shake hard.",
+        "Before you open the shaker, fill the glass with crushed ice to just below the belly.",
         "Fine strain the purple mixture into the hurricane glass over the crushed ice.",
         "Add more crushed ice to the rim.",
-        "Gently float 10 ml butterfly pea tea on top to create a distinct layer.",
-        "Top up with soda water.",
+        "Top up with soda water, around 100 ml.",
+        "Gently float 30 to 40 ml butterfly pea on top, for the layer.",
         "Garnish with a mint sprig and a lime wedge."
       ], nl: [
-        "In het hurricaneglas: kneus 3 limoenpartjes en 8-10 muntblaadjes.",
-        "Vul het glas voor een KWART met crushed ice.",
+        "In het hurricaneglas: kneus 3 limoenpartjes en 8 tot 10 muntblaadjes.",
         "In een shaker: 20 ml cassissiroop, 20 ml verse muntsiroop en 15 ml vers limoensap. Ijs toevoegen en hard shaken.",
+        "Vul het glas, voordat je de shaker opent, met crushed ice tot net onder de buik.",
         "Fijn zeven over het crushed ice in het hurricaneglas.",
         "Meer crushed ice toevoegen tot de rand.",
-        "10 ml vlindererwtthee voorzichtig erop laten drijven voor een duidelijke laag.",
-        "Aanvullen met bruiswater.",
+        "Aanvullen met bruiswater, ongeveer 100 ml.",
+        "30 tot 40 ml vlindererwt voorzichtig erop laten drijven, voor de laag.",
         "Garneer met een munttakje en een limoenpartje."
       ]},
       table: null,
@@ -835,18 +850,18 @@ var SECTIONS = [
       },
       tag: null,
       build: [
-        { ref: "cranberry", ml: 70 }, { ref: "orange", ml: 40 }, { ref: "lime", ml: 30 },
+        { ref: "cranberry", ml: 80 }, { ref: "orange", ml: 30 }, { ref: "lime", ml: 30 },
         { ref: "simple", ml: 20, note: { en: "Tasting correction, do not drop", nl: "Correctie na proeven, niet weglaten" } }
       ],
       bar: { en: [
         "Chill the coupe with ice.",
-        "Cranberry, orange, lime and simple syrup into the small tin.",
+        "80 cranberry, 30 orange, 30 lime and 20 simple syrup into the small tin.",
         "Tip the ice from the coupe into the tin, cap with the large tin, shake hard.",
         "Fine strain into the chilled coupe.",
         "Garnish with a twisted orange zest."
       ], nl: [
         "Koel de coupe met ijs.",
-        "Cranberry, sinaasappel, limoen en suikersiroop in de kleine tin.",
+        "80 cranberry, 30 sinaasappel, 30 limoen en 20 suikersiroop in de kleine tin.",
         "Kiep het ijs uit de coupe in de tin, sluit met de grote tin, shake hard.",
         "Fijn zeven in de gekoelde coupe.",
         "Garneer met een gedraaide sinaasappelzeste."
@@ -865,26 +880,34 @@ var SECTIONS = [
       },
       tag: { en: "Stir it when you are ready for sunset", nl: "Roer hem als je klaar bent voor de zonsondergang" },
       build: [
-        { ref: "orange", ml: 180, note: { en: "Fill", nl: "Aanvullen" } },
-        { ref: "grenadine", ml: 30, note: { en: "Floated over the top, it rides on the crushed ice", nl: "Erover laten drijven, hij blijft op het crushed ice liggen" } },
-        { ref: "orangezest", ml: 0, note: { en: "Half orange wheel, laid on top of the crushed ice", nl: "Halve sinaasappelschijf, op het crushed ice gelegd" } }
+        { ref: "orange", ml: 150, note: { en: "Fill", nl: "Aanvullen" } },
+        { ref: "grenadine", ml: 40, note: { en: "NOT at the bar. Carried out in the brute and poured at the table, so it rides on the crushed ice in front of the guest", nl: "NIET achter de bar. Gaat mee in de brute en wordt aan tafel geschonken, zodat hij voor de gast op het crushed ice blijft liggen" } },
+        { ref: "orangezest", ml: 0, note: { en: "Full orange wheel, laid on top of the crushed ice", nl: "Hele sinaasappelschijf, op het crushed ice gelegd" } }
       ],
       bar: { en: [
         "Fill the highball with crushed ice.",
-        "Fill with orange juice to 1 cm below the rim.",
-        "Float 30 ml grenadine over the top. On crushed ice it rides on the surface instead of sinking, so the sunrise runs the other way up.",
-        "Lay a half orange wheel on top of the crushed ice.",
+        "Fill with orange juice to 1 cm below the rim, roughly 150 ml.",
+        "Lay a full orange wheel on top of the crushed ice.",
+        "Put the brute holding 40 ml grenadine on the tray next to the drink. It is poured at the table, not here.",
         "Do not stir."
       ], nl: [
         "Vul de highball met crushed ice.",
-        "Aanvullen met sinaasappelsap tot 1 cm onder de rand.",
-        "Laat 30 ml grenadine erover drijven. Op crushed ice blijft hij aan de oppervlakte in plaats van te zakken, dus de zonsopgang loopt andersom.",
-        "Leg een halve sinaasappelschijf op het crushed ice.",
+        "Aanvullen met sinaasappelsap tot 1 cm onder de rand, ongeveer 150 ml.",
+        "Leg een hele sinaasappelschijf op het crushed ice.",
+        "Zet de brute met 40 ml grenadine op het blad naast het drankje. Die wordt aan tafel geschonken, niet hier.",
         "Niet roeren."
       ]},
-      table: null,
-      say: { en: ["On crushed the grenadine rides on top, so it arrives as sunset. Stir it down when you want first light."],
-             nl: ["Op crushed blijft de grenadine bovenop liggen, dus hij komt binnen als zonsondergang. Roer hem naar beneden als je het eerste licht wilt."] }
+      table: { en: [
+        "Set the glass down in front of the guest, with the brute beside it.",
+        "Pour the 40 ml grenadine over the crushed ice in front of them.",
+        "On crushed the grenadine rides on top, so it arrives as sunset. Stir it down when you want first light."
+      ], nl: [
+        "Zet het glas voor de gast neer, met de brute ernaast.",
+        "Giet de 40 ml grenadine voor hun ogen over het crushed ice.",
+        "Op crushed blijft de grenadine bovenop liggen, dus hij komt binnen als zonsondergang. Roer hem naar beneden als je het eerste licht wilt."
+      ]},
+      say: { en: ["The grenadine is not in the glass when it leaves the bar. It goes on at the table, in front of the guest."],
+             nl: ["De grenadine zit er nog niet in als het glas de bar verlaat. Die gaat er aan tafel op, voor de gast."] }
     },
     {
       id: "tropical-velvet", name: "Tropical Velvet", price: null, tool: "shaker",
@@ -899,7 +922,7 @@ var SECTIONS = [
         { ref: "passionjuice", ml: 40 },
         { ref: "applepear", ml: 30 },
         { ref: "passionpuree", ml: 20 },
-        { ref: "lime", ml: 20 },
+        { ref: "lime", ml: 10 },
         { ref: "vanilla", ml: 10 },
         { ref: "passionfresh", ml: 0, note: { en: "Half, floated, garnish only", nl: "Half, drijvend, alleen garnering" } }
       ],
@@ -931,21 +954,22 @@ var SECTIONS = [
       tag: null,
       build: [
         { ref: "pineapple", ml: 150 },
-        { ref: "coconutcream", ml: 80 },
+        { ref: "coconutcream", ml: 50 },
+        { ref: "cocolopez", ml: 45 },
         { ref: "condensed", ml: 20 },
-        { ref: "ice", ml: 0, note: { en: "100 g ice cubes, into the blender", nl: "100 g ijsblokjes, in de blender" } },
-        { ref: "cherries", ml: 0, note: { en: "1, with a pineapple wedge", nl: "1, met een stukje ananas" } }
+        { ref: "ice", ml: 0, note: { en: "100 g ice cubes, or 1 blue scoop, into the blender", nl: "100 g ijsblokjes, of 1 blauwe schep, in de blender" } },
+        { ref: "pineapplewedge", ml: 0, note: { en: "3 bigger wedges, the AH garnish", nl: "3 grotere stukken, de AH-garnering" } }
       ],
       bar: { en: [
-        "Everything into the blender: pineapple, coconut cream, condensed milk, 100 g ice.",
+        "Everything into the blender: 150 pineapple, 50 coconut cream, 45 Coco Lopez, 20 condensed milk, 100 g ice or 1 blue scoop.",
         "Blend until creamy.",
         "Pour into the hurricane glass.",
-        "Pineapple wedge and a cherry."
+        "Three bigger pineapple wedges, the AH garnish."
       ], nl: [
-        "Alles in de blender: ananas, kokosroom, gecondenseerde melk, 100 g ijs.",
+        "Alles in de blender: 150 ananas, 50 kokosroom, 45 Coco Lopez, 20 gecondenseerde melk, 100 g ijs of 1 blauwe schep.",
         "Blend tot het romig is.",
         "Schenk in het hurricaneglas.",
-        "Stukje ananas en een kers."
+        "Drie grotere stukken ananas, de AH-garnering."
       ]},
       table: null,
       say: { en: ["It is blended, not shaken, so it comes out thick. The condensed milk is what carries it."],
@@ -2033,8 +2057,18 @@ body.cmt-on #root { cursor: crosshair; }
     "lychee juice":        { t:"buy", shop:"Amazing Oriental", pack:"350 ml bottle, 1.45", home:"Rail slot 3, spare carton F1A bottom" },
     "lychee cordial":      { t:"house", from:"Amazing Oriental canned lychees, 2.59 a can", yield:"700 ml", keeps:"NOT SET IN THE FILE", home:"F1B top tier, 700 ml bottle",
                              warn:"This has no keep window written anywhere. Write yield, keep time and method before anyone batches it. A day dot with no keep time is a guess with a date on it." },
-    "lychee-lime cordial": { t:"house", from:"25 ml lychee cordial squeeze plus 25 ml Boiron lime puree", yield:"50 ml per drink, made to order", keeps:"Made to order, not stored", home:"Built at the station",
+    "lychee-lime cordial": { t:"house", from:"25 ml lychee cordial squeeze plus 15 ml Boiron lime puree", yield:"40 ml per drink, made to order", keeps:"Made to order, not stored", home:"Built at the station",
                              note:"Carried to the table in a brute and poured over the indigo. Current workaround: poured from a jigger." },
+    "bpt-infused coconut water": { t:"house", from:"Butterfly pea flower infused into coconut water, not into water", yield:"NOT SET IN THE FILE", keeps:"NOT SET IN THE FILE", home:"F1B top tier",
+                             warn:"The Lychee Siren changed from a float of butterfly pea tea to coconut water infused with the flower, and nothing says how much flower, how much coconut water, how long it steeps or how long it keeps. Write that down before anyone batches it." },
+    "coco lopez": { t:"buy", shop:"NOT YET DECIDED", pack:"NOT PRICED YET", home:"Second tier, F1C",
+                             warn:"New in the Pina Colada, 45 ml a drink, about 6.3 L a week. No supplier and no price on file, so it does not show in the weekly order total yet." },
+    "pineapple wedges": { t:"house", from:"The Albert Heijn pineapple garnish", yield:"Cut to order", keeps:"Same day", home:"F2A top tier, garnish tub",
+                             note:"Three bigger wedges per Pina Colada. This replaced the cocktail cherry." },
+    "lychees, from the can": { t:"buy", shop:"Amazing Oriental, or Sligro 119699", pack:"567 g can", home:"Dry store, open can F1C bottom tier",
+                             note:"Two are muddled in the shaker for each Lychee Siren. The syrup from the same can is what the lychee cordial is pressed from." },
+    "golden glitter lychee": { t:"house", from:"Canned lychees and edible gold glitter spray", yield:"Cut to order", keeps:"Same day", home:"F1C, garnish tub",
+                             note:"One per Lychee Siren." },
     "coconut water":       { t:"buy", shop:"Albert Heijn", pack:"1 L carton, 2.29", home:"F1A bottom tier",
                              warn:"NOT ON THE BUY LIST. Until it is bought, Lychee Siren cannot be made." },
     "butterfly pea tea":   { t:"house", from:"Amazing Oriental dried butterfly pea flower, 3.15 per 50 g", yield:"2.5 L, and the squeeze bottle is drawn off the same batch", keeps:"5 days", home:"F1B top tier",
@@ -2058,7 +2092,7 @@ body.cmt-on #root { cursor: crosshair; }
                              note:"Bought in. Do not batch this by hand." },
     "caramelised pear":    { t:"house", from:"Conference pears, Albert Heijn, 4.83 per 2", yield:"Cut to order", keeps:"Same day", home:"F2A top tier, garnish tub",
                              note:"Brown sugar spread over the slice with a spoon, for when the pear returns to the build.",
-                             warn:"TESTING: oven-dried slices, because thin ones fall into the glass. Until signed off this is NOT the garnish, a big basil leaf is floated on top instead." },
+                             warn:"NOT IN USE. The pear garnish was dropped: the basil leaf is settled as The Hulk's garnish. The caramelised pear stays here only in case it comes back." },
     "hibiscus tea":        { t:"house", from:"Amazing Oriental dried hibiscus, 3.89 per 125 g", yield:"2 L strong", keeps:"5 days", home:"F1B top tier, 4 x 700 ml bottles" },
     "strawberries":        { t:"buy", shop:"Albert Heijn", pack:"500 g punnet", home:"F2A top tier",
                              note:"Open question: check Sligro for a dried strawberry line as a fallback when fresh is out of season." },
@@ -2106,6 +2140,12 @@ body.cmt-on #root { cursor: crosshair; }
   var NL_ING = {
     "lycheesap": "lychee juice",
     "lycheecordial": "lychee cordial",
+    "coco lopez": "coco lopez",
+    "ananasstukken": "pineapple wedges",
+    "kokoswater met vlindererwt": "bpt-infused coconut water",
+    "lychees, uit blik": "lychees, from the can",
+    "gouden glitterlychee": "golden glitter lychee",
+    "lychee-limoencordialmix": "lychee-lime cordial",
     "lychee-limoencordial": "lychee-lime cordial",
     "kokoswater": "coconut water",
     "vlindererwtthee": "butterfly pea tea",
@@ -2402,25 +2442,26 @@ body.cmt-on #root { cursor: crosshair; }
   }
 
   var SEED = [
-    ["Liquids","Lychee juice","AO",7,U.L,4.14,"","Lycheesap",""],
-    ["Liquids","Lychees in syrup, cordial","AO",2.8,U.L,17.27,"","Lychees op siroop, voor cordial",""],
-    ["Liquids","Coconut water","AH",9.8,U.L,2.29,"NOT ON THE BUY LIST. Lychee Siren cannot be made until this is bought.","Kokoswater","STAAT NIET OP DE INKOOPLIJST. De Lychee Siren kan niet gemaakt worden tot dit gekocht is."],
+    ["Liquids","Lychee juice","AO",11.2,U.L,4.14,"","Lycheesap",""],
+    ["Liquids","Lychees in syrup, cordial","AO",5.6,U.L,17.27,"","Lychees op siroop, voor cordial",""],
+    ["Liquids","Coconut water","AH",11.2,U.L,2.29,"NOT ON THE BUY LIST. Lychee Siren cannot be made until this is bought.","Kokoswater","STAAT NIET OP DE INKOOPLIJST. De Lychee Siren kan niet gemaakt worden tot dit gekocht is."],
     ["Liquids","Apple-pear juice, Jumbo DUO smaak","JUMBO",16.8,U.L,2.49,"Jumbo DUO smaak, not the Albert Heijn one.","Appel-perensap, Jumbo DUO smaak","Jumbo DUO smaak, niet die van Albert Heijn."],
-    ["Liquids","Orange juice, fresh with pulp","AH",25.2,U.L,2.00,"","Sinaasappelsap, vers met vruchtvlees",""],
+    ["Liquids","Orange juice, fresh with pulp","AH",21,U.L,2.00,"","Sinaasappelsap, vers met vruchtvlees",""],
     ["Liquids","Pineapple juice, carton","AH",21,U.L,2.59,"","Ananassap, pak",""],
     ["Liquids","Pineapple chunks, canned","AH",4,U.C,2.15,"Garnish only.","Ananasstukjes, uit blik","Alleen voor de garnering."],
-    ["Liquids","Coconut cream","AO",11.2,U.L,4.73,"","Kokosroom",""],
+    ["Liquids","Coconut cream","AO",7,U.L,4.73,"","Kokosroom",""],
+    ["Liquids","Coco Lopez, cream of coconut","TBD",6.3,U.L,null,"NEW, from the Pina Colada rebuild. 45 ml a drink. NO PRICE AND NO SUPPLIER YET.","Coco Lopez, kokosroom","NIEUW, uit de herbouwde Pina Colada. 45 ml per drankje. NOG GEEN PRIJS EN GEEN LEVERANCIER."],
     ["Liquids","Condensed milk","AH",2.8,U.L,7.03,"Two days once decanted. Wide bore bottle.","Gecondenseerde melk","Twee dagen na aftappen. Fles met wijde opening."],
-    ["Liquids","Cranberry juice","AH",9.8,U.L,2.49,"","Cranberrysap",""],
+    ["Liquids","Cranberry juice","AH",11.2,U.L,2.49,"","Cranberrysap",""],
     ["Liquids","Passion fruit juice","AH",5.6,U.L,6.78,"","Passievruchtensap",""],
     ["Liquids","Ginger beer, Royal Club","AH",21,U.L,3.32,"1 L bottles are 300 mm. They lie down in F1B bottom.","Ginger beer, Royal Club","Flessen van 1 L zijn 300 mm. Die liggen plat in F1B onderin."],
     ["Liquids","Soda water, Spa Rood","AH",16.1,U.L,0.50,"","Bruiswater, Spa Rood",""],
-    ["Boiron purees","Boiron lime puree, pasteurised","Sligro",19.6,U.L,null,"Sligro 217504. PRICE NOT KNOWN. Every lime dose in the ten drinks pours this, not hand squeezed fruit.","Boiron limoenpuree, gepasteuriseerd","Sligro 217504. PRIJS ONBEKEND. Elke limoendosering in de tien drankjes komt hieruit, niet uit met de hand geperst fruit."],
-    ["Boiron purees","Boiron lemon puree, pasteurised","Sligro",9.1,U.L,null,"Sligro 217502. PRICE NOT KNOWN. Forest Fairy 25 ml and Hibiscus Royale 40 ml.","Boiron citroenpuree, gepasteuriseerd","Sligro 217502. PRIJS ONBEKEND. Forest Fairy 25 ml en Hibiscus Royale 40 ml."],
+    ["Boiron purees","Boiron lime puree, pasteurised","Sligro",17.5,U.L,null,"Sligro 217504. PRICE NOT KNOWN. Every lime dose in the ten drinks pours this, not hand squeezed fruit.","Boiron limoenpuree, gepasteuriseerd","Sligro 217504. PRIJS ONBEKEND. Elke limoendosering in de tien drankjes komt hieruit, niet uit met de hand geperst fruit."],
+    ["Boiron purees","Boiron lemon puree, pasteurised","Sligro",6.3,U.L,null,"Sligro 217502. PRICE NOT KNOWN. Forest Fairy 25 ml and Hibiscus Royale 40 ml.","Boiron citroenpuree, gepasteuriseerd","Sligro 217502. PRIJS ONBEKEND. Forest Fairy 25 ml en Hibiscus Royale 40 ml."],
     ["Boiron purees","Cassis puree","MAKRO",2.8,U.L,21.26,"STAINS. Dedicated squeeze bottle, never rotated.","Cassispuree","GEEFT VLEKKEN. Eigen knijpfles, nooit wisselen."],
     ["Boiron purees","Strawberry puree","A la Tarte",4.2,U.L,11.00,"Two days once decanted into a squeeze bottle.","Aardbeienpuree","Twee dagen na aftappen in een knijpfles."],
     ["Boiron purees","Passion fruit puree","A la Tarte",2.8,U.L,14.00,"","Passievruchtenpuree",""],
-    ["Syrups and sugar","Monin vanilla syrup","Monin",4.2,U.L,18.00,"","Monin vanillesiroop",""],
+    ["Syrups and sugar","Monin vanilla syrup","Monin",5.6,U.L,18.00,"","Monin vanillesiroop",""],
     ["Syrups and sugar","Monin sugar syrup","Monin",8.4,U.L,18.00,"Bought in. Do not batch by hand.","Monin suikersiroop","Wordt ingekocht. Niet zelf maken."],
     ["Syrups and sugar","Maple syrup, Maple Gold","TBD",4.9,U.L,25.96,"Goes into the rosemary-thyme cordial.","Ahornsiroop, Maple Gold","Gaat in de rozemarijn-tijm-cordial."],
     ["Syrups and sugar","Crystal sugar","AH",2,U.KG,1.50,"","Kristalsuiker",""],
@@ -3515,48 +3556,50 @@ body.cmt-on #root { cursor: crosshair; }
                     nl:"Elk glas eindigt 1 cm onder de rand. Lychee Siren is de uitzondering: laat ruimte voor de 50 ml die aan tafel wordt geschonken." };
   var BK = [
     { id:"lychee-siren", name:"Lychee Siren", sw:"#4C4C9D",
-      spec:{en:"Hurricane  ·  Crushed  ·  Build and float", nl:"Hurricane  ·  Crushed  ·  Opbouwen en laten drijven"},
-      b:[[{en:"Glass",nl:"Glas"},{en:"50 lychee juice · 20 lychee cordial · 70 coconut water",nl:"50 lycheesap · 20 lycheecordial · 70 kokoswater"}],
-         [{en:"Ice",nl:"Ijs"},{en:"Crushed, up to the neck. Only after the liquids, never before",nl:"Crushed, tot aan de hals. Pas na de vloeistoffen, nooit ervoor"}],
-         [{en:"Float",nl:"Drijven"},{en:"40 butterfly pea tea, off the jigger",nl:"40 vlindererwtthee, van de jigger"}],
-         [{en:"Garnish",nl:"Garnering"},{en:"2 golden glitter lychees · lime wedge",nl:"2 gouden glitterlychees · limoenpartje"}],
-         [{en:"Tray",nl:"Blad"},{en:"50 lychee-lime cordial in a brute, carried out with the drink. That is 25 lychee cordial plus 25 Boiron lime",nl:"50 lychee-limoencordial in een brute, mee naar tafel. Dat is 25 lycheecordial plus 25 Boiron limoen"}]],
-      tbl:{en:["Set the glass down in front of the guest","Pour the 50 ml lychee-lime cordial from the brute over the indigo","Straw in, guest stirs"],
-           nl:["Zet het glas voor de gast neer","Giet de 50 ml lychee-limoencordial uit de brute over het indigo","Rietje erin, gast roert"]},
-      say:{en:"No colouring. The blue is butterfly pea and it reacts to citrus.",nl:"Geen kleurstof. Het blauw is vlindererwt en reageert op citrus."} },
+      spec:{en:"Hurricane  ·  Crushed  ·  Shake, strain, layer", nl:"Hurricane  ·  Crushed  ·  Shaken, zeven, laag"},
+      b:[[{en:"Tray FIRST",nl:"EERST het blad"},{en:"The brute with 40 lychee-lime cordial goes on the tray NEXT TO the drink, with the ticket, so neither gets cleared away. That is 25 lychee cordial plus 15 Boiron lime",nl:"De brute met 40 lychee-limoencordial gaat op het blad NAAST het drankje, met de bon, zodat geen van beide wordt opgeruimd. Dat is 25 lycheecordial plus 15 Boiron limoen"}],
+         [{en:"Tin",nl:"Tin"},{en:"Muddle 2 lychees from the can · 80 lychee juice · 40 lychee cordial · ice · shake hard",nl:"Kneus 2 lychees uit blik · 80 lycheesap · 40 lycheecordial · ijs · hard shaken"}],
+         [{en:"Strain",nl:"Zeven"},{en:"Fine strain into the hurricane",nl:"Fijn zeven in de hurricane"}],
+         [{en:"Ice",nl:"Ijs"},{en:"Crushed, until the belly is full. A two thirds scoop is usually enough",nl:"Crushed, tot de buik vol is. Een schep van tweederde is meestal genoeg"}],
+         [{en:"Layer",nl:"Laag"},{en:"BPT-infused coconut water down the back of an upside-down barspoon, to 2.5 cm below the rim, roughly 80. Middle and ring finger as the gauge",nl:"Kokoswater met vlindererwt langs de bolle kant van een omgekeerde barlepel, tot 2,5 cm onder de rand, ongeveer 80. Middel- en ringvinger als maat"}],
+         [{en:"Garnish",nl:"Garnering"},{en:"1 golden glitter lychee · lime wedge",nl:"1 gouden glitterlychee · limoenpartje"}]],
+      tbl:{en:["Set the glass down in front of the guest, the brute beside it","Pour the lychee-lime cordial from the brute over the indigo","Straw in, guest stirs"],
+           nl:["Zet het glas voor de gast neer, de brute ernaast","Giet de lychee-limoencordial uit de brute over het indigo","Rietje erin, gast roert"]},
+      say:{en:"No colouring. The blue is butterfly pea and it reacts to citrus.",nl:"Geen kleurstof. Het blauw is vlindererwt en reageert op citrus."},
+      flag:{en:"Two things still open. The note that set this build says 45 ml for the lychee-lime mix, but its parts, 25 lychee cordial plus 15 Boiron lime, come to 40. The parts are what is written here. And BPT-infused coconut water has no batch size, method or keep window on the Prep tab yet.",nl:"Twee dingen staan nog open. De notitie waar deze opbouw uit komt zegt 45 ml voor de lychee-limoenmix, maar de onderdelen, 25 lycheecordial plus 15 Boiron limoen, komen op 40. Hier staan de onderdelen. En voor kokoswater met vlindererwt staat er nog geen batchgrootte, methode of houdbaarheid op het tabblad Voorbereiding."} },
 
     { id:"forest-fairy", name:"Forest Fairy", sw:"#3E5140",
-      spec:{en:"Highball  ·  Cubed  ·  Stir and strain", nl:"Highball  ·  Blokjes  ·  Roeren en zeven"},
-      b:[[{en:"Rim",nl:"Rand"},{en:"Lemon wedge round the rim · dip the FULL rim in rosemary-lemon salt · set aside",nl:"Citroenpartje rond de rand · doop de HELE rand in rozemarijn-citroenzout · apart zetten"}],
-         [{en:"Mixing glass",nl:"Mengglas"},{en:"25 lemon · 35 rosemary-thyme maple cordial · 10 to 15 soda",nl:"25 citroen · 35 rozemarijn-tijm-ahorncordial · 10 tot 15 spa rood"}],
+      spec:{en:"Highball  ·  Crushed  ·  Stir and strain", nl:"Highball  ·  Crushed  ·  Roeren en zeven"},
+      b:[[{en:"Rim",nl:"Rand"},{en:"Lemon wedge round half the rim · dip in rosemary-lemon salt, half oval · lift the bowl and press the glass in · set aside",nl:"Citroenpartje rond de halve rand · doop in rozemarijn-citroenzout, half ovaal · til het bakje op en druk het glas erin · apart zetten"}],
+         [{en:"Mixing glass",nl:"Mengglas"},{en:"15 lemon · 35 rosemary-thyme maple cordial · 10 soda",nl:"15 citroen · 35 rozemarijn-tijm-ahorncordial · 10 spa rood"}],
          [{en:"Stir",nl:"Roeren"},{en:"Ice in, 10 to 12 seconds",nl:"Ijs erbij, 10 tot 12 seconden"}],
-         [{en:"Glass",nl:"Glas"},{en:"Cubed ice",nl:"Ijsblokjes"}],
-         [{en:"Finish",nl:"Afmaken"},{en:"Strain in · soda to 1 cm · blowtorch the rosemary 3 seconds, blow it out · rosemary and raw thyme between the cubes",nl:"Erin zeven · spa rood tot 1 cm · brand de rozemarijn 3 seconden met de brander, uitblazen · rozemarijn en rauwe tijm tussen de blokjes"}]],
-      say:{en:"For someone who does not want anything sweet. Maple instead of sugar, two herbs, nothing else.",nl:"Voor wie niets zoets wil. Ahorn in plaats van suiker, twee kruiden, meer niet."} },
+         [{en:"Glass",nl:"Glas"},{en:"Half fill with sparkling water · crushed ice, a third of a metal scoop, to about 1 cm from the rim",nl:"Half vullen met bruisend water · crushed ice, een derde van een metalen schep, tot ongeveer 1 cm onder de rand"}],
+         [{en:"Finish",nl:"Afmaken"},{en:"Top with the cordial mixture from the mixing glass, for a clean silhouette",nl:"Aanvullen met het cordialmengsel uit het mengglas, voor een mooi silhouet"}],
+         [{en:"Smoke LAST",nl:"ALS LAATSTE roken"},{en:"Only once floor staff are there to carry it. Rosemary 3 seconds, blow it out, set it and the raw thyme in the ice",nl:"Pas als de bediening klaarstaat om hem te lopen. Rozemarijn 3 seconden, uitblazen, en zet hem met de rauwe tijm in het ijs"}]],
+      say:{en:"For someone who does not want anything sweet. Maple instead of sugar, two herbs, nothing else. It has to reach the table still smoking.",nl:"Voor wie niets zoets wil. Ahorn in plaats van suiker, twee kruiden, meer niet. Hij moet rokend aan tafel komen."} },
 
     { id:"the-hulk", name:"The Hulk", sw:"#6E8C3A",
       spec:{en:"Chilled coupe  ·  No ice in the glass  ·  Shake and fine strain", nl:"Gekoelde coupe  ·  Geen ijs in het glas  ·  Shaken en fijn zeven"},
       b:[[{en:"Prep",nl:"Voorbereiden"},{en:"Ice into the coupe to chill it",nl:"Ijs in de coupe om te koelen"}],
-         [{en:"Tin",nl:"Tin"},{en:"Muddle 10 grapes to a puree · 10 basil leaves, press ONCE · 120 apple-pear · 20 lime · 15 simple",nl:"Kneus 10 druiven tot puree · 10 basilicumblaadjes, EEN keer persen · 120 appel-peer · 20 limoen · 15 suikersiroop"}],
+         [{en:"Tin",nl:"Tin"},{en:"Muddle 5 to 8 grapes to a puree · 10 BIG basil leaves or 2 stems, press ONCE · 120 apple-pear · 25 lime · 15 simple",nl:"Kneus 5 tot 8 druiven tot puree · 10 GROTE basilicumblaadjes of 2 stelen, EEN keer persen · 120 appel-peer · 25 limoen · 15 suikersiroop"}],
          [{en:"Shake",nl:"Shaken"},{en:"Tip the coupe ice into the tin · cap · hard 12 seconds, until the chips sound smaller",nl:"Kiep het ijs uit de coupe in de tin · sluiten · hard 12 seconden, tot de ijsstukjes kleiner klinken"}],
-         [{en:"Finish",nl:"Afmaken"},{en:"Fine strain into the chilled coupe · float the biggest, best basil leaf on top",nl:"Fijn zeven in de gekoelde coupe · laat het grootste, mooiste basilicumblaadje bovenop drijven"}]],
-      say:{en:"Short on liquid? 5 to 15 soda keeps the crispness.",nl:"Te weinig vloeistof? 5 tot 15 spa rood houdt de frisheid."},
-      flag:{en:"TESTING: oven-dried pear slices, to stop them falling into the glass. Until that is signed off, the garnish is the biggest, most beautiful basil leaf, floated on top.",nl:"IN TEST: in de oven gedroogde perenschijfjes, zodat ze niet in het glas vallen. Tot dat is goedgekeurd, is de garnering het grootste, mooiste basilicumblaadje, drijvend bovenop."} },
+         [{en:"Finish",nl:"Afmaken"},{en:"Fine strain into the chilled coupe · float the biggest, best basil leaf on top, check the basil box",nl:"Fijn zeven in de gekoelde coupe · laat het grootste, mooiste basilicumblaadje bovenop drijven, kijk in de basilicumbak"}]],
+      say:{en:"Short on liquid? 5 to 15 soda keeps the crispness. FLOOR: extremely underrated, extremely refreshing, sweeter than the Lychee Siren, and the one purely European drink on the list. Sell it.",nl:"Te weinig vloeistof? 5 tot 15 spa rood houdt de frisheid. BEDIENING: enorm onderschat, heel verfrissend, zoeter dan de Lychee Siren, en het enige puur Europese drankje op de lijst. Verkoop hem."} },
 
     { id:"hibiscus-royale", name:"Hibiscus Royale", sw:"#9E2B3B",
       spec:{en:"Coppa  ·  Cubed  ·  Dry shake then wet shake", nl:"Coppa  ·  Blokjes  ·  Droog shaken, dan nat shaken"},
-      b:[[{en:"Glass",nl:"Glas"},{en:"Cubed ice · 4 strawberry halves, tucked so they show through",nl:"Ijsblokjes · 4 halve aardbeien, zo gestoken dat ze zichtbaar zijn"}],
-         [{en:"Tin",nl:"Tin"},{en:"6 to 8 foam drops · 50 strawberry puree · zest, 3 big or 6 small · 50 orange · 40 lemon · 40 vanilla · 120 hibiscus tea, all of it in the tin",nl:"6 tot 8 druppels schuimer · 50 aardbeienpuree · zeste, 3 grote of 6 kleine · 50 sinaasappel · 40 citroen · 40 vanille · 120 hibiscusthee, alles in de tin"}],
+      b:[[{en:"Glass",nl:"Glas"},{en:"Cubed ice · 3 to 4 strawberry halves, tucked so they show through · 120 hibiscus tea",nl:"Ijsblokjes · 3 tot 4 halve aardbeien, zo gestoken dat ze zichtbaar zijn · 120 hibiscusthee"}],
+         [{en:"Tin",nl:"Tin"},{en:"15 egg white or 6 to 8 foam drops · 30 strawberry puree · zest, 3 to 6 pieces, muddled · 55 orange · 30 lemon · 40 vanilla",nl:"15 eiwit of 6 tot 8 druppels schuimer · 30 aardbeienpuree · zeste, 3 tot 6 stukjes, gekneusd · 55 sinaasappel · 30 citroen · 40 vanille"}],
          [{en:"Shake",nl:"Shaken"},{en:"Dry 15 seconds, no ice.  Then ice, wet 12 seconds",nl:"Droog 15 seconden, zonder ijs.  Dan ijs, nat 12 seconden"}],
-         [{en:"Finish",nl:"Afmaken"},{en:"Fine strain slowly to 1 cm · 3 hibiscus petals",nl:"Langzaam fijn zeven tot 1 cm · 3 hibiscusblaadjes"}]],
-      say:{en:"Tilt the strainer so the thick pink cream flows in and the fruit stays in the tin.",nl:"Kantel de zeef zodat de dikke roze crème erin loopt en het fruit in de tin blijft."} },
+         [{en:"Finish",nl:"Afmaken"},{en:"Strain slowly to 1 cm, Hawthorne tight so no fruit gets in · crushed hibiscus petals · straw",nl:"Langzaam zeven tot 1 cm, Hawthorne stevig dicht zodat er geen fruit in komt · gekneusde hibiscusblaadjes · rietje"}]],
+      say:{en:"We no longer fine strain this one. Hold the Hawthorne tight instead, so the fruit stays in the tin.",nl:"Deze zeven we niet meer fijn. Houd de Hawthorne stevig dicht, zodat het fruit in de tin blijft."} },
 
     { id:"jalapeno-mule", name:"Spicy Jalapeno Mule", sw:"#5E8C4A",
       spec:{en:"Highball  ·  Crushed  ·  Stir and strain", nl:"Highball  ·  Crushed  ·  Roeren en zeven"},
-      b:[[{en:"Mixing glass",nl:"Mengglas"},{en:"3 jalapeno slices, seeds out · 20 lime · 10 simple · muddle",nl:"3 jalapenoschijfjes, zonder zaadjes · 20 limoen · 10 suikersiroop · kneuzen"}],
+      b:[[{en:"Mixing glass",nl:"Mengglas"},{en:"3 whole jalapenos or 6 slices, seeds out · 20 lime · 10 simple · muddle",nl:"3 hele jalapenos of 6 schijfjes, zonder zaadjes · 20 limoen · 10 suikersiroop · kneuzen"}],
          [{en:"Stir",nl:"Roeren"},{en:"Ice in, 8 to 10",nl:"Ijs erbij, 8 tot 10 keer"}],
-         [{en:"Glass",nl:"Glas"},{en:"Crushed ice",nl:"Crushed ice"}],
-         [{en:"Finish",nl:"Afmaken"},{en:"Strain in · ginger beer to 1 cm · cap with crushed",nl:"Erin zeven · gemberbier tot 1 cm · afdekken met crushed"}],
+         [{en:"Glass",nl:"Glas"},{en:"Two thirds crushed ice",nl:"Voor tweederde crushed ice"}],
+         [{en:"Finish",nl:"Afmaken"},{en:"Ginger beer FIRST, to 1.5 cm · then strain the jalapeno mix in on top · cap with crushed if necessary",nl:"EERST gemberbier, tot 1,5 cm · zeef daarna de jalapenomix erbovenop · indien nodig afdekken met crushed"}],
          [{en:"Garnish",nl:"Garnering"},{en:"Mint sprig, slapped once · jalapeno wheel, seeds out",nl:"Munttakje, een keer aangetikt · jalapenowiel, zonder zaadjes"}]],
       say:{en:"The heat lands first, the ginger finishes it. Ask before leaving the seeds in.",nl:"De hitte komt eerst, de gember maakt het af. Vraag het voor je de zaadjes laat zitten."} },
 
@@ -3564,16 +3607,17 @@ body.cmt-on #root { cursor: crosshair; }
       spec:{en:"Hurricane  ·  Crushed  ·  Muddle, shake, layer, top", nl:"Hurricane  ·  Crushed  ·  Kneuzen, shaken, laag, aanvullen"},
       b:[[{en:"Glass",nl:"Glas"},{en:"Muddle 4 lime wedges · bash 8 to 10 mint leaves",nl:"Kneus 4 limoenpartjes · tik 8 tot 10 muntblaadjes aan"}],
          [{en:"Tin",nl:"Tin"},{en:"20 cassis · 20 Jade's mint syrup · 15 lime · ice · shake hard",nl:"20 cassis · 20 muntsiroop van Jade · 15 limoen · ijs · hard shaken"}],
-         [{en:"Churn",nl:"Churnen"},{en:"Fill a QUARTER with crushed · churn 8 to 10 with the bar spoon until it takes the mojito look",nl:"Vul een KWART met crushed · churn 8 tot 10 keer met de barlepel tot het de mojito-look krijgt"}],
-         [{en:"Build",nl:"Opbouwen"},{en:"Fine strain the purple over · more crushed until it is covered · soda to 1 cm",nl:"Fijn zeef het paars eroverheen · meer crushed tot het bedekt is · spa rood tot 1 cm"}],
-         [{en:"Float",nl:"Drijven"},{en:"15 to 20 concentrated butterfly pea, for the layer",nl:"15 tot 20 geconcentreerde vlindererwt, voor de laag"}],
+         [{en:"Churn",nl:"Churnen"},{en:"Shake first. Before opening the tin, fill with crushed to just below the belly · churn 8 to 10 with the bar spoon until it takes the mojito look",nl:"Eerst shaken. Vul, voordat je de tin opent, met crushed tot net onder de buik · churn 8 tot 10 keer met de barlepel tot het de mojito-look krijgt"}],
+         [{en:"Build",nl:"Opbouwen"},{en:"Fine strain the purple over · more crushed until it is covered",nl:"Fijn zeef het paars eroverheen · meer crushed tot het bedekt is"}],
+         [{en:"Soda FIRST",nl:"EERST spa rood"},{en:"Around 100 soda, before the butterfly pea",nl:"Ongeveer 100 spa rood, voor de vlindererwt"}],
+         [{en:"Float LAST",nl:"ALS LAATSTE drijven"},{en:"30 to 40 concentrated butterfly pea, for the layer",nl:"30 tot 40 geconcentreerde vlindererwt, voor de laag"}],
          [{en:"Garnish",nl:"Garnering"},{en:"Mint sprig, slapped once · lime wedge on the ice",nl:"Munttakje, een keer aangetikt · limoenpartje op het ijs"}]],
       say:{en:"The layers are on purpose. One stir and the whole glass turns violet-blue.",nl:"De lagen zijn met opzet. Een keer roeren en het hele glas wordt violetblauw."} },
 
     { id:"cosmopolitan", name:"Cosmopolitan", sw:"#C24D66",
       spec:{en:"Chilled coupe  ·  No ice in the glass  ·  Shake and fine strain", nl:"Gekoelde coupe  ·  Geen ijs in het glas  ·  Shaken en fijn zeven"},
       b:[[{en:"Prep",nl:"Voorbereiden"},{en:"Ice into the coupe",nl:"Ijs in de coupe"}],
-         [{en:"Tin",nl:"Tin"},{en:"70 cranberry · 40 orange · 30 lime · 20 simple",nl:"70 cranberry · 40 sinaasappel · 30 limoen · 20 suikersiroop"}],
+         [{en:"Tin",nl:"Tin"},{en:"80 cranberry · 30 orange · 30 lime · 20 simple",nl:"80 cranberry · 30 sinaasappel · 30 limoen · 20 suikersiroop"}],
          [{en:"Shake",nl:"Shaken"},{en:"Tip the coupe ice into the tin · cap · hard",nl:"Kiep het ijs uit de coupe in de tin · sluiten · hard"}],
          [{en:"Finish",nl:"Afmaken"},{en:"Fine strain to 1 cm · twisted orange zest",nl:"Fijn zeven tot 1 cm · gedraaide sinaasappelzeste"}]],
       say:{en:"Cranberry and lime do the work, the orange rounds the middle.",nl:"Cranberry en limoen doen het werk, de sinaasappel rondt het midden af."} },
@@ -3581,25 +3625,27 @@ body.cmt-on #root { cursor: crosshair; }
     { id:"amsterdam-sunrise", name:"Amsterdam Sunrise", sw:"#E8791D",
       spec:{en:"Highball  ·  Crushed  ·  Build and float", nl:"Highball  ·  Crushed  ·  Opbouwen en laten drijven"},
       b:[[{en:"Glass",nl:"Glas"},{en:"Crushed ice",nl:"Crushed ice"}],
-         [{en:"Pour",nl:"Schenken"},{en:"180 orange juice, to 1 cm",nl:"180 sinaasappelsap, tot 1 cm"}],
-         [{en:"Float",nl:"Drijven"},{en:"30 grenadine over the top. On crushed it stays up instead of sinking, so the sunrise runs the other way",nl:"30 grenadine erover. Op crushed blijft hij boven liggen in plaats van te zakken, dus de zonsopgang loopt andersom"}],
-         [{en:"Garnish",nl:"Garnering"},{en:"Half orange wheel laid on top of the crushed ice",nl:"Halve sinaasappelschijf op het crushed ice gelegd"}],
+         [{en:"Pour",nl:"Schenken"},{en:"150 orange juice, to 1 cm",nl:"150 sinaasappelsap, tot 1 cm"}],
+         [{en:"Garnish",nl:"Garnering"},{en:"FULL orange wheel laid on top of the crushed ice",nl:"HELE sinaasappelschijf op het crushed ice gelegd"}],
+         [{en:"Tray",nl:"Blad"},{en:"40 grenadine in the brute, on the tray beside the drink. NOT poured at the bar",nl:"40 grenadine in de brute, op het blad naast het drankje. NIET achter de bar schenken"}],
          [{en:"Do not",nl:"Niet doen"},{en:"Stir it",nl:"Roeren"}]],
-      say:{en:"On crushed the grenadine rides on top, so it arrives as sunset. Stir it down for first light.",nl:"Op crushed blijft de grenadine bovenop liggen, dus hij komt binnen als zonsondergang. Roer hem naar beneden voor het eerste licht."} },
+      tbl:{en:["Set the glass down in front of the guest, the brute beside it","Pour the 40 grenadine over the crushed ice in front of them","On crushed it rides on top, so it arrives as sunset. Stir it down for first light"],
+           nl:["Zet het glas voor de gast neer, de brute ernaast","Giet de 40 grenadine voor hun ogen over het crushed ice","Op crushed blijft hij bovenop liggen, dus hij komt als zonsondergang. Roer hem naar beneden voor het eerste licht"]},
+      say:{en:"The grenadine is not in the glass when it leaves the bar. It goes on at the table.",nl:"De grenadine zit er nog niet in als het glas de bar verlaat. Die gaat er aan tafel op."} },
 
     { id:"tropical-velvet", name:"Tropical Velvet", sw:"#C9973B",
       spec:{en:"Chilled coupe  ·  No ice in the glass  ·  Shake and fine strain", nl:"Gekoelde coupe  ·  Geen ijs in het glas  ·  Shaken en fijn zeven"},
       b:[[{en:"Prep",nl:"Voorbereiden"},{en:"Ice into the coupe",nl:"Ijs in de coupe"}],
-         [{en:"Tin",nl:"Tin"},{en:"40 passionfruit juice · 30 apple-pear · 20 passionfruit puree · 20 lime · 10 vanilla",nl:"40 passievruchtensap · 30 appel-peer · 20 passievruchtenpuree · 20 limoen · 10 vanille"}],
+         [{en:"Tin",nl:"Tin"},{en:"40 passionfruit juice · 30 apple-pear · 20 passionfruit puree · 10 lime · 10 vanilla",nl:"40 passievruchtensap · 30 appel-peer · 20 passievruchtenpuree · 10 limoen · 10 vanille"}],
          [{en:"Shake",nl:"Shaken"},{en:"Ice · cap · hard 12 seconds",nl:"Ijs · sluiten · hard 12 seconden"}],
          [{en:"Finish",nl:"Afmaken"},{en:"Fine strain to 1 cm · float half a passion fruit",nl:"Fijn zeven tot 1 cm · een halve passievrucht laten drijven"}]],
       say:{en:"Passionfruit alone is sharp. The apple and pear gives it somewhere to sit.",nl:"Passievrucht op zich is scherp. De appel-peer geeft hem een bodem."} },
 
     { id:"pina-colada", name:"Pina Colada", sw:"#E7DFCF",
       spec:{en:"Hurricane  ·  Blended in  ·  Blend", nl:"Hurricane  ·  Meegeblend  ·  Blenden"},
-      b:[[{en:"Blender",nl:"Blender"},{en:"150 pineapple · 80 coconut cream · 20 condensed milk · 10 lime · 100 g ice",nl:"150 ananas · 80 kokosroom · 20 gecondenseerde melk · 10 limoen · 100 g ijs"}],
+      b:[[{en:"Blender",nl:"Blender"},{en:"150 pineapple · 50 coconut cream · 45 Coco Lopez · 20 condensed milk · 10 lime · 100 g ice or 1 blue scoop",nl:"150 ananas · 50 kokosroom · 45 Coco Lopez · 20 gecondenseerde melk · 10 limoen · 100 g ijs of 1 blauwe schep"}],
          [{en:"Blend",nl:"Blenden"},{en:"Until creamy",nl:"Tot het romig is"}],
-         [{en:"Finish",nl:"Afmaken"},{en:"Pour into the hurricane to 1 cm · 3 pineapple chunks",nl:"In de hurricane schenken tot 1 cm · 3 stukjes ananas"}]],
+         [{en:"Finish",nl:"Afmaken"},{en:"Pour into the hurricane to 1 cm · 3 bigger pineapple wedges, the AH garnish",nl:"In de hurricane schenken tot 1 cm · 3 grotere stukken ananas, de AH-garnering"}]],
       say:{en:"Blended, not shaken, so it pours thick. The condensed milk carries it.",nl:"Geblend, niet geshaket, dus hij schenkt dik. De gecondenseerde melk draagt hem."} }
   ];
 
@@ -4781,10 +4827,10 @@ body.cmt-on #root { cursor: crosshair; }
 
      Where 19.6 L and 9.1 L come from, at 140 servings per drink per week:
 
-       LIME    Lychee Siren 25 ml, The Hulk 20, Jalapeno Mule 20,
-               Ocean Mojito 15, Cosmopolitan 30, Tropical Velvet 20,
-               Pina Colada 10.  Total 19,600 ml.
-       LEMON   Forest Fairy 25 ml, Hibiscus Royale 40 ml.  Total 9,100 ml.
+       LIME    Lychee Siren 15 ml, The Hulk 25, Jalapeno Mule 20,
+               Ocean Mojito 15, Cosmopolitan 30, Tropical Velvet 10,
+               Pina Colada 10.  Total 17,500 ml.
+       LEMON   Forest Fairy 15 ml, Hibiscus Royale 30 ml.  Total 6,300 ml.
 
      TWO KNOCK-ON EDITS TO ROWS YOU ALREADY HAVE
 
