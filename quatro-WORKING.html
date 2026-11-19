@@ -3267,16 +3267,18 @@ body.cmt-on #root { cursor: crosshair; }
          drinks:{en:"Ocean Mojito, which is a hybrid · Tropical Velvet · Spicy Jalapeno Mule · The Hulk · Lychee Siren",
                  nl:"Ocean Mojito, die een hybride is · Tropical Velvet · Spicy Jalapeno Mule · The Hulk · Lychee Siren"} }
   };
-  var RAIL_MID = { en:"Then the Monin bottles in the middle, spouted and standing: sugar syrup, vanilla, grenadine",
-                   nl:"Dan de Monin-flessen in het midden, met schenktuit en rechtop: suikersiroop, vanille, grenadine" };
+  /* Vanilla, sugar syrup, vanilla. The two vanillas are deliberate, one
+     within reach of each station; it is not a repeated line. */
+  var RAIL_MID = { en:"Then the Monin bottles in the middle, spouted and standing: vanilla, sugar syrup, vanilla",
+                   nl:"Dan de Monin-flessen in het midden, met schenktuit en rechtop: vanille, suikersiroop, vanille" };
 
   var STATION = [
     [{en:"In front of you, left station",nl:"Recht voor je, linkerstation"},
      {en:"Gold pineapple, red hibiscus, orange orange juice, black cranberry. This end builds the Pina Colada, Hibiscus Royale and Cosmopolitan, and half of the Ocean Mojito.",
       nl:"Goud ananas, rood hibiscus, oranje sinaasappelsap, zwart cranberry. Aan dit eind maak je de Pina Colada, Hibiscus Royale en Cosmopolitan, en de helft van de Ocean Mojito."}],
     [{en:"In the middle",nl:"In het midden"},
-     {en:"The Monin bottles, spouted and standing: sugar syrup, vanilla, grenadine. They sit BETWEEN the two stations now, not off to one side, so either end can reach them.",
-      nl:"De Monin-flessen, met schenktuit en rechtop: suikersiroop, vanille, grenadine. Ze staan nu TUSSEN de twee stations, niet aan een kant, zodat beide einden erbij kunnen."}],
+     {en:"The Monin bottles, spouted and standing: vanilla, sugar syrup, vanilla. Two vanillas on purpose, one within reach of each station. They sit BETWEEN the two stations, not off to one side, so either end can reach the sugar syrup.",
+      nl:"De Monin-flessen, met schenktuit en rechtop: vanille, suikersiroop, vanille. Met opzet twee keer vanille, een binnen bereik van elk station. Ze staan TUSSEN de twee stations, niet aan een kant, zodat beide einden bij de suikersiroop kunnen."}],
     [{en:"Carrying on, right station",nl:"Verder, rechterstation"},
      {en:"Yellow passionfruit, green apple and pear, lychee juice, blue BPT-coconut mixture. This end builds Tropical Velvet, the Spicy Jalapeno Mule, The Hulk and the Lychee Siren, and the other half of the Ocean Mojito.",
       nl:"Geel passievrucht, groen appel-peer, lycheesap, blauw BPT-kokosmengsel. Aan dit eind maak je Tropical Velvet, de Spicy Jalapeno Mule, The Hulk en de Lychee Siren, en de andere helft van de Ocean Mojito."}],
@@ -3289,11 +3291,11 @@ body.cmt-on #root { cursor: crosshair; }
      {en:"One bucket per item, left holder then right holder. Full order below.",
       nl:"Een bakje per item, eerst de linkerhouder, dan de rechter. Volledige volgorde hieronder."}],
     [{en:"In front of each holder, a bar mat",nl:"Voor elke houder een barmat"},
-     {en:"At least one 50/30 jigger on each, so both stations can measure without reaching across the other.",
-      nl:"Op elke mat minstens een 50/30-jigger, zodat beide stations kunnen afmeten zonder over het andere heen te reiken."}],
+     {en:"At least one 50/30 jigger on each, and one Boston shaker, so both stations can measure and shake without reaching across the other.",
+      nl:"Op elke mat minstens een 50/30-jigger en een Boston shaker, zodat beide stations kunnen afmeten en shaken zonder over het andere heen te reiken."}],
     [{en:"In the middle, the ice and the tins",nl:"In het midden, het ijs en de tins"},
-     {en:"The two ice buckets, one crushed and one cubed. Tucked in between them, the two big Boston tins holding the instruments: 1 Hawthorne strainer, 1 fine strainer, 1 bar spoon, 1 muddler.",
-      nl:"De twee ijsbakken, een met crushed ice en een met ijsblokjes. Daartussen geklemd de twee grote Boston tins met het gereedschap: 1 Hawthorne-zeef, 1 fijne zeef, 1 barlepel, 1 muddler."}],
+     {en:"The two ice buckets, one crushed and one cubed. The crushed holds the metal spoon, the cubed holds the bigger blue spoon, so the two never get swapped. Tucked in between them, the two big Boston tins holding the instruments: 1 Hawthorne strainer, 1 fine strainer, 1 bar spoon, 1 muddler.",
+      nl:"De twee ijsbakken, een met crushed ice en een met ijsblokjes. In de crushed zit de metalen schep, in de blokjes de grotere blauwe schep, zodat ze nooit verwisseld worden. Daartussen geklemd de twee grote Boston tins met het gereedschap: 1 Hawthorne-zeef, 1 fijne zeef, 1 barlepel, 1 muddler."}],
     [{en:"Left of the station, the straws",nl:"Links van het station, de rietjes"},
      {en:"One coppa glass holding 1 short straw. 2 tall straws in the hurricane.",
       nl:"Een coppaglas met 1 kort rietje. 2 lange rietjes in de hurricane."}]
@@ -3303,8 +3305,11 @@ body.cmt-on #root { cursor: crosshair; }
      bucket lands in the middle, in front of the Ocean Mojito items, which is
      what makes the two halves separate stations rather than one long bar. */
   var HOLDER = [
+    [{en:"Before the left holder, on its own",nl:"Voor de linkerhouder, apart"},[
+      {en:"Pineapple chunks, small. Grand Gerard, Sligro. For the Pina Colada. A separate box, NOT a bucket in the holder",
+       nl:"Ananasstukjes, klein. Grand Gerard, Sligro. Voor de Pina Colada. Een aparte bak, GEEN bakje in de houder"}
+    ]],
     [{en:"Left holder",nl:"Linkerhouder"},[
-      {en:"Pineapple chunks, small. Grand Gerard, Sligro. For the Pina Colada",nl:"Ananasstukjes, klein. Grand Gerard, Sligro. Voor de Pina Colada"},
       {en:"Orange zests",nl:"Sinaasappelzestes"},
       {en:"Strawberries, cut in half",nl:"Aardbeien, gehalveerd"},
       {en:"Mint leaves, for bashing and shaking. For the Ocean Mojito",nl:"Muntblaadjes, om aan te tikken en te shaken. Voor de Ocean Mojito"},
@@ -3317,7 +3322,7 @@ body.cmt-on #root { cursor: crosshair; }
       {en:"Mint sprigs, for garnish",nl:"Munttakjes, voor de garnering"},
       {en:"Jalapenos. Halves for muddling and whole wheels for garnish, SEEDS OUT",nl:"Jalapenos. Halve schijfjes om te kneuzen en hele voor de garnering, ZONDER ZAADJES"},
       {en:"Basil leaves",nl:"Basilicumblaadjes"},
-      {en:"Grapes, cut in half",nl:"Druiven, gehalveerd"},
+      {en:"Grapes, whole",nl:"Druiven, heel"},
       {en:"Lychees, from the can",nl:"Lychees, uit blik"},
       {en:"Lime wedges again",nl:"Opnieuw limoenpartjes"},
       {en:"Glitter, on the far right of the holder",nl:"Glitter, helemaal rechts van de houder"}
