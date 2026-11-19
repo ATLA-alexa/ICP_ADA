@@ -240,7 +240,12 @@ td.buy.ok { color: var(--ink-soft); }
 .qsteps li { margin-bottom: 5px; }
 .qsub { font-family: 'Marcellus', Georgia, serif; font-size: 13px; letter-spacing: .14em;
   text-transform: uppercase; color: var(--gold); margin: 14px 0 6px; }
-.qgar { margin: 0 0 0 18px; font-size: 13.5px; line-height: 1.6; columns: 2; column-gap: 26px; }
+/* Single column on purpose: these lists are an order you walk, and two
+   columns read down the first before crossing to the second. */
+.qgar { margin: 0 0 0 18px; font-size: 13.5px; line-height: 1.6; }
+.qstep-why { display: block; margin-top: 5px; font-size: 13px; line-height: 1.5; color: var(--ink-soft); }
+.qhold { margin-top: var(--s3); }
+.qhold-h { display: block; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 3px; }
 .qgar li { break-inside: avoid; margin-bottom: 3px; }
 @media (max-width: 640px) { .qgar { columns: 1; } }
 /* prep table */
@@ -1559,34 +1564,48 @@ body.cmt-on #root { cursor: crosshair; }
     [{en:"Carrying on, right station",nl:"Verder, rechterstation"},
      {en:"Yellow passionfruit, green apple and pear, lychee juice, blue BPT-coconut mixture. This end builds Tropical Velvet, the Spicy Jalapeno Mule, The Hulk and the Lychee Siren, and the other half of the Ocean Mojito.",
       nl:"Geel passievrucht, groen appel-peer, lycheesap, blauw BPT-kokosmengsel. Aan dit eind maak je Tropical Velvet, de Spicy Jalapeno Mule, The Hulk en de Lychee Siren, en de andere helft van de Ocean Mojito."}],
-    [{en:"Next, the tray",nl:"Dan het blad"},
-     {en:"Every squeeze bottle. Boiron lime, Boiron lemon, lychee cordial, lychee-lime cordial, rosemary-thyme maple cordial, Jade's mint syrup, cassis, coconut cream, condensed milk, concentrated butterfly pea.",
-      nl:"Alle knijpflessen. Boiron limoen, Boiron citroen, lycheecordial, lychee-limoencordial, rozemarijn-tijm-ahornsiroop, muntsiroop van Jade, cassis, kokosroom, gecondenseerde melk, geconcentreerde vlindererwt."}],
-    [{en:"Back in front of the rail",nl:"Terug voor de speedrail"},
-     {en:"The steel condiment holders, one bucket per item. See the list below.",
-      nl:"De stalen condimentenhouders, een bakje per item. Zie de lijst hieronder."}],
-    [{en:"Between the two holders",nl:"Tussen de twee houders"},
-     {en:"The two big squeeze bottles, strawberry puree and passionfruit puree, and the two foamers: one pipette, one that gives drops.",
-      nl:"De twee grote knijpflessen, aardbeienpuree en passievruchtenpuree, en de twee schuimers: een pipet en een die druppels geeft."}],
-    [{en:"Directly behind",nl:"Direct daarachter"},
-     {en:"The crushed ice bucket, then the cubed ice bucket.",
-      nl:"De bak met crushed ice, dan de bak met ijsblokjes."}]
+    [{en:"Step forward. The squeeze bottles",nl:"Stap naar voren. De knijpflessen"},
+     {en:"In front of the speed rail and behind the steel condiment holders, left to right: coconut milk and cream, Coco Lopez, strawberry puree, Boiron lemon, egg whites. Then cassis, mint syrup, Spa Rood, pure BPT infusion. Then passionfruit puree, Boiron lime, lychee cordial.",
+      nl:"Voor de speedrail en achter de stalen condimentenhouders, van links naar rechts: kokosmelk en -room, Coco Lopez, aardbeienpuree, Boiron citroen, eiwit. Dan cassis, muntsiroop, Spa Rood, pure BPT-infusie. Dan passievruchtenpuree, Boiron limoen, lycheecordial."},
+     {en:"The four Ocean Mojito bottles, cassis through BPT infusion, sit directly in front of the Monin bottles, so the Mojito is made from the middle and neither station has to give up its own order.",
+      nl:"De vier Ocean Mojito-flessen, van cassis tot BPT-infusie, staan recht voor de Monin-flessen, zodat de Mojito vanuit het midden gemaakt wordt en geen van beide stations zijn eigen volgorde hoeft op te geven."}],
+    [{en:"The steel condiment holders",nl:"De stalen condimentenhouders"},
+     {en:"One bucket per item, left holder then right holder. Full order below.",
+      nl:"Een bakje per item, eerst de linkerhouder, dan de rechter. Volledige volgorde hieronder."}],
+    [{en:"In front of each holder, a bar mat",nl:"Voor elke houder een barmat"},
+     {en:"At least one 50/30 jigger on each, so both stations can measure without reaching across the other.",
+      nl:"Op elke mat minstens een 50/30-jigger, zodat beide stations kunnen afmeten zonder over het andere heen te reiken."}],
+    [{en:"In the middle, the ice and the tins",nl:"In het midden, het ijs en de tins"},
+     {en:"The two ice buckets, one crushed and one cubed. Tucked in between them, the two big Boston tins holding the instruments: 1 Hawthorne strainer, 1 fine strainer, 1 bar spoon, 1 muddler.",
+      nl:"De twee ijsbakken, een met crushed ice en een met ijsblokjes. Daartussen geklemd de twee grote Boston tins met het gereedschap: 1 Hawthorne-zeef, 1 fijne zeef, 1 barlepel, 1 muddler."}],
+    [{en:"Left of the station, the straws",nl:"Links van het station, de rietjes"},
+     {en:"One coppa glass holding 1 short straw. 2 tall straws in the hurricane.",
+      nl:"Een coppaglas met 1 kort rietje. 2 lange rietjes in de hurricane."}]
   ];
 
-  var GARNISH = [
-    {en:"Lime wedges, cut fresh",nl:"Limoenpartjes, vers gesneden"},
-    {en:"Pineapple chunks, from the can",nl:"Ananasstukjes, uit blik"},
-    {en:"Mint sprigs for garnish",nl:"Munttakjes voor de garnering"},
-    {en:"Mint leaves for bashing and shaking",nl:"Muntblaadjes om aan te tikken en te shaken"},
-    {en:"Basil leaves",nl:"Basilicumblaadjes"},
-    {en:"Passion fruit, for cutting in half",nl:"Passievruchten, om te halveren"},
-    {en:"Grapes, cut in half",nl:"Druiven, gehalveerd"},
-    {en:"Strawberries, cut in half",nl:"Aardbeien, gehalveerd"},
-    {en:"Jalapeno wheels cut in half, for muddling",nl:"Halve jalapenoschijfjes, om te kneuzen"},
-    {en:"Jalapeno wheels whole, for garnish. SEEDS OUT",nl:"Hele jalapenoschijfjes, voor de garnering. ZONDER ZAADJES"},
-    {en:"Orange zests",nl:"Sinaasappelzestes"},
-    {en:"Lychees, from the can",nl:"Lychees, uit blik"},
-    {en:"Pears, thinly sliced",nl:"Peren, dun gesneden"}
+  /* Left to right along each holder, as walked on 19 November. The cubed ice
+     bucket lands in the middle, in front of the Ocean Mojito items, which is
+     what makes the two halves separate stations rather than one long bar. */
+  var HOLDER = [
+    [{en:"Left holder",nl:"Linkerhouder"},[
+      {en:"Pineapple chunks, small. Grand Gerard, Sligro. For the Pina Colada",nl:"Ananasstukjes, klein. Grand Gerard, Sligro. Voor de Pina Colada"},
+      {en:"Orange zests",nl:"Sinaasappelzestes"},
+      {en:"Strawberries, cut in half",nl:"Aardbeien, gehalveerd"},
+      {en:"Mint leaves, for bashing and shaking. For the Ocean Mojito",nl:"Muntblaadjes, om aan te tikken en te shaken. Voor de Ocean Mojito"},
+      {en:"Lime wedges, cut fresh",nl:"Limoenpartjes, vers gesneden"}
+    ]],
+    [{en:"Then the middle",nl:"Dan het midden"},[
+      {en:"The cubed ice bucket, in front of the Ocean Mojito items",nl:"De bak met ijsblokjes, voor de Ocean Mojito-spullen"}
+    ]],
+    [{en:"Right holder",nl:"Rechterhouder"},[
+      {en:"Mint sprigs, for garnish",nl:"Munttakjes, voor de garnering"},
+      {en:"Jalapenos. Halves for muddling and whole wheels for garnish, SEEDS OUT",nl:"Jalapenos. Halve schijfjes om te kneuzen en hele voor de garnering, ZONDER ZAADJES"},
+      {en:"Basil leaves",nl:"Basilicumblaadjes"},
+      {en:"Grapes, cut in half",nl:"Druiven, gehalveerd"},
+      {en:"Lychees, from the can",nl:"Lychees, uit blik"},
+      {en:"Lime wedges again",nl:"Opnieuw limoenpartjes"},
+      {en:"Glitter, on the far right of the holder",nl:"Glitter, helemaal rechts van de houder"}
+    ]]
   ];
 
   /* The day dot standard is quoted on both the Rail tab and the Prep tab, so it
@@ -1658,12 +1677,19 @@ body.cmt-on #root { cursor: crosshair; }
       '<div class="panel"><h3>' +
       et({ en: "The station, clockwise", nl: "Het station, met de klok mee" }) + "</h3>" +
       '<ol class="qsteps">' + STATION.map(function (s) {
-        return "<li><b>" + et(s[0]) + ".</b> " + et(s[1]) + "</li>";
+        return "<li><b>" + et(s[0]) + ".</b> " + et(s[1]) +
+          (s[2] ? '<span class="qstep-why">' + et(s[2]) + "</span>" : "") + "</li>";
       }).join("") + "</ol>" +
       '<h4 class="qsub">' +
-      et({ en: "In each condiment holder, one bucket per item",
-           nl: "In elke condimentenhouder, een bakje per item" }) + '</h4><ul class="qgar">' +
-      GARNISH.map(function (g) { return "<li>" + et(g) + "</li>"; }).join("") + "</ul></div>" +
+      et({ en: "The holders, left to right, one bucket per item",
+           nl: "De houders, van links naar rechts, een bakje per item" }) + "</h4>" +
+      HOLDER.map(function (g) {
+        return '<div class="qhold"><span class="qhold-h">' + et(g[0]) + "</span><ul class=\"qgar\">" +
+          g[1].map(function (x) { return "<li>" + et(x) + "</li>"; }).join("") + "</ul></div>";
+      }).join("") +
+      '<div class="qflag">' +
+      et({ en: "Two buckets from the old layout are not in this order and have no home yet: pears, thinly sliced, and passion fruit for cutting in half. Say where they go, or whether they are gone.",
+           nl: "Twee bakjes uit de oude indeling staan niet in deze volgorde en hebben nog geen plek: dun gesneden peren, en passievruchten om te halveren. Zeg waar ze horen, of dat ze weg zijn." }) + "</div></div>" +
       '<div class="flag"><strong>' + et({ en: "Note", nl: "Let op" }) + "</strong>" +
       et({ en: "The Hulk and Tropical Velvet both take apple and pear, which is what holds the green slot. The Eminence Matcha Mojito will take the same Jumbo apple-pear, but it is not on this sprint: it sits in ",
            nl: "The Hulk en Tropical Velvet gaan allebei op appel-peer, en dat is wat het groene slot bezet houdt. De Eminence Matcha Mojito gaat op dezelfde Jumbo appel-peer, maar die staat niet in deze sprint: hij zit in " }) +

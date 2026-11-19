@@ -442,6 +442,7 @@ var ING = {
   sparklemon:   { name: { en: "Sparkling lemonade", nl: "Bruisende limonade" }, pack: "1 L", cost: null, supplier: "TODO", home: "FR1 door A", inStock: true, prep: false },
   lycheecordial:{ name: { en: "Lychee cordial", nl: "Lycheecordial" }, pack: "700 ml", cost: null, supplier: "TODO", home: "FR1 door B", inStock: false, prep: true },
   cocolopez:    { name: { en: "Coco Lopez, cream of coconut", nl: "Coco Lopez, kokosroom" }, pack: "NOT PRICED YET", cost: null, supplier: "TBD", home: "Second tier, FR1 C", inStock: false, prep: false },
+  pineapplechunk: { name: { en: "Pineapple chunks, small", nl: "Ananasstukjes, klein" }, pack: "Grand Gerard, Sligro", cost: null, supplier: "Sligro", home: "Left condiment holder, first bucket", inStock: true, prep: false },
   pineapplewedge:{ name: { en: "Pineapple wedges, garnish", nl: "Ananasstukken, garnering" }, pack: "AH garnish", cost: null, supplier: "AH", home: "FR2 door C, garnish tub", inStock: true, prep: true },
   lycheescan:   { name: { en: "Lychees, from the can", nl: "Lychees, uit blik" }, pack: "567 g can", cost: null, supplier: "AO, or Sligro 119699", home: "Dry store, open can FR1 door C", inStock: true, prep: false },
   glitterlychee:{ name: { en: "Golden glitter lychee", nl: "Gouden glitterlychee" }, pack: "Canned lychee, sprayed", cost: null, supplier: "In house", home: "FR1 door C, garnish tub", inStock: false, prep: true },
@@ -940,23 +941,24 @@ var SECTIONS = [
         { ref: "pineapple", ml: 150 },
         { ref: "coconutcream", ml: 50 },
         { ref: "cocolopez", ml: 45 },
+        { ref: "pineapplechunk", ml: 0, note: { en: "2 tablespoons of the small chunks, Grand Gerard from Sligro, into the blender", nl: "2 eetlepels van de kleine stukjes, Grand Gerard van Sligro, in de blender" } },
         { ref: "ice", ml: 0, note: { en: "100 g ice cubes, or 1 blue scoop, into the blender", nl: "100 g ijsblokjes, of 1 blauwe schep, in de blender" } },
         { ref: "pineapplewedge", ml: 0, note: { en: "3 bigger wedges, the AH garnish", nl: "3 grotere stukken, de AH-garnering" } }
       ],
       bar: { en: [
-        "Everything into the blender: 150 pineapple, 50 coconut cream, 45 Coco Lopez, 100 g ice or 1 blue scoop.",
+        "Everything into the blender: 150 pineapple, 50 coconut cream, 45 Coco Lopez, then 2 tablespoons of the small pineapple chunks, then 100 g ice or 1 blue scoop.",
         "Blend until creamy.",
         "Pour into the hurricane glass.",
         "Three bigger pineapple wedges, the AH garnish."
       ], nl: [
-        "Alles in de blender: 150 ananas, 50 kokosroom, 45 Coco Lopez, 100 g ijs of 1 blauwe schep.",
+        "Alles in de blender: 150 ananas, 50 kokosroom, 45 Coco Lopez, dan 2 eetlepels van de kleine ananasstukjes, dan 100 g ijs of 1 blauwe schep.",
         "Blend tot het romig is.",
         "Schenk in het hurricaneglas.",
         "Drie grotere stukken ananas, de AH-garnering."
       ]},
       table: null,
-      say: { en: ["It is blended, not shaken, so it comes out thick. The coconut cream and the Coco Lopez are what carry it."],
-             nl: ["Hij is geblend, niet geshaket, dus hij komt er dik uit. De kokosroom en de Coco Lopez dragen hem."] }
+      say: { en: ["It is blended, not shaken, so it comes out thick. The coconut cream and the Coco Lopez are what carry it, and there is fresh pineapple in the blender as well as juice."],
+             nl: ["Hij is geblend, niet geshaket, dus hij komt er dik uit. De kokosroom en de Coco Lopez dragen hem, en er gaat ook echte ananas mee in de blender, niet alleen sap."] }
     }
   ]
 },
