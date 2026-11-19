@@ -799,7 +799,7 @@ var SECTIONS = [
         "In a shaker: 20 ml cassis syrup, 40 ml fresh mint syrup, 15 ml fresh lime juice. Add ice and shake hard.",
         "Before you open the shaker, fill the glass with crushed ice to just below the belly, and churn 8 to 10 times with the bar spoon until it takes the mojito look.",
         "Fine strain the purple mixture into the hurricane glass over the crushed ice.",
-        "Add more crushed ice to the rim.",
+        "Add more crushed ice, up to the bottom of the neck.",
         "Top up with soda water, around 100 ml.",
         "Gently float 30 to 40 ml butterfly pea on top, for the layer.",
         "Garnish with a mint sprig and a lime wedge."
@@ -808,7 +808,7 @@ var SECTIONS = [
         "In een shaker: 20 ml cassissiroop, 40 ml verse muntsiroop en 15 ml vers limoensap. Ijs toevoegen en hard shaken.",
         "Vul het glas, voordat je de shaker opent, met crushed ice tot net onder de buik, en churn 8 tot 10 keer met de barlepel tot het de mojito-look krijgt.",
         "Fijn zeven over het crushed ice in het hurricaneglas.",
-        "Meer crushed ice toevoegen tot de rand.",
+        "Meer crushed ice toevoegen tot onderaan de hals.",
         "Aanvullen met bruiswater, ongeveer 100 ml.",
         "30 tot 40 ml vlindererwt voorzichtig erop laten drijven, voor de laag.",
         "Garneer met een munttakje en een limoenpartje."
@@ -1716,6 +1716,14 @@ render();
 .src-tag.house  { background: rgba(62,81,64,.14); color: #3E5140; }
 .src-note { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--gold-pale);
   font-size: 13px; line-height: 1.6; color: var(--ink-soft); }
+.src-ed { outline: none; border-radius: 4px; padding: 0 3px; margin: 0 -3px;
+  border-bottom: 1px dashed rgba(168,134,60,.45); }
+.src-ed:hover { background: rgba(168,134,60,.10); }
+.src-ed:focus { background: rgba(168,134,60,.16); border-bottom-color: var(--gold); border-bottom-style: solid; }
+.src-ed.empty::before { content: attr(data-ph); color: rgba(107,100,89,.55); font-style: italic; }
+.src-ed:focus.empty::before { content: ""; }
+.src-hint { margin: 10px 0 0; font-size: 11.5px; line-height: 1.5; color: var(--ink-soft); font-style: italic; }
+@media print { .src-ed { border: 0; margin: 0; padding: 0; } .src-ed.empty::before { content: ""; } .src-hint { display: none; } }
 .src-warn { margin-top: 10px; padding: 8px 10px; border-left: 3px solid #9E2B3B;
   background: rgba(158,43,59,.06); font-size: 13px; line-height: 1.55; }
 /* subtab bar scrolls sideways instead of wrapping or clipping */
@@ -2295,24 +2303,66 @@ body.cmt-on #root { cursor: crosshair; }
   };
   function sv(x) { return (LANG === "nl" && SRCV[x]) ? SRCV[x] : x; }
 
-  function row(label, val) {
-    return val ? "<dt>" + esc(tt(label)) + "</dt><dd>" + esc(sv(val)) + "</dd>" : "";
+  /* The source cards used to be fixed text. A shop changes, a pack size
+     changes, something moves shelf, and the card stayed wrong until the file
+     was rebuilt. Every field on them is editable now and saves in this
+     browser, per language, so a Dutch edit does not overwrite the English one
+     and the other language is used only when its own is empty. */
+  var LS_SRC = "quatro-src-v1";
+  var SRCEDIT = null;
+  function srcEdits() { if (!SRCEDIT) SRCEDIT = load(LS_SRC, {}); return SRCEDIT; }
+  function srcGet(key, field, fallback) {
+    var e = srcEdits()[key];
+    if (e) {
+      var mine = e[field + "_" + LANG];
+      if (mine) return mine;
+      var other = e[field + "_" + (LANG === "nl" ? "en" : "nl")];
+      if (other) return other;
+    }
+    return sv(fallback) || "";
   }
+  function srcSet(key, field, val) {
+    var all = srcEdits();
+    if (!all[key]) all[key] = {};
+    all[key][field + "_" + LANG] = val;
+    save(LS_SRC, all);
+  }
+  /* Every field is drawn even when it is empty, so a missing pack size or
+     shelf can be filled in rather than simply not being there. */
+  function row(label, val, key, field) {
+    var shown = srcGet(key, field, val);
+    return "<dt>" + esc(tt(label)) + "</dt>" +
+      '<dd class="src-ed' + (shown ? "" : " empty") + '" contenteditable="true" ' +
+      'data-srck="' + esc(key) + '" data-srcf="' + esc(field) + '" data-ph="' +
+      et({ en: "not recorded, click to add", nl: "niet vastgelegd, klik om toe te voegen" }) +
+      '">' + esc(shown) + "</dd>";
+  }
+  document.addEventListener("blur", function (e) {
+    var el = e.target;
+    if (!el.dataset || !el.dataset.srck) return;
+    var val = el.textContent.trim();
+    srcSet(el.dataset.srck, el.dataset.srcf, val);
+    el.classList.toggle("empty", !val);
+  }, true);
 
   var sheet = document.getElementById("sheet"), scrim = document.getElementById("scrim");
-  function openSrc(title, v) {
+  function openSrc(title, v, key) {
     if (!sheet) return;
+    key = key || slug(title);
     var head = v.t === "house"
       ? '<span class="src-tag house">' + esc(tt({ en: "We make this", nl: "Dit maken wij zelf" })) + "</span>"
       : '<span class="src-tag bought">' + esc(tt({ en: "Bought in", nl: "Ingekocht" })) + "</span>";
     var body = '<dl class="src-row">' +
       (v.t === "house"
-        ? row({ en: "Made from", nl: "Gemaakt van" }, v.from) +
-          row({ en: "Yield",     nl: "Opbrengst" },   v.yield) +
-          row({ en: "Keeps",     nl: "Houdbaar" },    v.keeps)
-        : row({ en: "Supplier",  nl: "Leverancier" }, v.shop) +
-          row({ en: "Pack",      nl: "Verpakking" },  v.pack)) +
-      row({ en: "Lives in", nl: "Staat in" }, v.home) + "</dl>";
+        ? row({ en: "Made from", nl: "Gemaakt van" }, v.from,  key, "from") +
+          row({ en: "Yield",     nl: "Opbrengst" },   v.yield, key, "yield") +
+          row({ en: "Keeps",     nl: "Houdbaar" },    v.keeps, key, "keeps")
+        : row({ en: "Supplier",  nl: "Leverancier" }, v.shop,  key, "shop") +
+          row({ en: "Pack",      nl: "Verpakking" },  v.pack,  key, "pack")) +
+      row({ en: "Lives in", nl: "Staat in" }, v.home, key, "home") + "</dl>";
+    body += '<p class="src-hint">' +
+      et({ en: "Supplier, pack and where it lives are editable. Click one and type, it saves in this browser.",
+           nl: "Leverancier, verpakking en waar het staat zijn aan te passen. Klik erop en typ, het wordt in deze browser bewaard." }) + "</p>";
     if (v.note) body += '<p class="src-note">' + esc(sv(v.note)) + "</p>";
     if (v.warn) body += '<div class="src-warn"><b>' +
       esc(tt({ en: "Note.", nl: "Let op." })) + "</b> " + esc(sv(v.warn)) + "</div>";
@@ -2340,11 +2390,11 @@ body.cmt-on #root { cursor: crosshair; }
     var hit = lookup(raw);
     var title = String(raw).trim();
     if (!hit) {
-      openSrc(title, { t: "buy", shop: "Not yet recorded", pack: "Add this line to the patch block",
-                       home: "", warn: "No source recorded for this ingredient yet." });
+      openSrc(title, { t: "buy", shop: "", pack: "", home: "",
+                       warn: "No source recorded for this ingredient yet. The three fields are empty and editable: fill them in and they save." }, slug(title));
       return;
     }
-    openSrc(title, hit.v);
+    openSrc(title, hit.v, hit.key);
   }, true);
 
   /* keyboard access */
