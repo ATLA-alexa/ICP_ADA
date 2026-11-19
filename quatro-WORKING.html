@@ -754,13 +754,13 @@ var SECTIONS = [
         "Muddle 3 whole jalapenos, or 6 slices, seeds out as standard, with the lime and simple syrup in the mixing glass or tin.",
         "Add ice and stir 8 to 10 times.",
         "Fill the highball one third with crushed ice.",
-        "Ginger beer FIRST, to 1.5 cm below the rim. Then strain the jalapeno cordial mix in on top.",
+        "Ginger beer FIRST, to 1.5 cm below the rim. Then strain the jalapeno cordial mix in on top. The top should turn green.",
         "Cap with crushed ice if necessary, slap the mint sprig, add the jalapeno wheel."
       ], nl: [
         "Kneus 3 hele jalapenos, of 6 schijfjes, standaard zonder zaadjes, met de limoen en suikersiroop in het mengglas of de tin.",
         "Ijs erbij en 8 tot 10 keer roeren.",
         "Vul de highball voor een derde met crushed ice.",
-        "EERST ginger beer, tot 1,5 cm onder de rand. Zeef daarna de jalapenocordialmix erbovenop.",
+        "EERST ginger beer, tot 1,5 cm onder de rand. Zeef daarna de jalapenocordialmix erbovenop. De bovenkant hoort groen te worden.",
         "Indien nodig afdekken met crushed ice, tik het munttakje aan, schijfje jalapeno erbij."
       ]},
       table: null,
@@ -893,7 +893,7 @@ var SECTIONS = [
     {
       id: "tropical-velvet", name: "Tropical Velvet", price: null, tool: "shaker",
       swatch: "#C9973B", glass: { en: "Chilled martini coupe", nl: "Gekoelde martini coupe" }, ice: { en: "None in the glass", nl: "Geen ijs in het glas" },
-      method: { en: "Shake and fine strain", nl: "Shaken en fijn zeven" },
+      method: { en: "Dry shake, then shake and strain", nl: "Droog shaken, dan shaken en zeven" },
       desc: {
         en: "Passionfruit is all acid and perfume on its own. Apple and pear give it body and a gentle sweetness to sit against, vanilla rounds the edges. Shaken hard, strained fine, served up.",
         nl: "Passievrucht is op zichzelf alleen maar zuur en parfum. Appel en peer geven body en zachte zoetheid om op te rusten, vanille rondt de randen af. Hard geshaket, fijn gezeefd, opgediend up."
@@ -905,18 +905,21 @@ var SECTIONS = [
         { ref: "passionpuree", ml: 20 },
         { ref: "lime", ml: 10 },
         { ref: "vanilla", ml: 10 },
+        { ref: "eggfoam", ml: 0, note: { en: "10 ml egg white", nl: "10 ml eiwit" } },
         { ref: "passionfresh", ml: 0, note: { en: "Half, floated, garnish only", nl: "Half, drijvend, alleen garnering" } }
       ],
       bar: { en: [
         "Chill the coupe with ice.",
-        "Passionfruit juice, apple and pear, passionfruit puree, lime and vanilla into the small tin.",
-        "Add ice, cap with the large tin, shake hard 12 seconds.",
+        "Passionfruit juice, apple and pear, passionfruit puree, lime, vanilla and the egg white into the small tin.",
+        "Cap with the large tin and dry shake, no ice.",
+        "Add ice, cap again, shake hard 12 seconds.",
         "Fine strain into the chilled coupe.",
         "Float half a passion fruit."
       ], nl: [
         "Koel de coupe met ijs.",
-        "Passievruchtensap, appel en peer, passievruchtenpuree, limoen en vanille in de kleine tin.",
-        "Ijs erbij, sluit met de grote tin, shake 12 seconden hard.",
+        "Passievruchtensap, appel en peer, passievruchtenpuree, limoen, vanille en het eiwit in de kleine tin.",
+        "Sluit met de grote tin en droog shaken, zonder ijs.",
+        "Ijs erbij, opnieuw sluiten, 12 seconden hard shaken.",
         "Fijn zeven in de gekoelde coupe.",
         "Laat een halve passievrucht drijven."
       ]},
@@ -937,24 +940,23 @@ var SECTIONS = [
         { ref: "pineapple", ml: 150 },
         { ref: "coconutcream", ml: 50 },
         { ref: "cocolopez", ml: 45 },
-        { ref: "condensed", ml: 20 },
         { ref: "ice", ml: 0, note: { en: "100 g ice cubes, or 1 blue scoop, into the blender", nl: "100 g ijsblokjes, of 1 blauwe schep, in de blender" } },
         { ref: "pineapplewedge", ml: 0, note: { en: "3 bigger wedges, the AH garnish", nl: "3 grotere stukken, de AH-garnering" } }
       ],
       bar: { en: [
-        "Everything into the blender: 150 pineapple, 50 coconut cream, 45 Coco Lopez, 20 condensed milk, 100 g ice or 1 blue scoop.",
+        "Everything into the blender: 150 pineapple, 50 coconut cream, 45 Coco Lopez, 100 g ice or 1 blue scoop.",
         "Blend until creamy.",
         "Pour into the hurricane glass.",
         "Three bigger pineapple wedges, the AH garnish."
       ], nl: [
-        "Alles in de blender: 150 ananas, 50 kokosroom, 45 Coco Lopez, 20 gecondenseerde melk, 100 g ijs of 1 blauwe schep.",
+        "Alles in de blender: 150 ananas, 50 kokosroom, 45 Coco Lopez, 100 g ijs of 1 blauwe schep.",
         "Blend tot het romig is.",
         "Schenk in het hurricaneglas.",
         "Drie grotere stukken ananas, de AH-garnering."
       ]},
       table: null,
-      say: { en: ["It is blended, not shaken, so it comes out thick. The condensed milk is what carries it."],
-             nl: ["Hij is geblend, niet geshaket, dus hij komt er dik uit. De gecondenseerde melk draagt hem."] }
+      say: { en: ["It is blended, not shaken, so it comes out thick. The coconut cream and the Coco Lopez are what carry it."],
+             nl: ["Hij is geblend, niet geshaket, dus hij komt er dik uit. De kokosroom en de Coco Lopez dragen hem."] }
     }
   ]
 },
@@ -3581,7 +3583,7 @@ body.cmt-on #root { cursor: crosshair; }
       b:[[{en:"Mixing glass",nl:"Mengglas"},{en:"3 whole jalapenos or 6 slices, seeds out · 20 lime · 10 simple · muddle",nl:"3 hele jalapenos of 6 schijfjes, zonder zaadjes · 20 limoen · 10 suikersiroop · kneuzen"}],
          [{en:"Stir",nl:"Roeren"},{en:"Ice in, 8 to 10",nl:"Ijs erbij, 8 tot 10 keer"}],
          [{en:"Glass",nl:"Glas"},{en:"One third crushed ice",nl:"Voor een derde crushed ice"}],
-         [{en:"Finish",nl:"Afmaken"},{en:"Ginger beer FIRST, to 1.5 cm · then strain the jalapeno mix in on top · cap with crushed if necessary",nl:"EERST gemberbier, tot 1,5 cm · zeef daarna de jalapenomix erbovenop · indien nodig afdekken met crushed"}],
+         [{en:"Finish",nl:"Afmaken"},{en:"Ginger beer FIRST, to 1.5 cm · then strain the jalapeno mix in on top, the top should turn green · cap with crushed if necessary",nl:"EERST gemberbier, tot 1,5 cm · zeef daarna de jalapenomix erbovenop, de bovenkant hoort groen te worden · indien nodig afdekken met crushed"}],
          [{en:"Garnish",nl:"Garnering"},{en:"Mint sprig, slapped once · jalapeno wheel, seeds out",nl:"Munttakje, een keer aangetikt · jalapenowiel, zonder zaadjes"}]],
       say:{en:"The heat lands first, the ginger finishes it. Ask before leaving the seeds in.",nl:"De hitte komt eerst, de gember maakt het af. Vraag het voor je de zaadjes laat zitten."} },
 
@@ -3616,19 +3618,19 @@ body.cmt-on #root { cursor: crosshair; }
       say:{en:"The grenadine is not in the glass when it leaves the bar. It goes on at the table.",nl:"De grenadine zit er nog niet in als het glas de bar verlaat. Die gaat er aan tafel op."} },
 
     { id:"tropical-velvet", name:"Tropical Velvet", sw:"#C9973B",
-      spec:{en:"Chilled coupe  ·  No ice in the glass  ·  Shake and fine strain", nl:"Gekoelde coupe  ·  Geen ijs in het glas  ·  Shaken en fijn zeven"},
+      spec:{en:"Chilled coupe  ·  No ice in the glass  ·  Dry shake, then shake and strain", nl:"Gekoelde coupe  ·  Geen ijs in het glas  ·  Droog shaken, dan shaken en zeven"},
       b:[[{en:"Prep",nl:"Voorbereiden"},{en:"Ice into the coupe",nl:"Ijs in de coupe"}],
-         [{en:"Tin",nl:"Tin"},{en:"40 passionfruit juice · 30 apple-pear · 20 passionfruit puree · 10 lime · 10 vanilla",nl:"40 passievruchtensap · 30 appel-peer · 20 passievruchtenpuree · 10 limoen · 10 vanille"}],
-         [{en:"Shake",nl:"Shaken"},{en:"Ice · cap · hard 12 seconds",nl:"Ijs · sluiten · hard 12 seconden"}],
+         [{en:"Tin",nl:"Tin"},{en:"40 passionfruit juice · 30 apple-pear · 20 passionfruit puree · 10 lime · 10 vanilla · 10 egg white",nl:"40 passievruchtensap · 30 appel-peer · 20 passievruchtenpuree · 10 limoen · 10 vanille · 10 eiwit"}],
+         [{en:"Shake",nl:"Shaken"},{en:"Dry shake first, no ice. Then ice · cap · hard 12 seconds",nl:"Eerst droog shaken, zonder ijs. Dan ijs · sluiten · hard 12 seconden"}],
          [{en:"Finish",nl:"Afmaken"},{en:"Fine strain to 1 cm · float half a passion fruit",nl:"Fijn zeven tot 1 cm · een halve passievrucht laten drijven"}]],
       say:{en:"Passionfruit alone is sharp. The apple and pear gives it somewhere to sit.",nl:"Passievrucht op zich is scherp. De appel-peer geeft hem een bodem."} },
 
     { id:"pina-colada", name:"Pina Colada", sw:"#E7DFCF",
       spec:{en:"Hurricane  ·  Blended in  ·  Blend", nl:"Hurricane  ·  Meegeblend  ·  Blenden"},
-      b:[[{en:"Blender",nl:"Blender"},{en:"150 pineapple · 50 coconut cream · 45 Coco Lopez · 20 condensed milk · 10 lime · 100 g ice or 1 blue scoop",nl:"150 ananas · 50 kokosroom · 45 Coco Lopez · 20 gecondenseerde melk · 10 limoen · 100 g ijs of 1 blauwe schep"}],
+      b:[[{en:"Blender",nl:"Blender"},{en:"150 pineapple · 50 coconut cream · 45 Coco Lopez · 10 lime · 100 g ice or 1 blue scoop",nl:"150 ananas · 50 kokosroom · 45 Coco Lopez · 10 limoen · 100 g ijs of 1 blauwe schep"}],
          [{en:"Blend",nl:"Blenden"},{en:"Until creamy",nl:"Tot het romig is"}],
          [{en:"Finish",nl:"Afmaken"},{en:"Pour into the hurricane to 1 cm · 3 bigger pineapple wedges, the AH garnish",nl:"In de hurricane schenken tot 1 cm · 3 grotere stukken ananas, de AH-garnering"}]],
-      say:{en:"Blended, not shaken, so it pours thick. The condensed milk carries it.",nl:"Geblend, niet geshaket, dus hij schenkt dik. De gecondenseerde melk draagt hem."} }
+      say:{en:"Blended, not shaken, so it pours thick. The coconut cream and Coco Lopez carry it.",nl:"Geblend, niet geshaket, dus hij schenkt dik. De kokosroom en Coco Lopez dragen hem."} }
   ];
 
   function bkPage(d) {
