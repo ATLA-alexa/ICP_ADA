@@ -1568,6 +1568,12 @@ function renderFuture() {
     '<p class="section-note">' + (LANG === "nl"
       ? "Geparkeerd, niet geschrapt. Deze drankjes staan vandaag niet op de kaart, zodat mocktails en koffie eerst afgemaakt worden. De recepten blijven hier klaarstaan."
       : "Parked, not cancelled. These drinks are off today's menu so the mocktails and coffee get finished first. Their recipes stay ready here.") + "</p></div>";
+  /* Moved off the Rail tab on 19 November: the point of the note is what the
+     Eminence Matcha Mojito will need when it arrives, and it lives here. */
+  h += '<div class="flag"><strong>' + esc(LANG === "nl" ? "Let op" : "Note") + "</strong>" +
+    esc(LANG === "nl"
+      ? "De Eminence Matcha Mojito gaat op dezelfde Jumbo appel-peer als The Hulk en Tropical Velvet. Die twee houden het groene railslot nu al bezet, dus er is geen nieuw slot nodig als deze erbij komt."
+      : "The Eminence Matcha Mojito will take the same Jumbo apple-pear as The Hulk and Tropical Velvet. Those two already hold the green rail slot, so no new slot is needed when this one arrives.") + "</div>";
   SECTIONS.forEach(function (sec) {
     if (!sec.future) return;
     h += sectionHTML(sec);
