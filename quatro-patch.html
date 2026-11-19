@@ -41,6 +41,21 @@
 .src-warn { margin-top: 10px; padding: 8px 10px; border-left: 3px solid #9E2B3B;
   background: rgba(158,43,59,.06); font-size: 13px; line-height: 1.55; }
 /* subtab bar scrolls sideways instead of wrapping or clipping */
+.rail-st td { background: rgba(168,134,60,.16); border-bottom: 1px solid var(--gold-pale);
+  font-family: 'Marcellus', Georgia, serif; font-size: 12px; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--gold); }
+.rail-st .st-d { display: block; font-family: var(--body); letter-spacing: .02em;
+  text-transform: none; font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+.rail-mid td { background: var(--limestone-deep); font-size: 12px; font-style: italic;
+  color: var(--ink-soft); }
+tr.rail-r { cursor: pointer; }
+tr.rail-r:hover td { background: rgba(168,134,60,.07); }
+tr.rail-r.on td { background: rgba(168,134,60,.12); }
+.why-c { float: right; color: var(--gold); font-size: 14px; line-height: 1; padding-left: 8px; }
+.rail-why td { background: var(--limestone); }
+.rw { margin: 0; font-size: 12.5px; line-height: 1.55; }
+.slot-dot.none { background: repeating-linear-gradient(45deg, #ddd, #ddd 3px, #fff 3px, #fff 6px); }
+@media print { .why-c { display: none; } }
 .subtabs { display: flex; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden;
   -webkit-overflow-scrolling: touch; scrollbar-width: none; scroll-snap-type: x proximity; }
 .subtabs::-webkit-scrollbar { display: none; }
@@ -1479,6 +1494,7 @@ body.cmt-on #root { cursor: crosshair; }
      squeeze bottles on the tray. Prep gains a pre-batch instructions
      column. Every note on both tabs is editable and saves.
      ================================================================== */
+  var RAILWHY = -1;   /* which rail slot is open, -1 for none */
   var LS_NOTES = "quatro-notes-v1";
   var NOTES = load(LS_NOTES, {});
   /* Bilingual helper for this whole patch block. Takes a plain string, which
@@ -1506,24 +1522,43 @@ body.cmt-on #root { cursor: crosshair; }
     el.classList.toggle("empty", !el.textContent.trim());
   }, true);
 
+  /* Left to right as the rail actually stands, split across the two stations
+     with the Monin bottles between them. The sixth field is why the slot sits
+     where it does: tap a slot to read it, and there is a note box under it so
+     the reason can be written down the first time someone has to ask. */
   var RAIL2 = [
-    ["#4C4C9D",{en:"Blue",nl:"Blauw"},{en:"Butterfly pea tea",nl:"Vlindererwtthee"},"Lychee Siren, Ocean Mojito"],
-    ["#FFFFFF",{en:"White",nl:"Wit"},{en:"Coconut water and lychee juice",nl:"Kokoswater en lycheesap"},"Lychee Siren"],
-    ["#E8791D",{en:"Orange",nl:"Oranje"},{en:"Orange juice",nl:"Sinaasappelsap"},"Hibiscus Royale, Cosmopolitan, Amsterdam Sunrise"],
-    ["#D9C24E",{en:"Yellow",nl:"Geel"},{en:"Passionfruit juice",nl:"Passievruchtensap"},"Tropical Velvet"],
-    ["#C9973B",{en:"Gold",nl:"Goud"},{en:"Pineapple juice",nl:"Ananassap"},"Pina Colada"],
-    ["#3E7A32",{en:"Green",nl:"Groen"},{en:"Apple and pear juice, Jumbo DUO smaak",nl:"Appel-perensap, Jumbo DUO smaak"},"The Hulk, Tropical Velvet"],
-    ["#23201C",{en:"Black",nl:"Zwart"},{en:"Cranberry juice",nl:"Cranberrysap"},"Cosmopolitan"],
-    ["#9E2B3B",{en:"Red",nl:"Rood"},{en:"Hibiscus tea, strong",nl:"Hibiscusthee, sterk"},"Hibiscus Royale"]
+    ["L","#C9973B",{en:"Gold",nl:"Goud"},{en:"Pineapple juice",nl:"Ananassap"},"Pina Colada",
+      {en:"Furthest left on purpose. The Pina Colada is blended, and the blender sits directly behind this spot. Any further right and making one would cut straight across the rest of production.",
+       nl:"Met opzet helemaal links. De Pina Colada wordt geblend en de blender staat direct achter deze plek. Verder naar rechts zou het maken ervan dwars door de rest van de productie lopen."}],
+    ["L","#9E2B3B",{en:"Red",nl:"Rood"},{en:"Hibiscus tea, strong",nl:"Hibiscusthee, sterk"},"Hibiscus Royale",""],
+    ["L","#E8791D",{en:"Orange",nl:"Oranje"},{en:"Orange juice",nl:"Sinaasappelsap"},"Hibiscus Royale, Cosmopolitan, Amsterdam Sunrise",""],
+    ["L","#23201C",{en:"Black",nl:"Zwart"},{en:"Cranberry juice",nl:"Cranberrysap"},"Cosmopolitan",""],
+    ["R","#D9C24E",{en:"Yellow",nl:"Geel"},{en:"Passionfruit juice",nl:"Passievruchtensap"},"Tropical Velvet",""],
+    ["R","#3E7A32",{en:"Green",nl:"Groen"},{en:"Apple and pear juice, Jumbo DUO smaak",nl:"Appel-perensap, Jumbo DUO smaak"},"The Hulk, Tropical Velvet",""],
+    ["R","","",{en:"Lychee juice",nl:"Lycheesap"},"Lychee Siren",""],
+    ["R","#4C4C9D",{en:"Blue",nl:"Blauw"},{en:"BPT-coconut mixture",nl:"BPT-kokosmengsel"},"Lychee Siren, Ocean Mojito",""]
   ];
+  var RAIL_ST = {
+    L: { label:{en:"Left station",nl:"Linkerstation"},
+         drinks:{en:"Pina Colada · Hibiscus Royale · Cosmopolitan · Ocean Mojito, which is a hybrid",
+                 nl:"Pina Colada · Hibiscus Royale · Cosmopolitan · Ocean Mojito, die een hybride is"} },
+    R: { label:{en:"Right station",nl:"Rechterstation"},
+         drinks:{en:"Ocean Mojito, which is a hybrid · Tropical Velvet · Spicy Jalapeno Mule · The Hulk · Lychee Siren",
+                 nl:"Ocean Mojito, die een hybride is · Tropical Velvet · Spicy Jalapeno Mule · The Hulk · Lychee Siren"} }
+  };
+  var RAIL_MID = { en:"Then the Monin bottles in the middle, spouted and standing: sugar syrup, vanilla, grenadine",
+                   nl:"Dan de Monin-flessen in het midden, met schenktuit en rechtop: suikersiroop, vanille, grenadine" };
 
   var STATION = [
-    [{en:"In front of you",nl:"Recht voor je"},
-     {en:"The speedrail, left to right: blue butterfly pea, white coconut and lychee, orange orange juice, yellow passionfruit, gold pineapple, green apple-pear, black cranberry, red hibiscus.",
-      nl:"De speedrail, van links naar rechts: blauw vlindererwt, wit kokos en lychee, oranje sinaasappelsap, geel passievrucht, goud ananas, groen appel-peer, zwart cranberry, rood hibiscus."}],
-    [{en:"Turn right",nl:"Draai naar rechts"},
-     {en:"The Monin bottles, spouted and standing: sugar syrup, vanilla, grenadine.",
-      nl:"De Monin-flessen, met schenktuit en rechtop: suikersiroop, vanille, grenadine."}],
+    [{en:"In front of you, left station",nl:"Recht voor je, linkerstation"},
+     {en:"Gold pineapple, red hibiscus, orange orange juice, black cranberry. This end builds the Pina Colada, Hibiscus Royale and Cosmopolitan, and half of the Ocean Mojito.",
+      nl:"Goud ananas, rood hibiscus, oranje sinaasappelsap, zwart cranberry. Aan dit eind maak je de Pina Colada, Hibiscus Royale en Cosmopolitan, en de helft van de Ocean Mojito."}],
+    [{en:"In the middle",nl:"In het midden"},
+     {en:"The Monin bottles, spouted and standing: sugar syrup, vanilla, grenadine. They sit BETWEEN the two stations now, not off to one side, so either end can reach them.",
+      nl:"De Monin-flessen, met schenktuit en rechtop: suikersiroop, vanille, grenadine. Ze staan nu TUSSEN de twee stations, niet aan een kant, zodat beide einden erbij kunnen."}],
+    [{en:"Carrying on, right station",nl:"Verder, rechterstation"},
+     {en:"Yellow passionfruit, green apple and pear, lychee juice, blue BPT-coconut mixture. This end builds Tropical Velvet, the Spicy Jalapeno Mule, The Hulk and the Lychee Siren, and the other half of the Ocean Mojito.",
+      nl:"Geel passievrucht, groen appel-peer, lycheesap, blauw BPT-kokosmengsel. Aan dit eind maak je Tropical Velvet, de Spicy Jalapeno Mule, The Hulk en de Lychee Siren, en de andere helft van de Ocean Mojito."}],
     [{en:"Next, the tray",nl:"Dan het blad"},
      {en:"Every squeeze bottle. Boiron lime, Boiron lemon, lychee cordial, lychee-lime cordial, rosemary-thyme maple cordial, Jade's mint syrup, cassis, coconut cream, condensed milk, concentrated butterfly pea.",
       nl:"Alle knijpflessen. Boiron limoen, Boiron citroen, lycheecordial, lychee-limoencordial, rozemarijn-tijm-ahornsiroop, muntsiroop van Jade, cassis, kokosroom, gecondenseerde melk, geconcentreerde vlindererwt."}],
@@ -1577,20 +1612,49 @@ body.cmt-on #root { cursor: crosshair; }
            nl: "Beide zijn gepasteuriseerde Boiron-puree en staan in knijpflessen op het blad. Niets in de speedrail wordt met de hand geperst." }) +
       '<div style="margin-top:9px"><b>' + et(DAYDOT.lead) + "</b> " + et(DAYDOT.body) +
       " <b>" + et(DAYDOT.days) + "</b>. " + et(DAYDOT.fifo) + "</div></div>" +
+      '<p class="legend" style="margin:0 0 8px">' +
+      et({ en: "Left to right, as it stands. Tap any slot to see why it sits there.",
+           nl: "Van links naar rechts, zoals hij staat. Tik op een slot om te zien waarom hij daar staat." }) + "</p>" +
       '<div class="tablewrap"><table class="wide"><thead><tr>' +
       "<th>" + et({ en: "Slot", nl: "Slot" }) + "</th>" +
       "<th>" + et({ en: "Colour", nl: "Kleur" }) + "</th>" +
       "<th>" + et({ en: "Contents", nl: "Inhoud" }) + "</th>" +
       "<th>" + et({ en: "Feeds", nl: "Gaat naar" }) + "</th></tr></thead><tbody>" +
       RAIL2.map(function (r, i) {
-        return "<tr><td><span class=\"slot\"><span class=\"slot-n\">" + (i + 1) + "</span></span></td>" +
-          '<td><span class="slot"><span class="slot-dot" style="background:' + r[0] +
-            (r[0] === "#FFFFFF" ? ";border:1px solid var(--gold-pale)" : "") + '"></span>' + et(r[1]) + "</span></td>" +
-          "<td>" + et(r[2]) + "</td><td>" + et(r[3]) + "</td></tr>";
+        var h = "";
+        /* A station header before its first slot, and the Monin bottles
+           between the two, because that is the order you walk past them. */
+        if (i === 0 || r[0] !== RAIL2[i - 1][0]) {
+          if (i !== 0) h += '<tr class="rail-mid"><td colspan="4">' + et(RAIL_MID) + "</td></tr>";
+          h += '<tr class="rail-st"><td colspan="4">' + et(RAIL_ST[r[0]].label) +
+               '<span class="st-d">' + et(RAIL_ST[r[0]].drinks) + "</span></td></tr>";
+        }
+        var open = RAILWHY === i;
+        h += '<tr class="rail-r' + (open ? " on" : "") + '" data-why="' + i + '">' +
+          '<td><span class="slot"><span class="slot-n">' + (i + 1) + "</span></span></td>" +
+          '<td><span class="slot">' + (r[1]
+            ? '<span class="slot-dot" style="background:' + r[1] +
+              (r[1] === "#FFFFFF" ? ";border:1px solid var(--gold-pale)" : "") + '"></span>' + et(r[2])
+            : '<span class="slot-dot none"></span><span class="qopen">' +
+              et({ en: "not set", nl: "niet vastgelegd" }) + "</span>") + "</span></td>" +
+          "<td>" + et(r[3]) + "</td><td>" + et(r[4]) +
+          '<span class="why-c">' + (open ? "&minus;" : "+") + "</span></td></tr>";
+        if (open) {
+          h += '<tr class="rail-why"><td colspan="4">' +
+            (tt(r[5]) ? '<p class="rw">' + et(r[5]) + "</p>"
+                      : '<p class="rw qdash">' + et({ en: "No reason written down for this slot yet.",
+                                                      nl: "Voor dit slot is nog geen reden opgeschreven." }) + "</p>") +
+            noteBox("rail-why-" + i, { en: "Why this slot sits here.", nl: "Waarom dit slot hier staat." }) +
+            "</td></tr>";
+        }
+        return h;
       }).join("") + "</tbody></table></div>" +
       '<div class="qflag" style="margin-top:10px">' +
       et({ en: "Passionfruit and pineapple both read yellow in the photo. They are written here as yellow and gold so they can be told apart at speed. Two distinct caps needed.",
            nl: "Passievrucht en ananas zien er op de foto allebei geel uit. Ze staan hier als geel en goud zodat je ze in het tempo van de service uit elkaar houdt. Twee duidelijk verschillende doppen nodig." }) + "</div>" +
+      '<div class="qflag">' +
+      et({ en: "Two things on this layout are still open. Slot 7, lychee juice, has no colour. And the Ocean Mojito is marked a hybrid across both stations, with the reason still to be written into the walkthrough below.",
+           nl: "Twee dingen aan deze indeling staan nog open. Slot 7, lycheesap, heeft geen kleur. En de Ocean Mojito staat als hybride over beide stations, met de reden nog te schrijven in de uitleg hieronder." }) + "</div>" +
       '<div class="panel"><h3>' +
       et({ en: "The station, clockwise", nl: "Het station, met de klok mee" }) + "</h3>" +
       '<ol class="qsteps">' + STATION.map(function (s) {
@@ -1886,6 +1950,16 @@ body.cmt-on #root { cursor: crosshair; }
   }
 
   document.addEventListener("click", function (e) {
+    var w = e.target.closest && e.target.closest("[data-why]");
+    /* Not while typing in the note box inside an open slot. */
+    if (w && !(e.target.closest && e.target.closest(".qn"))) {
+      var n = Number(w.dataset.why);
+      RAILWHY = (RAILWHY === n) ? -1 : n;
+      var y = window.scrollY || 0;
+      render();
+      window.scrollTo(0, y);
+      return;
+    }
     var g = e.target.closest && e.target.closest("[data-goto]");
     if (g && typeof TAB !== "undefined") { TAB = g.dataset.goto; render(); }
   });
@@ -3151,8 +3225,224 @@ body.cmt-on #root { cursor: crosshair; }
     };
   })();
 
+  /* ---------------- 10. at a glance: glass, kit, build to scale ----------------
+     Tap a drink on the menu and see the build drawn from the build list
+     itself, so the picture cannot drift away from the numbers on the
+     Builds tab. Order runs bottom to top: first in the build, first in
+     the glass. */
+(function () {
+  "use strict";
+
+  /* Ingredient colours, only for drawing. Nothing reads these as data. */
+  var GCOL = {
+    lychee: "#E8C2CF", lycheecordial: "#E3B9C8", lycheelime: "#D9B6B0",
+    coconutw: "#F6F1E4", bptcoconut: "#4C4C9D", peatea: "#4C4C9D",
+    lime: "#8FBF5A", lemon: "#E4D35C", orange: "#E8791D", cranberry: "#9E1F3A",
+    hibiscus: "#9E2B3B", strawpuree: "#D4566A", passionjuice: "#E8A020",
+    passionpuree: "#E09018", applepear: "#D7DE92", cloudyapple: "#DCDFA8",
+    pineapple: "#E8C84A", coconutcream: "#FBF7EC", cocolopez: "#F8F0DC",
+    cassis: "#4A1E3C", mintsyrup: "#8CC06E", simple: "#F2EDE2",
+    vanilla: "#E4D9BF", grenadine: "#B3123A", gingerbeer: "#D9A441",
+    soda: "#EAF4F8", sparklemon: "#EEF3DC", cordial: "#8A6134",
+    matcha: "#7A9A5B", milk: "#FFFFFF", ice: "#E8F4F8"
+  };
+
+  /* What each drink takes off the back bar. Written out per drink rather
+     than guessed from the method line, because the method line does not
+     know about the torch, the brute or the zester. */
+  var KIT = {
+    "lychee-siren": { en: ["Boston tins", "Muddler", "Hawthorne strainer", "Jigger", "Crushed ice scoop", "Brute for the tray"],
+                      nl: ["Boston tins", "Muddler", "Hawthorne-zeef", "Jigger", "Schep voor crushed ice", "Brute voor het blad"] },
+    "forest-fairy": { en: ["Mixing glass", "Bar spoon", "Hawthorne strainer", "Jigger", "Blowtorch", "Crushed ice scoop", "Rim bowl"],
+                      nl: ["Mengglas", "Barlepel", "Hawthorne-zeef", "Jigger", "Brander", "Schep voor crushed ice", "Randbakje"] },
+    "the-hulk": { en: ["Boston tins", "Muddler", "Hawthorne strainer", "Fine strainer", "Jigger"],
+                  nl: ["Boston tins", "Muddler", "Hawthorne-zeef", "Fijne zeef", "Jigger"] },
+    "hibiscus-royale": { en: ["Boston tins", "Muddler", "Hawthorne strainer", "Jigger"],
+                         nl: ["Boston tins", "Muddler", "Hawthorne-zeef", "Jigger"] },
+    "jalapeno-mule": { en: ["Mixing glass", "Muddler", "Bar spoon", "Hawthorne strainer", "Jigger", "Crushed ice scoop"],
+                       nl: ["Mengglas", "Muddler", "Barlepel", "Hawthorne-zeef", "Jigger", "Schep voor crushed ice"] },
+    "ocean-mojito": { en: ["Boston tins", "Muddler", "Fine strainer", "Jigger", "Bar spoon to churn", "Crushed ice scoop"],
+                      nl: ["Boston tins", "Muddler", "Fijne zeef", "Jigger", "Barlepel om te churnen", "Schep voor crushed ice"] },
+    "cosmopolitan": { en: ["Boston tins", "Hawthorne strainer", "Fine strainer", "Jigger", "Zester"],
+                      nl: ["Boston tins", "Hawthorne-zeef", "Fijne zeef", "Jigger", "Zesteur"] },
+    "amsterdam-sunrise": { en: ["Jigger", "Crushed ice scoop", "Brute for the tray", "Zester"],
+                           nl: ["Jigger", "Schep voor crushed ice", "Brute voor het blad", "Zesteur"] },
+    "tropical-velvet": { en: ["Boston tins", "Hawthorne strainer", "Fine strainer", "Jigger"],
+                         nl: ["Boston tins", "Hawthorne-zeef", "Fijne zeef", "Jigger"] },
+    "pina-colada": { en: ["Blender", "Jigger", "Blue ice scoop"],
+                     nl: ["Blender", "Jigger", "Blauwe ijsschep"] }
+  };
+
+  /* Fall-back for the matcha and soft drinks, which are built in the glass.
+     Read off the method line so a new drink gets something sensible without
+     anyone having to remember this list exists. */
+  function kitFor(d) {
+    var named = KIT[d.id];
+    if (named) return named[LANG] || named.en;
+    var m = (tt(d.method) || "").toLowerCase() + " " + (tt(d.ice) || "").toLowerCase();
+    var out = [];
+    function add(en, nl) { out.push(LANG === "nl" ? nl : en); }
+    if (m.indexOf("whisk") > -1) add("Matcha bowl and whisk", "Matchakom en garde");
+    if (m.indexOf("shake") > -1) add("Boston tins", "Boston tins");
+    if (m.indexOf("blend") > -1) add("Blender", "Blender");
+    if (m.indexOf("stir") > -1 || m.indexOf("build") > -1) add("Bar spoon", "Barlepel");
+    if (m.indexOf("strain") > -1) add("Hawthorne strainer", "Hawthorne-zeef");
+    if (m.indexOf("crushed") > -1) add("Crushed ice scoop", "Schep voor crushed ice");
+    add("Jigger", "Jigger");
+    return out;
+  }
+
+  /* Outlines, in a 60 x 164 box. Drawn rather than approximated with border
+     radius, because a hurricane and a coupe have to be tellable apart at a
+     glance and rounded corners cannot do it. fill is the band of the box the
+     liquid may occupy. */
+  var SHAPE = {
+    tall: {
+      body: "M9,5 L9,148 Q9,158 19,158 L41,158 Q51,158 51,148 L51,5 Z",
+      fill: [6, 157], stem: ""
+    },
+    hurricane: {
+      body: "M8,5 C8,27 14,43 14,61 C14,79 8,95 10,114 C12,134 20,146 30,146 " +
+            "C40,146 48,134 50,114 C52,95 46,79 46,61 C46,43 52,27 52,5 Z",
+      fill: [6, 145],
+      stem: "M24,148 L36,148 L36,152 Q46,154 46,158 L14,158 Q14,154 24,152 Z"
+    },
+    coupe: {
+      body: "M5,8 C5,8 7,62 30,62 C53,62 55,8 55,8 Z",
+      fill: [9, 61],
+      stem: "M28,62 L32,62 L32,146 Q32,150 42,152 Q48,154 48,158 L12,158 " +
+            "Q12,154 18,152 Q28,150 28,146 Z"
+    }
+  };
+
+  function glassShape(d) {
+    var g = (tt(d.glass) || "").toLowerCase();
+    if (g.indexOf("coupe") > -1 || g.indexOf("coppa") > -1 || g.indexOf("martini") > -1) return "coupe";
+    if (g.indexOf("hurricane") > -1) return "hurricane";
+    return "tall";
+  }
+
+  /* Bands are given a floor of a few units each so a 10 ml dash still shows,
+     then the rest of the height is shared out by volume. Top of the list is
+     the top of the glass. */
+  var UID = 0;
+  function glassSVG(shape, pours) {
+    var sp = SHAPE[shape] || SHAPE.tall;
+    var top = sp.fill[0], bot = sp.fill[1], H = bot - top;
+    var n = pours.length, floor = Math.min(5, H / (n * 2.2));
+    var total = 0, i;
+    for (i = 0; i < n; i++) total += pours[i].ml;
+    var id = "agc" + (++UID);
+
+    var rects = "", y = top;
+    for (i = n - 1; i >= 0; i--) {           /* build list is bottom first */
+      var h = floor + (H - n * floor) * (pours[i].ml / total);
+      rects += '<rect x="0" y="' + y.toFixed(2) + '" width="60" height="' +
+               (h + 0.4).toFixed(2) + '" fill="' + (GCOL[pours[i].ref] || "#CFC6B4") + '"/>';
+      y += h;
+    }
+
+    return '<svg class="ag-glass" data-shape="' + shape + '" viewBox="0 0 60 164" width="60" height="164" ' +
+           'role="img" aria-hidden="true" focusable="false">' +
+           '<defs><clipPath id="' + id + '"><path d="' + sp.body + '"/></clipPath></defs>' +
+           (sp.stem ? '<path d="' + sp.stem + '" class="ag-stem"/>' : "") +
+           '<path d="' + sp.body + '" class="ag-well"/>' +
+           '<g clip-path="url(#' + id + ')">' + rects + "</g>" +
+           '<path d="' + sp.body + '" class="ag-edge"/>' +
+           "</svg>";
+  }
+
+  function vizHTML(d) {
+    var pours = [], extras = [], i, b, ing;
+    for (i = 0; i < (d.build || []).length; i++) {
+      b = d.build[i];
+      ing = ING[b.ref];
+      if (!ing) continue;
+      if (b.ml > 0) pours.push({ ref: b.ref, ml: b.ml, name: tt(ing.name), note: b.note ? tt(b.note) : "" });
+      else extras.push({ name: tt(ing.name), note: b.note ? tt(b.note) : "" });
+    }
+
+    var shape = glassShape(d);
+    var h = '<div class="ag">';
+
+    /* ---- glass + kit ---- */
+    h += '<div class="ag-facts">' +
+         '<div><span class="ag-k">' + et({ en: "Glass", nl: "Glas" }) + '</span>' +
+         '<span class="ag-v">' + esc(tt(d.glass) || "—") + "</span></div>" +
+         '<div><span class="ag-k">' + et({ en: "Ice", nl: "IJs" }) + '</span>' +
+         '<span class="ag-v">' + esc(tt(d.ice) || "—") + "</span></div>" +
+         '<div><span class="ag-k">' + et({ en: "Method", nl: "Methode" }) + '</span>' +
+         '<span class="ag-v">' + esc(tt(d.method) || "—") + "</span></div>" +
+         "</div>";
+
+    /* ---- the stack ---- */
+    if (pours.length) {
+      var total = 0;
+      for (i = 0; i < pours.length; i++) total += pours[i].ml;
+
+      /* Drawn top first, so the list reads the same way down the page as the
+         liquid sits in the glass. The build list is bottom first. */
+      var legend = "";
+      for (i = pours.length - 1; i >= 0; i--) {
+        var p = pours[i];
+        var col = GCOL[p.ref] || "#CFC6B4";
+        legend += '<li><i style="background:' + col + '"></i>' +
+                  '<span class="ag-nm">' + esc(p.name) + "</span>" +
+                  '<span class="ag-ml">' + p.ml + " ml</span>" +
+                  (p.note ? '<span class="ag-no">' + esc(p.note) + "</span>" : "") +
+                  "</li>";
+      }
+
+      h += '<div class="ag-viz">' + glassSVG(shape, pours) +
+           '<ol class="ag-leg">' + legend + "</ol>" +
+           "</div>" +
+           '<p class="ag-tot">' + et({ en: "Drawn to scale, bottom of the glass first.", nl: "Op schaal getekend, onderkant van het glas eerst." }) +
+           " " + total + " ml" + et({ en: " of liquid in total.", nl: " vloeistof in totaal." }) + "</p>";
+    }
+
+    /* ---- everything with no millilitres ---- */
+    if (extras.length) {
+      h += '<div class="ag-sec">' + et({ en: "Also in or on it", nl: "Ook erin of erop" }) + "</div><ul class=\"ag-x\">";
+      for (i = 0; i < extras.length; i++) {
+        h += "<li>" + esc(extras[i].name) + (extras[i].note ? ' <span class="ag-no">' + esc(extras[i].note) + "</span>" : "") + "</li>";
+      }
+      h += "</ul>";
+    }
+
+    /* ---- kit ---- */
+    var kit = kitFor(d);
+    if (kit.length) {
+      h += '<div class="ag-sec">' + et({ en: "What you need to make it", nl: "Wat je nodig hebt om hem te maken" }) + "</div><div class=\"ag-kit\">";
+      for (i = 0; i < kit.length; i++) h += '<span class="ag-tool">' + esc(kit[i]) + "</span>";
+      h += "</div>";
+    }
+
+    return h + "</div>";
+  }
+
+  /* openSheet writes the guest copy and nothing else, so the glance block is
+     appended after it rather than threaded through it. */
+  var open0 = window.openSheet;
+  if (typeof open0 === "function") {
+    window.openSheet = function (id) {
+      var out = open0.apply(this, arguments);
+      try {
+        var d = null, si, di;
+        for (si = 0; si < SECTIONS.length; si++) {
+          var ds = SECTIONS[si].drinks || [];
+          for (di = 0; di < ds.length; di++) if (ds[di].id === id) d = ds[di];
+        }
+        var body = document.getElementById("sheet-body");
+        if (d && body) body.insertAdjacentHTML("beforeend", vizHTML(d));
+      } catch (err) {}
+      return out;
+    };
+  }
+})();
+
   if (typeof render === "function") render();
 })();
+
 </script>
 
 <!-- ==========================================================================
@@ -3202,3 +3492,30 @@ body.cmt-on #root { cursor: crosshair; }
        Alpro Barista oat milk, row 38. Coffee only. It is in the bar sheet
        but no drink in the ten uses it.
      ========================================================================== -->
+
+
+<style>
+.ag { margin-top: var(--s5); border-top: 1px solid var(--gold-pale); padding-top: var(--s4); }
+.ag-facts { display: grid; gap: 2px; margin-bottom: var(--s4); }
+.ag-facts > div { display: flex; gap: var(--s2); align-items: baseline; }
+.ag-k { flex: 0 0 72px; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
+.ag-v { flex: 1 1 auto; font-size: 14px; }
+.ag-viz { display: flex; gap: var(--s4); align-items: flex-start; }
+.ag-glass { flex: 0 0 60px; display: block; }
+.ag-well { fill: #fff; }
+.ag-stem { fill: #fff; stroke: rgba(35,32,28,0.38); stroke-width: 1.5; stroke-linejoin: round; }
+.ag-edge { fill: none; stroke: rgba(35,32,28,0.44); stroke-width: 1.7; stroke-linejoin: round; }
+
+.ag-leg { flex: 1 1 auto; list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; align-content: start; }
+.ag-leg li { display: grid; grid-template-columns: 12px 1fr auto; gap: 8px; align-items: baseline; font-size: 14px; line-height: 1.35; }
+.ag-leg i { width: 12px; height: 12px; border-radius: 3px; border: 1px solid rgba(35,32,28,0.22); align-self: center; }
+.ag-ml { font-variant-numeric: tabular-nums; color: var(--ink-soft); font-size: 13px; }
+.ag-no { grid-column: 2 / -1; font-size: 12px; color: var(--ink-soft); line-height: 1.4; }
+.ag-tot { margin: var(--s3) 0 0; font-size: 12px; color: var(--ink-soft); }
+.ag-sec { margin-top: var(--s4); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
+.ag-x { margin: 6px 0 0; padding-left: 18px; font-size: 14px; line-height: 1.5; }
+.ag-x .ag-no { display: block; }
+.ag-kit { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; padding-bottom: 46px; }
+.ag-tool { font-size: 13px; border: 1px solid var(--gold-pale); border-radius: 999px; padding: 3px 10px; background: #fff; }
+@media (max-width: 380px) { .ag-viz { gap: var(--s3); } }
+</style>
