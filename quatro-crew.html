@@ -2700,7 +2700,12 @@ body.cmt-on #root { cursor: crosshair; }
      the weekday then the date, so this saves counting on a calendar mid-count. */
   var DD_EN = ["MO","TU","WED","THU","FR","SAT","SUN"];
   var DD_NL = ["MA","DI","WO","DO","VR","ZA","ZO"];
-  var DDVAL = "";
+/* null means nobody has typed in it yet, which is not the same as an empty
+   string: an empty string is someone having cleared it on purpose. While it
+   is null the box shows today, worked out at render rather than at load, so
+   a page left open through a night shift rolls over instead of sticking on
+   yesterday. */
+  var DDVAL = null;
   function dayDot(v) {
     var d = String(v || "").replace(/\D/g, "");
     if (!d) return null;
@@ -2715,16 +2720,17 @@ body.cmt-on #root { cursor: crosshair; }
     return (isNl() ? DD_NL : DD_EN)[wd] + " " + p2(day) + "." + p2(mon) + "." + String(yr).slice(-2);
   }
   function dayDotHTML() {
-    var out = dayDot(DDVAL);
+    var val = DDVAL == null ? todayDot() : DDVAL;
+    var out = dayDot(val);
     return '<div class="dd">' +
       '<label for="dd-in">' + et({ en: "Day dot", nl: "Dagsticker" }) + "</label>" +
       '<input id="dd-in" type="text" inputmode="numeric" maxlength="10" autocomplete="off" ' +
-        'placeholder="DDMMYY" value="' + esc(DDVAL) + '">' +
+        'placeholder="DDMMYY" value="' + esc(val) + '">' +
       '<span class="dd-out' + (out === false ? " bad" : "") + '" id="dd-out">' +
         (out === false ? et({ en: "not a date", nl: "geen datum" }) : (out || "")) + "</span>" +
       '<span class="dd-hint">' +
-      et({ en: "Type the date, get the label for the tape.",
-           nl: "Typ de datum, krijg het label voor op de tape." }) + "</span></div>";
+      et({ en: "Starts on today. Type over it for any other date, and the label for the tape follows.",
+           nl: "Staat op vandaag. Typ er een andere datum overheen, dan volgt het label voor op de tape." }) + "</span></div>";
   }
   document.addEventListener("input", function (e) {
     if (!e.target || e.target.id !== "dd-in") return;
