@@ -134,6 +134,17 @@ td.buy.ok { color: var(--ink-soft); }
 @media print { .sup-sel { border: 0; background: none; -webkit-appearance: none; appearance: none; } }
 /* The group band is a button on every width: tap it to fold the group away. */
 .inv-cat td { cursor: pointer; user-select: none; }
+/* The band name is the category name, so editing it there is the obvious
+   way to rename one. Only editable while you are grouped by category. */
+.cat-nm { outline: none; border-radius: 4px; padding: 0 4px; margin: 0 -4px; }
+.cat-nm[contenteditable="true"]:hover { background: rgba(255,255,255,.55); }
+.cat-nm[contenteditable="true"]:focus { background: #fff; box-shadow: 0 0 0 2px var(--gold); }
+.iv-catf { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 7px; margin-top: 6px; }
+.iv-catl { font-size: 9.5px; letter-spacing: .09em; text-transform: uppercase; color: var(--gold); }
+.iv-cat { font: inherit; font-size: 13px; padding: 4px 7px; min-width: 130px;
+  border: 1px solid var(--gold-pale); border-radius: 6px; background: #fff; }
+.iv-cat:focus { border-color: var(--gold); outline: none; }
+@media print { .cat-nm { box-shadow: none; } .iv-catf { display: none; } }
 .cat-tw { display: inline-block; width: 0; height: 0; margin-right: 7px; vertical-align: middle;
   border-left: 5px solid var(--gold); border-top: 4px solid transparent;
   border-bottom: 4px solid transparent; transform: rotate(90deg); transition: transform 120ms; }
@@ -171,10 +182,12 @@ td.buy.ok { color: var(--ink-soft); }
   .inv-t tr.inv-r td:nth-child(5),
   .inv-t tr.inv-r td:nth-child(6),
   .inv-t tr.inv-r .mk,
+  .inv-t tr.inv-r .iv-catf,
   .inv-t tr.inv-r .iv-note { display: none; }
   .inv-t tr.inv-r.open td:nth-child(5) { display: inline-flex; }
   .inv-t tr.inv-r.open td:nth-child(6) { display: flex; }
   .inv-t tr.inv-r.open .mk { display: flex; }
+  .inv-t tr.inv-r.open .iv-catf { display: flex; }
   .inv-t tr.inv-r.open .iv-note { display: block; }
 
   .iv-more { display: block; position: absolute; left: -2px; top: 1px; width: 20px; height: 20px;
@@ -1293,6 +1306,17 @@ body.cmt-on #root { cursor: crosshair; }
   var IVFOLD = {};
   var GROUPBY = "cat";
 
+  /* Every category in use right now, so the pick list offers what exists
+     and the field still takes anything you type. */
+  function catsInUse() {
+    var seen = {}, out = [];
+    ROWS.forEach(function (r) {
+      var c = catLabel(r.cat);
+      if (c && !seen[c]) { seen[c] = 1; out.push(c); }
+    });
+    return out.sort();
+  }
+
   function groupOf(r, cls) {
     if (GROUPBY === "sup") return r.supplier || "TBD";
     if (GROUPBY === "status") {
@@ -1333,7 +1357,15 @@ body.cmt-on #root { cursor: crosshair; }
           /* In the item cell rather than a new column: the inventory table
              rebuilds itself as a stacked card on a phone, and the stack is
              keyed to the columns it already has. */
-          dateCell("inv-" + r.id, "", { en: "Day dot", nl: "Dagsticker" }) + "</td>" +
+          dateCell("inv-" + r.id, "", { en: "Day dot", nl: "Dagsticker" }) +
+          /* A list-backed input rather than a select: it offers the categories
+             that exist and still accepts one you have just thought of, which
+             is the whole point of being able to re-file a line. */
+          '<div class="iv-catf"><span class="iv-catl">' +
+          et({ en: "Category", nl: "Categorie" }) + "</span>" +
+          '<input class="iv-cat" list="iv-cats" data-cat="' + esc(r.id) + '" value="' +
+          esc(catLabel(r.cat)) + '" aria-label="' +
+          et({ en: "Category for this line", nl: "Categorie voor deze regel" }) + '"></div></td>' +
         '<td class="num" data-l="' + esc(L.need) + '"><span class="iv-need" contenteditable="true" data-f="need">' +
           (need == null ? et(SETPAR) : tidy(need)) + "</span> " + esc(unitLabel(r.unit)) + "</td>" +
         '<td data-l="' + esc(L.have) + '"><input class="inv-qty" type="text" inputmode="decimal" autocomplete="off" data-id="' + esc(r.id) +
@@ -1363,10 +1395,17 @@ body.cmt-on #root { cursor: crosshair; }
       seen[x.key].buy += x.buyCost;
     });
     var L = INVCOL();
+    var catList = '<datalist id="iv-cats">' +
+      catsInUse().map(function (c) { return '<option value="' + esc(c) + '"></option>'; }).join("") +
+      "</datalist>";
     var tbody = groups.map(function (g) {
       var n = g.rows.length, shut = !!IVFOLD[g.key];
+      var nameCell = GROUPBY === "cat"
+        ? '<span class="cat-nm" contenteditable="true" data-ren="' + esc(g.key) + '">' +
+          esc(g.key) + "</span>"
+        : '<span class="cat-nm plain">' + esc(g.key) + "</span>";
       return '<tr class="inv-cat' + (shut ? " shut" : "") + '" data-fold="' + esc(g.key) + '">' +
-        '<td colspan="6"><span class="cat-tw"></span>' + esc(g.key) +
+        '<td colspan="6"><span class="cat-tw"></span>' + nameCell +
         '<span class="cat-r">' + n + " " +
         tt(n === 1 ? { en: "line", nl: "regel" } : { en: "lines", nl: "regels" }) +
         (g.buy > 0 ? "  ·  " + n2(g.buy) + tt({ en: " to buy", nl: " te kopen" }) : "") +
@@ -1429,7 +1468,7 @@ body.cmt-on #root { cursor: crosshair; }
                                        nl: "Wat het ontbrekende aantal kost om te bestellen" }) + '">' +
       esc(L.cost) + "</th>" +
       "<th>" + esc(L.where) + "</th>" +
-      "</tr></thead><tbody>" + tbody + "</tbody></table></div>" +
+      "</tr></thead><tbody>" + tbody + "</tbody></table></div>" + catList +
       '<div class="inv-sum"><div><dt>' +
       et({ en: "A full week, if you held nothing", nl: "Een hele week, als je niets had" }) +
       "</dt><dd>" + n2(totNeed) + "</dd></div>" +
@@ -1524,6 +1563,19 @@ body.cmt-on #root { cursor: crosshair; }
       return;
     }
     if (e.target.id === "iv-filter") { FILTER = e.target.value; invRender(); return; }
+    var cf = e.target.closest && e.target.closest("[data-cat]");
+    if (cf) {
+      var row = ROWS.filter(function (x) { return x.id === cf.dataset.cat; })[0];
+      var v = String(cf.value || "").trim();
+      if (row && v && v !== catLabel(row.cat)) {
+        row.cat = v;
+        persist();
+        var y0 = window.scrollY || 0;
+        invRender();
+        window.scrollTo(0, y0);
+      }
+      return;
+    }
     if (e.target.id === "iv-group") {
       GROUPBY = e.target.value;
       IVFOLD = {};          /* fold keys from the old grouping mean nothing now */
@@ -1535,7 +1587,28 @@ body.cmt-on #root { cursor: crosshair; }
        type in it. */
     if (q && (FILTER === "short" || FILTER === "covered" || FILTER === "note")) invRender();
   });
+  /* Renaming the band renames the category, which means moving every row
+     filed under it. Committed on blur, like the other editable fields. */
+  document.addEventListener("blur", function (e) {
+    var el = e.target;
+    if (!el || !el.dataset || !el.dataset.ren) return;
+    var was = el.dataset.ren, now = el.textContent.trim();
+    if (!now || now === was) { el.textContent = was; return; }
+    var moved = 0;
+    ROWS.forEach(function (r) {
+      if (catLabel(r.cat) === was) { r.cat = now; moved++; }
+    });
+    if (!moved) { el.textContent = was; return; }
+    persist();
+    if (IVFOLD[was]) { IVFOLD[now] = true; delete IVFOLD[was]; }
+    var y1 = window.scrollY || 0;
+    invRender();
+    window.scrollTo(0, y1);
+  }, true);
+
   document.addEventListener("click", function (e) {
+    /* Typing in the band name must not fold the group under the caret. */
+    if (e.target.closest && e.target.closest(".cat-nm")) return;
     var m = e.target.closest && e.target.closest("[data-more]");
     if (m) {
       var id = m.dataset.more;
