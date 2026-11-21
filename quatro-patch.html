@@ -87,7 +87,10 @@ tr.par td { background: rgba(168,134,60,.05); }
 .inv-qty { width: 72px; padding: 4px 6px; font: inherit; font-size: 13px;
   border: 1px solid var(--gold-pale); border-radius: 6px; background: #fff; }
 .inv-unit { font-size: 11px; color: var(--ink-soft); margin-left: 4px; }
-.inv-filters { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 0 0 14px; }
+.inv-filters { display: flex; align-items: center; gap: 8px 10px; flex-wrap: wrap; margin: 0 0 14px; }
+/* A label and its select travel together, or the line wraps between them and
+   the control ends up under someone else's heading. */
+.ivf { display: inline-flex; align-items: center; gap: 7px; }
 .inv-filters select, .inv-filters button { font: inherit; font-size: 13px; padding: 5px 10px;
   border: 1px solid var(--gold-pale); border-radius: 8px; background: var(--limestone); cursor: pointer; }
 .inv-sum { display: flex; gap: 26px; flex-wrap: wrap; margin-top: 18px; padding-top: 14px;
@@ -112,8 +115,11 @@ td.buy.ok { color: var(--ink-soft); }
 .inv-cat td { background: rgba(168,134,60,.16); border-bottom: 1px solid var(--gold-pale);
   font-family: 'Marcellus', Georgia, serif; font-size: 12px; letter-spacing: .16em;
   text-transform: uppercase; color: var(--gold); padding: 8px 10px; }
-.inv-cat .cat-r { float: right; font-family: var(--body); letter-spacing: .04em;
-  text-transform: none; font-size: 11.5px; color: var(--ink-soft); }
+/* Flex rather than a float: at phone width a floated count lands on top of a
+   long category name with no gap between them. */
+.inv-cat td { display: flex; align-items: baseline; gap: 10px; }
+.inv-cat .cat-r { margin-left: auto; text-align: right; font-family: var(--body);
+  letter-spacing: .04em; text-transform: none; font-size: 11.5px; color: var(--ink-soft); }
 .sup { display: inline-block; font-size: 10px; letter-spacing: .08em; padding: 2px 7px;
   border-radius: 999px; border: 1px solid var(--gold-pale); background: var(--limestone);
   color: var(--gold); white-space: nowrap; }
@@ -126,19 +132,72 @@ td.buy.ok { color: var(--ink-soft); }
 .sup-sel:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
 .sup-sel.tbd { border-color: #E0B3AA; color: #9E2B3B; background: rgba(158,43,59,.06); }
 @media print { .sup-sel { border: 0; background: none; -webkit-appearance: none; appearance: none; } }
+/* The group band is a button on every width: tap it to fold the group away. */
+.inv-cat td { cursor: pointer; user-select: none; }
+.cat-tw { display: inline-block; width: 0; height: 0; margin-right: 7px; vertical-align: middle;
+  border-left: 5px solid var(--gold); border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent; transform: rotate(90deg); transition: transform 120ms; }
+.inv-cat.shut .cat-tw { transform: rotate(0deg); }
+
+/* The details toggle. Off on wide screens, where every column is visible
+   anyway and there is nothing to reveal. */
+.iv-more { display: none; }
+
 @media (max-width: 719px) {
-  .inv-t, .inv-t tbody, .inv-t tr, .inv-t td { display: block; width: 100%; }
+  .inv-t, .inv-t tbody, .inv-t td { display: block; width: 100%; }
   .inv-t thead { display: none; }
-  .inv-t tr.inv-r { border-bottom: 1px solid var(--gold-pale); padding: 9px 0; }
-  .inv-t tr.inv-r td { border: 0; padding: 2px 0; display: grid;
-    grid-template-columns: 8.5em 1fr; gap: 10px; align-items: baseline; }
-  .inv-t tr.inv-r td::before { content: attr(data-l); font-size: 10px; letter-spacing: .1em;
-    text-transform: uppercase; color: var(--gold); }
+
+  /* Two lines, not six. The name and the count you are about to change sit
+     on the first line; the numbers you read sit on the second as chips.
+     Anything you only need occasionally is behind the toggle. */
+  .inv-t tr.inv-r { display: flex; flex-wrap: wrap; align-items: flex-start;
+    gap: 3px 12px; border-bottom: 1px solid var(--gold-pale); padding: 9px 0; width: 100%; }
+  .inv-t tr.inv-r td { border: 0; padding: 0; display: inline-flex; flex-wrap: wrap;
+    align-items: baseline; gap: 5px; width: auto; }
+  .inv-t tr.inv-r td::before { content: attr(data-l); font-size: 9.5px; letter-spacing: .09em;
+    text-transform: uppercase; color: var(--gold); white-space: nowrap; }
+
+  .inv-t tr.inv-r td:nth-child(1) { order: 1; flex: 1 1 calc(100% - 118px);
+    display: block; padding-left: 22px; position: relative; }
+  .inv-t tr.inv-r td:nth-child(1)::before { display: none; }   /* the name needs no label */
+  .inv-t tr.inv-r td:nth-child(3) { order: 2; flex: 0 0 auto; }          /* have  */
+  .inv-t tr.inv-r td:nth-child(2) { order: 3; }                          /* need  */
+  .inv-t tr.inv-r td:nth-child(4) { order: 4; }                          /* buy   */
+  .inv-t tr.inv-r td:nth-child(5) { order: 5; }                          /* cost  */
+  .inv-t tr.inv-r td:nth-child(6) { order: 6; flex: 1 1 100%; }          /* buy at */
   .inv-t tr.inv-r td.num { text-align: left; }
+
+  /* Behind the toggle: cost, where to buy, the day dot and the note. */
+  .inv-t tr.inv-r td:nth-child(5),
+  .inv-t tr.inv-r td:nth-child(6),
+  .inv-t tr.inv-r .mk,
+  .inv-t tr.inv-r .iv-note { display: none; }
+  .inv-t tr.inv-r.open td:nth-child(5) { display: inline-flex; }
+  .inv-t tr.inv-r.open td:nth-child(6) { display: flex; }
+  .inv-t tr.inv-r.open .mk { display: flex; }
+  .inv-t tr.inv-r.open .iv-note { display: block; }
+
+  .iv-more { display: block; position: absolute; left: -2px; top: 1px; width: 20px; height: 20px;
+    border: 0; background: none; padding: 0; }
+  .iv-more::before { content: ""; position: absolute; left: 5px; top: 6px;
+    border-left: 5px solid var(--gold); border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent; transition: transform 120ms; }
+  .inv-r.open .iv-more::before { transform: rotate(90deg); }
+
   /* The editable fields carry margin:0 -3px so the hover pad sits flush with
      the text. Stacked, that bleeds 3px past the container and reintroduces a
      sideways scroll, so drop the pull on a phone. */
   .inv-t tr.inv-r .iv-name, .inv-t tr.inv-r .iv-need { margin-left: 0; margin-right: 0; }
+  .inv-t tr.inv-r .inv-qty { width: 62px; }
+  /* Two class names on purpose: ".inv-t td" above also matches this cell and
+     ties on specificity, and a tie is settled by source order, which put the
+     count flush against a long category name with no gap. */
+  .inv-t tr.inv-cat { display: block; width: 100%; }
+  .inv-t tr.inv-cat td { display: flex; width: 100%; }
+  /* The bar caption says "0 / 11.2 L (0%)", which the per-week and
+     still-to-buy chips on the next line already say. The bar itself stays. */
+  .inv-t tr.inv-r .barlbl { display: none; }
+  .inv-t tr.inv-r.open .barlbl { display: block; font-size: 11px; }
   .inv-cat td { display: block; }
 }
 /* price book */
@@ -1226,6 +1285,23 @@ body.cmt-on #root { cursor: crosshair; }
     return { need: need, have: have, buy: buy };
   }
 
+  /* Phone layout state. A row carries its detail (cost, buy at, day dot)
+     behind a toggle, and a group can be folded away, because 59 rows unfolded
+     is a column several screens long that you cannot find anything in.
+     In memory on purpose: it is a view, not a record. */
+  var IVOPEN = {};
+  var IVFOLD = {};
+  var GROUPBY = "cat";
+
+  function groupOf(r, cls) {
+    if (GROUPBY === "sup") return r.supplier || "TBD";
+    if (GROUPBY === "status") {
+      return cls === "short" ? tt({ en: "Still to buy", nl: "Nog kopen" })
+                             : tt({ en: "Covered", nl: "Gedekt" });
+    }
+    return catLabel(r.cat);
+  }
+
   function invHTML() {
     var totNeed = 0, totHave = 0, totBuy = 0, unpriced = 0;
     var body = ROWS.map(function (r, i) {
@@ -1244,8 +1320,12 @@ body.cmt-on #root { cursor: crosshair; }
         '<span class="barlbl">' + tidy(have) + " / " + tidy(need) + " " + esc(unitLabel(r.unit)) + "  (" + pct + "%)</span>";
       var nm = rowName(r), nt = rowNote(r);
       var L = INVCOL();
-      var html = '<tr class="inv-r ' + cls + '" data-id="' + esc(r.id) + '">' +
+      var html = '<tr class="inv-r ' + cls + (IVOPEN[r.id] ? " open" : "") +
+        '" data-id="' + esc(r.id) + '">' +
         '<td data-l="' + esc(L.item) + '">' +
+          '<button class="iv-more" type="button" data-more="' + esc(r.id) + '" aria-expanded="' +
+          (IVOPEN[r.id] ? "true" : "false") + '" aria-label="' +
+          et({ en: "More about this line", nl: "Meer over deze regel" }) + '"></button>' +
           '<span class="iv-name" contenteditable="true" data-f="name">' + esc(nm) + "</span>" + bar +
           '<div class="iv-note' + (nt ? "" : " empty") + '" contenteditable="true" data-f="note" ' +
           'data-ph="' + et({ en: "Add a note, dated", nl: "Voeg een notitie toe, met datum" }) + '">' +
@@ -1270,7 +1350,7 @@ body.cmt-on #root { cursor: crosshair; }
           '<button class="iv-del" type="button" data-del="' + esc(r.id) + '" title="' +
           et({ en: "Delete row", nl: "Regel verwijderen" }) + '">&times;</button></td>' +
         "</tr>";
-      return { cat: r.cat, html: html, buyCost: (priced && short > 0) ? short * r.cost : 0 };
+      return { key: groupOf(r, cls), html: html, buyCost: (priced && short > 0) ? short * r.cost : 0 };
     });
 
     /* Rows come out of the map as objects so they can be grouped; a category
@@ -1278,18 +1358,19 @@ body.cmt-on #root { cursor: crosshair; }
     var groups = [], seen = {};
     body.forEach(function (x) {
       if (!x) return;
-      if (!seen[x.cat]) { seen[x.cat] = { cat: x.cat, rows: [], buy: 0 }; groups.push(seen[x.cat]); }
-      seen[x.cat].rows.push(x.html);
-      seen[x.cat].buy += x.buyCost;
+      if (!seen[x.key]) { seen[x.key] = { key: x.key, rows: [], buy: 0 }; groups.push(seen[x.key]); }
+      seen[x.key].rows.push(x.html);
+      seen[x.key].buy += x.buyCost;
     });
     var L = INVCOL();
     var tbody = groups.map(function (g) {
-      var n = g.rows.length;
-      return '<tr class="inv-cat"><td colspan="6">' + esc(catLabel(g.cat)) +
+      var n = g.rows.length, shut = !!IVFOLD[g.key];
+      return '<tr class="inv-cat' + (shut ? " shut" : "") + '" data-fold="' + esc(g.key) + '">' +
+        '<td colspan="6"><span class="cat-tw"></span>' + esc(g.key) +
         '<span class="cat-r">' + n + " " +
         tt(n === 1 ? { en: "line", nl: "regel" } : { en: "lines", nl: "regels" }) +
         (g.buy > 0 ? "  ·  " + n2(g.buy) + tt({ en: " to buy", nl: " te kopen" }) : "") +
-        "</span></td></tr>" + g.rows.join("");
+        "</span></td></tr>" + (shut ? "" : g.rows.join(""));
     }).join("");
 
     var FILTERS = [
@@ -1306,7 +1387,7 @@ body.cmt-on #root { cursor: crosshair; }
       et({ en: "Every field on this page is editable. Click a name, a quantity or a note and type. Use Add row for anything new and the cross to delete. Everything saves to this browser and survives a reload.",
            nl: "Elk veld op deze pagina is aan te passen. Klik op een naam, een aantal of een notitie en typ. Gebruik Regel toevoegen voor iets nieuws en het kruisje om te verwijderen. Alles wordt in deze browser bewaard en blijft na herladen staan." }) + "</p>" +
       dayDotHTML() +
-      '<div class="inv-filters"><span class="smallcaps">' +
+      '<div class="inv-filters"><span class="ivf"><span class="smallcaps">' +
       et({ en: "Filter", nl: "Filter" }) + "</span>" +
       '<select id="iv-filter">' +
         FILTERS.map(function (o) {
@@ -1317,7 +1398,17 @@ body.cmt-on #root { cursor: crosshair; }
           var v = "sup:" + s;
           return '<option value="' + esc(v) + '"' + (FILTER === v ? " selected" : "") + ">" +
                  esc(s) + "</option>"; }).join("") + "</optgroup>" +
-      "</select>" +
+      "</select></span>" +
+      '<span class="ivf"><span class="smallcaps">' + et({ en: "Group by", nl: "Groepeer op" }) + "</span>" +
+      '<select id="iv-group">' +
+        [["cat", { en: "Category", nl: "Categorie" }],
+         ["sup", { en: "Buy at", nl: "Waar te koop" }],
+         ["status", { en: "Still to buy first", nl: "Nog kopen eerst" }]].map(function (o) {
+          return '<option value="' + o[0] + '"' + (GROUPBY === o[0] ? " selected" : "") + ">" +
+                 et(o[1]) + "</option>"; }).join("") +
+      "</select></span>" +
+      '<button type="button" id="iv-fold">' +
+      et({ en: "Fold all", nl: "Alles inklappen" }) + "</button>" +
       '<button type="button" id="iv-add">' +
       et({ en: "Add row", nl: "Regel toevoegen" }) + "</button>" +
       '<button type="button" id="iv-reset">' +
@@ -1369,7 +1460,11 @@ body.cmt-on #root { cursor: crosshair; }
     var r = ROWS.filter(function (x) { return x.id === id; })[0];
     if (!tr || !r) return;
     var c = calcRow(r);
-    tr.className = c.cls;
+    /* Assigning c.cls alone wiped inv-r off the row, and with it every rule
+       that lays the row out. Harmless-looking on a wide screen, where the
+       table still had columns to fall back on; on a phone the row collapsed
+       the moment you typed a count into it. */
+    tr.className = "inv-r " + c.cls + (IVOPEN[id] ? " open" : "");
 
     var bar = tr.querySelector(".bar"), lbl = tr.querySelector(".barlbl");
     if (bar) {
@@ -1429,12 +1524,49 @@ body.cmt-on #root { cursor: crosshair; }
       return;
     }
     if (e.target.id === "iv-filter") { FILTER = e.target.value; invRender(); return; }
+    if (e.target.id === "iv-group") {
+      GROUPBY = e.target.value;
+      IVFOLD = {};          /* fold keys from the old grouping mean nothing now */
+      invRender(); return;
+    }
     var q = e.target.closest && e.target.closest(".inv-qty[data-id]");
     /* Only once the field is committed can a row legitimately drop out of a
        filtered view. Doing that mid-keystroke would pull the row away as you
        type in it. */
     if (q && (FILTER === "short" || FILTER === "covered" || FILTER === "note")) invRender();
   });
+  document.addEventListener("click", function (e) {
+    var m = e.target.closest && e.target.closest("[data-more]");
+    if (m) {
+      var id = m.dataset.more;
+      IVOPEN[id] = !IVOPEN[id];
+      /* Toggled in place. A full redraw here would scroll the row you just
+         tapped off the screen, which is the thing being complained about. */
+      var tr = m.closest("tr");
+      if (tr) tr.classList.toggle("open", !!IVOPEN[id]);
+      m.setAttribute("aria-expanded", IVOPEN[id] ? "true" : "false");
+      return;
+    }
+    var f = e.target.closest && e.target.closest("[data-fold]");
+    if (f) {
+      var k = f.dataset.fold;
+      IVFOLD[k] = !IVFOLD[k];
+      var y = window.scrollY || 0;
+      invRender();
+      window.scrollTo(0, y);
+      return;
+    }
+    if (e.target.id === "iv-fold") {
+      var heads = document.querySelectorAll("#root .inv-cat[data-fold]");
+      var anyOpen = false, i;
+      for (i = 0; i < heads.length; i++) if (!heads[i].classList.contains("shut")) anyOpen = true;
+      IVFOLD = {};
+      if (anyOpen) for (i = 0; i < heads.length; i++) IVFOLD[heads[i].dataset.fold] = true;
+      invRender();
+      return;
+    }
+  });
+
   document.addEventListener("blur", function (e) {
     var el = e.target;
     if (!el.dataset || !el.dataset.f) return;
