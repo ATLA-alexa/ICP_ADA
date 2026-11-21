@@ -759,20 +759,23 @@ var SECTIONS = [
         { ref: "jalapeno", ml: 0, note: { en: "3 whole, or 6 slices, seeds out as standard, into the mixing glass or tin", nl: "3 hele, of 6 schijfjes, standaard zonder zaadjes, in het mengglas of de tin" } },
         { ref: "lime", ml: 20 },
         { ref: "simple", ml: 10 },
-        { ref: "gingerbeer", ml: 0, note: { en: "In FIRST, to 1.5 cm below the rim", nl: "ALS EERSTE erin, tot 1,5 cm onder de rand" } },
+        { ref: "gingerbeer", ml: 0, note: { en: "In FIRST, half the glass, two thirds at most", nl: "ALS EERSTE erin, de helft van het glas, hooguit twee derde" } },
+        { ref: "ice", ml: 0, note: { en: "Crushed, about two thirds of a metal scoop, on top of the ginger beer", nl: "Crushed, ongeveer twee derde van een metalen schep, op het gemberbier" } },
         { ref: "mint", ml: 0, note: { en: "Sprig, with a jalapeno wheel", nl: "Takje, met een schijfje jalapeno" } }
       ],
       bar: { en: [
         "Muddle 3 whole jalapenos, or 6 slices, seeds out as standard, with the lime and simple syrup in the mixing glass or tin.",
         "Add ice and stir 8 to 10 times.",
-        "Fill the highball one third with crushed ice.",
-        "Ginger beer FIRST, to 1.5 cm below the rim. Then strain the jalapeno cordial mix in on top. The top should turn green.",
+        "Ginger beer FIRST. Fill the highball half, two thirds at most.",
+        "Then crushed ice, about two thirds of a metal scoop, until there is roughly 1 cm left.",
+        "Top up with the jalapeno cordial mix from the mixing glass, strained. The top should turn green.",
         "Cap with crushed ice if necessary, slap the mint sprig, add the jalapeno wheel."
       ], nl: [
         "Kneus 3 hele jalapenos, of 6 schijfjes, standaard zonder zaadjes, met de limoen en suikersiroop in het mengglas of de tin.",
         "Ijs erbij en 8 tot 10 keer roeren.",
-        "Vul de highball voor een derde met crushed ice.",
-        "EERST ginger beer, tot 1,5 cm onder de rand. Zeef daarna de jalapenocordialmix erbovenop. De bovenkant hoort groen te worden.",
+        "EERST ginger beer. Vul de highball voor de helft, hooguit twee derde.",
+        "Dan crushed ice, ongeveer twee derde van een metalen schep, tot er nog ongeveer 1 cm over is.",
+        "Vul aan met de gezeefde jalapenocordialmix uit het mengglas. De bovenkant hoort groen te worden.",
         "Indien nodig afdekken met crushed ice, tik het munttakje aan, schijfje jalapeno erbij."
       ]},
       table: null,
@@ -1796,6 +1799,19 @@ tr.par td { background: rgba(168,134,60,.05); }
 /* A label and its select travel together, or the line wraps between them and
    the control ends up under someone else's heading. */
 .ivf { display: inline-flex; align-items: center; gap: 7px; }
+/* The two controls do different jobs, so they should not look identical.
+   Show narrows which lines you see; Stack into only changes how they are
+   piled up. The sentence under them says which is doing what right now. */
+.ivf-g select { background: #fff; border-style: dashed; }
+.iv-state { margin: -4px 0 14px; font-size: 13px; line-height: 1.5; color: var(--ink-soft); }
+.iv-state b { color: var(--ink); font-weight: 600; }
+.iv-state.on { color: var(--ink); }
+.iv-state.on::before { content: ""; display: inline-block; width: 7px; height: 7px;
+  border-radius: 999px; background: var(--gold); margin-right: 7px; vertical-align: middle; }
+.inv-filters select:not(#iv-group).on, #iv-filter.on { background: rgba(168,134,60,.18); border-color: var(--gold); }
+.iv-clear { font: inherit; font-size: 12.5px; border: 1px solid var(--gold-pale); background: #fff;
+  border-radius: 999px; padding: 2px 10px; margin-left: 4px; color: var(--gold); cursor: pointer; }
+@media print { .iv-clear { display: none; } }
 .inv-filters select, .inv-filters button { font: inherit; font-size: 13px; padding: 5px 10px;
   border: 1px solid var(--gold-pale); border-radius: 8px; background: var(--limestone); cursor: pointer; }
 .inv-sum { display: flex; gap: 26px; flex-wrap: wrap; margin-top: 18px; padding-top: 14px;
@@ -1846,9 +1862,10 @@ td.buy.ok { color: var(--ink-soft); }
 .cat-nm[contenteditable="true"]:focus { background: #fff; box-shadow: 0 0 0 2px var(--gold); }
 .iv-catf { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 7px; margin-top: 6px; }
 .iv-catl { font-size: 9.5px; letter-spacing: .09em; text-transform: uppercase; color: var(--gold); }
-.iv-cat { font: inherit; font-size: 13px; padding: 4px 7px; min-width: 130px;
+.iv-field { font: inherit; font-size: 13px; padding: 4px 7px; min-width: 130px;
   border: 1px solid var(--gold-pale); border-radius: 6px; background: #fff; }
-.iv-cat:focus { border-color: var(--gold); outline: none; }
+.iv-field:focus { border-color: var(--gold); outline: none; }
+.iv-unit { min-width: 86px; }
 @media print { .cat-nm { box-shadow: none; } .iv-catf { display: none; } }
 .cat-tw { display: inline-block; width: 0; height: 0; margin-right: 7px; vertical-align: middle;
   border-left: 5px solid var(--gold); border-top: 4px solid transparent;
@@ -1858,6 +1875,37 @@ td.buy.ok { color: var(--ink-soft); }
 /* The details toggle. Off on wide screens, where every column is visible
    anyway and there is nothing to reveal. */
 .iv-more { display: none; }
+
+/* Every wide table stacks on a phone. Four of them scrolled sideways at
+   390 px, which is the thing you cannot do one-handed behind a bar: the
+   inventory, the rail, the prep sheet and the storage list. The cells get
+   their column name from labelWide, so the stack says what each value is. */
+@media (max-width: 719px) {
+  /* The base sets table.wide { min-width: 760px }, which is what actually
+     forces the sideways scroll: stacking the cells alone does not undo it. */
+  table.wide { min-width: 0; }
+  .wide, .wide tbody, .wide tr, .wide td { display: block; width: 100%; }
+  .wide thead { display: none; }
+  .wide tr { border-bottom: 1px solid var(--gold-pale); padding: 10px 0; }
+  .wide td { border: 0; padding: 2px 0; }
+  .wide td[data-l]::before { content: attr(data-l); display: block; font-size: 9.5px;
+    letter-spacing: .09em; text-transform: uppercase; color: var(--gold); margin-bottom: 1px; }
+  .wide td:empty { display: none; }
+  .wide .num { text-align: left; }
+
+  /* Prep: the date made and the use by go directly under the item, because
+     that pair is what you are checking when you pick the bottle up. */
+  .prep-t tbody tr { display: flex; flex-wrap: wrap; gap: 2px 14px; }
+  .prep-t tbody td { width: auto; }
+  .prep-t tbody td:nth-child(1) { order: 1; flex: 1 1 100%; font-size: 15px; }
+  .prep-t tbody td:nth-child(5) { order: 2; flex: 1 1 100%; }
+  .prep-t tbody td:nth-child(2) { order: 3; }
+  .prep-t tbody td:nth-child(3) { order: 4; }
+  .prep-t tbody td:nth-child(4) { order: 5; flex: 1 1 100%; }
+  .prep-t tbody td:nth-child(6) { order: 6; flex: 1 1 100%; margin-top: 4px; }
+  .prep-t tbody td:nth-child(2)::before,
+  .prep-t tbody td:nth-child(3)::before { display: inline; margin-right: 5px; }
+}
 
 @media (max-width: 719px) {
   .inv-t, .inv-t tbody, .inv-t td { display: block; width: 100%; }
@@ -2778,7 +2826,14 @@ body.cmt-on #root { cursor: crosshair; }
     "Dry goods and specials": 1, "Bar consumables": 1, "Bottled and chilled": 1
   };
   var UNIT_NL = { "pcs":"st", "cans":"blikken", "bottles":"flessen",
-                  "jars":"potten", "packs":"pakken", "sets":"sets" };
+                  "jars":"potten", "packs":"pakken", "sets":"sets",
+                  "boxes":"dozen", "cartons":"pakken", "crates":"kratten",
+                  "trays":"trays", "cases":"dozen" };
+  /* Offered in the pick list. The field still takes anything you type, and
+     nothing here converts: changing L to crates relabels the number, it does
+     not recalculate it. */
+  var UNITS = ["L", "ml", "kg", "g", "pcs", "cans", "bottles", "jars",
+               "packs", "sets", "boxes", "cartons", "crates", "trays", "cases"];
   var SETPAR = { en: "set par", nl: "stel par in" };
   function isNl() { return LANG === "nl"; }
   function catLabel(c)  { return isNl() ? (CAT_NL[c] || c) : c; }
@@ -3029,6 +3084,30 @@ body.cmt-on #root { cursor: crosshair; }
     return { need: need, have: have, buy: buy };
   }
 
+  /* Every wide table stacks into cards on a phone, and a stacked cell needs
+     to say which column it came from. Rather than hand-writing data-l on
+     every cell of every table, copy the header row into the cells once per
+     render. A row whose cells span columns is a band, not data, so it is
+     left alone. */
+  function labelWide() {
+    var tables = document.querySelectorAll("#root table.wide");
+    var i, j, k;
+    for (i = 0; i < tables.length; i++) {
+      var head = tables[i].querySelectorAll("thead th");
+      if (!head.length) continue;
+      var names = [];
+      for (j = 0; j < head.length; j++) names.push(head[j].textContent.trim());
+      var rows = tables[i].querySelectorAll("tbody tr");
+      for (j = 0; j < rows.length; j++) {
+        var tds = rows[j].children;
+        if (tds.length !== names.length) continue;     /* a band row */
+        for (k = 0; k < tds.length; k++) {
+          if (!tds[k].getAttribute("data-l")) tds[k].setAttribute("data-l", names[k]);
+        }
+      }
+    }
+  }
+
   /* Phone layout state. A row carries its detail (cost, buy at, day dot)
      behind a toggle, and a group can be folded away, because 59 rows unfolded
      is a column several screens long that you cannot find anything in.
@@ -3055,6 +3134,19 @@ body.cmt-on #root { cursor: crosshair; }
                              : tt({ en: "Covered", nl: "Gedekt" });
     }
     return catLabel(r.cat);
+  }
+
+  function filterLabel() {
+    if (FILTER === "short")   return tt({ en: "still to buy", nl: "nog te kopen" });
+    if (FILTER === "covered") return tt({ en: "covered",      nl: "gedekte" });
+    if (FILTER === "note")    return tt({ en: "with a note",  nl: "met een notitie" });
+    if (FILTER.indexOf("sup:") === 0) return tt({ en: "bought at ", nl: "gekocht bij " }) + FILTER.slice(4);
+    return tt({ en: "all", nl: "alle" });
+  }
+  function groupLabel() {
+    if (GROUPBY === "sup")    return tt({ en: "where you buy them", nl: "waar je ze koopt" });
+    if (GROUPBY === "status") return tt({ en: "what is left to buy", nl: "wat er nog te kopen is" });
+    return tt({ en: "category", nl: "categorie" });
   }
 
   function invHTML() {
@@ -3094,9 +3186,13 @@ body.cmt-on #root { cursor: crosshair; }
              is the whole point of being able to re-file a line. */
           '<div class="iv-catf"><span class="iv-catl">' +
           et({ en: "Category", nl: "Categorie" }) + "</span>" +
-          '<input class="iv-cat" list="iv-cats" data-cat="' + esc(r.id) + '" value="' +
+          '<input class="iv-field iv-cat" list="iv-cats" data-cat="' + esc(r.id) + '" value="' +
           esc(catLabel(r.cat)) + '" aria-label="' +
-          et({ en: "Category for this line", nl: "Categorie voor deze regel" }) + '"></div></td>' +
+          et({ en: "Category for this line", nl: "Categorie voor deze regel" }) + '">' +
+          '<span class="iv-catl">' + et({ en: "Counted in", nl: "Geteld in" }) + "</span>" +
+          '<input class="iv-field iv-unit" list="iv-units" data-unit="' + esc(r.id) + '" value="' +
+          esc(unitLabel(r.unit)) + '" aria-label="' +
+          et({ en: "Unit for this line", nl: "Eenheid voor deze regel" }) + '"></div></td>' +
         '<td class="num" data-l="' + esc(L.need) + '"><span class="iv-need" contenteditable="true" data-f="need">' +
           (need == null ? et(SETPAR) : tidy(need)) + "</span> " + esc(unitLabel(r.unit)) + "</td>" +
         '<td data-l="' + esc(L.have) + '"><input class="inv-qty" type="text" inputmode="decimal" autocomplete="off" data-id="' + esc(r.id) +
@@ -3125,10 +3221,15 @@ body.cmt-on #root { cursor: crosshair; }
       seen[x.key].rows.push(x.html);
       seen[x.key].buy += x.buyCost;
     });
+    var shown = 0;
+    groups.forEach(function (g) { shown += g.rows.length; });
     var L = INVCOL();
     var catList = '<datalist id="iv-cats">' +
       catsInUse().map(function (c) { return '<option value="' + esc(c) + '"></option>'; }).join("") +
-      "</datalist>";
+      '</datalist><datalist id="iv-units">' +
+      UNITS.map(function (u) {
+        return '<option value="' + esc(isNl() ? (UNIT_NL[u] || u) : u) + '"></option>';
+      }).join("") + "</datalist>";
     var tbody = groups.map(function (g) {
       var n = g.rows.length, shut = !!IVFOLD[g.key];
       var nameCell = GROUPBY === "cat"
@@ -3158,8 +3259,8 @@ body.cmt-on #root { cursor: crosshair; }
            nl: "Elk veld op deze pagina is aan te passen. Klik op een naam, een aantal of een notitie en typ. Gebruik Regel toevoegen voor iets nieuws en het kruisje om te verwijderen. Alles wordt in deze browser bewaard en blijft na herladen staan." }) + "</p>" +
       dayDotHTML() +
       '<div class="inv-filters"><span class="ivf"><span class="smallcaps">' +
-      et({ en: "Filter", nl: "Filter" }) + "</span>" +
-      '<select id="iv-filter">' +
+      et({ en: "Show", nl: "Toon" }) + "</span>" +
+      '<select id="iv-filter"' + (FILTER === "all" ? "" : ' class="on"') + ">" +
         FILTERS.map(function (o) {
           return '<option value="' + o[0] + '"' + (FILTER === o[0] ? " selected" : "") + ">" +
                  et(o[1]) + "</option>"; }).join("") +
@@ -3169,7 +3270,7 @@ body.cmt-on #root { cursor: crosshair; }
           return '<option value="' + esc(v) + '"' + (FILTER === v ? " selected" : "") + ">" +
                  esc(s) + "</option>"; }).join("") + "</optgroup>" +
       "</select></span>" +
-      '<span class="ivf"><span class="smallcaps">' + et({ en: "Group by", nl: "Groepeer op" }) + "</span>" +
+      '<span class="ivf ivf-g"><span class="smallcaps">' + et({ en: "Stack into", nl: "Stapel in" }) + "</span>" +
       '<select id="iv-group">' +
         [["cat", { en: "Category", nl: "Categorie" }],
          ["sup", { en: "Buy at", nl: "Waar te koop" }],
@@ -3185,6 +3286,19 @@ body.cmt-on #root { cursor: crosshair; }
       et({ en: "Reset to defaults", nl: "Terug naar standaard" }) + "</button>" +
       '<button type="button" id="iv-shops">' +
       et({ en: "Shops", nl: "Winkels" }) + "</button></div>" +
+      /* The two controls looked alike and read alike, so it was not obvious
+         which did what. This says, in a sentence, what each has just done. */
+      '<p class="iv-state' + (FILTER === "all" ? "" : " on") + '">' +
+      (FILTER === "all"
+        ? et({ en: "Showing every line", nl: "Alle regels zichtbaar" })
+        : et({ en: "Showing only ", nl: "Alleen " }) + "<b>" + esc(filterLabel()) + "</b>" +
+          et({ en: " lines", nl: " regels zichtbaar" })) +
+      ": <b>" + shown + "</b>" + et({ en: " of ", nl: " van de " }) + ROWS.length +
+      et({ en: ", stacked into ", nl: ", gestapeld in " }) + "<b>" + groups.length + "</b> " +
+      et({ en: "groups by ", nl: "groepen op " }) + esc(groupLabel()) + "." +
+      (FILTER === "all" ? "" :
+        ' <button type="button" class="iv-clear" id="iv-all">' +
+        et({ en: "Show every line", nl: "Toon alle regels" }) + "</button>") + "</p>" +
       (unpriced ? '<div class="src-warn" style="margin:0 0 14px"><b>' +
         (isNl() ? (unpriced === 1 ? "1 regel heeft nog geen prijs." : unpriced + " regels hebben nog geen prijs.")
                 : (unpriced === 1 ? "1 line has no price yet." : unpriced + " lines have no price yet.")) + "</b> " +
@@ -3294,6 +3408,22 @@ body.cmt-on #root { cursor: crosshair; }
       return;
     }
     if (e.target.id === "iv-filter") { FILTER = e.target.value; invRender(); return; }
+    var uf = e.target.closest && e.target.closest("[data-unit]");
+    if (uf) {
+      var urow = ROWS.filter(function (x) { return x.id === uf.dataset.unit; })[0];
+      var uv = String(uf.value || "").trim();
+      if (urow && uv && uv !== unitLabel(urow.unit)) {
+        /* Stored as typed. Nothing is converted: the figures stay as they
+           are and only their label changes, which is the honest behaviour
+           when nobody has told us how many litres are in a crate. */
+        urow.unit = uv;
+        persist();
+        var y2 = window.scrollY || 0;
+        invRender();
+        window.scrollTo(0, y2);
+      }
+      return;
+    }
     var cf = e.target.closest && e.target.closest("[data-cat]");
     if (cf) {
       var row = ROWS.filter(function (x) { return x.id === cf.dataset.cat; })[0];
@@ -3360,6 +3490,7 @@ body.cmt-on #root { cursor: crosshair; }
       window.scrollTo(0, y);
       return;
     }
+    if (e.target.id === "iv-all") { FILTER = "all"; invRender(); return; }
     if (e.target.id === "iv-fold") {
       var heads = document.querySelectorAll("#root .inv-cat[data-fold]");
       var anyOpen = false, i;
@@ -3941,7 +4072,7 @@ body.cmt-on #root { cursor: crosshair; }
       '<div class="flag"><strong>' + et({ en: "Note", nl: "Let op" }) + "</strong>" +
       et({ en: "Do not batch simple syrup. It is bought in and in stock.",
            nl: "Suikersiroop niet zelf maken. Die wordt ingekocht en is op voorraad." }) + "</div>" +
-      '<div class="tablewrap"><table class="wide"><thead><tr>' +
+      '<div class="tablewrap"><table class="wide prep-t"><thead><tr>' +
       "<th>" + et({ en: "Item", nl: "Item" }) + "</th>" +
       "<th>" + et({ en: "Yield", nl: "Opbrengst" }) + "</th>" +
       "<th>" + et({ en: "Keeps", nl: "Houdbaar" }) + "</th>" +
@@ -4041,8 +4172,9 @@ body.cmt-on #root { cursor: crosshair; }
       spec:{en:"Highball  ·  Crushed  ·  Stir and strain", nl:"Highball  ·  Crushed  ·  Roeren en zeven"},
       b:[[{en:"Mixing glass",nl:"Mengglas"},{en:"3 whole jalapenos or 6 slices, seeds out · 20 lime · 10 simple · muddle",nl:"3 hele jalapenos of 6 schijfjes, zonder zaadjes · 20 limoen · 10 suikersiroop · kneuzen"}],
          [{en:"Stir",nl:"Roeren"},{en:"Ice in, 8 to 10",nl:"Ijs erbij, 8 tot 10 keer"}],
-         [{en:"Glass",nl:"Glas"},{en:"One third crushed ice",nl:"Voor een derde crushed ice"}],
-         [{en:"Finish",nl:"Afmaken"},{en:"Ginger beer FIRST, to 1.5 cm · then strain the jalapeno mix in on top, the top should turn green · cap with crushed if necessary",nl:"EERST gemberbier, tot 1,5 cm · zeef daarna de jalapenomix erbovenop, de bovenkant hoort groen te worden · indien nodig afdekken met crushed"}],
+         [{en:"Glass",nl:"Glas"},{en:"Ginger beer FIRST, half the glass, two thirds at most",nl:"EERST gemberbier, de helft van het glas, hooguit twee derde"}],
+         [{en:"Ice",nl:"IJs"},{en:"Crushed, about two thirds of a metal scoop, to roughly 1 cm from the rim",nl:"Crushed, ongeveer twee derde van een metalen schep, tot ongeveer 1 cm onder de rand"}],
+         [{en:"Finish",nl:"Afmaken"},{en:"Top up with the strained jalapeno mix, the top should turn green · cap with crushed if necessary",nl:"Vul aan met de gezeefde jalapenomix, de bovenkant hoort groen te worden · indien nodig afdekken met crushed"}],
          [{en:"Garnish",nl:"Garnering"},{en:"Mint sprig, slapped once · jalapeno wheel, seeds out",nl:"Munttakje, een keer aangetikt · jalapenowiel, zonder zaadjes"}]],
       say:{en:"The heat lands first, the ginger finishes it. Ask before leaving the seeds in.",nl:"De hitte komt eerst, de gember maakt het af. Vraag het voor je de zaadjes laat zitten."} },
 
@@ -5240,6 +5372,7 @@ body.cmt-on #root { cursor: crosshair; }
            to be put back after every draw or comment mode dies on a tab or
            language change. */
         document.body.classList.toggle("cmt-on", CMTMODE);
+        labelWide();
         cmtUI(); cmtLabels(); cmtRenderPanel(); cmtFit();
       } catch (err) {}
       return out;
