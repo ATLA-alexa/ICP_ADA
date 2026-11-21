@@ -2248,7 +2248,7 @@ body.cmt-on #root { cursor: crosshair; }
      shows a day dot shows the same thing and reads from the same store.
      The keep window travels on the element rather than being looked up in
      PREP2, because three of the four callers are not prep rows. */
-  function mkText(v, keeps) {
+  function mkText(v, keeps, verb) {
     var r = useBy(v, keeps), txt = "", cls = "mk-out";
     if (r === false) { txt = tt({ en: "not a date", nl: "geen datum" }); cls += " bad"; }
     else if (r && r.exp) {
@@ -2256,7 +2256,19 @@ body.cmt-on #root { cursor: crosshair; }
       cls += left < 0 ? " due" : left < 1 ? " warn" : " ok";
       txt = (left < 0 ? tt({ en: "PAST DATE, bin it. Was due ", nl: "OVER DATUM, weggooien. Was THT " })
                       : tt({ en: "Use by ", nl: "THT " })) + dotOf(r.exp);
-    } else if (r) { txt = tt({ en: "no keep window set", nl: "geen houdbaarheid ingesteld" }); cls += " bad"; }
+    } else if (r) {
+      /* No keep window on file, and for a rail bottle or a bought-in line
+         there never will be. Saying so on every one of them told you nothing
+         you could act on. Say how long it has been open instead, which is the
+         question you are actually asking when you pick the bottle up. */
+      var days = Math.floor((new Date() - r.made) / 86400000);
+      txt = tt(verb === "made" ? { en: "Made ", nl: "Gemaakt " } : { en: "Opened ", nl: "Geopend " }) +
+        dotOf(r.made) +
+        (days <= 0 ? tt({ en: ", today", nl: ", vandaag" })
+         : days === 1 ? tt({ en: ", yesterday", nl: ", gisteren" })
+         : tt({ en: ", ", nl: ", " }) + days + tt({ en: " days ago", nl: " dagen geleden" }));
+      cls += days >= 7 ? " warn" : " ok";
+    }
     else { txt = tt({ en: "no date on this yet", nl: "hier staat nog geen datum op" }); cls += " none"; }
     return { txt: txt, cls: cls };
   }
@@ -2266,24 +2278,25 @@ body.cmt-on #root { cursor: crosshair; }
     return p2(d.getDate()) + p2(d.getMonth() + 1) + String(d.getFullYear()).slice(-2);
   }
 
-  function dateCell(id, keeps, label) {
-    var v = MADE[id] || "", r = mkText(v, keeps);
+  function dateCell(id, keeps, label, verb) {
+    var v = MADE[id] || "", r = mkText(v, keeps, verb);
     return '<div class="mk">' +
       (label ? '<span class="mk-lbl">' + et(label) + "</span>" : "") +
       '<input class="mk-in" type="text" inputmode="numeric" maxlength="10" autocomplete="off" ' +
       'data-made="' + esc(id) + '" data-keeps="' + esc(tt(keeps) || "") + '" value="' + esc(v) + '" ' +
+      'data-verb="' + esc(verb || "opened") + '" ' +
       'placeholder="DDMMYY" aria-label="' + et({ en: "Date opened or made", nl: "Datum geopend of gemaakt" }) + '">' +
       '<button class="mk-now" type="button" data-today="' + esc(id) + '">' +
       et({ en: "Today", nl: "Vandaag" }) + "</button>" +
       '<span class="' + r.cls + '">' + esc(r.txt) + "</span></div>";
   }
 
-  function madeCell(id, keeps) { return dateCell(id, keeps, null); }
+  function madeCell(id, keeps) { return dateCell(id, keeps, null, "made"); }
 
   function paintMk(i) {
     var wrap = i.parentNode, out = wrap && wrap.querySelector(".mk-out");
     if (!out) return;
-    var r = mkText(i.value, i.dataset.keeps);
+    var r = mkText(i.value, i.dataset.keeps, i.dataset.verb);
     out.className = r.cls; out.textContent = r.txt;
   }
 
