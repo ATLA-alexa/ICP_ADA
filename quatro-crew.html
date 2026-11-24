@@ -575,9 +575,9 @@ var SECTIONS = [
       },
       tag: { en: "Poured at your table. Watch it turn from indigo to purple", nl: "Aan je tafel geschonken. Kijk hoe hij van indigo naar paars gaat" },
       build: [
-        { ref: "lycheescan", ml: 0, note: { en: "2 from the can, muddled in the shaker", nl: "2 uit blik, gekneusd in de shaker" } },
-        { ref: "lychee", ml: 80 },
-        { ref: "lycheecordial", ml: 40 },
+        { ref: "lycheescan", ml: 0, in: true, note: { en: "2 from the can, muddled in the shaker", nl: "2 uit blik, gekneusd in de shaker" } },
+        { ref: "lychee", ml: 80, pre: { en: "Shaker, strained", nl: "Shaker, gezeefd" } },
+        { ref: "lycheecordial", ml: 40, pre: { en: "Shaker, strained", nl: "Shaker, gezeefd" } },
         { ref: "bptcoconut", ml: 80, note: { en: "Or until 2.5 cm below the rim", nl: "Of tot 2,5 cm onder de rand" } },
         { ref: "lycheelime", ml: 40, note: { en: "Carried to the table in the brute. 25 ml lychee cordial plus 15 ml Boiron lime", nl: "In de brute mee naar tafel. 25 ml lycheecordial plus 15 ml Boiron limoen" } },
         { ref: "glitterlychee", ml: 0, note: { en: "1, garnish", nl: "1, garnering" } },
@@ -681,7 +681,9 @@ var SECTIONS = [
       build: [
         { ref: "grapes", ml: 0, in: true, note: { en: "5 to 8 full green grapes, muddled to a puree in the tin. This is flavour, not garnish", nl: "5 tot 8 hele witte druiven, in de tin tot puree gekneusd. Dit is smaak, geen garnering" } },
         { ref: "basil", ml: 0, in: true, note: { en: "10 BIG leaves, or 2 big stems, pressed ONCE only, in the tin. Any more and it turns bitter", nl: "10 GROTE blaadjes, of 2 grote stelen, EEN keer geperst, in de tin. Meer en hij wordt bitter" } },
-        { ref: "applepear", ml: 120 }, { ref: "lime", ml: 25 }, { ref: "simple", ml: 15 },
+        { ref: "applepear", ml: 120, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
+        { ref: "lime", ml: 25, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
+        { ref: "simple", ml: 15, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
         { ref: "basil", ml: 0, note: { en: "GARNISH: 1 big, beautiful leaf, floated on top. Check the basil box", nl: "GARNERING: 1 groot, mooi blad, drijvend bovenop. Kijk in de basilicumbak" } }
       ],
       bar: { en: [
@@ -718,13 +720,13 @@ var SECTIONS = [
       },
       tag: { en: "Deep red, properly tart, and soft with it", nl: "Diep rood, echt zuur, en toch zacht" },
       build: [
-        { ref: "orangezest", ml: 0, note: { en: "2 big or 4 small slices, muddled in the small tin FIRST", nl: "2 grote of 4 kleine schijfjes, als EERSTE gekneusd in de kleine tin" } },
-        { ref: "hibiscus", ml: 120, note: { en: "In the shaker, NOT the glass", nl: "In de shaker, NIET in het glas" } },
-        { ref: "orange", ml: 50, note: { en: "In the shaker", nl: "In de shaker" } },
-        { ref: "strawpuree", ml: 50, note: { en: "In the shaker", nl: "In de shaker" } },
-        { ref: "vanilla", ml: 40, note: { en: "In the shaker", nl: "In de shaker" } },
-        { ref: "lemon", ml: 30, note: { en: "In the shaker", nl: "In de shaker" } },
-        { ref: "eggfoam", ml: 0, note: { en: "15 ml egg white OR 6 to 8 drops of foamer", nl: "15 ml eiwit OF 6 tot 8 druppels schuimer" } },
+        { ref: "orangezest", ml: 0, in: true, note: { en: "2 big or 4 small slices, muddled in the small tin FIRST", nl: "2 grote of 4 kleine schijfjes, als EERSTE gekneusd in de kleine tin" } },
+        { ref: "hibiscus", ml: 120, pre: { en: "Shaker, strained, NOT fine strained", nl: "Shaker, gezeefd, NIET fijn gezeefd" }, note: { en: "In the shaker, NOT the glass", nl: "In de shaker, NIET in het glas" } },
+        { ref: "orange", ml: 50, pre: { en: "Shaker, strained, NOT fine strained", nl: "Shaker, gezeefd, NIET fijn gezeefd" } },
+        { ref: "strawpuree", ml: 50, pre: { en: "Shaker, strained, NOT fine strained", nl: "Shaker, gezeefd, NIET fijn gezeefd" } },
+        { ref: "vanilla", ml: 40, pre: { en: "Shaker, strained, NOT fine strained", nl: "Shaker, gezeefd, NIET fijn gezeefd" } },
+        { ref: "lemon", ml: 30, pre: { en: "Shaker, strained, NOT fine strained", nl: "Shaker, gezeefd, NIET fijn gezeefd" } },
+        { ref: "eggfoam", ml: 0, in: true, note: { en: "15 ml egg white OR 6 to 8 drops of foamer, dry shaken first", nl: "15 ml eiwit OF 6 tot 8 druppels schuimer, eerst droog geshaket" } },
         { ref: "strawberry", ml: 0, note: { en: "3 to 4 halved, tucked into the glass so they show through", nl: "3 tot 4 gehalveerd, in het glas gestoken zodat ze zichtbaar zijn" } }
       ],
       bar: { en: [
@@ -763,7 +765,7 @@ var SECTIONS = [
         /* Glass order: the ginger beer goes in first and is most of it, then
            the crushed ice, then the muddled mixture strained over the top. */
         { ref: "gingerbeer", fill: 0.55, ml: 0, note: { en: "In FIRST, straight into the glass. Fills it half, two thirds at most. Volume not recorded", nl: "ALS EERSTE erin, direct in het glas. Vult het half, hooguit twee derde. Hoeveelheid niet vastgelegd" } },
-        { ref: "ice", ml: 0, note: { en: "Crushed, about two thirds of a metal scoop, on top of the ginger beer", nl: "Crushed, ongeveer twee derde van een metalen schep, op het gemberbier" } },
+        { ref: "ice", ml: 0, in: true, note: { en: "Crushed, about two thirds of a metal scoop, on top of the ginger beer", nl: "Crushed, ongeveer twee derde van een metalen schep, op het gemberbier" } },
         { ref: "jalapeno", ml: 0, pre: { en: "Mixing glass, strained over", nl: "Mengglas, erover gezeefd" }, note: { en: "3 whole, or 6 slices, seeds out as standard, muddled", nl: "3 hele, of 6 schijfjes, standaard zonder zaadjes, gekneusd" } },
         { ref: "lime", ml: 20, pre: { en: "Mixing glass, strained over", nl: "Mengglas, erover gezeefd" } },
         { ref: "simple", ml: 10, pre: { en: "Mixing glass, strained over", nl: "Mengglas, erover gezeefd" } },
@@ -858,8 +860,10 @@ var SECTIONS = [
       },
       tag: null,
       build: [
-        { ref: "cranberry", ml: 80 }, { ref: "orange", ml: 30 }, { ref: "lime", ml: 30 },
-        { ref: "simple", ml: 20, note: { en: "Tasting correction, do not drop", nl: "Correctie na proeven, niet weglaten" } }
+        { ref: "cranberry", ml: 80, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
+        { ref: "orange", ml: 30, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
+        { ref: "lime", ml: 30, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
+        { ref: "simple", ml: 20, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" }, note: { en: "Tasting correction, do not drop", nl: "Correctie na proeven, niet weglaten" } }
       ],
       bar: { en: [
         "Chill the coupe with ice.",
@@ -927,12 +931,12 @@ var SECTIONS = [
       },
       tag: null,
       build: [
-        { ref: "passionjuice", ml: 40 },
-        { ref: "applepear", ml: 30 },
-        { ref: "passionpuree", ml: 20 },
-        { ref: "lime", ml: 10 },
-        { ref: "vanilla", ml: 10 },
-        { ref: "eggfoam", ml: 0, note: { en: "10 ml egg white", nl: "10 ml eiwit" } },
+        { ref: "passionjuice", ml: 40, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
+        { ref: "applepear", ml: 30, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
+        { ref: "passionpuree", ml: 20, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
+        { ref: "lime", ml: 10, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
+        { ref: "vanilla", ml: 10, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
+        { ref: "eggfoam", ml: 0, in: true, note: { en: "10 ml egg white, dry shaken first", nl: "10 ml eiwit, eerst droog geshaket" } },
         { ref: "passionfresh", ml: 0, note: { en: "Half, floated, garnish only", nl: "Half, drijvend, alleen garnering" } }
       ],
       bar: { en: [
@@ -964,11 +968,11 @@ var SECTIONS = [
       },
       tag: null,
       build: [
-        { ref: "pineapple", ml: 150 },
-        { ref: "coconutcream", ml: 50 },
-        { ref: "cocolopez", ml: 45 },
-        { ref: "pineapplechunk", ml: 0, note: { en: "2 tablespoons of the small chunks, Grand Gerard from Sligro, into the blender", nl: "2 eetlepels van de kleine stukjes, Grand Gerard van Sligro, in de blender" } },
-        { ref: "ice", ml: 0, note: { en: "100 g ice cubes, or 1 blue scoop, into the blender", nl: "100 g ijsblokjes, of 1 blauwe schep, in de blender" } },
+        { ref: "pineapple", ml: 150, pre: { en: "Blender", nl: "Blender" } },
+        { ref: "coconutcream", ml: 50, pre: { en: "Blender", nl: "Blender" } },
+        { ref: "cocolopez", ml: 45, pre: { en: "Blender", nl: "Blender" } },
+        { ref: "pineapplechunk", ml: 0, in: true, note: { en: "2 tablespoons of the small chunks, Grand Gerard from Sligro, into the blender", nl: "2 eetlepels van de kleine stukjes, Grand Gerard van Sligro, in de blender" } },
+        { ref: "ice", ml: 0, in: true, note: { en: "100 g ice cubes, or 1 blue scoop, into the blender", nl: "100 g ijsblokjes, of 1 blauwe schep, in de blender" } },
         { ref: "pineapplewedge", ml: 0, note: { en: "3 bigger wedges, the AH garnish", nl: "3 grotere stukken, de AH-garnering" } }
       ],
       bar: { en: [
@@ -5556,14 +5560,14 @@ body.cmt-on #root { cursor: crosshair; }
         var lbl = tt(b.pre);
         if (last && last.kind === "mix" && last.name === lbl) {
           last.ml += b.ml;
-          last.parts.push({ name: tt(ing.name), ml: b.ml, note: b.note ? tt(b.note) : "" });
+          last.parts.push({ ref: b.ref, name: tt(ing.name), ml: b.ml, note: b.note ? tt(b.note) : "" });
           /* The band takes the colour of whatever is most of it, not of
              whichever ingredient happens to be written first. */
           if (b.ml > last.big) { last.big = b.ml; last.ref = b.ref; }
           if (b.col) last.col = b.col;
         } else {
           last = { kind: "mix", ref: b.ref, col: b.col || null, ml: b.ml, name: lbl, note: "", big: b.ml,
-                   parts: [{ name: tt(ing.name), ml: b.ml, note: b.note ? tt(b.note) : "" }] };
+                   parts: [{ ref: b.ref, name: tt(ing.name), ml: b.ml, note: b.note ? tt(b.note) : "" }] };
           pours.push(last);
         }
       } else if (b.ml > 0) {
@@ -5578,6 +5582,20 @@ body.cmt-on #root { cursor: crosshair; }
         (b.in ? goesIn : extras).push({ name: tt(ing.name), note: b.note ? tt(b.note) : "" });
         last = null;
       }
+    }
+
+    /* A drink that is wholly one mixture, shaken or blended and strained
+       into the glass, has no layers at all. Collapsing it to a single band
+       would be truthful but would throw away the proportions, which are the
+       useful part. So the parts are drawn to scale and the glass is marked
+       and captioned as a mixture rather than a stack. */
+    var allMixed = pours.length === 1 && pours[0].kind === "mix", mixName = "";
+    if (allMixed) {
+      var grp = pours[0];
+      mixName = grp.name;
+      pours = grp.parts.filter(function (x) { return x.ml > 0; }).map(function (x) {
+        return { kind: "ml", ref: x.ref, ml: x.ml, name: x.name, note: x.note };
+      });
     }
 
     var shape = glassShape(d);
@@ -5628,10 +5646,13 @@ body.cmt-on #root { cursor: crosshair; }
                   "</span>" + amount + sub + "</li>";
       }
 
-      h += '<div class="ag-viz">' + glassSVG(shape, pours) +
+      h += '<div class="ag-viz' + (allMixed ? " mixed" : "") + '">' + glassSVG(shape, pours) +
            '<ol class="ag-leg">' + legend + "</ol>" +
            "</div>" +
-           '<p class="ag-tot">' + et({ en: "Drawn to scale, bottom of the glass first.", nl: "Op schaal getekend, onderkant van het glas eerst." }) +
+           '<p class="ag-tot">' + (allMixed
+             ? esc(mixName) + ". " + et({ en: "These are proportions, not layers: it reaches the glass as one liquid.",
+                                          nl: "Dit zijn verhoudingen, geen lagen: het komt als een vloeistof in het glas." })
+             : et({ en: "Drawn to scale, bottom of the glass first.", nl: "Op schaal getekend, onderkant van het glas eerst." })) +
            " " + total + " ml" + et({ en: " of measured liquid", nl: " afgemeten vloeistof" }) +
            (anyFill
              ? et({ en: ", plus a long pour nobody has measured, drawn by the share of the glass it fills.",
@@ -5744,6 +5765,10 @@ body.cmt-on #root { cursor: crosshair; }
 .ag-k { flex: 0 0 72px; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
 .ag-v { flex: 1 1 auto; font-size: 14px; }
 .ag-viz { display: flex; gap: var(--s4); align-items: flex-start; }
+/* A mixture is marked with a hatch behind the glass so it cannot be read as
+   a stack of layers even at a glance, without the caption. */
+.ag-viz.mixed .ag-glass { background: repeating-linear-gradient(135deg,
+  rgba(168,134,60,.10) 0 4px, transparent 4px 9px); border-radius: 7px; }
 .ag-glass { flex: 0 0 60px; display: block; }
 .ag-well { fill: #fff; }
 .ag-stem { fill: #fff; stroke: rgba(35,32,28,0.38); stroke-width: 1.5; stroke-linejoin: round; }

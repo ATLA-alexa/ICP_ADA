@@ -3838,14 +3838,14 @@ body.cmt-on #root { cursor: crosshair; }
         var lbl = tt(b.pre);
         if (last && last.kind === "mix" && last.name === lbl) {
           last.ml += b.ml;
-          last.parts.push({ name: tt(ing.name), ml: b.ml, note: b.note ? tt(b.note) : "" });
+          last.parts.push({ ref: b.ref, name: tt(ing.name), ml: b.ml, note: b.note ? tt(b.note) : "" });
           /* The band takes the colour of whatever is most of it, not of
              whichever ingredient happens to be written first. */
           if (b.ml > last.big) { last.big = b.ml; last.ref = b.ref; }
           if (b.col) last.col = b.col;
         } else {
           last = { kind: "mix", ref: b.ref, col: b.col || null, ml: b.ml, name: lbl, note: "", big: b.ml,
-                   parts: [{ name: tt(ing.name), ml: b.ml, note: b.note ? tt(b.note) : "" }] };
+                   parts: [{ ref: b.ref, name: tt(ing.name), ml: b.ml, note: b.note ? tt(b.note) : "" }] };
           pours.push(last);
         }
       } else if (b.ml > 0) {
@@ -3860,6 +3860,20 @@ body.cmt-on #root { cursor: crosshair; }
         (b.in ? goesIn : extras).push({ name: tt(ing.name), note: b.note ? tt(b.note) : "" });
         last = null;
       }
+    }
+
+    /* A drink that is wholly one mixture, shaken or blended and strained
+       into the glass, has no layers at all. Collapsing it to a single band
+       would be truthful but would throw away the proportions, which are the
+       useful part. So the parts are drawn to scale and the glass is marked
+       and captioned as a mixture rather than a stack. */
+    var allMixed = pours.length === 1 && pours[0].kind === "mix", mixName = "";
+    if (allMixed) {
+      var grp = pours[0];
+      mixName = grp.name;
+      pours = grp.parts.filter(function (x) { return x.ml > 0; }).map(function (x) {
+        return { kind: "ml", ref: x.ref, ml: x.ml, name: x.name, note: x.note };
+      });
     }
 
     var shape = glassShape(d);
@@ -3910,10 +3924,13 @@ body.cmt-on #root { cursor: crosshair; }
                   "</span>" + amount + sub + "</li>";
       }
 
-      h += '<div class="ag-viz">' + glassSVG(shape, pours) +
+      h += '<div class="ag-viz' + (allMixed ? " mixed" : "") + '">' + glassSVG(shape, pours) +
            '<ol class="ag-leg">' + legend + "</ol>" +
            "</div>" +
-           '<p class="ag-tot">' + et({ en: "Drawn to scale, bottom of the glass first.", nl: "Op schaal getekend, onderkant van het glas eerst." }) +
+           '<p class="ag-tot">' + (allMixed
+             ? esc(mixName) + ". " + et({ en: "These are proportions, not layers: it reaches the glass as one liquid.",
+                                          nl: "Dit zijn verhoudingen, geen lagen: het komt als een vloeistof in het glas." })
+             : et({ en: "Drawn to scale, bottom of the glass first.", nl: "Op schaal getekend, onderkant van het glas eerst." })) +
            " " + total + " ml" + et({ en: " of measured liquid", nl: " afgemeten vloeistof" }) +
            (anyFill
              ? et({ en: ", plus a long pour nobody has measured, drawn by the share of the glass it fills.",
@@ -4026,6 +4043,10 @@ body.cmt-on #root { cursor: crosshair; }
 .ag-k { flex: 0 0 72px; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
 .ag-v { flex: 1 1 auto; font-size: 14px; }
 .ag-viz { display: flex; gap: var(--s4); align-items: flex-start; }
+/* A mixture is marked with a hatch behind the glass so it cannot be read as
+   a stack of layers even at a glance, without the caption. */
+.ag-viz.mixed .ag-glass { background: repeating-linear-gradient(135deg,
+  rgba(168,134,60,.10) 0 4px, transparent 4px 9px); border-radius: 7px; }
 .ag-glass { flex: 0 0 60px; display: block; }
 .ag-well { fill: #fff; }
 .ag-stem { fill: #fff; stroke: rgba(35,32,28,0.38); stroke-width: 1.5; stroke-linejoin: round; }
