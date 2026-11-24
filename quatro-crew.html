@@ -351,7 +351,7 @@ var UI = {
   method:      { en: "Method",          nl: "Methode" },
   atBar:       { en: "At the bar",      nl: "Achter de bar" },
   atTable:     { en: "At the table",    nl: "Aan tafel" },
-  sayThis:     { en: "Say this",        nl: "Zeg dit" },
+  sayThis:     { en: "Important",      nl: "Belangrijk" },
   ingredients: { en: "Ingredients, in build order", nl: "Ingredienten, in opbouwvolgorde" },
   printBooklet:{ en: "Print booklet",   nl: "Boekje afdrukken" },
   bookletNote: { en: "One drink per page with a notes box, grayscale safe.",
@@ -672,10 +672,11 @@ var SECTIONS = [
         "Rook de rozemarijn 3 seconden, ALLEEN als de bediening klaarstaat om deze tafel te lopen, nooit eerder. Blaas hem uit en zet hem, met de rauwe tijm, tussen het ijs."
       ]},
       table: null,
-      say: { en: ["This is the one for someone who does not want anything sweet. Maple instead of sugar, two herbs, nothing else.",
-                  "BAR AND FLOOR. This drink has to be carried while the rosemary is still smoking. Do not light it until someone is there to take it."],
-             nl: ["Dit is de drank voor wie niets zoets wil. Ahornsiroop in plaats van suiker, twee kruiden, niets anders.",
-                  "BAR EN BEDIENING. Dit drankje moet gelopen worden terwijl de rozemarijn nog rookt. Steek hem pas aan als iemand klaarstaat om hem mee te nemen."] }
+      /* The line about it being the drink for someone who wants nothing
+         sweet was guest patter under a heading that is now for things the
+         bar must not get wrong. The flavour line on the menu carries it. */
+      say: { en: ["BAR AND FLOOR. This drink has to be carried while the rosemary is still smoking. Do not light it until someone is there to take it."],
+             nl: ["BAR EN BEDIENING. Dit drankje moet gelopen worden terwijl de rozemarijn nog rookt. Steek hem pas aan als iemand klaarstaat om hem mee te nemen."] }
     },
     {
       id: "the-hulk", name: "The Hulk", price: null, tool: "shaker",
@@ -714,10 +715,8 @@ var SECTIONS = [
       ]},
       table: null,
       sayLabel: { en: "Nice to know", nl: "Handig om te weten" },
-      say: { en: ["Not enough liquid? Add 5 to 15 ml sparkling water to keep the crispness the drink is known for.",
-                  "FLOOR STAFF. The Hulk is extremely underrated. It is extremely refreshing and sweeter than the Lychee Siren. The other drinks lean Asian; this one is purely European ingredients. Please sell it."],
-             nl: ["Te weinig vloeistof? Voeg 5 tot 15 ml spa rood toe om de frisheid te behouden waar de drank om bekend staat.",
-                  "BEDIENING. The Hulk wordt enorm onderschat. Hij is heel verfrissend en zoeter dan de Lychee Siren. De andere drankjes leunen Aziatisch; deze is puur Europese ingredienten. Verkoop hem alsjeblieft."] }
+      say: { en: ["FLOOR STAFF. The Hulk is extremely underrated. It is extremely refreshing and sweeter than the Lychee Siren. The other drinks lean Asian; this one is purely European ingredients. Please sell it."],
+             nl: ["BEDIENING. The Hulk wordt enorm onderschat. Hij is heel verfrissend en zoeter dan de Lychee Siren. De andere drankjes leunen Aziatisch; deze is puur Europese ingredienten. Verkoop hem alsjeblieft."] }
     },
     {
       id: "hibiscus-royale", name: "Hibiscus Royale", price: null, tool: "shaker",
@@ -1368,7 +1367,7 @@ function renderChrome() {
 function guideHTML() {
   var nl = LANG === "nl";
   var rows = [
-    [ui("menu"),      nl ? "De menukaart zoals de gast hem ziet. Geen recepten, geen prijzen. Tik op een drankje voor het verhaal." : "The menu as the guest sees it. No recipes, no prices. Tap a drink for its story."],
+    [ui("menu"),      nl ? "De kaart zoals de gast hem ziet, met per drankje een smaakregel om op te kiezen. Tik op een drankje voor het verhaal, het glas, het gereedschap en hoe het is opgebouwd, op schaal getekend. Onder de koffie staat wat er in elke kop zit." : "The menu as the guest sees it, each drink with a flavour line to choose on. Tap a drink for its story, its glass, the kit it takes and how it is built, drawn to scale. Under the coffee is what goes in each cup."],
     [ui("builds"),    nl ? "Het volledige recept van elk drankje, plus de knop om het oefenboekje te printen, een drankje per pagina." : "The full recipe for every drink, plus the button that prints the practice booklet, one drink per page."],
     [ui("rail"),      nl ? "De speedrail-indeling, slot voor slot, op kleur." : "The speedrail layout, slot by slot, by colour."],
     [ui("prep"),      nl ? "Wat vooraf gemaakt wordt, hoeveel, hoe lang het houdbaar is en waar het staat, met de bereidingswijze." : "What gets made ahead, how much, how long it keeps and where it lives, with the how-to."],
@@ -4197,7 +4196,7 @@ body.cmt-on #root { cursor: crosshair; }
          [{en:"Glass",nl:"Glas"},{en:"Half fill with sparkling water · crushed ice, a third of a metal scoop, to about 1 cm from the rim",nl:"Half vullen met bruisend water · crushed ice, een derde van een metalen schep, tot ongeveer 1 cm onder de rand"}],
          [{en:"Finish",nl:"Afmaken"},{en:"Top with the cordial mixture from the mixing glass, for a clean silhouette",nl:"Aanvullen met het cordialmengsel uit het mengglas, voor een mooi silhouet"}],
          [{en:"Smoke LAST",nl:"ALS LAATSTE roken"},{en:"Only once floor staff are there to carry it. Rosemary 3 seconds, blow it out, set it and the raw thyme in the ice",nl:"Pas als de bediening klaarstaat om hem te lopen. Rozemarijn 3 seconden, uitblazen, en zet hem met de rauwe tijm in het ijs"}]],
-      say:{en:"For someone who does not want anything sweet. Maple instead of sugar, two herbs, nothing else. It has to reach the table still smoking.",nl:"Voor wie niets zoets wil. Ahorn in plaats van suiker, twee kruiden, meer niet. Hij moet rokend aan tafel komen."} },
+      say:{en:"It has to reach the table still smoking. Do not light it until someone is there to carry it.",nl:"Hij moet rokend aan tafel komen. Steek hem pas aan als iemand klaarstaat om hem te lopen."} },
 
     { id:"the-hulk", name:"The Hulk", sw:"#6E8C3A",
       spec:{en:"Chilled coupe  ·  No ice in the glass  ·  Shake and fine strain", nl:"Gekoelde coupe  ·  Geen ijs in het glas  ·  Shaken en fijn zeven"},
@@ -4205,7 +4204,7 @@ body.cmt-on #root { cursor: crosshair; }
          [{en:"Tin",nl:"Tin"},{en:"Muddle 5 to 8 grapes to a puree · 10 BIG basil leaves or 2 stems, press ONCE · 120 apple-pear · 25 lime · 15 simple",nl:"Kneus 5 tot 8 druiven tot puree · 10 GROTE basilicumblaadjes of 2 stelen, EEN keer persen · 120 appel-peer · 25 limoen · 15 suikersiroop"}],
          [{en:"Shake",nl:"Shaken"},{en:"Tip the coupe ice into the tin · cap · hard 12 seconds, until the chips sound smaller",nl:"Kiep het ijs uit de coupe in de tin · sluiten · hard 12 seconden, tot de ijsstukjes kleiner klinken"}],
          [{en:"Finish",nl:"Afmaken"},{en:"Fine strain into the chilled coupe · float the biggest, best basil leaf on top, check the basil box",nl:"Fijn zeven in de gekoelde coupe · laat het grootste, mooiste basilicumblaadje bovenop drijven, kijk in de basilicumbak"}]],
-      say:{en:"Short on liquid? 5 to 15 soda keeps the crispness. FLOOR: extremely underrated, extremely refreshing, sweeter than the Lychee Siren, and the one purely European drink on the list. Sell it.",nl:"Te weinig vloeistof? 5 tot 15 spa rood houdt de frisheid. BEDIENING: enorm onderschat, heel verfrissend, zoeter dan de Lychee Siren, en het enige puur Europese drankje op de lijst. Verkoop hem."} },
+      say:{en:"FLOOR: extremely underrated, extremely refreshing, sweeter than the Lychee Siren, and the one purely European drink on the list. Sell it.",nl:"BEDIENING: enorm onderschat, heel verfrissend, zoeter dan de Lychee Siren, en het enige puur Europese drankje op de lijst. Verkoop hem."} },
 
     { id:"hibiscus-royale", name:"Hibiscus Royale", sw:"#9E2B3B",
       spec:{en:"Coppa  ·  Cubed  ·  Dry shake then wet shake", nl:"Coppa  ·  Blokjes  ·  Droog shaken, dan nat shaken"},

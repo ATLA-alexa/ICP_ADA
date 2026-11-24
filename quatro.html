@@ -340,7 +340,7 @@ var UI = {
   method:      { en: "Method",          nl: "Methode" },
   atBar:       { en: "At the bar",      nl: "Achter de bar" },
   atTable:     { en: "At the table",    nl: "Aan tafel" },
-  sayThis:     { en: "Say this",        nl: "Zeg dit" },
+  sayThis:     { en: "Important",      nl: "Belangrijk" },
   ingredients: { en: "Ingredients, in build order", nl: "Ingredienten, in opbouwvolgorde" },
   printBooklet:{ en: "Print booklet",   nl: "Boekje afdrukken" },
   bookletNote: { en: "One drink per page with a notes box, grayscale safe.",
@@ -661,10 +661,11 @@ var SECTIONS = [
         "Rook de rozemarijn 3 seconden, ALLEEN als de bediening klaarstaat om deze tafel te lopen, nooit eerder. Blaas hem uit en zet hem, met de rauwe tijm, tussen het ijs."
       ]},
       table: null,
-      say: { en: ["This is the one for someone who does not want anything sweet. Maple instead of sugar, two herbs, nothing else.",
-                  "BAR AND FLOOR. This drink has to be carried while the rosemary is still smoking. Do not light it until someone is there to take it."],
-             nl: ["Dit is de drank voor wie niets zoets wil. Ahornsiroop in plaats van suiker, twee kruiden, niets anders.",
-                  "BAR EN BEDIENING. Dit drankje moet gelopen worden terwijl de rozemarijn nog rookt. Steek hem pas aan als iemand klaarstaat om hem mee te nemen."] }
+      /* The line about it being the drink for someone who wants nothing
+         sweet was guest patter under a heading that is now for things the
+         bar must not get wrong. The flavour line on the menu carries it. */
+      say: { en: ["BAR AND FLOOR. This drink has to be carried while the rosemary is still smoking. Do not light it until someone is there to take it."],
+             nl: ["BAR EN BEDIENING. Dit drankje moet gelopen worden terwijl de rozemarijn nog rookt. Steek hem pas aan als iemand klaarstaat om hem mee te nemen."] }
     },
     {
       id: "the-hulk", name: "The Hulk", price: null, tool: "shaker",
@@ -703,10 +704,8 @@ var SECTIONS = [
       ]},
       table: null,
       sayLabel: { en: "Nice to know", nl: "Handig om te weten" },
-      say: { en: ["Not enough liquid? Add 5 to 15 ml sparkling water to keep the crispness the drink is known for.",
-                  "FLOOR STAFF. The Hulk is extremely underrated. It is extremely refreshing and sweeter than the Lychee Siren. The other drinks lean Asian; this one is purely European ingredients. Please sell it."],
-             nl: ["Te weinig vloeistof? Voeg 5 tot 15 ml spa rood toe om de frisheid te behouden waar de drank om bekend staat.",
-                  "BEDIENING. The Hulk wordt enorm onderschat. Hij is heel verfrissend en zoeter dan de Lychee Siren. De andere drankjes leunen Aziatisch; deze is puur Europese ingredienten. Verkoop hem alsjeblieft."] }
+      say: { en: ["FLOOR STAFF. The Hulk is extremely underrated. It is extremely refreshing and sweeter than the Lychee Siren. The other drinks lean Asian; this one is purely European ingredients. Please sell it."],
+             nl: ["BEDIENING. The Hulk wordt enorm onderschat. Hij is heel verfrissend en zoeter dan de Lychee Siren. De andere drankjes leunen Aziatisch; deze is puur Europese ingredienten. Verkoop hem alsjeblieft."] }
     },
     {
       id: "hibiscus-royale", name: "Hibiscus Royale", price: null, tool: "shaker",
@@ -1357,7 +1356,7 @@ function renderChrome() {
 function guideHTML() {
   var nl = LANG === "nl";
   var rows = [
-    [ui("menu"),      nl ? "De menukaart zoals de gast hem ziet. Geen recepten, geen prijzen. Tik op een drankje voor het verhaal." : "The menu as the guest sees it. No recipes, no prices. Tap a drink for its story."],
+    [ui("menu"),      nl ? "De kaart zoals de gast hem ziet, met per drankje een smaakregel om op te kiezen. Tik op een drankje voor het verhaal, het glas, het gereedschap en hoe het is opgebouwd, op schaal getekend. Onder de koffie staat wat er in elke kop zit." : "The menu as the guest sees it, each drink with a flavour line to choose on. Tap a drink for its story, its glass, the kit it takes and how it is built, drawn to scale. Under the coffee is what goes in each cup."],
     [ui("builds"),    nl ? "Het volledige recept van elk drankje, plus de knop om het oefenboekje te printen, een drankje per pagina." : "The full recipe for every drink, plus the button that prints the practice booklet, one drink per page."],
     [ui("rail"),      nl ? "De speedrail-indeling, slot voor slot, op kleur." : "The speedrail layout, slot by slot, by colour."],
     [ui("prep"),      nl ? "Wat vooraf gemaakt wordt, hoeveel, hoe lang het houdbaar is en waar het staat, met de bereidingswijze." : "What gets made ahead, how much, how long it keeps and where it lives, with the how-to."],
