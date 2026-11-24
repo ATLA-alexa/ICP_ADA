@@ -5410,11 +5410,96 @@ body.cmt-on #root { cursor: crosshair; }
            language change. */
         document.body.classList.toggle("cmt-on", CMTMODE);
         labelWide();
+        coffeeMount();
         cmtUI(); cmtLabels(); cmtRenderPanel(); cmtFit();
-      } catch (err) {}
+      } catch (err) {
+        /* This catch is here so a fault in the patch cannot take the whole
+           app down mid-service. It used to swallow the error silently, which
+           turned a one-line mistake into a hunt. */
+        if (window.console && console.error) console.error("Quatro render hook:", err);
+      }
       return out;
     };
   })();
+
+  /* ---------------- 11. the coffee ratio chart ----------------
+     House ratios as given on 24 November. Drawn bottom to top the way the
+     cup fills: espresso at the bottom, milk or water above it, foam last. */
+  var CBITS = {
+    esp:  { col: "#3B2416", en: "Espresso",     nl: "Espresso" },
+    milk: { col: "#F0E2CB", en: "Steamed milk", nl: "Gestoomde melk" },
+    foam: { col: "#FBF5EA", en: "Milk foam",    nl: "Melkschuim" },
+    water:{ col: "#E6EEF2", en: "Hot water",    nl: "Heet water" },
+    choc: { col: "#6B3F24", en: "Chocolate",    nl: "Chocolade" }
+  };
+  /* Each list runs bottom of the cup first. */
+  var COFFEE = [
+    ["Espresso",   [["esp", 100]]],
+    ["Americano",  [["esp", 20], ["water", 80]]],
+    ["Macchiato",  [["esp", 90], ["foam", 10]]],
+    ["Cortado",    [["esp", 70], ["milk", 30]]],
+    ["Cappuccino", [["esp", 10], ["milk", 30], ["foam", 60]]],
+    ["Flat white", [["esp", 20], ["milk", 80]]],
+    ["Latte",      [["esp", 10], ["milk", 90]]],
+    ["Mocha",      [["esp", 20], ["choc", 20], ["milk", 60]]]
+  ];
+
+  /* Its own counter: the glance block keeps UID inside a nested closure of
+     its own, so it is not shared. */
+  var CUID = 0;
+
+  function cupSVG(parts) {
+    /* A tapered cup. The fill is clipped to it so the bands follow the taper
+       instead of sitting in a rectangle behind it. */
+    var id = "cup" + (++CUID);
+    var body = "M9,6 L51,6 L45,52 Q44,58 38,58 L22,58 Q16,58 15,52 Z";
+    var y = 6, H = 52, rects = "", i;
+    for (i = parts.length - 1; i >= 0; i--) {        /* top of the cup first */
+      var h = H * (parts[i][1] / 100);
+      rects += '<rect x="0" y="' + y.toFixed(2) + '" width="60" height="' +
+               (h + 0.4).toFixed(2) + '" fill="' + CBITS[parts[i][0]].col + '"/>';
+      y += h;
+    }
+    return '<svg class="cof-cup" viewBox="0 0 68 68" width="68" height="68" ' +
+      'role="img" aria-hidden="true" focusable="false">' +
+      '<defs><clipPath id="' + id + '"><path d="' + body + '"/></clipPath></defs>' +
+      '<path d="' + body + '" fill="#fff"/>' +
+      '<g clip-path="url(#' + id + ')">' + rects + "</g>" +
+      '<path d="' + body + '" fill="none" stroke="rgba(35,32,28,0.44)" stroke-width="1.7" stroke-linejoin="round"/>' +
+      /* the handle */
+      '<path d="M51,16 Q61,17 60,25 Q59,33 47,34" fill="none" stroke="rgba(35,32,28,0.44)" stroke-width="1.7"/>' +
+      '<path d="M20,62 L40,62" stroke="rgba(35,32,28,0.30)" stroke-width="2" stroke-linecap="round"/>' +
+      "</svg>";
+  }
+
+  function coffeeChart() {
+    return '<div class="panel cof-panel"><h3>' +
+      et({ en: "What is in each one", nl: "Wat er in elke kop zit" }) + "</h3>" +
+      '<p class="legend">' +
+      et({ en: "House ratios. Drawn the way the cup fills, espresso at the bottom and foam last.",
+           nl: "Huisverhoudingen. Getekend zoals de kop vult, espresso onderin en schuim als laatste." }) + "</p>" +
+      '<div class="cof-grid">' + COFFEE.map(function (c) {
+        var parts = c[1];
+        return '<div class="cof-one">' + cupSVG(parts) +
+          '<span class="cof-nm">' + esc(c[0]) + "</span><ul class=\"cof-bits\">" +
+          parts.slice().reverse().map(function (b) {
+            return '<li><i style="background:' + CBITS[b[0]].col + '"></i>' +
+                   b[1] + "% " + esc(tt({ en: CBITS[b[0]].en, nl: CBITS[b[0]].nl })) + "</li>";
+          }).join("") + "</ul></div>";
+      }).join("") + "</div>" +
+      '<div class="qflag">' +
+      et({ en: "The menu above lists a Latte macchiato; the chart shows the espresso Macchiato, which is a different drink. Say which you serve and I will make them agree.",
+           nl: "De kaart hierboven noemt een Latte macchiato; het schema toont de espresso Macchiato, een ander drankje. Zeg welke jullie schenken en ik laat ze overeenkomen." }) +
+      "</div></div>";
+  }
+
+  /* Put it under the coffee list every time the menu is drawn. */
+  function coffeeMount() {
+    var sec = document.getElementById("sec-coffee");
+    if (!sec || sec.querySelector(".cof-panel")) return;
+    var rows = sec.querySelector(".rows");
+    if (rows) rows.insertAdjacentHTML("afterend", coffeeChart());
+  }
 
   /* ---------------- 10. at a glance: glass, kit, build to scale ----------------
      Tap a drink on the menu and see the build drawn from the build list
@@ -5792,6 +5877,17 @@ body.cmt-on #root { cursor: crosshair; }
 .ag-leg { flex: 1 1 auto; list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; align-content: start; }
 .ag-leg li { display: grid; grid-template-columns: 12px 1fr auto; gap: 8px; align-items: baseline; font-size: 14px; line-height: 1.35; }
 .ag-leg i { width: 12px; height: 12px; border-radius: 3px; border: 1px solid rgba(35,32,28,0.22); align-self: center; }
+.cof-panel .legend { margin: 0 0 var(--s3); }
+.cof-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--s4); }
+.cof-one { display: grid; grid-template-columns: 68px 1fr; grid-template-rows: auto 1fr;
+  column-gap: 10px; align-items: start; }
+.cof-cup { grid-row: 1 / 3; }
+.cof-nm { font-family: 'Marcellus', Georgia, serif; font-size: 15px; line-height: 1.2; }
+.cof-bits { list-style: none; margin: 4px 0 0; padding: 0; font-size: 12px; line-height: 1.5; }
+.cof-bits li { display: flex; align-items: center; gap: 5px; }
+.cof-bits i { width: 9px; height: 9px; border-radius: 2px; flex: 0 0 auto;
+  box-shadow: inset 0 0 0 1px rgba(35,32,28,0.25); }
+@media (max-width: 420px) { .cof-grid { grid-template-columns: 1fr; } }
 .ag-tag { font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--gold);
   border: 1px solid var(--gold-pale); border-radius: 999px; padding: 1px 6px; margin-left: 5px;
   white-space: nowrap; }
