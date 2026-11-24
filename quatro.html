@@ -92,6 +92,10 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .swatch { width: 12px; height: 12px; border-radius: 999px; flex: 0 0 auto; transform: translateY(1px); box-shadow: inset 0 0 0 1px rgba(35,32,28,0.22); }
 .card-name { font-family: var(--display); font-size: 19px; flex: 1 1 auto; min-width: 0; }
 .card-desc { display: block; margin: var(--s2) 0 0; font-size: 14px; color: var(--ink-soft); }
+.card-flav { display: block; margin-top: var(--s2); font-size: 13px; line-height: 1.5;
+  color: var(--gold); font-style: italic; }
+.sheet-flav { margin: 0 0 var(--s3); font-size: 15px; line-height: 1.5; color: var(--gold);
+  font-style: italic; border-left: 2px solid var(--gold-pale); padding-left: var(--s3); }
 .card-tag { display: inline-block; margin-top: var(--s3); font-size: 11.5px; color: var(--gold); border: 1px solid var(--gold-pale); border-radius: 999px; padding: 3px 9px; }
 
 .rows { display: flex; flex-direction: column; }
@@ -558,6 +562,8 @@ var SECTIONS = [
         en: "Lychee shaken with the fruit itself, over crushed ice, under an indigo layer of coconut water infused with butterfly pea flower. The lime arrives at your table.",
         nl: "Lychee geshaket met de vrucht zelf, over crushed ice, onder een indigo laag kokoswater met vlindererwtbloem. De limoen komt aan je tafel."
       },
+      flavour: { en: "Floral and soft, lightly sweet, sharpened by the lime you add yourself",
+                 nl: "Bloemig en zacht, licht zoet, scherper gemaakt met de limoen die je er zelf bij doet" },
       story: {
         en: "Lychee on its own is all perfume and no spine, so it reads as sweet and then goes nowhere. Shaking it with the fruit from the can gives it something to hold on to, and the coconut water carries it. The flower is not stirred in. It sits on top in its own layer, waiting for acid, which is why the lime comes to the table separately rather than going in at the bar. In Taipei, lychee is what you drink because it is hot outside; the rest of this glass is what happened to that habit in Amsterdam.",
         nl: "Lychee op zich is alleen parfum en geen ruggengraat, dus het smaakt zoet en verdwijnt dan. Shaken met de vrucht uit blik geeft het iets om zich aan vast te houden, en het kokoswater draagt het. De bloem wordt niet geroerd. Hij ligt er in een eigen laag bovenop, wachtend op zuur, en daarom komt de limoen apart naar tafel in plaats van achter de bar erin te gaan. In Taipei drink je lychee omdat het heet is buiten; de rest van dit glas is wat er met die gewoonte in Amsterdam is gebeurd."
@@ -615,9 +621,11 @@ var SECTIONS = [
       ice: { en: "Crushed", nl: "Crushed" },
       method: { en: "Stir and strain", nl: "Roeren en zeven" },
       desc: {
-        en: "A rosemary and lemon salt rim, smoked rosemary and raw thyme over dark maple, cut with lemon and lengthened over crushed ice. Herbal, smoky, quietly bitter at the edges.",
-        nl: "Een rand van rozemarijn-citroenzout, gerookte rozemarijn en rauwe tijm over donkere ahorn, met citroen en verlengd over crushed ice. Kruidig, rokerig, licht bitter aan de randen."
+        en: "A rosemary and lemon salt rim, smoked rosemary and raw thyme over dark maple, cut with lemon and lengthened over crushed ice.",
+        nl: "Een rand van rozemarijn-citroenzout, gerookte rozemarijn en rauwe tijm over donkere ahorn, met citroen en verlengd over crushed ice."
       },
+      flavour: { en: "Herbal and smoky, dry rather than sweet, quietly bitter at the edges",
+                 nl: "Kruidig en rokerig, eerder droog dan zoet, licht bitter aan de randen" },
       story: {
         en: "Rosemary is smoked for exactly three seconds, long enough to perfume the glass, short enough to avoid ash. The salt rim carries rosemary and lemon zest, so the first sip is herbal and bright. Maple brings smoke and bitterness inside its sweetness, arguing with the herbs instead of covering them. Thyme stays raw and green underneath to stop the whole thing turning medicinal, and the lemon keeps the whole thing dry. It is lit only once someone is ready to carry it, so it is still smoking when it reaches the table.",
         nl: "Rozemarijn wordt precies drie seconden gerookt, lang genoeg om het glas te parfumeren, kort genoeg om as te vermijden. De zoutrand draagt rozemarijn en citroenschil, dus de eerste slok is kruidig en helder. Ahorn brengt rook en bitterheid mee in zijn zoetheid, wat ruzie maakt met de kruiden in plaats van ze te bedekken. Tijm blijft rauw en groen eronder om te voorkomen dat het geheel medicinaal wordt, en de citroen houdt het droog. Hij wordt pas aangestoken als iemand klaarstaat om hem te lopen, zodat hij nog rookt als hij aan tafel komt."
@@ -666,7 +674,8 @@ var SECTIONS = [
         en: "Basil pressed once, never twice, gives up its peppery anise oils into the sugar of muddled green grapes. Apple and pear give it body, lime lifts it. The green is the leaf itself, no colouring.",
         nl: "Basilicum, een keer geperst en nooit twee keer, geeft zijn peperige anijsolie af aan de suiker van gekneusde witte druiven. Appel en peer geven body, limoen tilt het op. Het groen is het blad zelf, geen kleurstof."
       },
-      tag: { en: "On the sour side, very refreshing", nl: "Aan de zure kant, heel verfrissend" },
+      flavour: { en: "Green and sour, peppery with basil, the most refreshing of the ten",
+                 nl: "Groen en zuur, peperig van de basilicum, de meest verfrissende van de tien" },
       build: [
         { ref: "grapes", ml: 0, in: true, note: { en: "5 to 8 full green grapes, muddled to a puree in the tin. This is flavour, not garnish", nl: "5 tot 8 hele witte druiven, in de tin tot puree gekneusd. Dit is smaak, geen garnering" } },
         { ref: "basil", ml: 0, in: true, note: { en: "10 BIG leaves, or 2 big stems, pressed ONCE only, in the tin. Any more and it turns bitter", nl: "10 GROTE blaadjes, of 2 grote stelen, EEN keer geperst, in de tin. Meer en hij wordt bitter" } },
@@ -707,7 +716,8 @@ var SECTIONS = [
         en: "Hibiscus steeps deep red and properly tart. Strawberry rounds that acid with sweetness and body, orange and vanilla soften it, and the whole thing is shaken into one colour, so the last sip tastes like the first.",
         nl: "Hibiscus trekt diep rood en echt zuur. Aardbei rondt dat zuur af met zoetheid en body, sinaasappel en vanille verzachten het, en het geheel wordt tot een kleur geshaket, zodat de laatste slok smaakt als de eerste."
       },
-      tag: { en: "Deep red, properly tart, and soft with it", nl: "Diep rood, echt zuur, en toch zacht" },
+      flavour: { en: "Properly tart and deep red, rounded by strawberry and vanilla",
+                 nl: "Echt zuur en diep rood, afgerond met aardbei en vanille" },
       build: [
         { ref: "orangezest", ml: 0, in: true, note: { en: "2 big or 4 small slices, muddled in the small tin FIRST", nl: "2 grote of 4 kleine schijfjes, als EERSTE gekneusd in de kleine tin" } },
         { ref: "hibiscus", ml: 120, pre: { en: "Shaker, strained, NOT fine strained", nl: "Shaker, gezeefd, NIET fijn gezeefd" }, note: { en: "In the shaker, NOT the glass", nl: "In de shaker, NIET in het glas" } },
@@ -749,6 +759,8 @@ var SECTIONS = [
         en: "Fresh jalapeno, half a lime, proper ginger beer over crushed ice. The heat arrives first, the ginger finishes it.",
         nl: "Verse jalapeno, een halve limoen, echte ginger beer over crushed ice. De hitte komt eerst, de gember maakt het af."
       },
+      flavour: { en: "Hot first, gingery after, dry all the way through",
+                 nl: "Eerst heet, dan gember, en overal droog" },
       tag: { en: "Not a jalapeno fan? Feel free to ask without", nl: "Geen jalapeno-liefhebber? Vraag hem gerust zonder" },
       build: [
         /* Glass order: the ginger beer goes in first and is most of it, then
@@ -792,11 +804,12 @@ var SECTIONS = [
         en: "Mint and lime muddled through crushed ice, blackcurrant shaken over the top, and butterfly pea flower layered above it. Purple below, blue above.",
         nl: "Munt en limoen gekneusd door crushed ice, cassis eroverheen geschud, en vlindererwtbloem als laag daarboven. Paars onder, blauw erboven."
       },
+      flavour: { en: "Berry-deep and herb-fresh, long and cooling",
+                 nl: "Diep van bessen en fris van kruiden, lang en verkoelend" },
       story: {
         en: "Blackberries were too sour for this glass, so we traded them for cassis, a deep, dark berry syrup that brings richness without the acid bite. Fresh mint syrup (made in-house by Jade) adds a clean sweetness that doesn't compete with the lime. The drink is built in two parts: the base is muddled mint and lime, crushed ice holds it together; the top is shaken cassis and lime, fine-strained for a silky texture. The soda goes in before the butterfly pea, so the flower sits on top as its own layer. One stir, and the layers collapse into a single, balanced sip.",
         nl: "Bramen waren te zuur voor dit glas, dus hebben we ze ingeruild voor cassis, een diepe, donkere bessensiroop die rijkdom brengt zonder de zure beet. Verse muntsiroop (zelfgemaakt door Jade) geeft een schone zoetheid die niet concurreert met de limoen. De drank wordt in twee delen gebouwd: de basis is gekneusde munt en limoen, crushed ice houdt het bij elkaar; de top is geschudde cassis en limoen, fijn gezeefd voor een zijdezachte textuur. Het bruiswater gaat erin voor de vlindererwt, zodat de bloem er als eigen laag bovenop ligt. Een keer roeren en de lagen vallen samen in één evenwichtige slok."
       },
-      tag: { en: "Layered, berry-deep and herb-fresh", nl: "Gelaagd, diep besachtig en kruidenvers" },
       build: [
         /* In the order it reaches the glass: the muddle at the bottom, the
            shaker mixture over it, then soda, then the flower on top. */
@@ -847,6 +860,8 @@ var SECTIONS = [
         en: "Dry cranberry against fresh lime, orange juice rounding the middle. Served up in a chilled coupe.",
         nl: "Droge cranberry tegen verse limoen, sinaasappelsap dat het midden afrondt. Opgediend in een gekoelde coupe."
       },
+      flavour: { en: "Dry and sharp, cranberry tart, clean citrus finish",
+                 nl: "Droog en scherp, zuur van cranberry, schone citrusafdronk" },
       tag: null,
       build: [
         { ref: "cranberry", ml: 80, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
@@ -879,6 +894,8 @@ var SECTIONS = [
         en: "Fresh orange over crushed ice. The grenadine is not in it when it reaches you: it comes alongside and goes on at the table, riding on the ice rather than sinking through it.",
         nl: "Verse sinaasappel over crushed ice. De grenadine zit er nog niet in als hij bij je komt: die gaat aan tafel erop en blijft op het ijs liggen in plaats van erdoorheen te zakken."
       },
+      flavour: { en: "Pure sweet orange, the simplest of the ten, pomegranate at the end",
+                 nl: "Puur zoete sinaasappel, de eenvoudigste van de tien, granaatappel op het eind" },
       tag: { en: "Poured at your table. Stir it down for first light", nl: "Aan je tafel geschonken. Roer hem naar beneden voor het eerste licht" },
       build: [
         { ref: "orange", ml: 150, note: { en: "Fill", nl: "Aanvullen" } },
@@ -918,6 +935,8 @@ var SECTIONS = [
         en: "Passionfruit is all acid and perfume on its own. Apple and pear give it body to sit against, vanilla rounds the edges, and a little egg white is what makes it velvet. Shaken twice, strained fine, served up.",
         nl: "Passievrucht is op zichzelf alleen maar zuur en parfum. Appel en peer geven body om op te rusten, vanille rondt de randen af, en een beetje eiwit maakt hem fluweel. Twee keer geshaket, fijn gezeefd, opgediend up."
       },
+      flavour: { en: "Tart tropical fruit turned silky, rich without being heavy",
+                 nl: "Zuur tropisch fruit, zijdezacht gemaakt, vol zonder zwaar te zijn" },
       tag: null,
       build: [
         { ref: "passionjuice", ml: 40, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
@@ -955,6 +974,8 @@ var SECTIONS = [
         en: "Pineapple against coconut cream and Coco Lopez, blended with ice until it pours thick and cold.",
         nl: "Ananas tegen kokosroom en Coco Lopez, geblend met ijs tot het dik en koud uitschenkt."
       },
+      flavour: { en: "Thick, cold and creamy, the sweetest of the ten",
+                 nl: "Dik, koud en romig, de zoetste van de tien" },
       tag: null,
       build: [
         { ref: "pineapple", ml: 150, pre: { en: "Blender", nl: "Blender" } },
@@ -1360,6 +1381,10 @@ function cardHTML(d) {
       '<span class="card-name">' + esc(d.name) + "</span>" +
     "</span>" +
     '<span class="card-desc">' + esc(t(d.desc)) + "</span>" +
+    /* One comparable line per drink, so a guest choosing between ten has
+       something to choose ON. The tag below is theatre or a service note and
+       is not on every drink; this is. */
+    (d.flavour ? '<span class="card-flav">' + esc(t(d.flavour)) + "</span>" : "") +
     (d.tag ? '<span class="card-tag">' + esc(t(d.tag)) + "</span>" : "") +
   "</button>";
 }
@@ -1654,9 +1679,10 @@ function openSheet(id) {
 
   /* FIX 1: STORY DUPLICATION, use story if present, otherwise fall back to desc */
   var displayText = d.story ? t(d.story) : t(d.desc);
+  var flav = d.flavour ? '<p class="sheet-flav">' + esc(t(d.flavour)) + "</p>" : "";
 
   /* Guest sheet: story/desc and tag only. No glass, no ice, no method. */
-  $("#sheet-body").innerHTML = '<p class="story">' + esc(displayText) + "</p>" +
+  $("#sheet-body").innerHTML = flav + '<p class="story">' + esc(displayText) + "</p>" +
     (d.tag ? '<p style="margin-top:20px"><span class="card-tag">' + esc(t(d.tag)) + "</span></p>" : "");
 
   if (sheetTimer) { clearTimeout(sheetTimer); sheetTimer = null; }
