@@ -950,7 +950,7 @@ var SECTIONS = [
                  nl: "Zuur tropisch fruit, zijdezacht gemaakt, vol zonder zwaar te zijn" },
       tag: null,
       build: [
-        { ref: "passionjuice", ml: 40, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
+        { ref: "passionjuice", ml: 40, col: "#EFB15C", pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
         { ref: "applepear", ml: 30, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
         { ref: "passionpuree", ml: 20, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
         { ref: "lime", ml: 10, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
@@ -989,7 +989,7 @@ var SECTIONS = [
                  nl: "Dik, koud en romig, de zoetste van de tien" },
       tag: null,
       build: [
-        { ref: "pineapple", ml: 150, pre: { en: "Blender", nl: "Blender" } },
+        { ref: "pineapple", ml: 150, col: "#F0DFA8", pre: { en: "Blender", nl: "Blender" } },
         { ref: "coconutcream", ml: 50, pre: { en: "Blender", nl: "Blender" } },
         { ref: "cocolopez", ml: 45, pre: { en: "Blender", nl: "Blender" } },
         { ref: "pineapplechunk", ml: 0, in: true, note: { en: "2 tablespoons of the small chunks, Grand Gerard from Sligro, into the blender", nl: "2 eetlepels van de kleine stukjes, Grand Gerard van Sligro, in de blender" } },
@@ -1403,7 +1403,7 @@ function cardHTML(d) {
 var UPSELL = function () {
   return '<div class="panel panel--upsell"><span class="smallcaps">' +
     (LANG === "nl" ? "Maak het je eigen" : "Make it yours") + "</span><h3>" +
-    (LANG === "nl" ? "Vanille, karamel of hazelnoot" : "Vanilla, caramel or hazelnut") + "</h3><p>" +
+    (LANG === "nl" ? "Vanille" : "Vanilla") + "</h3><p>" +
     (LANG === "nl" ? "In elke koffie of matcha." : "In any coffee or matcha.") +
     '<span class="sub">' + (LANG === "nl" ? "Ook zonder suiker." : "Sugar free available.") + "</span></p></div>";
 };
@@ -5695,19 +5695,13 @@ body.cmt-on #root { cursor: crosshair; }
       }
     }
 
-    /* A drink that is wholly one mixture, shaken or blended and strained
-       into the glass, has no layers at all. Collapsing it to a single band
-       would be truthful but would throw away the proportions, which are the
-       useful part. So the parts are drawn to scale and the glass is marked
-       and captioned as a mixture rather than a stack. */
-    var allMixed = pours.length === 1 && pours[0].kind === "mix", mixName = "";
-    if (allMixed) {
-      var grp = pours[0];
-      mixName = grp.name;
-      pours = grp.parts.filter(function (x) { return x.ml > 0; }).map(function (x) {
-        return { kind: "ml", ref: x.ref, ml: x.ml, name: x.name, note: x.note };
-      });
-    }
+    /* Anything that arrives from a mixing vessel is ONE band, always, even
+       when it is the whole drink. That is what tells a Cosmopolitan apart
+       from an Ocean Mojito at a glance: one is a single liquid, the other
+       is genuinely stacked. The ingredients are not lost, they are drawn in
+       their own colours in the strip under the band. */
+    var allMixed = pours.length === 1 && pours[0].kind === "mix";
+    var mixName = allMixed ? pours[0].name : "";
 
     var shape = glassShape(d);
     var h = '<div class="ag">';
@@ -5743,7 +5737,19 @@ body.cmt-on #root { cursor: crosshair; }
           : '<span class="ag-ml">' + p.ml + " ml</span>";
         var sub = p.note ? '<span class="ag-no">' + esc(p.note) + "</span>" : "";
         if (p.kind === "mix") {
-          sub = '<span class="ag-no">' + p.parts.map(function (x) {
+          /* A proportion strip of the parts, each in its own colour, so an
+             ingredient is still visible inside the mixture it went into. */
+          var tot = 0, q;
+          for (q = 0; q < p.parts.length; q++) tot += p.parts[q].ml;
+          if (tot > 0) {
+            sub = '<span class="ag-strip">' + p.parts.map(function (x) {
+              return x.ml > 0
+                ? '<i style="flex:' + x.ml + ' 1 0;background:' +
+                  (GCOL[x.ref] || "#CFC6B4") + '" title="' + esc(x.name) + '"></i>'
+                : "";
+            }).join("") + "</span>";
+          } else { sub = ""; }
+          sub += '<span class="ag-no">' + p.parts.map(function (x) {
             /* Something muddled or bashed in has no millilitres; saying
                "0 ml" would read as none of it going in. */
             return esc(x.name) + (x.ml > 0 ? " " + x.ml + " ml" : "") +
@@ -5761,8 +5767,8 @@ body.cmt-on #root { cursor: crosshair; }
            '<ol class="ag-leg">' + legend + "</ol>" +
            "</div>" +
            '<p class="ag-tot">' + (allMixed
-             ? esc(mixName) + ". " + et({ en: "These are proportions, not layers: it reaches the glass as one liquid.",
-                                          nl: "Dit zijn verhoudingen, geen lagen: het komt als een vloeistof in het glas." })
+             ? esc(mixName) + ". " + et({ en: "One liquid in the glass, no layers. The strip shows what is in it, in proportion.",
+                                          nl: "Een vloeistof in het glas, geen lagen. De strook laat zien wat erin zit, op verhouding." })
              : et({ en: "Drawn to scale, bottom of the glass first.", nl: "Op schaal getekend, onderkant van het glas eerst." })) +
            " " + total + " ml" + et({ en: " of measured liquid", nl: " afgemeten vloeistof" }) +
            (anyFill
@@ -5899,6 +5905,11 @@ body.cmt-on #root { cursor: crosshair; }
 .cof-bits i { width: 9px; height: 9px; border-radius: 2px; flex: 0 0 auto;
   box-shadow: inset 0 0 0 1px rgba(35,32,28,0.25); }
 @media (max-width: 420px) { .cof-grid { grid-template-columns: 1fr; } }
+/* The parts of a mixture, in proportion and in their own colours, so an
+   ingredient stays visible inside the thing it was mixed into. */
+.ag-strip { grid-column: 2 / -1; display: flex; height: 9px; border-radius: 3px;
+  overflow: hidden; margin: 4px 0 2px; box-shadow: inset 0 0 0 1px rgba(35,32,28,0.18); }
+.ag-strip i { display: block; min-width: 3px; }
 .ag-tag { font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--gold);
   border: 1px solid var(--gold-pale); border-radius: 999px; padding: 1px 6px; margin-left: 5px;
   white-space: nowrap; }

@@ -939,7 +939,7 @@ var SECTIONS = [
                  nl: "Zuur tropisch fruit, zijdezacht gemaakt, vol zonder zwaar te zijn" },
       tag: null,
       build: [
-        { ref: "passionjuice", ml: 40, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
+        { ref: "passionjuice", ml: 40, col: "#EFB15C", pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
         { ref: "applepear", ml: 30, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
         { ref: "passionpuree", ml: 20, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
         { ref: "lime", ml: 10, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
@@ -978,7 +978,7 @@ var SECTIONS = [
                  nl: "Dik, koud en romig, de zoetste van de tien" },
       tag: null,
       build: [
-        { ref: "pineapple", ml: 150, pre: { en: "Blender", nl: "Blender" } },
+        { ref: "pineapple", ml: 150, col: "#F0DFA8", pre: { en: "Blender", nl: "Blender" } },
         { ref: "coconutcream", ml: 50, pre: { en: "Blender", nl: "Blender" } },
         { ref: "cocolopez", ml: 45, pre: { en: "Blender", nl: "Blender" } },
         { ref: "pineapplechunk", ml: 0, in: true, note: { en: "2 tablespoons of the small chunks, Grand Gerard from Sligro, into the blender", nl: "2 eetlepels van de kleine stukjes, Grand Gerard van Sligro, in de blender" } },
@@ -1392,7 +1392,7 @@ function cardHTML(d) {
 var UPSELL = function () {
   return '<div class="panel panel--upsell"><span class="smallcaps">' +
     (LANG === "nl" ? "Maak het je eigen" : "Make it yours") + "</span><h3>" +
-    (LANG === "nl" ? "Vanille, karamel of hazelnoot" : "Vanilla, caramel or hazelnut") + "</h3><p>" +
+    (LANG === "nl" ? "Vanille" : "Vanilla") + "</h3><p>" +
     (LANG === "nl" ? "In elke koffie of matcha." : "In any coffee or matcha.") +
     '<span class="sub">' + (LANG === "nl" ? "Ook zonder suiker." : "Sugar free available.") + "</span></p></div>";
 };
