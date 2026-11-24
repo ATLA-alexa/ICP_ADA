@@ -668,8 +668,8 @@ var SECTIONS = [
       },
       tag: { en: "On the sour side, very refreshing", nl: "Aan de zure kant, heel verfrissend" },
       build: [
-        { ref: "grapes", ml: 0, note: { en: "5 to 8 full green grapes, muddled to a puree", nl: "5 tot 8 hele witte druiven, tot puree gekneusd" } },
-        { ref: "basil", ml: 0, note: { en: "10 BIG leaves, or 2 big stems, press ONCE only. Any more and it turns bitter", nl: "10 GROTE blaadjes, of 2 grote stelen, EEN keer persen. Meer en hij wordt bitter" } },
+        { ref: "grapes", ml: 0, in: true, note: { en: "5 to 8 full green grapes, muddled to a puree in the tin. This is flavour, not garnish", nl: "5 tot 8 hele witte druiven, in de tin tot puree gekneusd. Dit is smaak, geen garnering" } },
+        { ref: "basil", ml: 0, in: true, note: { en: "10 BIG leaves, or 2 big stems, pressed ONCE only, in the tin. Any more and it turns bitter", nl: "10 GROTE blaadjes, of 2 grote stelen, EEN keer geperst, in de tin. Meer en hij wordt bitter" } },
         { ref: "applepear", ml: 120 }, { ref: "lime", ml: 25 }, { ref: "simple", ml: 15 },
         { ref: "basil", ml: 0, note: { en: "GARNISH: 1 big, beautiful leaf, floated on top. Check the basil box", nl: "GARNERING: 1 groot, mooi blad, drijvend bovenop. Kijk in de basilicumbak" } }
       ],
@@ -796,16 +796,22 @@ var SECTIONS = [
       },
       tag: { en: "Layered, berry-deep and herb-fresh", nl: "Gelaagd, diep besachtig en kruidenvers" },
       build: [
-        { ref: "lime", ml: 0, note: { en: "3 wedges, muddled in the glass", nl: "3 partjes, gekneusd in het glas" } },
-        { ref: "mint", ml: 0, note: { en: "8-10 leaves, bashed in the glass", nl: "8-10 blaadjes, gekneusd in het glas" } },
-        { ref: "cassis", ml: 20, note: { en: "Boiron cassis syrup", nl: "Boiron cassissiroop" } },
-        { ref: "mintsyrup", ml: 40, note: { en: "Homemade fresh mint syrup (Jade)", nl: "Zelfgemaakte verse muntsiroop (Jade)" } },
-        { ref: "lime", ml: 15, note: { en: "Fresh lime juice (Boiron), in the shaker", nl: "Vers limoensap (Boiron), in de shaker" } },
-        { ref: "soda", ml: 0, note: { en: "Around 100 ml, in BEFORE the butterfly pea", nl: "Ongeveer 100 ml, erin VOOR de vlindererwt" } },
-        { ref: "peatea", ml: 0, note: { en: "30 to 40 ml, floated last, after the soda", nl: "30 tot 40 ml, als laatste erop, na het bruiswater" } }
+        /* In the order it reaches the glass: the muddle at the bottom, the
+           shaker mixture over it, then soda, then the flower on top. */
+        { ref: "lime", ml: 0, in: true, note: { en: "2 wedges, muddled in the glass", nl: "2 partjes, gekneusd in het glas" } },
+        { ref: "simple", ml: 20, note: { en: "Sugar, into the glass with the lime wedges", nl: "Suiker, in het glas bij de limoenpartjes" } },
+        { ref: "mint", ml: 0, in: true, note: { en: "8-10 leaves, bashed in the glass on top of the sugar", nl: "8-10 blaadjes, gekneusd in het glas op de suiker" } },
+        /* The shaker is mostly mint syrup by volume but it comes out the
+           colour of the cassis, so the band is told to be purple. */
+        { ref: "cassis", ml: 20, col: "#6E4A86", pre: { en: "Shaker, fine strained over", nl: "Shaker, er fijn overheen gezeefd" } },
+        { ref: "mintsyrup", ml: 40, pre: { en: "Shaker, fine strained over", nl: "Shaker, er fijn overheen gezeefd" }, note: { en: "Jade's, homemade", nl: "Van Jade, zelfgemaakt" } },
+        { ref: "lime", ml: 15, pre: { en: "Shaker, fine strained over", nl: "Shaker, er fijn overheen gezeefd" } },
+        { ref: "ice", ml: 0, in: true, note: { en: "Crushed. Churned in first, then more up to the bottom of the neck", nl: "Crushed. Eerst ingechurnd, dan meer tot onder aan de hals" } },
+        { ref: "soda", ml: 100, note: { en: "Spa Rood, around 100 ml, in BEFORE the butterfly pea", nl: "Spa Rood, ongeveer 100 ml, erin VOOR de vlindererwt" } },
+        { ref: "peatea", ml: 35, note: { en: "30 to 40 ml, floated last, after the soda", nl: "30 tot 40 ml, als laatste erop, na het bruiswater" } }
       ],
       bar: { en: [
-        "In the hurricane glass: muddle 3 lime wedges and bash 8 to 10 mint leaves.",
+        "In the hurricane glass: muddle 2 lime wedges, add 20 ml sugar, then bash 8 to 10 mint leaves on top.",
         "In a shaker: 20 ml cassis syrup, 40 ml fresh mint syrup, 15 ml fresh lime juice. Add ice and shake hard.",
         "Before you open the shaker, fill the glass with crushed ice to just below the belly, and churn 8 to 10 times with the bar spoon until it takes the mojito look.",
         "Fine strain the purple mixture into the hurricane glass over the crushed ice.",
@@ -814,7 +820,7 @@ var SECTIONS = [
         "Gently float 30 to 40 ml butterfly pea on top, for the layer.",
         "Garnish with a mint sprig and a lime wedge."
       ], nl: [
-        "In het hurricaneglas: kneus 3 limoenpartjes en 8 tot 10 muntblaadjes.",
+        "In het hurricaneglas: kneus 2 limoenpartjes, voeg 20 ml suiker toe en kneus daarop 8 tot 10 muntblaadjes.",
         "In een shaker: 20 ml cassissiroop, 40 ml verse muntsiroop en 15 ml vers limoensap. Ijs toevoegen en hard shaken.",
         "Vul het glas, voordat je de shaker opent, met crushed ice tot net onder de buik, en churn 8 tot 10 keer met de barlepel tot het de mojito-look krijgt.",
         "Fijn zeven over het crushed ice in het hurricaneglas.",
