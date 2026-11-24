@@ -625,9 +625,13 @@ var SECTIONS = [
       tag: { en: "It reaches you still smoking", nl: "Hij komt rokend bij je aan" },
       build: [
         { ref: "saltrim", ml: 0, note: { en: "Rosemary-lemon sea salt rim, half oval", nl: "Rozemarijn-citroen-zeezoutrand, half ovaal" } },
-        { ref: "lemon", ml: 15 },
-        { ref: "cordial", ml: 35 },
-        { ref: "soda", ml: 10, note: { en: "In the mixing glass. The highball is also filled half with sparkling water when building", nl: "In het mengglas. De highball wordt bij het opbouwen ook half met bruisend water gevuld" } },
+        /* The long pour goes in the glass FIRST and is most of the drink. It
+           had no build line at all, only a mention in a note, so the glass
+           drawing showed the mixing-glass mixture and no Spa Rood. */
+        { ref: "soda", fill: 0.5, ml: 0, note: { en: "Spa Rood, the long pour, straight into the glass. Fills it half, then crushed ice to about 1 cm from the rim. Volume not recorded", nl: "Spa Rood, de lange schenk, direct in het glas. Vult het half, daarna crushed ice tot ongeveer 1 cm onder de rand. Hoeveelheid niet vastgelegd" } },
+        { ref: "lemon", ml: 15, pre: { en: "Mixing glass", nl: "Mengglas" } },
+        { ref: "cordial", ml: 35, pre: { en: "Mixing glass", nl: "Mengglas" } },
+        { ref: "soda", ml: 10, pre: { en: "Mixing glass", nl: "Mengglas" }, note: { en: "A splash, in the mixing glass only", nl: "Een scheutje, alleen in het mengglas" } },
         { ref: "rosemary", ml: 0, note: { en: "1 sprig, smoked 3 seconds", nl: "1 takje, 3 seconden gerookt" } },
         { ref: "thyme", ml: 0, note: { en: "1 sprig, raw", nl: "1 takje, rauw" } }
       ],
@@ -745,11 +749,13 @@ var SECTIONS = [
       },
       tag: { en: "Not a jalapeno fan? Feel free to ask without", nl: "Geen jalapeno-liefhebber? Vraag hem gerust zonder" },
       build: [
-        { ref: "jalapeno", ml: 0, note: { en: "3 whole, or 6 slices, seeds out as standard, into the mixing glass or tin", nl: "3 hele, of 6 schijfjes, standaard zonder zaadjes, in het mengglas of de tin" } },
-        { ref: "lime", ml: 20 },
-        { ref: "simple", ml: 10 },
-        { ref: "gingerbeer", ml: 0, note: { en: "In FIRST, half the glass, two thirds at most", nl: "ALS EERSTE erin, de helft van het glas, hooguit twee derde" } },
+        /* Glass order: the ginger beer goes in first and is most of it, then
+           the crushed ice, then the muddled mixture strained over the top. */
+        { ref: "gingerbeer", fill: 0.55, ml: 0, note: { en: "In FIRST, straight into the glass. Fills it half, two thirds at most. Volume not recorded", nl: "ALS EERSTE erin, direct in het glas. Vult het half, hooguit twee derde. Hoeveelheid niet vastgelegd" } },
         { ref: "ice", ml: 0, note: { en: "Crushed, about two thirds of a metal scoop, on top of the ginger beer", nl: "Crushed, ongeveer twee derde van een metalen schep, op het gemberbier" } },
+        { ref: "jalapeno", ml: 0, pre: { en: "Mixing glass, strained over", nl: "Mengglas, erover gezeefd" }, note: { en: "3 whole, or 6 slices, seeds out as standard, muddled", nl: "3 hele, of 6 schijfjes, standaard zonder zaadjes, gekneusd" } },
+        { ref: "lime", ml: 20, pre: { en: "Mixing glass, strained over", nl: "Mengglas, erover gezeefd" } },
+        { ref: "simple", ml: 10, pre: { en: "Mixing glass, strained over", nl: "Mengglas, erover gezeefd" } },
         { ref: "mint", ml: 0, note: { en: "Sprig, with a jalapeno wheel", nl: "Takje, met een schijfje jalapeno" } }
       ],
       bar: { en: [

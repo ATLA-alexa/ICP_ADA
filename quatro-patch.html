@@ -3784,13 +3784,21 @@ body.cmt-on #root { cursor: crosshair; }
     var sp = SHAPE[shape] || SHAPE.tall;
     var top = sp.fill[0], bot = sp.fill[1], H = bot - top;
     var n = pours.length, floor = Math.min(5, H / (n * 2.2));
-    var total = 0, i;
-    for (i = 0; i < n; i++) total += pours[i].ml;
+    var total = 0, share = 0, i;
+    for (i = 0; i < n; i++) {
+      if (pours[i].kind === "fill") share += pours[i].fill; else total += pours[i].ml;
+    }
+    if (share > 0.9) share = 0.9;            /* always leave room for the rest */
     var id = "agc" + (++UID);
 
+    /* An unmeasured long pour takes the share of the glass it is said to
+       fill; what is left over is shared out by millilitres. */
+    var free = H * (1 - share), fillH = H * share;
     var rects = "", y = top;
     for (i = n - 1; i >= 0; i--) {           /* build list is bottom first */
-      var h = floor + (H - n * floor) * (pours[i].ml / total);
+      var h = pours[i].kind === "fill"
+        ? (fillH * (pours[i].fill / (share || 1)))
+        : floor + (free - n * floor) * (total ? pours[i].ml / total : 1 / n);
       rects += '<rect x="0" y="' + y.toFixed(2) + '" width="60" height="' +
                (h + 0.4).toFixed(2) + '" fill="' + (GCOL[pours[i].ref] || "#CFC6B4") + '"/>';
       y += h;
@@ -3807,13 +3815,45 @@ body.cmt-on #root { cursor: crosshair; }
   }
 
   function vizHTML(d) {
-    var pours = [], extras = [], i, b, ing;
+    /* The build list is read as the order things reach the GLASS. Two kinds
+       of entry are not a plain pour:
+
+       fill   a long pour nobody has measured, like the Spa Rood that fills
+              half a Forest Fairy. It takes its share of the glass by the
+              fraction given, and says so instead of inventing millilitres.
+       pre    something combined before it reaches the glass. The mixing
+              glass and the tin arrive as one liquid, so they are drawn as
+              one band, not as separate layers that never existed. */
+    var pours = [], extras = [], i, b, ing, last = null;
     for (i = 0; i < (d.build || []).length; i++) {
       b = d.build[i];
       ing = ING[b.ref];
       if (!ing) continue;
-      if (b.ml > 0) pours.push({ ref: b.ref, ml: b.ml, name: tt(ing.name), note: b.note ? tt(b.note) : "" });
-      else extras.push({ name: tt(ing.name), note: b.note ? tt(b.note) : "" });
+      if (b.fill) {
+        pours.push({ kind: "fill", ref: b.ref, fill: b.fill, name: tt(ing.name),
+                     note: b.note ? tt(b.note) : "" });
+        last = null;
+      } else if (b.pre) {
+        var lbl = tt(b.pre);
+        if (last && last.kind === "mix" && last.name === lbl) {
+          last.ml += b.ml;
+          last.parts.push({ name: tt(ing.name), ml: b.ml, note: b.note ? tt(b.note) : "" });
+          /* The band takes the colour of whatever is most of it, not of
+             whichever ingredient happens to be written first. */
+          if (b.ml > last.big) { last.big = b.ml; last.ref = b.ref; }
+        } else {
+          last = { kind: "mix", ref: b.ref, ml: b.ml, name: lbl, note: "", big: b.ml,
+                   parts: [{ name: tt(ing.name), ml: b.ml, note: b.note ? tt(b.note) : "" }] };
+          pours.push(last);
+        }
+      } else if (b.ml > 0) {
+        pours.push({ kind: "ml", ref: b.ref, ml: b.ml, name: tt(ing.name),
+                     note: b.note ? tt(b.note) : "" });
+        last = null;
+      } else {
+        extras.push({ name: tt(ing.name), note: b.note ? tt(b.note) : "" });
+        last = null;
+      }
     }
 
     var shape = glassShape(d);
@@ -3831,8 +3871,10 @@ body.cmt-on #root { cursor: crosshair; }
 
     /* ---- the stack ---- */
     if (pours.length) {
-      var total = 0;
-      for (i = 0; i < pours.length; i++) total += pours[i].ml;
+      var total = 0, anyFill = false;
+      for (i = 0; i < pours.length; i++) {
+        if (pours[i].kind === "fill") anyFill = true; else total += pours[i].ml;
+      }
 
       /* Drawn top first, so the list reads the same way down the page as the
          liquid sits in the glass. The build list is bottom first. */
@@ -3840,18 +3882,34 @@ body.cmt-on #root { cursor: crosshair; }
       for (i = pours.length - 1; i >= 0; i--) {
         var p = pours[i];
         var col = GCOL[p.ref] || "#CFC6B4";
+        var amount = p.kind === "fill"
+          ? '<span class="ag-ml">' + Math.round(p.fill * 100) + "%</span>"
+          : '<span class="ag-ml">' + p.ml + " ml</span>";
+        var sub = p.note ? '<span class="ag-no">' + esc(p.note) + "</span>" : "";
+        if (p.kind === "mix") {
+          sub = '<span class="ag-no">' + p.parts.map(function (x) {
+            /* Something muddled or bashed in has no millilitres; saying
+               "0 ml" would read as none of it going in. */
+            return esc(x.name) + (x.ml > 0 ? " " + x.ml + " ml" : "") +
+                   (x.note ? " (" + esc(x.note) + ")" : "");
+          }).join(" · ") + "</span>";
+        }
         legend += '<li><i style="background:' + col + '"></i>' +
-                  '<span class="ag-nm">' + esc(p.name) + "</span>" +
-                  '<span class="ag-ml">' + p.ml + " ml</span>" +
-                  (p.note ? '<span class="ag-no">' + esc(p.note) + "</span>" : "") +
-                  "</li>";
+                  '<span class="ag-nm">' + esc(p.name) +
+                  (p.kind === "mix" ? ' <span class="ag-tag">' +
+                     et({ en: "one mixture", nl: "een mengsel" }) + "</span>" : "") +
+                  "</span>" + amount + sub + "</li>";
       }
 
       h += '<div class="ag-viz">' + glassSVG(shape, pours) +
            '<ol class="ag-leg">' + legend + "</ol>" +
            "</div>" +
            '<p class="ag-tot">' + et({ en: "Drawn to scale, bottom of the glass first.", nl: "Op schaal getekend, onderkant van het glas eerst." }) +
-           " " + total + " ml" + et({ en: " of liquid in total.", nl: " vloeistof in totaal." }) + "</p>";
+           " " + total + " ml" + et({ en: " of measured liquid", nl: " afgemeten vloeistof" }) +
+           (anyFill
+             ? et({ en: ", plus a long pour nobody has measured, drawn by the share of the glass it fills.",
+                    nl: ", plus een lange schenk die niemand heeft afgemeten, getekend naar het deel van het glas dat hij vult." })
+             : ".") + "</p>";
     }
 
     /* ---- everything with no millilitres ---- */
@@ -3963,6 +4021,9 @@ body.cmt-on #root { cursor: crosshair; }
 .ag-leg { flex: 1 1 auto; list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; align-content: start; }
 .ag-leg li { display: grid; grid-template-columns: 12px 1fr auto; gap: 8px; align-items: baseline; font-size: 14px; line-height: 1.35; }
 .ag-leg i { width: 12px; height: 12px; border-radius: 3px; border: 1px solid rgba(35,32,28,0.22); align-self: center; }
+.ag-tag { font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--gold);
+  border: 1px solid var(--gold-pale); border-radius: 999px; padding: 1px 6px; margin-left: 5px;
+  white-space: nowrap; }
 .ag-ml { font-variant-numeric: tabular-nums; color: var(--ink-soft); font-size: 13px; }
 .ag-no { grid-column: 2 / -1; font-size: 12px; color: var(--ink-soft); line-height: 1.4; }
 .ag-tot { margin: var(--s3) 0 0; font-size: 12px; color: var(--ink-soft); }
