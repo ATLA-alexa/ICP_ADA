@@ -6,8 +6,13 @@ the patch block reads, so a change to prep or inventory lands in both and the
 two can never drift apart.
 """
 import io
+import re
 
 w = io.open('quatro-WORKING.html', encoding='utf-8').read()
+
+# The bar photos only feed the Rail tab, which the crew file does not have, so
+# they are dropped rather than carried as half a megabyte of dead weight.
+w, n = re.subn(r'<!-- =+\s*QUATRO BAR PHOTOS.*?</script>\n', '', w, count=1, flags=re.S)
 
 FLAG = '''<script>
 /* ==========================================================================

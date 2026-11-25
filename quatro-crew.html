@@ -457,8 +457,8 @@ var ING = {
   sparklemon:   { name: { en: "Sparkling lemonade", nl: "Bruisende limonade" }, pack: "1 L", cost: null, supplier: "TODO", home: "FR1 door A", inStock: true, prep: false },
   lycheecordial:{ name: { en: "Lychee cordial", nl: "Lycheecordial" }, pack: "700 ml", cost: null, supplier: "TODO", home: "FR1 door B", inStock: false, prep: true },
   cocolopez:    { name: { en: "Coco Lopez, cream of coconut", nl: "Coco Lopez, kokosroom" }, pack: "NOT PRICED YET", cost: null, supplier: "TBD", home: "Second tier, FR1 C", inStock: false, prep: false },
-  pineapplechunk: { name: { en: "Pineapple chunks, small", nl: "Ananasstukjes, klein" }, pack: "Grand Gerard, Sligro", cost: null, supplier: "Sligro", home: "Left condiment holder, first bucket", inStock: true, prep: false },
-  pineapplewedge:{ name: { en: "Pineapple wedges, garnish", nl: "Ananasstukken, garnering" }, pack: "AH garnish", cost: null, supplier: "AH", home: "FR2 door C, garnish tub", inStock: true, prep: true },
+  pineapplechunk: { name: { en: "Pineapple chunks, small", nl: "Ananasstukjes, klein" }, pack: "Grand Gerard, Sligro", cost: null, supplier: "Sligro", home: "Pineapple box, front, left of the left holder", inStock: true, prep: false },
+  pineapplewedge:{ name: { en: "Pineapple chunks, big, garnish", nl: "Ananasstukken, groot, garnering" }, pack: "AH garnish", cost: null, supplier: "AH", home: "FR2 door C, garnish tub", inStock: true, prep: true },
   lycheescan:   { name: { en: "Lychees, from the can", nl: "Lychees, uit blik" }, pack: "567 g can", cost: null, supplier: "AO, or Sligro 119699", home: "Dry store, open can FR1 door C", inStock: true, prep: false },
   glitterlychee:{ name: { en: "Golden glitter lychee", nl: "Gouden glitterlychee" }, pack: "Canned lychee, sprayed", cost: null, supplier: "In house", home: "FR1 door C, garnish tub", inStock: false, prep: true },
   bptcoconut:   { name: { en: "BPT-infused coconut water", nl: "Kokoswater met vlindererwt" }, pack: "NOT SET YET", cost: null, supplier: "In house", home: "FR1 door B", inStock: false, prep: true },
@@ -995,18 +995,18 @@ var SECTIONS = [
         { ref: "cocolopez", ml: 45, pre: { en: "Blender", nl: "Blender" } },
         { ref: "pineapplechunk", ml: 0, in: true, note: { en: "2 tablespoons of the small chunks, Grand Gerard from Sligro, into the blender", nl: "2 eetlepels van de kleine stukjes, Grand Gerard van Sligro, in de blender" } },
         { ref: "ice", ml: 0, in: true, note: { en: "100 g ice cubes, or 1 blue scoop, into the blender", nl: "100 g ijsblokjes, of 1 blauwe schep, in de blender" } },
-        { ref: "pineapplewedge", ml: 0, note: { en: "3 bigger wedges, the AH garnish", nl: "3 grotere stukken, de AH-garnering" } }
+        { ref: "pineapplewedge", ml: 0, note: { en: "3 big chunks on a garnish stick, from the back of the pineapple box", nl: "3 grote stukken op een garneerprikker, achter uit de ananasbak" } }
       ],
       bar: { en: [
         "Everything into the blender: 150 pineapple, 50 coconut cream, 45 Coco Lopez, then 2 tablespoons of the small pineapple chunks, then 100 g ice or 1 blue scoop.",
         "Blend until creamy.",
         "Pour into the hurricane glass.",
-        "Three bigger pineapple wedges, the AH garnish."
+        "Three big pineapple chunks on a garnish stick."
       ], nl: [
         "Alles in de blender: 150 ananas, 50 kokosroom, 45 Coco Lopez, dan 2 eetlepels van de kleine ananasstukjes, dan 100 g ijs of 1 blauwe schep.",
         "Blend tot het romig is.",
         "Schenk in het hurricaneglas.",
-        "Drie grotere stukken ananas, de AH-garnering."
+        "Drie grote stukken ananas op een garneerprikker."
       ]},
       table: null,
       say: { en: ["It is blended, not shaken, so it comes out thick. The coconut cream and the Coco Lopez are what carry it, and there is fresh pineapple in the blender as well as juice."],
@@ -2130,6 +2130,25 @@ td.buy.ok { color: var(--ink-soft); }
 .qmethod { font-size: 13px; line-height: 1.55; min-width: 240px; }
 .qdash { color: var(--ink-soft); font-style: italic; }
 .qopen { color: #9E2B3B; font-weight: 500; }
+.isl-route { display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: center; margin: 4px 0 4px;
+  font-size: 12px; color: var(--ink-soft); }
+.isl-route .isl-stop { padding: 2px 8px; border-radius: 999px; border: 1px solid var(--gold-pale); white-space: nowrap; }
+.isl-route .isl-stop.on { border-color: var(--gold); color: var(--gold); font-weight: 600; }
+.isl { margin-top: var(--s3); padding-top: 10px; border-top: 1px solid rgba(168,134,60,.22); }
+.isl-h { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; margin-bottom: 4px; }
+.isl-n { font-family: 'Marcellus', Georgia, serif; font-size: 18px; color: var(--gold); flex: none; }
+.isl-w { font-weight: 600; font-size: 14.5px; }
+.isl-s { flex-basis: 100%; font-size: 12px; color: var(--ink-soft); }
+.isl .qgar { margin-left: 0; padding-left: 20px; }
+.isl-mid { margin-top: var(--s3); padding: 8px 10px; border-radius: 8px; font-size: 13px; line-height: 1.5;
+  background: rgba(168,134,60,.08); border: 1px dashed var(--gold-pale); }
+.isl-ph { margin: 8px 0 0; }
+.isl-ph summary { cursor: pointer; font-size: 12px; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--gold); padding: 6px 0; list-style-position: inside; }
+.isl-ph img { display: block; width: 100%; max-width: 560px; height: auto; border-radius: 8px;
+  border: 1px solid var(--gold-pale); background: rgba(168,134,60,.06); }
+.isl-ph .qdash { font-size: 12.5px; }
+@media print { .isl-ph { display: none; } }
 .qflag { margin-top: 6px; padding: 5px 8px; border-left: 3px solid #9E2B3B;
   background: rgba(158,43,59,.06); font-size: 12px; line-height: 1.5; }
 .qlink { border: none; background: none; color: var(--gold); font: inherit; text-decoration: underline;
@@ -2266,8 +2285,8 @@ body.cmt-on #root { cursor: crosshair; }
                              warn:"The Lychee Siren changed from a float of butterfly pea tea to coconut water infused with the flower, and nothing says how much flower, how much coconut water, how long it steeps or how long it keeps. Write that down before anyone batches it." },
     "coco lopez": { t:"buy", shop:"NOT YET DECIDED", pack:"NOT PRICED YET", home:"Second tier, F1C",
                              warn:"New in the Pina Colada, 45 ml a drink, about 6.3 L a week. No supplier and no price on file, so it does not show in the weekly order total yet." },
-    "pineapple wedges": { t:"house", from:"The Albert Heijn pineapple garnish", yield:"Cut to order", keeps:"Same day", home:"F2A top tier, garnish tub",
-                             note:"Three bigger wedges per Pina Colada. This replaced the cocktail cherry." },
+    "pineapple chunks, big": { t:"house", from:"The Albert Heijn pineapple garnish", yield:"Cut to order", keeps:"Same day", home:"F2A top tier, garnish tub",
+                             note:"Three big chunks on a garnish stick per Pina Colada, from the back of the pineapple box. This replaced the cocktail cherry." },
     "lychees, from the can": { t:"buy", shop:"Amazing Oriental, or Sligro 119699", pack:"567 g can", home:"Dry store, open can F1C bottom tier",
                              note:"Two are muddled in the shaker for each Lychee Siren. The syrup from the same can is what the lychee cordial is pressed from." },
     "golden glitter lychee": { t:"house", from:"Canned lychees and edible gold glitter spray", yield:"Cut to order", keeps:"Same day", home:"F1C, garnish tub",
@@ -2344,7 +2363,7 @@ body.cmt-on #root { cursor: crosshair; }
     "lycheesap": "lychee juice",
     "lycheecordial": "lychee cordial",
     "coco lopez": "coco lopez",
-    "ananasstukken": "pineapple wedges",
+    "ananasstukken, groot": "pineapple chunks, big",
     "kokoswater met vlindererwt": "bpt-infused coconut water",
     "lychees, uit blik": "lychees, from the can",
     "gouden glitterlychee": "golden glitter lychee",
@@ -2453,6 +2472,8 @@ body.cmt-on #root { cursor: crosshair; }
     "F2A top tier": "F2A bovenste plank",
     "F2A top tier, damp cloth": "F2A bovenste plank, vochtige doek",
     "F2A top tier, garnish tub": "F2A bovenste plank, garneringsbakje",
+    "Three big chunks on a garnish stick per Pina Colada, from the back of the pineapple box. This replaced the cocktail cherry.":
+      "Drie grote stukken op een garneerprikker per Pina Colada, achter uit de ananasbak. Dit verving de cocktailkers.",
     "F2A top tier, sliced into the garnish tub at open": "F2A bovenste plank, bij opening in het garneringsbakje gesneden",
     "Open can F1C bottom tier": "Aangebroken blik F1C onderste plank",
     "Open jar, F1C bottom tier": "Aangebroken pot, F1C onderste plank",
@@ -3720,12 +3741,11 @@ body.cmt-on #root { cursor: crosshair; }
       nl:"Twee witte ijsbakken, achter elkaar. Ijsblokjes achteraan met de grotere blauwe schep, crushed vooraan met de metalen schep, zodat ze nooit verwisseld worden. Daartussen geklemd, links en rechts, twee grote tins met het gereedschap. Het zijn de grote tins van een cobbler shaker waar we niet mee shaken, dus ze zijn opslag en geen shakers. In elk zit een Hawthorne-zeef, een fijne zeef, een barlepel en een muddler. Voor elke tin staat een Boston shaker, een links en een rechts van de bak met crushed ice."},
      {en:"The Boston shakers stand in front on purpose: they are what stops the tins of instruments from falling over, so put them back there after every shake. Underneath all of it lie two white mats with raised squares on the surface, so nothing slides.",
       nl:"De Boston shakers staan er met opzet voor: zij voorkomen dat de tins met gereedschap omvallen, dus zet ze daar na elke shake terug. Onder het geheel liggen twee witte matten met opstaande vierkantjes, zodat niets wegglijdt."}],
-    [{en:"Left of the station, the straws",nl:"Links van het station, de rietjes"},
-     {en:"One coppa glass holding 1 short straw. 2 tall straws in the hurricane.",
-      nl:"Een coppaglas met 1 kort rietje. 2 lange rietjes in de hurricane."}],
-    [{en:"Right of the station, the Forest Fairy and Jalapeno Mule prep",nl:"Rechts van het station, de prep voor Forest Fairy en Jalapeno Mule"},
-     {en:"Left to right. Two glasses of garnish sticks, for the Lychee Siren's glitter lychee and lime. Behind them, the squeeze bottle of rosemary-thyme maple cordial. A white bowl, which is what the sea salt and lemon zest mix is made in, with a white plate on top carrying the rosemary sea salt flakes, the fresh lemon to grate and the long zester. The glass mixing vessel, holding the muddler and the julep strainer. In front, one extra Boston shaker in case it is needed. After that the glassware starts: the brutes, then the martini coupes.",
-      nl:"Van links naar rechts. Twee glazen met garneerprikkers, voor de glitterlychee en de limoen van de Lychee Siren. Daarachter de knijpfles met rozemarijn-tijm-ahorncordial. Een witte kom, waarin de mix van zeezout en citroenzeste gemaakt wordt, met daarop een wit bord met de rozemarijn-zeezoutvlokken, de verse citroen om te raspen en de lange rasp. Het glazen mengglas, met de muddler en de julepzeef erin. Vooraan een extra Boston shaker voor als hij nodig is. Daarna begint het glaswerk: de brutes, dan de martini coupes."}]
+    /* Steps 8 and 9 used to describe the two sides here. They are islands 2
+       and 3 of the bar setup now, written out once in that panel. */
+    [{en:"Either side of the station",nl:"Aan weerszijden van het station"},
+     {en:"On the left, island 2: the straws, the crushed hibiscus garnish and the pineapple box. On the right, island 3: the Forest Fairy and Jalapeno Mule prep, the passion fruit and the third Boston shaker. Both are in Bar setup, clockwise, above.",
+      nl:"Links eiland 2: de rietjes, de verkruimelde hibiscusgarnering en de ananasbak. Rechts eiland 3: de prep voor Forest Fairy en Jalapeno Mule, de passievrucht en de derde Boston shaker. Beide staan hierboven bij Bar-opstelling, met de klok mee."}]
   ];
 
   /* Left to right along each holder, as walked on 19 November. The cubed ice
@@ -3733,8 +3753,8 @@ body.cmt-on #root { cursor: crosshair; }
      what makes the two halves separate stations rather than one long bar. */
   var HOLDER = [
     [{en:"Before the left holder, on its own",nl:"Voor de linkerhouder, apart"},[
-      {en:"Pineapple chunks, small. Grand Gerard, Sligro. For the Pina Colada. A separate box, NOT a bucket in the holder",
-       nl:"Ananasstukjes, klein. Grand Gerard, Sligro. Voor de Pina Colada. Een aparte bak, GEEN bakje in de houder"}
+      {en:"The pineapple box. Small chunks at the front, Grand Gerard from Sligro, for the Pina Colada build. Big chunks at the back, for the garnish. A separate box, NOT a bucket in the holder. See island 2",
+       nl:"De ananasbak. Kleine stukjes voorin, Grand Gerard van Sligro, voor de Pina Colada. Grote stukken achterin, voor de garnering. Een aparte bak, GEEN bakje in de houder. Zie eiland 2"}
     ]],
     [{en:"Left holder",nl:"Linkerhouder"},[
       {en:"Orange zests",nl:"Sinaasappelzestes"},
@@ -3768,6 +3788,146 @@ body.cmt-on #root { cursor: crosshair; }
     fifo:   { en: "Every open juice container from the store goes in front, and the old one is marked with an X in permanent marker. Anything past date is binned at open.",
               nl: "Elke aangebroken verpakking uit de voorraad gaat vooraan, en de oude wordt met een X in permanente marker gemarkeerd. Alles over datum gaat bij opening weg." }
   };
+
+  /* The bar around the station, as walked clockwise from the sink and
+     photographed on 25 November. Islands 1 and 2 come before the station,
+     3 and 4 after it. Each item is [what, why], the why only where one was
+     given. */
+  var ISLANDS = [
+    { n: 1,
+      where: { en: "Next to the sink", nl: "Naast de spoelbak" },
+      span:  { en: "From the kettle to the ticket printer", nl: "Van de waterkoker tot de bonprinter" },
+      items: [
+        [{ en: "The kettle", nl: "De waterkoker" }],
+        [{ en: "The ginger box, BAR Ginger, standing on the mint box", nl: "De gemberbak, BAR Ginger, bovenop de muntbak" }],
+        [{ en: "The mint box", nl: "De muntbak" },
+         { en: "Take the mint out of the shop box and move it into the mint box. Cover it with tissue and ice cubes.",
+           nl: "Haal de munt uit de winkelverpakking en doe hem in de muntbak. Dek af met tissue en ijsblokjes." }],
+        [{ en: "Polished glass plates, for the Latte Macchiato and the tea", nl: "Gepoetste glazen schoteltjes, voor de latte macchiato en de thee" }],
+        [{ en: "A silver metal container with polished long spoons, sugar bags and honey sticks",
+           nl: "Een zilveren metalen bakje met gepoetste lange lepels, suikerzakjes en honingsticks" }],
+        [{ en: "Then the ticket printer", nl: "Dan de bonprinter" }]
+      ] },
+    { n: 2,
+      where: { en: "Right of the ticket printer, left of the station", nl: "Rechts van de bonprinter, links van het station" },
+      span:  { en: "Waters, straws and the pineapple box", nl: "Water, rietjes en de ananasbak" },
+      items: [
+        [{ en: "Small white plates, for Acqua Panna and San Pellegrino", nl: "Kleine witte bordjes, voor Acqua Panna en San Pellegrino" }],
+        [{ en: "In front of the plates, a white bowl with the bottle opener", nl: "Voor de bordjes een witte kom met de flesopener" },
+         { en: "It collects the caps from the soft drinks.", nl: "Daarin gaan de doppen van de frisdranken." }],
+        [{ en: "A coppa glass of short straws", nl: "Een coppaglas met korte rietjes" }],
+        [{ en: "A hurricane glass of long straws", nl: "Een hurricaneglas met lange rietjes" }],
+        [{ en: "In front of the straws, a copper mug of crushed hibiscus garnish", nl: "Voor de rietjes een koperen beker met verkruimelde hibiscusgarnering" }],
+        [{ en: "The pineapple box, with a tablespoon in it", nl: "De ananasbak, met een eetlepel erin" },
+         { en: "Small chunks at the front of the box, for the Pina Colada build. Big chunks at the back, for the garnish: 3 big chunks on a garnish stick.",
+           nl: "Kleine stukjes voorin de bak, voor de Pina Colada. Grote stukken achterin, voor de garnering: 3 grote stukken op een garneerprikker." }],
+        [{ en: "The 75 ml jigger for the Pina Colada, at the left end of the left holder", nl: "De 75 ml-jigger voor de Pina Colada, aan het linkereind van de linkerhouder" }]
+      ] },
+    { n: 3,
+      where: { en: "Right of the right station", nl: "Rechts van het rechterstation" },
+      span:  { en: "The Forest Fairy and Jalapeno Mule prep, then the glassware", nl: "De prep voor Forest Fairy en Jalapeno Mule, dan het glaswerk" },
+      items: [
+        [{ en: "A hurricane glass of long straws", nl: "Een hurricaneglas met lange rietjes" }],
+        [{ en: "Garnish sticks, for the Lychee Siren's glitter lychee and lime", nl: "Garneerprikkers, voor de glitterlychee en de limoen van de Lychee Siren" }],
+        [{ en: "Rosemary sea salt flakes and a whole lemon, on a white plate, standing on a white bowl", nl: "Rozemarijn-zeezoutvlokken en een hele citroen, op een wit bord, dat op een witte kom staat" },
+         { en: "The bowl holds what is left of the last salt and lemon zest mix, for the Forest Fairy's rim.",
+           nl: "In de kom zit wat over is van de vorige mix van zout en citroenzeste, voor de rand van de Forest Fairy." }],
+        [{ en: "Behind, right of the long straws, the rosemary-thyme maple cordial (RT-M) and the torch", nl: "Daarachter, rechts van de lange rietjes, de rozemarijn-tijm-ahornsiroop (RT-M) en de brander" }],
+        [{ en: "In front of the cordial and the torch, the glass mixing vessel, with the long muddler and the julep strainer in it", nl: "Voor de siroop en de brander het glazen mengglas, met de lange muddler en de julepzeef erin" }],
+        [{ en: "The lemon zest grater, the Microplane", nl: "De citroenrasp, de Microplane" }],
+        [{ en: "The passion fruit box, halves inside", nl: "De passievruchtbak, met halve vruchten" },
+         { en: "The right station makes the Tropical Velvet, so its passion fruit lives on this side.",
+           nl: "Het rechterstation maakt de Tropical Velvet, dus de passievrucht staat aan deze kant." }],
+        [{ en: "The third Boston shaker, for when the station gets busy", nl: "De derde Boston shaker, voor als het druk wordt" }],
+        [{ en: "Then the glassware: the brutes, then the martini coupes", nl: "Dan het glaswerk: de brutes, dan de martini coupes" }]
+      ] },
+    { n: 4,
+      where: { en: "Between the blender and the coffee machine", nl: "Tussen de blender en de koffiemachine" },
+      span:  { en: "Right of the blender, left of the coffee machine. The soft drinks corner", nl: "Rechts van de blender, links van de koffiemachine. De hoek voor de frisdranken" },
+      items: [
+        [{ en: "The lemon box, with the tongs on the lid", nl: "De citroenbak, met de tang op het deksel" },
+         { en: "Lemon half-moons for the soft drinks: the iced teas and the ginger ale only.",
+           nl: "Halve citroenschijfjes voor de frisdranken: alleen de ice teas en de ginger ale." }],
+        [{ en: "A tall glass of stampers, for lemon and tonic", nl: "Een hoog glas met stampers, voor citroen en tonic" }],
+        [{ en: "A coppa glass of short straws", nl: "Een coppaglas met korte rietjes" }],
+        [{ en: "A black bowl with the bottle opener", nl: "Een zwarte kom met de flesopener" }],
+        [{ en: "A small container of mint, for the ginger ale", nl: "Een klein bakje munt, voor de ginger ale" }]
+      ] }
+  ];
+
+  /* Which photos are open, so a re-render (tapping a rail slot redraws the
+     page) does not snap them shut. */
+  var ISLPH = {};
+  var ISLIMG = null;
+  function islPhoto(n) {
+    if (ISLIMG === null) {
+      ISLIMG = {};
+      try {
+        var el = document.getElementById("qbar-photos");
+        if (el) ISLIMG = JSON.parse(el.textContent) || {};
+      } catch (e) { ISLIMG = {}; }
+    }
+    return ISLIMG[String(n)] || "";
+  }
+
+  function islandsHTML() {
+    var stop = function (label, on) {
+      return '<span class="isl-stop' + (on ? " on" : "") + '">' + label + "</span>";
+    };
+    var route = [
+      stop(et({ en: "Sink", nl: "Spoelbak" })), stop("1", 1),
+      stop(et({ en: "Ticket printer", nl: "Bonprinter" })), stop("2", 1),
+      stop(et({ en: "The station", nl: "Het station" })), stop("3", 1),
+      stop(et({ en: "Glassware", nl: "Glaswerk" })), "&hellip;",
+      stop(et({ en: "Blender", nl: "Blender" })), stop("4", 1),
+      stop(et({ en: "Coffee machine", nl: "Koffiemachine" }))
+    ].join('<span aria-hidden="true">&rsaquo;</span>');
+    function island(isl) {
+      var n = isl.n, open = !!ISLPH[n], src = open ? islPhoto(n) : "";
+      return '<div class="isl" data-isl="' + n + '"><div class="isl-h">' +
+        '<span class="isl-n">&#8470;&thinsp;' + n + "</span>" +
+        '<span class="isl-w">' + et(isl.where) + "</span>" +
+        '<span class="isl-s">' + et(isl.span) + "</span></div>" +
+        '<ul class="qgar">' + isl.items.map(function (it) {
+          return "<li>" + et(it[0]) + (it[1] ? '<span class="qstep-why">' + et(it[1]) + "</span>" : "") + "</li>";
+        }).join("") + "</ul>" +
+        '<details class="isl-ph" data-isl-ph="' + n + '"' + (open ? " open" : "") + "><summary>" +
+        et({ en: "Photo of island " + n, nl: "Foto van eiland " + n }) + "</summary>" +
+        (open && !src ? '<p class="qdash">' + et({ en: "The photo is not in this copy of the file.", nl: "De foto zit niet in deze versie van het bestand." }) + "</p>"
+                      : '<img alt="' + et({ en: "Island " + n + ", as set up", nl: "Eiland " + n + ", zoals opgesteld" }) + '"' +
+                        (src ? ' src="' + src + '"' : "") + ">") +
+        "</details></div>";
+    }
+    return '<div class="panel" id="q-islands"><h3>' +
+      et({ en: "Bar setup, clockwise", nl: "Bar-opstelling, met de klok mee" }) + "</h3>" +
+      '<p class="legend" style="margin:0 0 6px">' +
+      et({ en: "Four islands around the station, from the sink round to the coffee machine. The station itself is the next panel.",
+           nl: "Vier eilanden rond het station, van de spoelbak tot de koffiemachine. Het station zelf staat in het volgende paneel." }) + "</p>" +
+      '<div class="isl-route">' + route + "</div>" +
+      island(ISLANDS[0]) + island(ISLANDS[1]) +
+      '<div class="isl-mid"><b>' + et({ en: "Then the station.", nl: "Dan het station." }) + "</b> " +
+      et({ en: "The speed rail, the squeeze bottles, the holders, the ice and the tools, left station to right station. Walked through in the next panel.",
+           nl: "De speedrail, de knijpflessen, de houders, het ijs en het gereedschap, van linkerstation tot rechterstation. Uitgelegd in het volgende paneel." }) + "</div>" +
+      island(ISLANDS[2]) + island(ISLANDS[3]) +
+      "</div>";
+  }
+
+  /* toggle does not bubble, so listen in the capture phase. The photo is only
+     decoded when someone opens it. */
+  document.addEventListener("toggle", function (e) {
+    var d = e.target;
+    if (!d || !d.matches || !d.matches("details.isl-ph")) return;
+    var n = d.getAttribute("data-isl-ph");
+    ISLPH[n] = d.open;
+    if (!d.open) return;
+    var img = d.querySelector("img");
+    if (img && !img.getAttribute("src")) {
+      var src = islPhoto(n);
+      if (src) img.src = src;
+      else img.outerHTML = '<p class="qdash">' + et({ en: "The photo is not in this copy of the file.", nl: "De foto zit niet in deze versie van het bestand." }) + "</p>";
+    }
+  }, true);
+
 
   function railHTML() {
     return '<section class="section"><div class="section-head"><div class="smallcaps">' +
@@ -3820,7 +3980,8 @@ body.cmt-on #root { cursor: crosshair; }
       '<div class="qflag" style="margin-top:10px">' +
       et({ en: "Passionfruit and pineapple both read yellow in the photo. They are written here as yellow and gold so they can be told apart on this page. The bottles themselves will be labelled, so two distinct cap colours are not needed.",
            nl: "Passievrucht en ananas lezen allebei als geel op de foto. Ze staan hier als geel en goud zodat ze op deze pagina uit elkaar te houden zijn. De flessen worden zelf gelabeld, dus twee verschillende dopkleuren zijn niet nodig." }) + "</div>" +
-      '<div class="panel"><h3>' +
+      islandsHTML() +
+      '<div class="panel" id="q-station"><h3>' +
       et({ en: "The station, clockwise", nl: "Het station, met de klok mee" }) + "</h3>" +
       '<ol class="qsteps">' + STATION.map(function (s) {
         return "<li><b>" + et(s[0]) + ".</b> " + et(s[1]) +
@@ -3834,8 +3995,8 @@ body.cmt-on #root { cursor: crosshair; }
           g[1].map(function (x) { return "<li>" + et(x) + "</li>"; }).join("") + "</ul></div>";
       }).join("") +
       '<div class="qflag">' +
-      et({ en: "Two buckets from the old layout are not in this order and have no home yet: pears, thinly sliced, and passion fruit for cutting in half. Say where they go, or whether they are gone.",
-           nl: "Twee bakjes uit de oude indeling staan niet in deze volgorde en hebben nog geen plek: dun gesneden peren, en passievruchten om te halveren. Zeg waar ze horen, of dat ze weg zijn." }) + "</div></div>" +
+      et({ en: "One bucket from the old layout is not in this order and has no home yet: pears, thinly sliced. Say where it goes, or whether it is gone. The passion fruit has its home now, halved in its own box on island 3.",
+           nl: "Een bakje uit de oude indeling staat niet in deze volgorde en heeft nog geen plek: dun gesneden peren. Zeg waar het hoort, of dat het weg is. De passievrucht heeft nu een plek, gehalveerd in een eigen bak op eiland 3." }) + "</div></div>" +
       noteBox("rail-1", { en: "Rail notes. Anything that changes at the station, type it here.",
                           nl: "Notities over de speedrail. Alles wat aan het station verandert, typ je hier." }) +
       noteBox("rail-2", { en: "Syrup and Monin notes.", nl: "Notities over siroop en Monin." }) +
@@ -4276,7 +4437,7 @@ body.cmt-on #root { cursor: crosshair; }
       spec:{en:"Hurricane  ·  Blended in  ·  Blend", nl:"Hurricane  ·  Meegeblend  ·  Blenden"},
       b:[[{en:"Blender",nl:"Blender"},{en:"150 pineapple · 50 coconut cream · 45 Coco Lopez · 10 lime · 100 g ice or 1 blue scoop",nl:"150 ananas · 50 kokosroom · 45 Coco Lopez · 10 limoen · 100 g ijs of 1 blauwe schep"}],
          [{en:"Blend",nl:"Blenden"},{en:"Until creamy",nl:"Tot het romig is"}],
-         [{en:"Finish",nl:"Afmaken"},{en:"Pour into the hurricane to 1 cm · 3 bigger pineapple wedges, the AH garnish",nl:"In de hurricane schenken tot 1 cm · 3 grotere stukken ananas, de AH-garnering"}]],
+         [{en:"Finish",nl:"Afmaken"},{en:"Pour into the hurricane to 1 cm · 3 big pineapple chunks on a garnish stick",nl:"In de hurricane schenken tot 1 cm · 3 grote stukken ananas op een garneerprikker"}]],
       say:{en:"Blended, not shaken, so it pours thick. The coconut cream and Coco Lopez carry it.",nl:"Geblend, niet geshaket, dus hij schenkt dik. De kokosroom en Coco Lopez dragen hem."} }
   ];
 
@@ -5564,8 +5725,8 @@ body.cmt-on #root { cursor: crosshair; }
                            nl: ["Jigger", "Schep voor crushed ice", "Brute voor het blad", "Zesteur"] },
     "tropical-velvet": { en: ["Boston tins", "Hawthorne strainer", "Fine strainer", "Jigger"],
                          nl: ["Boston tins", "Hawthorne-zeef", "Fijne zeef", "Jigger"] },
-    "pina-colada": { en: ["Blender", "Jigger", "Blue ice scoop"],
-                     nl: ["Blender", "Jigger", "Blauwe ijsschep"] }
+    "pina-colada": { en: ["Blender", "75 ml jigger", "Tablespoon, in the pineapple box", "Garnish stick", "Blue ice scoop"],
+                     nl: ["Blender", "75 ml-jigger", "Eetlepel, in de ananasbak", "Garneerprikker", "Blauwe ijsschep"] }
   };
 
   /* Fall-back for the matcha and soft drinks, which are built in the glass.
