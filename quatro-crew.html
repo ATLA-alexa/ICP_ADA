@@ -689,7 +689,7 @@ var SECTIONS = [
       flavour: { en: "Green and sour, peppery with basil, the most refreshing of the ten",
                  nl: "Groen en zuur, peperig van de basilicum, de meest verfrissende van de tien" },
       build: [
-        { ref: "grapes", ml: 0, in: true, note: { en: "5 to 8 full green grapes, muddled to a puree in the tin. This is flavour, not garnish", nl: "5 tot 8 hele witte druiven, in de tin tot puree gekneusd. Dit is smaak, geen garnering" } },
+        { ref: "grapes", ml: 0, in: true, note: { en: "8 to 10 full green grapes, muddled to a puree in the tin. This is flavour, not garnish", nl: "8 tot 10 hele witte druiven, in de tin tot puree gekneusd. Dit is smaak, geen garnering" } },
         { ref: "basil", ml: 0, in: true, note: { en: "10 BIG leaves, or 2 big stems, pressed ONCE only, in the tin. Any more and it turns bitter", nl: "10 GROTE blaadjes, of 2 grote stelen, EEN keer geperst, in de tin. Meer en hij wordt bitter" } },
         { ref: "applepear", ml: 120, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
         { ref: "lime", ml: 25, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
@@ -698,7 +698,7 @@ var SECTIONS = [
       ],
       bar: { en: [
         "Add ice to the martini coupe to chill it. That is what gives the glass its fogged silhouette.",
-        "Muddle 5 to 8 green grapes until they turn to puree.",
+        "Muddle 8 to 10 green grapes until they turn to puree.",
         "Add 10 big basil leaves, or 2 big stems, and press once only.",
         "Apple and pear juice, lime, simple syrup.",
         "Tip the ice from the coupe into the small tin, cap with the large tin, shake hard 12 seconds or until the ice chips sound smaller.",
@@ -706,7 +706,7 @@ var SECTIONS = [
         "Float the biggest, most beautiful basil leaf on top. Check the basil box."
       ], nl: [
         "Doe ijs in de martini coupe om hem te koelen. Dat geeft het glas zijn beslagen silhouet.",
-        "Kneus 5 tot 8 witte druiven tot ze puree worden.",
+        "Kneus 8 tot 10 witte druiven tot ze puree worden.",
         "Voeg 10 grote basilicumblaadjes toe, of 2 grote stelen, en pers ze een keer.",
         "Appel-perensap, limoen, suikersiroop.",
         "Kiep het ijs uit de coupe in de kleine tin, sluit met de grote tin, shake 12 seconden hard of tot het ijs kleiner klinkt.",
@@ -1626,8 +1626,8 @@ function renderFuture() {
      Eminence Matcha Mojito will need when it arrives, and it lives here. */
   h += '<div class="flag"><strong>' + esc(LANG === "nl" ? "Let op" : "Note") + "</strong>" +
     esc(LANG === "nl"
-      ? "De Eminence Matcha Mojito gaat op dezelfde Jumbo appel-peer als The Hulk en Tropical Velvet. Die twee houden het groene railslot nu al bezet, dus er is geen nieuw slot nodig als deze erbij komt."
-      : "The Eminence Matcha Mojito will take the same Jumbo apple-pear as The Hulk and Tropical Velvet. Those two already hold the green rail slot, so no new slot is needed when this one arrives.") + "</div>";
+      ? "De Eminence Matcha Mojito gaat op hetzelfde appel-perensap als The Hulk en Tropical Velvet. Die twee houden het groene railslot nu al bezet, dus er is geen nieuw slot nodig als deze erbij komt."
+      : "The Eminence Matcha Mojito will take the same apple-pear juice as The Hulk and Tropical Velvet. Those two already hold the green rail slot, so no new slot is needed when this one arrives.") + "</div>";
   SECTIONS.forEach(function (sec) {
     if (!sec.future) return;
     h += sectionHTML(sec);
@@ -1755,7 +1755,7 @@ render();
 
      What it does
        1. Makes every ingredient in Builds clickable, opening a card that says
-          where the item comes from, Albert Heijn, Jumbo, Amazing Oriental,
+          where the item comes from, Albert Heijn, Amazing Oriental,
           Boiron, Sligro, or in house, plus its prep and keep window.
        2. Rewrites the Rail table to the sprint 1 layout.
      ========================================================================== -->
@@ -2048,6 +2048,52 @@ tr.inv-new td { padding: 2px 10px; border-bottom: 1px solid var(--limestone-deep
 .iv-mgr-msg { font-size: 12.5px; color: #9E2B3B; margin: 8px 0 0; }
 .iv-mgr-x { margin-top: 10px; }
 .iv-ack { margin-left: 8px; vertical-align: baseline; }
+/* column menu, sorting, pinning, sizing */
+.inv-t th[data-col] { padding-right: 22px; }
+/* Not on the name or a pinned column: those are sticky, and position:relative
+   here would quietly unstick them. Sticky already anchors the menu caret. */
+.inv-t th[data-col]:not(.pin):not(.c-item) { position: relative; }
+.inv-t th .th-m { position: absolute; right: 8px; top: 50%; width: 0; height: 0; margin-top: -2px;
+  border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid var(--ink-soft); opacity: .35; }
+.inv-t th:hover .th-m { opacity: .9; }
+.inv-t th.sorted { color: var(--ink); }
+.inv-t th .th-s { margin-left: 5px; color: var(--gold); font-size: 12px; letter-spacing: 0; }
+.inv-t.sorted .iv-grip { display: none; }
+.iv-hmenu { position: fixed; z-index: 80; min-width: 220px; max-width: calc(100vw - 16px); background: #fff;
+  border: 1px solid var(--gold-pale); border-radius: 10px; box-shadow: 0 10px 30px rgba(35,32,28,.18); padding: 6px; }
+.iv-hm-t { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); padding: 6px 10px 4px; }
+.iv-hmenu button { display: block; width: 100%; text-align: left; font: inherit; font-size: 13.5px; border: 0;
+  background: none; padding: 8px 10px; border-radius: 6px; cursor: pointer; color: var(--ink); }
+.iv-hmenu button:hover, .iv-hmenu button:focus { background: rgba(168,134,60,.12); outline: none; }
+.iv-hmenu button:disabled { color: var(--ink-soft); opacity: .45; cursor: default; background: none; }
+.iv-hm-sep { height: 1px; background: var(--limestone-deep); margin: 4px 6px; }
+@media (min-width: 720px) {
+  .inv-t th.pin, .inv-t td.pin { position: sticky; z-index: 1; background: #fff; }
+  .inv-t th.pin { background: var(--limestone-deep); z-index: 2; }
+  .inv-t tr.par td.pin { background: #FBF9F5; }
+  .inv-t .pin-last { box-shadow: inset -1px 0 0 var(--gold-pale); }
+}
+.inv-t th.fit, .inv-t td.fit { white-space: nowrap; width: 1%; min-width: 0 !important; }
+.inv-t td.fit .iv-note { white-space: nowrap; }
+.iv-sdir { min-width: 34px; font-size: 15px !important; padding: 3px 8px !important; }
+/* status, tags, tick box */
+.iv-ssel { font: inherit; font-size: 12.5px; padding: 4px 8px; border-radius: 999px; border: 1px solid var(--gold-pale);
+  background: #fff; cursor: pointer; max-width: 170px; font-weight: 600; }
+.iv-ssel.none { color: var(--ink-soft); font-weight: 400; border-style: dashed; }
+.iv-tags { display: inline-flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+.iv-tag { display: inline-block; font-size: 12px; padding: 2px 9px; border-radius: 999px; border: 1px solid var(--gold-pale);
+  white-space: nowrap; line-height: 1.5; }
+button.iv-tag { font: inherit; font-size: 12px; cursor: pointer; background: #fff; }
+button.iv-tag.on { font-weight: 600; }
+.iv-tag-add { font: inherit; font-size: 13px; line-height: 1; width: 24px; height: 24px; border-radius: 999px;
+  border: 1px dashed var(--gold-pale); background: none; color: var(--gold); cursor: pointer; padding: 0; }
+.iv-tagbox { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; min-width: 200px; }
+.iv-tag-done { font: inherit; font-size: 12px; border: 0; background: none; color: var(--gold); text-decoration: underline; cursor: pointer; }
+.iv-chk { width: 18px; height: 18px; accent-color: var(--gold); margin: 0; }
+.iv-ctype { font-size: 11px; color: var(--ink-soft); font-style: italic; }
+.iv-opts { flex: 1 1 100%; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; padding: 4px 0 2px 76px; }
+@media (max-width: 719px) { .iv-opts { padding-left: 0; } }
+@media print { .iv-hmenu, .th-m, .iv-tag-add { display: none; } }
 @media print { .iv-grip, tr.inv-new, .iv-mgr, .iv-ack, .c-plus, .iv-unpriced { display: none; } }
 @media (max-width: 719px) {
   .inv-t, .inv-t tbody, .inv-t td { display: block; width: 100%; }
@@ -2072,12 +2118,17 @@ tr.inv-new td { padding: 2px 10px; border-bottom: 1px solid var(--limestone-deep
   .inv-t tr.inv-r td.num { text-align: left; }
   /* Scoped to closed cards, so opening one needs no rule strong enough to
      beat this: the :not() chain outranks any plain .open selector. */
-  .inv-t tr.inv-r:not(.open) td:not(.c-item):not(.c-have):not(.c-need):not(.c-buy),
+  .inv-t tr.inv-r:not(.open) td:not(.c-item):not(.c-have):not(.c-need):not(.c-buy):not(.c-st),
   .inv-t tr.inv-r td.c-plus { display: none; }
   .inv-t tr.inv-r.open td.c-where, .inv-t tr.inv-r.open td.c-dot, .inv-t tr.inv-r.open td.c-cat { flex: 1 1 100%; }
   .inv-t tr.inv-r.open td.c-note, .inv-t tr.inv-r.open td.c-x { display: block; flex: 1 1 100%; }
   .inv-t tr.inv-r.open td.c-note::before, .inv-t tr.inv-r.open td.c-x::before { display: block; margin-bottom: 2px; }
   .inv-t tr.inv-r td.c-cat .iv-field { min-width: 0; flex: 1 1 140px; }
+  /* A status sits on the first line of a closed card, right of the name,
+     so the card stays two lines tall. */
+  .inv-t tr.inv-r:not(.open) td.c-st { order: -4; flex: 0 0 auto; }
+  .inv-t tr.inv-r:not(.open) td.c-st::before { display: none; }
+  .inv-t tr.inv-r:not(.open) td.c-st .iv-ssel { max-width: 104px; font-size: 11px; padding: 3px 2px 3px 6px; }
 
   .inv-t tr.inv-r .iv-grip { position: absolute; left: 0; top: 0; width: 14px; height: 22px; margin: 0; }
   .iv-more { display: block; position: absolute; left: 18px; top: 1px; width: 20px; height: 20px;
@@ -2395,7 +2446,7 @@ body.cmt-on #root { cursor: crosshair; }
                              note:"Two are muddled in the shaker for each Lychee Siren. The syrup from the same can is what the lychee cordial is pressed from." },
     "golden glitter lychee": { t:"house", from:"Canned lychees and edible gold glitter spray", yield:"Cut to order", keeps:"Same day", home:"F1C, garnish tub",
                              note:"One per Lychee Siren." },
-    "coconut water":       { t:"buy", shop:"Albert Heijn", pack:"1 L carton, 2.29", home:"F1A bottom tier",
+    "coconut water":       { t:"buy", shop:"Sligro 57133", pack:"Healthy People, 1 L carton, 2.37", home:"F1A bottom tier",
                              warn:"NOT ON THE BUY LIST. Until it is bought, Lychee Siren cannot be made." },
     "butterfly pea tea":   { t:"house", from:"Amazing Oriental dried butterfly pea flower, 3.15 per 50 g", yield:"2.5 L, and the squeeze bottle is drawn off the same batch", keeps:"5 days", home:"F1B top tier",
                              note:"Two bottles in the fridge at all times: it is re-batched before the old one runs out. Steep 20 minutes, then drain into one prebatch bottle and one large squeeze bottle, and that squeeze bottle is what the Ocean Mojito floats." },
@@ -2407,53 +2458,53 @@ body.cmt-on #root { cursor: crosshair; }
                              note:"Microwave the rosemary between paper towel, 4 x 30 seconds, until it crumbles but is still green. Grind coarse, mix 3 tsp with the salt and a whole lemon zest." },
     "rosemary-thyme maple cordial": { t:"house", from:"Maple Gold syrup, 6.49 per 250 ml, plus fresh rosemary and thyme", yield:"1 L", keeps:"2 weeks", home:"F1B top tier, 2 x 700 ml bottles" },
     "sparkling water":     { t:"buy", shop:"SPA Rood", pack:"330 ml bottles", home:"F1A bottom tier, 7 chilled" },
-    "rosemary":            { t:"buy", shop:"Albert Heijn", pack:"15 g pack, 1.19", home:"F2A top tier, damp cloth" },
-    "thyme":               { t:"buy", shop:"Albert Heijn", pack:"15 g pack, 1.19", home:"F2A top tier, damp cloth" },
-    "green grapes":        { t:"buy", shop:"Albert Heijn", pack:"500 g, 2.59", home:"F2A top tier" },
-    "basil":               { t:"buy", shop:"Albert Heijn", pack:"22 g pack, 1.19", home:"F2A top tier, damp cloth",
+    "rosemary":            { t:"buy", shop:"Sligro 517366", pack:"DeliHerbs, 70 g bag, 2.09", home:"F2A top tier, damp cloth" },
+    "thyme":               { t:"buy", shop:"Sligro 514627", pack:"DeliHerbs, 70 g bag, 2.09", home:"F2A top tier, damp cloth" },
+    "green grapes":        { t:"buy", shop:"Sligro 137373", pack:"500 g tub, 2.68", home:"F2A top tier" },
+    "basil":               { t:"buy", shop:"Sligro 517269", pack:"DeliHerbs, 70 g bag, 1.99", home:"F2A top tier, damp cloth",
                              note:"Press once only. A second press turns it bitter." },
-    "apple and pear juice":{ t:"buy", shop:"Jumbo", pack:"DUO smaak, 1 L", home:"F1A rail slot 5" },
-    "apple-pear":          { t:"buy", shop:"Jumbo", pack:"DUO smaak, 1 L", home:"F1A rail slot 5" },
+    "apple and pear juice":{ t:"buy", shop:"Albert Heijn", pack:"Van de Boom Peer met appel, 1 L, 2 for 3.99", home:"F1A rail slot 5" },
+    "apple-pear":          { t:"buy", shop:"Albert Heijn", pack:"Van de Boom Peer met appel, 1 L, 2 for 3.99", home:"F1A rail slot 5" },
     "simple syrup":        { t:"buy", shop:"Monin", pack:"1 L, 18.00", home:"Squeeze bottle, second tier right of the rail",
                              note:"Bought in. Do not batch this by hand." },
-    "caramelised pear":    { t:"house", from:"Conference pears, Albert Heijn, 4.83 per 2", yield:"Cut to order", keeps:"Same day", home:"F2A top tier, garnish tub",
+    "caramelised pear":    { t:"house", from:"Conference pears, Sligro 173559, 4.32 per 2 kg", yield:"Cut to order", keeps:"Same day", home:"F2A top tier, garnish tub",
                              note:"Brown sugar spread over the slice with a spoon, for when the pear returns to the build.",
                              warn:"NOT IN USE. The pear garnish was dropped: the basil leaf is settled as The Hulk's garnish. The caramelised pear stays here only in case it comes back." },
     "hibiscus tea":        { t:"house", from:"Amazing Oriental dried hibiscus, 3.89 per 125 g", yield:"2 L strong", keeps:"5 days", home:"F1B top tier, 4 x 700 ml bottles" },
-    "strawberries":        { t:"buy", shop:"Albert Heijn", pack:"500 g punnet", home:"F2A top tier",
+    "strawberries":        { t:"buy", shop:"Sligro 507714", pack:"500 g punnet, 4.32", home:"F2A top tier",
                              note:"Open question: check Sligro for a dried strawberry line as a fallback when fresh is out of season." },
     "strawberry puree":    { t:"buy", shop:"Boiron, via A la Tarte", pack:"1 kg, 11.00", home:"Tub in F1C bottom, squeeze bottle in F1C top",
                              warn:"Once decanted into a squeeze bottle it keeps 2 DAYS, not a week. Day dot it and bin it on day three." },
     "foam drops":          { t:"buy", shop:"EKOPLAZA", pack:"Fee Foam, 250 g, 3.19", home:"Station 3 dry store",
                              note:"Plant foamer. No eggs are stocked, so this is the foam in every drink that calls for one." },
-    "orange zest":         { t:"house", from:"Whole oranges, Albert Heijn, 3.29 per 2 kg", yield:"Cut to order", keeps:"Same day", home:"F2A bottom tier, cut from the whole fruit" },
-    "orange juice":        { t:"buy", shop:"Albert Heijn", pack:"2 L fresh with pulp, 3.99", home:"F1A rail slot 4" },
+    "orange zest":         { t:"house", from:"Whole oranges, Sligro 676241, 18.30 per 15 kg", yield:"Cut to order", keeps:"Same day", home:"F2A bottom tier, cut from the whole fruit" },
+    "orange juice":        { t:"buy", shop:"Sligro 780074", pack:"Hoogesteger, 2 L fresh, 7.65", home:"F1A rail slot 4" },
     "vanilla syrup":       { t:"buy", shop:"Monin", pack:"1 L, 18.00", home:"Squeeze bottle, second tier right of the rail" },
-    "jalapeno":            { t:"buy", shop:"Albert Heijn", pack:"Each, 0.59", home:"F2A top tier, sliced into the garnish tub at open",
+    "jalapeno":            { t:"buy", shop:"Sligro 204506", pack:"200 g tub, 3.03", home:"F2A top tier, sliced into the garnish tub at open",
                              note:"Seeds out as standard. Ask the guest before leaving them in." },
-    "ginger beer":         { t:"buy", shop:"Albert Heijn", pack:"Royal Club, 3 L for 9.96", home:"F1B bottom tier, laid on their side",
+    "ginger beer":         { t:"buy", shop:"Sligro 155571", pack:"Royal Club, 6 x 1 L, 8.32", home:"F1B bottom tier, laid on their side",
                              note:"A 1 L bottle is 300 mm and will not stand under a 297 mm shelf. Lay it down, it is sealed." },
-    "mint":                { t:"buy", shop:"Albert Heijn", pack:"75 g family pack, 1.99", home:"F2A top tier, damp cloth" },
+    "mint":                { t:"buy", shop:"Sligro 185323", pack:"DeliHerbs, 200 g tub, 5.05", home:"F2A top tier, damp cloth" },
     "cassis syrup":        { t:"buy", shop:"Boiron, via MAKRO", pack:"500 g, 10.63", home:"Tub in F1C bottom, squeeze bottle in F1C top",
                              warn:"STAINS. This squeeze bottle is dedicated for life and never rotated onto another product." },
     "fresh mint syrup":    { t:"house", from:"Jade's recipe, blanched mint and simple syrup", yield:"500 ml", keeps:"1 week", home:"F1B top tier",
                              note:"Blanch 100 g mint 30 seconds, shock in ice water, pat dry, blend with 500 ml 1:1 syrup, strain fine." },
-    "cranberry juice":     { t:"buy", shop:"Albert Heijn", pack:"1 L, 2.49", home:"F1A bottom tier" },
+    "cranberry juice":     { t:"buy", shop:"Sligro 203732", pack:"Prominent, 6 x 1 L, 19.84", home:"F1A bottom tier" },
     "grenadine":           { t:"buy", shop:"Monin", pack:"1 L, 18.00", home:"DRY shelf 4, squeeze bottle in F1C top",
                              warn:"The 1 L Monin bottle is 320 mm and fits no shelf in the cabinet. It stays in dry store and you decant from it. STAINS, dedicated squeeze bottle." },
-    "passionfruit juice":  { t:"buy", shop:"Albert Heijn", pack:"CoolBest, 500 ml, 3.39", home:"F1A bottom tier" },
+    "passionfruit juice":  { t:"buy", shop:"Sligro 167971", pack:"CoolBest, 1 L, 2.54", home:"F1A bottom tier" },
     "passionfruit puree":  { t:"buy", shop:"Boiron, via A la Tarte", pack:"1 kg, 14.00", home:"Tub in F1C bottom, squeeze bottle in F1C top" },
-    "fresh passion fruit": { t:"buy", shop:"Albert Heijn", pack:"6 for 3.99", home:"F2A top tier", note:"Garnish only. Never juiced." },
-    "pineapple juice":     { t:"buy", shop:"Albert Heijn", pack:"1 L, 2.59", home:"F1A bottom tier" },
+    "fresh passion fruit": { t:"buy", shop:"Sligro 515194", pack:"2 kg box, 15.39", home:"F2A top tier", note:"Garnish only. Never juiced." },
+    "pineapple juice":     { t:"buy", shop:"Sligro 223812", pack:"Appelsientje, 8 x 1 L, 20.39", home:"F1A bottom tier" },
     "coconut cream":       { t:"buy", shop:"Amazing Oriental", pack:"400 ml, 1.89", home:"Open can F1C bottom tier",
                              note:"Stir before every use, it separates in the can." },
-    "condensed milk":      { t:"buy", shop:"Albert Heijn", pack:"397 ml tin, 2.79", home:"Wide-bore squeeze bottle, F1C top",
+    "condensed milk":      { t:"buy", shop:"Sligro 32347", pack:"Melkan, 12 x 30.5 cl, 16.05", home:"Wide-bore squeeze bottle, F1C top",
                              warn:"Too thick for a standard nozzle, it needs the wide mouth bottle. Keeps 2 DAYS once decanted." },
     "ice cubes":           { t:"house", from:"The ice machine in the barista zone", yield:"Insulated bin at station 2", keeps:"Filled at open and again at the midpoint", home:"Station 2",
                              warn:"Depends on the machine being repaired in time. If it is not, ice is a bought line at 0.89 per kg and someone has to carry it." },
     "ice":                 { t:"house", from:"The ice machine in the barista zone", yield:"Insulated bin at station 2", keeps:"Filled at open and again at the midpoint", home:"Station 2",
                              warn:"Depends on the machine being repaired in time." },
-    "cocktail cherries":   { t:"buy", shop:"Albert Heijn", pack:"Jar of about 20, 1.99", home:"Open jar, F1C bottom tier" }
+    "cocktail cherries":   { t:"buy", shop:"NOT YET DECIDED", pack:"Jar of about 20, last seen at 1.99", home:"Open jar, F1C bottom tier" }
   };
 
   var order = Object.keys(SRC).sort(function (a, b) { return b.length - a.length; });
@@ -2821,7 +2872,7 @@ body.cmt-on #root { cursor: crosshair; }
     ["Juices","Lychee juice","AO",11.2,U.L,4.14,"","Lycheesap",""],
     ["Canned fruit","Lychees in syrup, cordial","AO",5.6,U.L,17.27,"","Lychees op siroop, voor cordial",""],
     ["Juices","Coconut water","AH",11.2,U.L,2.29,"NOT ON THE BUY LIST. Lychee Siren cannot be made until this is bought.","Kokoswater","STAAT NIET OP DE INKOOPLIJST. De Lychee Siren kan niet gemaakt worden tot dit gekocht is."],
-    ["Juices","Apple-pear juice, Jumbo DUO smaak","JUMBO",16.8,U.L,2.49,"Jumbo DUO smaak, not the Albert Heijn one.","Appel-perensap, Jumbo DUO smaak","Jumbo DUO smaak, niet die van Albert Heijn."],
+    ["Juices","Apple-pear juice, Jumbo DUO smaak","AH",16.8,U.L,2.49,"Van de Boom Peer met appel, from AH. Jumbo no longer stocks the DUO smaak.","Appel-perensap, Van de Boom Peer met appel","Van de Boom Peer met appel, van AH. Jumbo verkoopt de DUO smaak niet meer."],
     ["Juices","Orange juice, fresh with pulp","AH",21,U.L,2.00,"","Sinaasappelsap, vers met vruchtvlees",""],
     ["Juices","Pineapple juice, carton","AH",21,U.L,2.59,"","Ananassap, pak",""],
     ["Canned fruit","Pineapple chunks, canned","AH",4,U.C,2.15,"Garnish only.","Ananasstukjes, uit blik","Alleen voor de garnering."],
@@ -2840,7 +2891,7 @@ body.cmt-on #root { cursor: crosshair; }
     ["Syrups and sugar","Monin vanilla syrup","Monin",5.6,U.L,18.00,"","Monin vanillesiroop",""],
     ["Syrups and sugar","Monin sugar syrup","Monin",8.4,U.L,18.00,"Bought in. Do not batch by hand.","Monin suikersiroop","Wordt ingekocht. Niet zelf maken."],
     ["Syrups and sugar","Maple syrup, Maple Gold","TBD",4.9,U.L,25.96,"Goes into the rosemary-thyme cordial.","Ahornsiroop, Maple Gold","Gaat in de rozemarijn-tijm-cordial."],
-    ["Syrups and sugar","Crystal sugar","AH",2,U.KG,1.50,"","Kristalsuiker",""],
+    ["Syrups and sugar","Crystal sugar","TBD",2,U.KG,1.50,"","Kristalsuiker",""],
     ["Syrups and sugar","Monin grenadine","Monin",2.8,U.L,18.00,"1 L bottle is 320 mm, fits no shelf. Stays dry, decant from it. STAINS.","Monin grenadine","Fles van 1 L is 320 mm, past op geen enkele plank. Blijft droog staan, tap eruit af. GEEFT VLEKKEN."],
     ["Tea and dried flowers","Butterfly pea, dried","AO",56,U.G,0.063,"Makes the tea and the concentrated squeeze bottle.","Vlindererwt, gedroogd","Hiervan komen de thee en de geconcentreerde knijpfles."],
     ["Tea and dried flowers","Hibiscus, dried","AO",168,U.G,0.031,"","Hibiscus, gedroogd",""],
@@ -2853,11 +2904,11 @@ body.cmt-on #root { cursor: crosshair; }
     ["Fresh herbs","Basil","AH",88,U.G,0.0541,"Press once only.","Basilicum","Slechts een keer persen."],
     ["Fresh herbs","Rosemary","AH",60,U.G,0.0793,"First out of F2A to a damp cloth if the door tightens.","Rozemarijn","Als eerste uit F2A naar een vochtige doek als de deur te vol wordt."],
     ["Fresh herbs","Thyme","AH",60,U.G,0.0793,"Second out of F2A if the door tightens.","Tijm","Als tweede uit F2A als de deur te vol wordt."],
-    ["Fruit and vegetables","Jalapenos","AH",10,U.P,0.59,"Seeds out as standard.","Jalapenos","Standaard zonder zaadjes."],
-    ["Fruit and vegetables","Pears, Conference","AH",6,U.P,2.415,"OPEN: thin slices fall into the glass. Test drying them in the oven.","Peren, Conference","OPEN: dunne schijfjes vallen in het glas. Test om ze in de oven te drogen."],
-    ["Fruit and vegetables","Passion fruit, fresh","AH",4,U.P,0.665,"Garnish only, never juiced.","Passievrucht, vers","Alleen garnering, nooit uitgeperst."],
+    ["Fruit and vegetables","Jalapenos","Sligro",10,U.P,0.59,"Seeds out as standard.","Jalapenos","Standaard zonder zaadjes."],
+    ["Fruit and vegetables","Pears, Conference","Sligro",6,U.P,2.415,"OPEN: thin slices fall into the glass. Test drying them in the oven.","Peren, Conference","OPEN: dunne schijfjes vallen in het glas. Test om ze in de oven te drogen."],
+    ["Fruit and vegetables","Passion fruit, fresh","Sligro",4,U.P,0.665,"Garnish only, never juiced.","Passievrucht, vers","Alleen garnering, nooit uitgeperst."],
     ["Dry goods","Fee Foam or aquafaba","EKOPLAZA",1,U.B,3.19,"This is the foam. No eggs are stocked.","Fee Foam of aquafaba","Dit is de schuimer. Er liggen geen eieren op voorraad."],
-    ["Canned fruit","Cocktail cherries","AH",1,U.J,1.99,"","Cocktailkersen",""],
+    ["Canned fruit","Cocktail cherries","TBD",1,U.J,1.99,"","Cocktailkersen",""],
     ["Dry goods","Fine sea salt","AH",1,U.PK,3.69,"Goes into the rosemary-lemon rim mix.","Fijn zeezout","Gaat in het rozemarijn-citroenzout voor de rand."],
     ["Dairy and creams","Alpro Barista oat milk","AH",10,U.L,2.79,"Coffee only. No drink in the ten uses it.","Alpro Barista havermelk","Alleen voor koffie. Geen van de tien drankjes gebruikt het."],
     ["Bar consumables","Ice, crushed","AH",14,U.KG,0.89,"","IJs, crushed",""],
@@ -2887,6 +2938,13 @@ body.cmt-on #root { cursor: crosshair; }
              supplier:r[2], need:r[3], unit:r[4], cost:r[5],
              note:r[6], noteNl:r[8] || "", prep:false };
   });
+
+  /* Lines whose product changed but whose key has to stay, because the id
+     and every saved count hang off it. They read as what they are now. */
+  var RENAMED = {
+    "Apple-pear juice, Jumbo DUO smaak": { name: "Apple-pear juice, Van de Boom", nameNl: "Appel-perensap, Van de Boom" }
+  };
+  SEED.forEach(function (s) { var n = RENAMED[s.key]; if (n) { s.name = n.name; s.nameNl = n.nameNl; } });
 
   /* The row order as it stood when ids were positional. Saved data keyed s0..s54
      is remapped through this once, so nobody loses their stock counts. */
@@ -3204,6 +3262,17 @@ body.cmt-on #root { cursor: crosshair; }
     var kept = ROWS.filter(function (r) { return !gone[r.key]; });
     if (kept.length !== ROWS.length) { ROWS = kept; patched = true; }
 
+    /* A saved line still carrying the old product's name and note takes the
+       new ones; a name someone typed themselves is left alone. */
+    ROWS.forEach(function (r) {
+      var n = RENAMED[r.key], sd = seedByKey[r.key];
+      if (!n) return;
+      if (r.name === r.key) { r.name = n.name; patched = true; }
+      if (r.nameNl === "Appel-perensap, Jumbo DUO smaak") { r.nameNl = n.nameNl; patched = true; }
+      if (sd && /Jumbo DUO smaak, not the Albert Heijn one/.test(r.note || "")) { r.note = sd.note; r.noteNl = sd.noteNl; patched = true; }
+      if (r.supplier === "JUMBO") { r.supplier = "AH"; patched = true; }
+    });
+
     if (patched) save(LS_ROWS, ROWS);
   })();
   var FILTER = "all";
@@ -3298,6 +3367,10 @@ body.cmt-on #root { cursor: crosshair; }
   }
 
   function groupOf(r, cls) {
+    if (GROUPBY.indexOf("x:") === 0) {
+      var gv = r.x ? r.x[GROUPBY.slice(2)] : null;
+      return gv ? optLabel(gv) : tt({ en: "No status", nl: "Geen status" });
+    }
     if (GROUPBY === "sup") return r.supplier || "TBD";
     if (GROUPBY === "status") {
       return cls === "short" ? tt({ en: "Still to buy", nl: "Nog kopen" })
@@ -3311,13 +3384,354 @@ body.cmt-on #root { cursor: crosshair; }
     if (FILTER === "covered") return tt({ en: "covered",      nl: "gedekte" });
     if (FILTER === "note")    return tt({ en: "with a note",  nl: "met een notitie" });
     if (FILTER.indexOf("sup:") === 0) return tt({ en: "bought at ", nl: "gekocht bij " }) + FILTER.slice(4);
+    if (FILTER.indexOf("xs:") === 0) return optLabel(FILTER.split(":").slice(2).join(":"));
     return tt({ en: "all", nl: "alle" });
   }
   function groupLabel() {
+    if (GROUPBY.indexOf("x:") === 0) { var gc = colById(GROUPBY.slice(2)); return gc ? colName(gc) : ""; }
     if (GROUPBY === "sup")    return tt({ en: "where you buy them", nl: "waar je ze koopt" });
     if (GROUPBY === "status") return tt({ en: "what is left to buy", nl: "wat er nog te kopen is" });
     return tt({ en: "category", nl: "categorie" });
   }
+
+  /* Column types beyond plain text: a number, a status picked from a short
+     list, tags (several from a list), and a tick box. Options live on the
+     column; each takes a colour from PAL by position. */
+  var PAL = ["#2F6B3A", "#9E2B3B", "#B26A05", "#3B5B8C", "#6B4E8C", "#6B6459", "#A8863C", "#2C7A7B"];
+  var COL_TYPES = [
+    ["text",   { en: "Text",     nl: "Tekst" }],
+    ["number", { en: "Number",   nl: "Getal" }],
+    ["status", { en: "Status",   nl: "Status" }],
+    ["tags",   { en: "Tags",     nl: "Tags" }],
+    ["check",  { en: "Checkbox", nl: "Vinkje" }]
+  ];
+  /* The status column ships ready made, because it is the first thing asked
+     for: is this line to be bought or not. It can be deleted like any other. */
+  var COL_SEEDED = [{ id: "status", custom: true, type: "status", name: "Status",
+                      opts: [{ v: "Ready to buy", c: 0 }, { v: "Not to buy", c: 5 }] }];
+  var OPT_NL = { "Ready to buy": "Klaar om te kopen", "Not to buy": "Niet kopen" };
+  var LS_COLS_GONE = "quatro-inv-cols-gone-v1", LS_SORT = "quatro-inv-sort-v1";
+  var COLS_GONE = load(LS_COLS_GONE, []);
+  var SORT = load(LS_SORT, null);
+  var TAGEDIT = null, HMENU = null;
+  function typeLabel(t) { var x = COL_TYPES.filter(function (k) { return k[0] === t; })[0]; return x ? tt(x[1]) : t; }
+  function optLabel(v) { return isNl() ? (OPT_NL[v] || v) : v; }
+  function optColour(c, v) {
+    var o = (c.opts || []).filter(function (x) { return x.v === v; })[0];
+    return o ? PAL[o.c % PAL.length] : null;
+  }
+  function hexA(h, a) {
+    var n = parseInt(h.slice(1), 16);
+    return "rgba(" + (n >> 16 & 255) + "," + (n >> 8 & 255) + "," + (n & 255) + "," + a + ")";
+  }
+  function chipStyle(col, strong) {
+    return col ? "color:" + col + ";border-color:" + hexA(col, strong ? .9 : .45) + ";background:" + hexA(col, strong ? .16 : .08) : "";
+  }
+  function addOpt(c, v) {
+    v = String(v || "").trim();
+    if (!v) return null;
+    c.opts = c.opts || [];
+    var hit = c.opts.filter(function (o) { return o.v.toLowerCase() === v.toLowerCase(); })[0];
+    if (hit) return hit.v;
+    var used = c.opts.map(function (o) { return o.c; }), k = 0;
+    while (used.indexOf(k) !== -1 && k < PAL.length) k++;
+    c.opts.push({ v: v, c: k % PAL.length });
+    colsSave();
+    return v;
+  }
+  function xval(r, id) { return r.x ? r.x[id] : undefined; }
+
+  function statusSel(c, r) {
+    var v = xval(r, c.id) || "", col = optColour(c, v);
+    return '<select class="iv-ssel' + (v ? "" : " none") + '" data-xs="' + esc(c.id) + '"' +
+      (col ? ' style="' + chipStyle(col, true) + '"' : "") + ' aria-label="' + esc(colName(c)) + '">' +
+      '<option value=""' + (v ? "" : " selected") + ">&mdash;</option>" +
+      (c.opts || []).map(function (o) {
+        return '<option value="' + esc(o.v) + '"' + (o.v === v ? " selected" : "") + ">" + esc(optLabel(o.v)) + "</option>";
+      }).join("") +
+      '<option value="__add">' + et({ en: "+ Add an option…", nl: "+ Optie toevoegen…" }) + "</option></select>";
+  }
+  function tagsCell(c, r) {
+    var vals = xval(r, c.id) || [];
+    if (!Array.isArray(vals)) vals = [vals];
+    var key = r.id + "|" + c.id;
+    if (TAGEDIT !== key) {
+      return '<span class="iv-tags">' + vals.map(function (v) {
+        return '<span class="iv-tag" style="' + chipStyle(optColour(c, v)) + '">' + esc(optLabel(v)) + "</span>";
+      }).join("") + '<button type="button" class="iv-tag-add" data-tagedit="' + esc(key) + '" aria-label="' +
+      et({ en: "Edit tags", nl: "Tags bewerken" }) + '">+</button></span>';
+    }
+    return '<div class="iv-tagbox" data-tagbox="' + esc(key) + '">' + (c.opts || []).map(function (o) {
+        var on = vals.indexOf(o.v) !== -1;
+        return '<button type="button" class="iv-tag pick' + (on ? " on" : "") + '" data-tagtog="' + esc(o.v) + '" aria-pressed="' +
+          on + '" style="' + chipStyle(PAL[o.c % PAL.length], on) + '">' + esc(optLabel(o.v)) + "</button>";
+      }).join("") +
+      '<span class="iv-uadd"><input class="iv-field iv-tagnew" placeholder="' + et({ en: "New tag", nl: "Nieuwe tag" }) + '">' +
+      '<button type="button" data-tagok="1">' + et({ en: "Add", nl: "Toevoegen" }) + "</button></span>" +
+      '<button type="button" class="iv-tag-done" data-tagdone="1">' + et({ en: "Done", nl: "Klaar" }) + "</button></div>";
+  }
+  function customCell(c, r, lab) {
+    var v = xval(r, c.id);
+    if (c.type === "status") return '<td class="c-x c-st"' + lab + ">" + statusSel(c, r) + "</td>";
+    if (c.type === "tags") return '<td class="c-x c-tags"' + lab + ">" + tagsCell(c, r) + "</td>";
+    if (c.type === "check") return '<td class="c-x c-chk"' + lab + '><input type="checkbox" class="iv-chk" data-xc="' + esc(c.id) + '"' +
+      (v ? " checked" : "") + ' aria-label="' + esc(colName(c)) + '"></td>';
+    var num = c.type === "number";
+    v = v == null ? "" : String(v);
+    return '<td class="c-x' + (num ? " num" : "") + '"' + lab + '><div class="iv-x' + (v ? "" : " empty") + '" contenteditable="true" data-x="' +
+      esc(c.id) + '"' + (num ? ' inputmode="decimal"' : "") + ' data-ph="' + et({ en: "Empty", nl: "Leeg" }) + '">' +
+      esc(num && v ? dec(v) : v) + "</div></td>";
+  }
+
+  /* The name, then any pinned columns, then the rest: pinning a column brings
+     it to the left edge, where it then stays as the table scrolls. */
+  function dispCols() {
+    var v = visCols();
+    return [v[0]].concat(v.slice(1).filter(function (c) { return c.pin; }),
+                         v.slice(1).filter(function (c) { return !c.pin; }));
+  }
+
+  /* What a column sorts on. Empty cells sort last whichever way round. */
+  function sortVal(c, r) {
+    var k = calcRow(r);
+    switch (c.id) {
+      case "item":  return rowName(r).toLowerCase();
+      case "have":  return HAVE[r.id] == null ? null : Number(HAVE[r.id]);
+      case "need":  return k.need;
+      case "buy":   return k.short;
+      case "cost":  return k.priced && k.short != null ? k.short * r.cost : null;
+      case "where": return r.supplier || "TBD";
+      case "unit":  return unitLabel(r.unit);
+      case "cat":   return catLabel(r.cat);
+      case "note":  return rowNote(r) || null;
+      case "dot":
+        var m = String((typeof MADE !== "undefined" && MADE["inv-" + r.id]) || "").replace(/\D/g, "");
+        if (m.length !== 6 && m.length !== 8) return null;
+        return (m.length === 8 ? m.slice(4) : "20" + m.slice(4, 6)) + m.slice(2, 4) + m.slice(0, 2);
+    }
+    var v = xval(r, c.id);
+    if (c.type === "number") { var n = parseQty(v); return n === undefined ? null : n; }
+    if (c.type === "status") {
+      if (!v) return null;
+      var i = (c.opts || []).map(function (o) { return o.v; }).indexOf(v);
+      return i < 0 ? 999 : i;
+    }
+    if (c.type === "tags") return Array.isArray(v) && v.length ? v.join(", ").toLowerCase() : null;
+    if (c.type === "check") return v ? 1 : 0;
+    return v ? String(v).toLowerCase() : null;
+  }
+  function sortRows(list) {
+    var c = SORT && colById(SORT.col);
+    if (!c) return list;
+    var d = SORT.dir === -1 ? -1 : 1;
+    return list.map(function (r, i) { return { r: r, i: i, v: sortVal(c, r) }; })
+      .sort(function (a, b) {
+        var an = a.v == null || a.v === "", bn = b.v == null || b.v === "";
+        if (an || bn) return an && bn ? a.i - b.i : an ? 1 : -1;
+        var x = (typeof a.v === "number" && typeof b.v === "number") ? a.v - b.v
+              : String(a.v).localeCompare(String(b.v), undefined, { numeric: true, sensitivity: "base" });
+        return x ? x * d : a.i - b.i;
+      })
+      .map(function (k) { return k.r; });
+  }
+
+  /* Pinned columns stick at the left edge, each one just right of the last.
+     Their offsets depend on rendered widths, so they are set after a draw. */
+  function ivPinLayout() {
+    var t = document.querySelector("#root table.inv-t");
+    if (!t) return;
+    var ths = t.querySelectorAll("thead th.pin"), i, j;
+    if (!ths.length) return;
+    var wide = window.innerWidth >= 720;
+    var item = t.querySelector("thead th.c-item"), left = item ? item.offsetWidth : 0;
+    for (i = 0; i < ths.length; i++) {
+      var id = ths[i].getAttribute("data-col");
+      var cells = [ths[i]].concat([].slice.call(t.querySelectorAll('td.pin[data-k="' + CSS.escape(id) + '"]')));
+      for (j = 0; j < cells.length; j++) cells[j].style.left = wide ? left + "px" : "";
+      left += ths[i].offsetWidth;
+    }
+  }
+  window.addEventListener("resize", function () { ivPinLayout(); closeHMenu(); });
+
+  /* The column menu, opened by a tap on a heading. It lives on the page body
+     rather than in the table, so the table's sideways scroll cannot clip it. */
+  function closeHMenu() { if (HMENU) { HMENU.parentNode && HMENU.parentNode.removeChild(HMENU); HMENU = null; } }
+  function openHMenu(th) {
+    closeHMenu();
+    var id = th.getAttribute("data-col"), c = colById(id);
+    if (!c) return;
+    var sorted = SORT && SORT.col === id ? SORT.dir : 0;
+    var items = [
+      ["sort-asc",  { en: "Sort ascending",  nl: "Oplopend sorteren" },  sorted === 1],
+      ["sort-desc", { en: "Sort descending", nl: "Aflopend sorteren" },  sorted === -1],
+      ["sort-clear",{ en: "Clear sort",      nl: "Sortering wissen" },   !SORT],
+      "-",
+      c.pin ? ["unpin", { en: "Unpin column", nl: "Kolom losmaken" }]
+            : ["pin",   { en: "Pin column",   nl: "Kolom vastzetten" }, id === "item"],
+      c.fit ? ["unfit", { en: "Reset column size",   nl: "Kolombreedte terugzetten" }]
+            : ["fit",   { en: "Autosize this column", nl: "Deze kolom passend maken" }],
+      ["fit-all",   { en: "Autosize all columns", nl: "Alle kolommen passend maken" }],
+      "-",
+      ["expand",    { en: "Expand all row groups",   nl: "Alle groepen uitklappen" }],
+      ["collapse",  { en: "Collapse all row groups", nl: "Alle groepen inklappen" }],
+      "-",
+      ["hide",      { en: "Hide column", nl: "Kolom verbergen" }, id === "item"],
+      ["cols",      { en: "Columns…",    nl: "Kolommen…" }]
+    ];
+    var m = document.createElement("div");
+    m.className = "iv-hmenu";
+    m.setAttribute("role", "menu");
+    m.setAttribute("data-for", id);
+    m.innerHTML = '<div class="iv-hm-t">' + esc(colName(c)) + "</div>" + items.map(function (it) {
+      if (it === "-") return '<div class="iv-hm-sep"></div>';
+      return '<button type="button" role="menuitem" data-hm="' + it[0] + '"' + (it[2] ? " disabled" : "") + ">" + et(it[1]) + "</button>";
+    }).join("");
+    document.body.appendChild(m);
+    var r = th.getBoundingClientRect(), w = m.offsetWidth, h = m.offsetHeight;
+    m.style.left = Math.max(8, Math.min(r.left, window.innerWidth - w - 8)) + "px";
+    var top = r.bottom + 4;
+    if (top + h > window.innerHeight - 8) top = Math.max(8, r.top - h - 4);
+    m.style.top = top + "px";
+    m._th = th; m._x = r.left; m._y = r.bottom;
+    HMENU = m;
+  }
+  document.addEventListener("click", function (e) {
+    var t = e.target;
+    if (!t || !t.closest) return;
+    var mi = t.closest(".iv-hmenu [data-hm]");
+    if (mi) {
+      var id = mi.closest(".iv-hmenu").getAttribute("data-for"), c = colById(id), a = mi.getAttribute("data-hm");
+      closeHMenu();
+      if (!c) return;
+      if (a === "sort-asc" || a === "sort-desc") { SORT = { col: id, dir: a === "sort-asc" ? 1 : -1 }; save(LS_SORT, SORT); }
+      else if (a === "sort-clear") { SORT = null; save(LS_SORT, null); }
+      else if (a === "pin" || a === "unpin") { c.pin = a === "pin"; colsSave(); }
+      else if (a === "fit" || a === "unfit") { c.fit = a === "fit"; colsSave(); }
+      else if (a === "fit-all") { COLS.forEach(function (x) { x.fit = true; }); colsSave(); }
+      else if (a === "expand") { IVFOLD = {}; }
+      else if (a === "collapse") {
+        var hs = document.querySelectorAll("#root .inv-cat[data-fold]");
+        for (var i = 0; i < hs.length; i++) IVFOLD[hs[i].getAttribute("data-fold")] = true;
+      }
+      else if (a === "hide") { c.show = false; colsSave(); }
+      else if (a === "cols") { MGR = "cols"; MGRMSG = ""; }
+      invRender();
+      return;
+    }
+    if (t.closest(".iv-hmenu")) return;
+    var th = t.closest("#root .inv-t th[data-col]");
+    var same = th && HMENU && HMENU.getAttribute("data-for") === th.getAttribute("data-col");
+    closeHMenu();
+    if (th && !same) openHMenu(th);
+  });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeHMenu(); });
+  window.addEventListener("scroll", function () {
+    /* Scrolling the page or the table moves the heading away from its menu,
+       so the menu goes. A scroll that leaves the heading where it was, such
+       as the last of a fling arriving after the tap, does not. */
+    if (!HMENU) return;
+    var th = HMENU._th;
+    if (!th || !th.isConnected) { closeHMenu(); return; }
+    var r = th.getBoundingClientRect();
+    if (Math.abs(r.left - HMENU._x) > 2 || Math.abs(r.bottom - HMENU._y) > 2) closeHMenu();
+  }, true);
+
+  /* Status, tags and tick boxes. */
+  document.addEventListener("change", function (e) {
+    var t = e.target;
+    if (!t || !t.getAttribute) return;
+    var tr = t.closest && t.closest("tr.inv-r"), row = tr && rowById(tr.getAttribute("data-id"));
+    var xs = t.getAttribute("data-xs");
+    if (xs != null && row) {
+      if (t.value === "__add") { inlineAdd(t, "opt"); return; }
+      row.x = row.x || {};
+      if (t.value) row.x[xs] = t.value; else delete row.x[xs];
+      persist(); invRender();
+      return;
+    }
+    var xc = t.getAttribute("data-xc");
+    if (xc != null && row) {
+      row.x = row.x || {};
+      if (t.checked) row.x[xc] = true; else delete row.x[xc];
+      persist();
+      if (SORT && SORT.col === xc) invRender();
+      return;
+    }
+    if (t.id === "iv-sort") {
+      SORT = t.value ? { col: t.value, dir: 1 } : null;
+      save(LS_SORT, SORT); invRender();
+      return;
+    }
+    if (t.id === "iv-col-type") return;
+  });
+  function tagToggle(key, v, on) {
+    var p = key.split("|"), row = rowById(p[0]), c = colById(p[1]);
+    if (!row || !c) return;
+    row.x = row.x || {};
+    var vals = Array.isArray(row.x[c.id]) ? row.x[c.id].slice() : [];
+    var i = vals.indexOf(v);
+    if (on === undefined) on = i === -1;
+    if (on && i === -1) vals.push(v);
+    if (!on && i !== -1) vals.splice(i, 1);
+    if (vals.length) row.x[c.id] = vals; else delete row.x[c.id];
+    persist();
+  }
+  document.addEventListener("click", function (e) {
+    var t = e.target;
+    if (!t || !t.closest) return;
+    var b = t.closest("#root button");
+    if (!b) return;
+    var a;
+    if ((a = b.getAttribute("data-tagedit")) != null) { TAGEDIT = a; invRender(); var ni = document.querySelector("#root .iv-tagnew"); if (ni) ni.focus({ preventScroll: true }); return; }
+    var box = b.closest("[data-tagbox]");
+    if (box) {
+      var key = box.getAttribute("data-tagbox");
+      if ((a = b.getAttribute("data-tagtog")) != null) { tagToggle(key, a); invRender(); return; }
+      if (b.hasAttribute("data-tagok")) {
+        var inp = box.querySelector(".iv-tagnew"), c = colById(key.split("|")[1]);
+        var v = c && addOpt(c, inp ? inp.value : "");
+        if (v) tagToggle(key, v, true);
+        invRender();
+        var again = document.querySelector("#root .iv-tagnew");
+        if (again) again.focus({ preventScroll: true });
+        return;
+      }
+      if (b.hasAttribute("data-tagdone")) { TAGEDIT = null; invRender(); return; }
+    }
+    if (b.id === "iv-sortdir" && SORT) { SORT.dir = SORT.dir === -1 ? 1 : -1; save(LS_SORT, SORT); invRender(); return; }
+    if (b.id === "iv-sortclr") { SORT = null; save(LS_SORT, null); invRender(); return; }
+    /* options of a status or tags column, from the Columns panel */
+    if ((a = b.getAttribute("data-ook")) != null) {
+      var oc = colById(a), oi = document.querySelector('#root [data-onew="' + CSS.escape(a) + '"]');
+      if (oc && oi && addOpt(oc, oi.value)) { MGRMSG = ""; invRender(); var o2 = document.querySelector('#root [data-onew="' + CSS.escape(a) + '"]'); if (o2) o2.focus({ preventScroll: true }); }
+      return;
+    }
+    if ((a = b.getAttribute("data-orm")) != null) {
+      var cut = a.indexOf("|"), rc = colById(a.slice(0, cut)), rv = a.slice(cut + 1);
+      if (!rc) return;
+      rc.opts = (rc.opts || []).filter(function (o) { return o.v !== rv; });
+      ROWS.forEach(function (r) {
+        if (!r.x || r.x[rc.id] == null) return;
+        if (Array.isArray(r.x[rc.id])) { r.x[rc.id] = r.x[rc.id].filter(function (x) { return x !== rv; }); if (!r.x[rc.id].length) delete r.x[rc.id]; }
+        else if (r.x[rc.id] === rv) delete r.x[rc.id];
+      });
+      colsSave(); persist(); invRender();
+      return;
+    }
+  });
+  document.addEventListener("keydown", function (e) {
+    var t = e.target;
+    if (e.key !== "Enter" || !t || !t.classList) return;
+    if (t.classList.contains("iv-tagnew")) {
+      e.preventDefault();
+      var ok = t.parentNode.querySelector("[data-tagok]");
+      if (ok) ok.click();
+    } else if (t.getAttribute && t.getAttribute("data-onew") != null) {
+      e.preventDefault();
+      var b = document.querySelector('#root [data-ook="' + CSS.escape(t.getAttribute("data-onew")) + '"]');
+      if (b) b.click();
+    }
+  });
 
   /* ---------------------------------------------------------------
      The table works like a Notion database. Every field is its own
@@ -3334,10 +3748,20 @@ body.cmt-on #root { cursor: crosshair; }
       if (!c || !c.id || seen[c.id]) return;
       if (!c.custom && COL_BUILTIN.indexOf(c.id) === -1) return;
       seen[c.id] = 1;
-      out.push({ id: c.id, show: c.show !== false, custom: !!c.custom, name: c.name || "" });
+      out.push({ id: c.id, show: c.show !== false, custom: !!c.custom, name: c.name || "",
+                 type: c.custom ? (c.type || "text") : "", opts: c.opts || [], pin: !!c.pin, fit: !!c.fit });
     });
     COL_BUILTIN.forEach(function (id) {
-      if (!seen[id]) out.push({ id: id, show: true, custom: false, name: "" });
+      if (!seen[id]) { seen[id] = 1; out.push({ id: id, show: true, custom: false, name: "", type: "", opts: [], pin: false, fit: false }); }
+    });
+    /* A ready-made column arrives once, next to Still to buy, unless it has
+       been deleted on purpose. */
+    COL_SEEDED.forEach(function (sd) {
+      if (seen[sd.id] || COLS_GONE.indexOf(sd.id) !== -1) return;
+      var c = JSON.parse(JSON.stringify(sd));
+      c.show = true; c.pin = false; c.fit = false;
+      var at = out.map(function (x) { return x.id; }).indexOf("buy");
+      out.splice(at < 0 ? out.length : at + 1, 0, c);
     });
     /* The name leads, always: it is what a row is. */
     var item = out.filter(function (c) { return c.id === "item"; })[0];
@@ -3392,6 +3816,7 @@ body.cmt-on #root { cursor: crosshair; }
   /* Which group a row sits in, as stored, so a drop or a new line can file
      itself without going through the translated label. */
   function groupVal(r) {
+    if (GROUPBY.indexOf("x:") === 0) return (r.x && r.x[GROUPBY.slice(2)]) || "";
     if (GROUPBY === "sup") return r.supplier || "TBD";
     if (GROUPBY === "cat") return r.cat;
     return "";
@@ -3452,9 +3877,13 @@ body.cmt-on #root { cursor: crosshair; }
       case "dot":
         return '<td class="c-dot"' + lab + '>' + dateCell("inv-" + r.id, "", null) + "</td>";
     }
-    var xv = (r.x && r.x[c.id]) || "";
-    return '<td class="c-x"' + lab + '><div class="iv-x' + (xv ? "" : " empty") + '" contenteditable="true" data-x="' +
-      esc(c.id) + '" data-ph="' + et({ en: "Empty", nl: "Leeg" }) + '">' + esc(xv) + "</div></td>";
+    return customCell(c, r, lab);
+  }
+  /* Every cell says which column it belongs to, and carries the pin and
+     size of that column. */
+  function cellOut(c, r, k) {
+    return cellHTML(c, r, k).replace("<td ", '<td data-k="' + esc(c.id) + '" ')
+      .replace('class="', 'class="' + (c.pin ? "pin " : "") + (c.fit ? "fit " : ""));
   }
 
   function mgrHTML() {
@@ -3476,13 +3905,24 @@ body.cmt-on #root { cursor: crosshair; }
             (c.custom ? "" : '<span class="iv-cn">' + esc(colName(c)) + "</span>") + "</label>" +
             (c.custom ? '<input class="iv-field iv-cname" data-cname="' + esc(c.id) + '" value="' + esc(c.name) + '" aria-label="' +
                         et({ en: "Column name", nl: "Kolomnaam" }) + '">' +
+                        '<span class="iv-ctype">' + esc(typeLabel(c.type)) + "</span>" +
                         '<button type="button" class="iv-cdel' + (CDELARM === c.id ? " armed" : "") + '" data-cdel="' + esc(c.id) + '">' +
                         (CDELARM === c.id ? et({ en: "Tap again to delete", nl: "Tik nog eens om te verwijderen" })
                                           : et({ en: "Delete", nl: "Verwijderen" })) + "</button>" : "") +
+            ((c.type === "status" || c.type === "tags") ?
+              '<div class="iv-opts">' + (c.opts || []).map(function (o) {
+                return '<span class="iv-chip" style="' + chipStyle(PAL[o.c % PAL.length]) + '">' + esc(optLabel(o.v)) +
+                  '<button type="button" data-orm="' + esc(c.id + "|" + o.v) + '" aria-label="' + et({ en: "Remove", nl: "Verwijderen" }) + " " + esc(o.v) + '">&times;</button></span>';
+              }).join("") +
+              '<span class="iv-uadd"><input class="iv-field" data-onew="' + esc(c.id) + '" placeholder="' +
+              et({ en: "New option", nl: "Nieuwe optie" }) + '"><button type="button" data-ook="' + esc(c.id) + '">' +
+              et({ en: "Add", nl: "Toevoegen" }) + "</button></span></div>" : "") +
             "</li>";
         }).join("") + "</ol>" +
         '<div class="iv-add-l"><input class="iv-field" id="iv-col-in" placeholder="' +
         et({ en: "New column, for example Fridge", nl: "Nieuwe kolom, bijvoorbeeld Koelkast" }) + '">' +
+        '<select id="iv-col-type" class="iv-usel" aria-label="' + et({ en: "Kind of column", nl: "Soort kolom" }) + '">' +
+        COL_TYPES.map(function (k) { return '<option value="' + k[0] + '">' + et(k[1]) + "</option>"; }).join("") + "</select>" +
         '<button type="button" id="iv-col-addbtn">' + et({ en: "Add column", nl: "Kolom toevoegen" }) + "</button>" +
         '<button type="button" id="iv-col-reset" class="iv-quiet">' +
         et({ en: "Back to the standard columns", nl: "Terug naar de standaardkolommen" }) + "</button></div>";
@@ -3516,8 +3956,13 @@ body.cmt-on #root { cursor: crosshair; }
 
   function invHTML() {
     var totNeed = 0, totHave = 0, totBuy = 0, unpriced = [];
-    var cols = visCols(), span = cols.length + 1;
-    var body = ROWS.map(function (r) {
+    if (GROUPBY.indexOf("x:") === 0 && !colById(GROUPBY.slice(2))) GROUPBY = "cat";
+    if (SORT && !colById(SORT.col)) SORT = null;
+    var cols = dispCols(), span = cols.length + 1;
+    var pins = cols.filter(function (c) { return c.pin; }), lastPin = pins.length ? pins[pins.length - 1].id : null;
+    var order0 = {};
+    ROWS.forEach(function (r, i) { var g = groupOf(r, calcRow(r).cls); if (!(g in order0)) order0[g] = i; });
+    var body = sortRows(ROWS.slice()).map(function (r) {
       var c = calcRow(r);
       if (c.need != null && c.priced) {
         totNeed += c.need * r.cost; totHave += Math.min(c.have, c.need) * r.cost; totBuy += c.short * r.cost;
@@ -3527,9 +3972,14 @@ body.cmt-on #root { cursor: crosshair; }
       if (FILTER === "covered" && c.cls !== "covered") return null;
       if (FILTER === "note" && !hasNote(r)) return null;
       if (FILTER.indexOf("sup:") === 0 && (r.supplier || "TBD") !== FILTER.slice(4)) return null;
+      if (FILTER.indexOf("xs:") === 0) {
+        var fp = FILTER.split(":");
+        if ((xval(r, fp[1]) || "") !== fp.slice(2).join(":")) return null;
+      }
       var html = '<tr class="inv-r ' + c.cls + (IVOPEN[r.id] ? " open" : "") +
         '" data-id="' + esc(r.id) + '" data-gval="' + esc(groupVal(r)) + '">' +
-        cols.map(function (col) { return cellHTML(col, r, c); }).join("") +
+        cols.map(function (col) { return cellOut(col, r, c); }).join("").replace(
+          'data-k="' + esc(lastPin) + '" class="pin ', 'data-k="' + esc(lastPin) + '" class="pin pin-last ') +
         '<td class="c-plus"></td></tr>';
       return { key: groupOf(r, c.cls), val: groupVal(r), html: html,
                buyCost: (c.priced && c.short > 0) ? c.short * r.cost : 0 };
@@ -3544,9 +3994,22 @@ body.cmt-on #root { cursor: crosshair; }
       seen[x.key].rows.push(x.html);
       seen[x.key].buy += x.buyCost;
     });
+    /* Sorting reorders the lines inside each group; the groups themselves
+       keep their order, by status option when stacked by a status column. */
+    var gx = GROUPBY.indexOf("x:") === 0 ? colById(GROUPBY.slice(2)) : null;
+    groups.sort(function (a, b) {
+      if (gx) {
+        var ov = (gx.opts || []).map(function (o) { return o.v; });
+        var ia = a.val ? ov.indexOf(a.val) : 998, ib = b.val ? ov.indexOf(b.val) : 998;
+        return (ia < 0 ? 997 : ia) - (ib < 0 ? 997 : ib);
+      }
+      return (order0[a.key] || 0) - (order0[b.key] || 0);
+    });
     var shown = 0;
     groups.forEach(function (g) { shown += g.rows.length; });
-    var canNew = GROUPBY === "cat" || GROUPBY === "sup";
+    var canNew = GROUPBY === "cat" || GROUPBY === "sup" || !!gx;
+    var sortC = SORT && colById(SORT.col);
+    var stCols = COLS.filter(function (c) { return c.custom && c.type === "status"; });
     var catList = '<datalist id="iv-cats">' +
       catsInUse().map(function (c) { return '<option value="' + esc(c) + '"></option>'; }).join("") + "</datalist>";
     var tbody = groups.map(function (g) {
@@ -3601,15 +4064,33 @@ body.cmt-on #root { cursor: crosshair; }
           var v = "sup:" + s;
           return '<option value="' + esc(v) + '"' + (FILTER === v ? " selected" : "") + ">" +
                  esc(s) + "</option>"; }).join("") + "</optgroup>" +
+        stCols.map(function (c) {
+          return '<optgroup label="' + esc(colName(c)) + '">' + (c.opts || []).map(function (o) {
+            var v = "xs:" + c.id + ":" + o.v;
+            return '<option value="' + esc(v) + '"' + (FILTER === v ? " selected" : "") + ">" + esc(optLabel(o.v)) + "</option>";
+          }).join("") + "</optgroup>";
+        }).join("") +
       "</select></span>" +
       '<span class="ivf ivf-g"><span class="smallcaps">' + et({ en: "Stack into", nl: "Stapel in" }) + "</span>" +
       '<select id="iv-group">' +
         [["cat", { en: "Category", nl: "Categorie" }],
          ["sup", { en: "Buy at", nl: "Waar te koop" }],
-         ["status", { en: "Still to buy first", nl: "Nog kopen eerst" }]].map(function (o) {
-          return '<option value="' + o[0] + '"' + (GROUPBY === o[0] ? " selected" : "") + ">" +
+         ["status", { en: "Still to buy first", nl: "Nog kopen eerst" }]].concat(stCols.map(function (c) {
+           return ["x:" + c.id, { en: colName(c), nl: colName(c) }];
+         })).map(function (o) {
+          return '<option value="' + esc(o[0]) + '"' + (GROUPBY === o[0] ? " selected" : "") + ">" +
                  et(o[1]) + "</option>"; }).join("") +
       "</select></span>" +
+      /* Sorting, for a phone too, where there are no column headings to tap. */
+      '<span class="ivf"><span class="smallcaps">' + et({ en: "Sort", nl: "Sorteer" }) + "</span>" +
+      '<select id="iv-sort"' + (sortC ? ' class="on"' : "") + '><option value="">' +
+        et({ en: "Own order", nl: "Eigen volgorde" }) + "</option>" +
+        visCols().map(function (c) {
+          return '<option value="' + esc(c.id) + '"' + (sortC && sortC.id === c.id ? " selected" : "") + ">" + esc(colName(c)) + "</option>";
+        }).join("") + "</select>" +
+      (sortC ? '<button type="button" id="iv-sortdir" class="iv-sdir" title="' +
+        et({ en: "Flip the order", nl: "Volgorde omdraaien" }) + '">' + (SORT.dir === -1 ? "&darr;" : "&uarr;") + "</button>" : "") +
+      "</span>" +
       '<button type="button" id="iv-fold">' +
       et({ en: "Fold all", nl: "Alles inklappen" }) + "</button>" +
       '<button type="button" id="iv-add">' +
@@ -3632,20 +4113,28 @@ body.cmt-on #root { cursor: crosshair; }
       et({ en: "groups by ", nl: "groepen op " }) + esc(groupLabel()) + "." +
       (FILTER === "all" ? "" :
         ' <button type="button" class="iv-clear" id="iv-all">' +
-        et({ en: "Show every line", nl: "Toon alle regels" }) + "</button>") + "</p>" +
+        et({ en: "Show every line", nl: "Toon alle regels" }) + "</button>") +
+      (sortC ? " " + et({ en: "Sorted by ", nl: "Gesorteerd op " }) + "<b>" + esc(colName(sortC)) + "</b>, " +
+        (SORT.dir === -1 ? et({ en: "descending", nl: "aflopend" }) : et({ en: "ascending", nl: "oplopend" })) + ". " +
+        et({ en: "Lines cannot be dragged while sorted.", nl: "Regels slepen kan niet zolang er gesorteerd is." }) +
+        ' <button type="button" class="iv-clear" id="iv-sortclr">' + et({ en: "Clear sort", nl: "Sortering wissen" }) + "</button>" : "") +
+      "</p>" +
       (fresh.length ? '<div class="src-warn iv-unpriced" style="margin:0 0 14px"><b>' +
         (isNl() ? (unpriced.length === 1 ? "1 regel heeft nog geen prijs." : unpriced.length + " regels hebben nog geen prijs.")
                 : (unpriced.length === 1 ? "1 line has no price yet." : unpriced.length + " lines have no price yet.")) + "</b> " +
         et({ en: "They are counted in the quantities but not in the money below.",
              nl: "Ze tellen mee in de aantallen, maar niet in de bedragen hieronder." }) +
         ' <button type="button" class="iv-ack" id="iv-ack">' + et({ en: "Done", nl: "Klaar" }) + "</button></div>" : "") +
-      '<div class="tablewrap"><table class="inv-t"><thead><tr>' +
+      '<div class="tablewrap"><table class="inv-t' + (sortC ? " sorted" : "") + '"><thead><tr>' +
       cols.map(function (c) {
+        var sd = sortC && sortC.id === c.id ? SORT.dir : 0;
         return '<th data-col="' + esc(c.id) + '" class="c-' + (c.custom ? "x" : esc(c.id)) +
-          (c.id === "need" || c.id === "cost" ? " num" : "") + '"' +
+          (c.id === "need" || c.id === "cost" ? " num" : "") + (c.pin ? " pin" : "") + (c.id === lastPin ? " pin-last" : "") +
+          (c.fit ? " fit" : "") + (sd ? " sorted" : "") + '" aria-haspopup="menu"' + (sd ? ' aria-sort="' + (sd === 1 ? "ascending" : "descending") + '"' : "") +
           (c.id === "cost" ? ' title="' + et({ en: "What the missing quantity will cost to order",
                                                nl: "Wat het ontbrekende aantal kost om te bestellen" }) + '"' : "") + ">" +
-          esc(colName(c)) + "</th>";
+          esc(colName(c)) + (sd ? '<span class="th-s">' + (sd === 1 ? "&uarr;" : "&darr;") + "</span>" : "") +
+          '<span class="th-m" aria-hidden="true"></span></th>';
       }).join("") +
       '<th class="c-plus"><button type="button" id="iv-col-plus" title="' +
       et({ en: "Add a column", nl: "Kolom toevoegen" }) + '">+</button></th>' +
@@ -3953,6 +4442,11 @@ body.cmt-on #root { cursor: crosshair; }
   }
   function setGroup(row, gval) {
     if (gval == null) return;
+    if (GROUPBY.indexOf("x:") === 0) {
+      row.x = row.x || {};
+      if (gval) row.x[GROUPBY.slice(2)] = gval; else delete row.x[GROUPBY.slice(2)];
+      return;
+    }
     if (GROUPBY === "cat" && gval) row.cat = gval;
     else if (GROUPBY === "sup" && gval) {
       row.supplier = gval;
@@ -3994,6 +4488,7 @@ body.cmt-on #root { cursor: crosshair; }
     if (!g) return;
     var col = g.getAttribute("data-col");
     if (col === "item") return;
+    if (!col && SORT) return;          /* a sorted list has no order of its own to drag in */
     DRAG = { kind: col ? "col" : "row", id: col || g.getAttribute("data-grip"), el: g,
              x0: e.clientX, y0: e.clientY, lx: e.clientX, ly: e.clientY, on: false, pid: e.pointerId, tgt: null };
     /* Stops the page from starting a scroll or a text selection under the
@@ -4056,11 +4551,13 @@ body.cmt-on #root { cursor: crosshair; }
   /* "+ Add a unit…" or "+ Add a shop…" turns the picker into a field in
      place. Enter, Add or leaving the field keeps it; Escape drops it. */
   function inlineAdd(sel, kind) {
-    var id = sel.getAttribute(kind === "sup" ? "data-sup" : "data-unit");
+    var id = kind === "opt" ? sel.closest("tr").getAttribute("data-id") + "|" + sel.getAttribute("data-xs")
+                            : sel.getAttribute(kind === "sup" ? "data-sup" : "data-unit");
     var w = document.createElement("span");
     w.className = "iv-uadd";
     w.innerHTML = '<input class="iv-field iv-unew" data-unew="' + esc(id) + '" data-kind="' + kind + '" placeholder="' +
-      (kind === "sup" ? et({ en: "Name of the shop", nl: "Naam van de winkel" })
+      (kind === "opt" ? et({ en: "New option", nl: "Nieuwe optie" }) :
+       kind === "sup" ? et({ en: "Name of the shop", nl: "Naam van de winkel" })
                       : et({ en: "crates, boxes…", nl: "kratten, dozen…" })) +
       '"><button type="button" data-uok="' + esc(id) + '">' + et({ en: "Add", nl: "Toevoegen" }) + "</button>";
     sel.parentNode.replaceChild(w, sel);
@@ -4068,6 +4565,12 @@ body.cmt-on #root { cursor: crosshair; }
   }
   function unitAddInline(sel) { inlineAdd(sel, "unit"); }
   function unitAddCommit(id, val, kind) {
+    if (kind === "opt") {
+      var p = String(id).split("|"), orow = rowById(p[0]), oc = colById(p[1]), ov = oc && addOpt(oc, val);
+      if (orow && ov) { orow.x = orow.x || {}; orow.x[oc.id] = ov; persist(); }
+      invRender();
+      return;
+    }
     var row = rowById(id);
     if (kind === "sup") {
       var sp = addSup(val);
@@ -4144,6 +4647,12 @@ body.cmt-on #root { cursor: crosshair; }
     var tr = el.closest("tr"), row = tr && rowById(tr.getAttribute("data-id"));
     if (!row) return;
     var k = el.getAttribute("data-x"), v = el.textContent.trim();
+    var xc = colById(k);
+    if (xc && xc.type === "number") {
+      var nv = parseQty(v);
+      v = nv === undefined ? "" : String(nv);
+      el.textContent = v ? dec(v) : "";
+    }
     row.x = row.x || {};
     if ((row.x[k] || "") === v) return;
     if (v) row.x[k] = v; else delete row.x[k];
@@ -4194,18 +4703,32 @@ body.cmt-on #root { cursor: crosshair; }
       if (CDELARM !== a) { CDELARM = a; invRender(); return; }
       COLS = COLS.filter(function (c) { return c.id !== a; });
       ROWS.forEach(function (r) { if (r.x) delete r.x[a]; });
+      /* A ready-made column deleted on purpose stays deleted. */
+      if (COL_SEEDED.some(function (sd) { return sd.id === a; }) && COLS_GONE.indexOf(a) === -1) {
+        COLS_GONE.push(a); save(LS_COLS_GONE, COLS_GONE);
+      }
+      if (SORT && SORT.col === a) { SORT = null; save(LS_SORT, null); }
       CDELARM = null; colsSave(); persist(); invRender(); return;
     }
     if (id === "iv-col-addbtn") {
       var ni = document.getElementById("iv-col-in"), nm = ni ? ni.value.trim() : "";
       if (!nm) { MGRMSG = tt({ en: "Type a name for the column first.", nl: "Typ eerst een naam voor de kolom." }); invRender(); return; }
-      COLS.push({ id: "x" + Date.now().toString(36), show: true, custom: true, name: nm });
+      var tp = (document.getElementById("iv-col-type") || {}).value || "text";
+      COLS.push({ id: "x" + Date.now().toString(36), show: true, custom: true, name: nm, type: tp, opts: [], pin: false, fit: false });
       MGRMSG = ""; colsSave(); invRender(); return;
     }
     if (id === "iv-col-reset") {
-      var keep = COLS.filter(function (c) { return c.custom; });
-      keep.forEach(function (c) { c.show = true; });
-      COLS = null; colsFix(); COLS = COLS.concat(keep);
+      /* Standard columns, standard sizes, nothing pinned; your own columns
+         stay, and a ready-made one you had deleted comes back. */
+      var seededIds = COL_SEEDED.map(function (sd) { return sd.id; });
+      var keep = COLS.filter(function (c) { return c.custom && seededIds.indexOf(c.id) === -1; });
+      var seededNow = COLS.filter(function (c) { return seededIds.indexOf(c.id) !== -1; });
+      keep.forEach(function (c) { c.show = true; c.pin = false; c.fit = false; });
+      COLS_GONE = []; save(LS_COLS_GONE, COLS_GONE);
+      COLS = null; colsFix();
+      /* a seeded column that was still there keeps its options */
+      seededNow.forEach(function (o) { var n = colById(o.id); if (n) n.opts = o.opts; });
+      COLS = COLS.concat(keep);
       colsSave(); invRender(); return;
     }
     /* units and shops */
@@ -4284,7 +4807,7 @@ body.cmt-on #root { cursor: crosshair; }
     ["L","#E8791D",{en:"Orange",nl:"Oranje"},{en:"Orange juice",nl:"Sinaasappelsap"},"Hibiscus Royale, Cosmopolitan, Amsterdam Sunrise",""],
     ["L","#23201C",{en:"Black",nl:"Zwart"},{en:"Cranberry juice",nl:"Cranberrysap"},"Cosmopolitan",""],
     ["R","#D9C24E",{en:"Yellow",nl:"Geel"},{en:"Passionfruit juice",nl:"Passievruchtensap"},"Tropical Velvet",""],
-    ["R","#3E7A32",{en:"Green",nl:"Groen"},{en:"Apple and pear juice, Jumbo DUO smaak",nl:"Appel-perensap, Jumbo DUO smaak"},"The Hulk, Tropical Velvet",""],
+    ["R","#3E7A32",{en:"Green",nl:"Groen"},{en:"Apple and pear juice, Van de Boom Peer met appel, AH",nl:"Appel-perensap, Van de Boom Peer met appel, AH"},"The Hulk, Tropical Velvet",""],
     ["R","#FFFFFF",{en:"White",nl:"Wit"},{en:"Lychee juice",nl:"Lycheesap"},"Lychee Siren",""],
     ["R","#4C4C9D",{en:"Blue",nl:"Blauw"},{en:"BPT-coconut mixture",nl:"BPT-kokosmengsel"},"Lychee Siren, Ocean Mojito",""]
   ];
@@ -4959,7 +5482,7 @@ body.cmt-on #root { cursor: crosshair; }
     { id:"the-hulk", name:"The Hulk", sw:"#6E8C3A",
       spec:{en:"Chilled coupe  ·  No ice in the glass  ·  Shake and fine strain", nl:"Gekoelde coupe  ·  Geen ijs in het glas  ·  Shaken en fijn zeven"},
       b:[[{en:"Prep",nl:"Voorbereiden"},{en:"Ice into the coupe to chill it",nl:"Ijs in de coupe om te koelen"}],
-         [{en:"Tin",nl:"Tin"},{en:"Muddle 5 to 8 grapes to a puree · 10 BIG basil leaves or 2 stems, press ONCE · 120 apple-pear · 25 lime · 15 simple",nl:"Kneus 5 tot 8 druiven tot puree · 10 GROTE basilicumblaadjes of 2 stelen, EEN keer persen · 120 appel-peer · 25 limoen · 15 suikersiroop"}],
+         [{en:"Tin",nl:"Tin"},{en:"Muddle 8 to 10 grapes to a puree · 10 BIG basil leaves or 2 stems, press ONCE · 120 apple-pear · 25 lime · 15 simple",nl:"Kneus 8 tot 10 druiven tot puree · 10 GROTE basilicumblaadjes of 2 stelen, EEN keer persen · 120 appel-peer · 25 limoen · 15 suikersiroop"}],
          [{en:"Shake",nl:"Shaken"},{en:"Tip the coupe ice into the tin · cap · hard 12 seconds, until the chips sound smaller",nl:"Kiep het ijs uit de coupe in de tin · sluiten · hard 12 seconden, tot de ijsstukjes kleiner klinken"}],
          [{en:"Finish",nl:"Afmaken"},{en:"Fine strain into the chilled coupe · float the biggest, best basil leaf on top, check the basil box",nl:"Fijn zeven in de gekoelde coupe · laat het grootste, mooiste basilicumblaadje bovenop drijven, kijk in de basilicumbak"}]],
       say:{en:"FLOOR: extremely underrated, extremely refreshing, sweeter than the Lychee Siren, and the one purely European drink on the list. Sell it.",nl:"BEDIENING: enorm onderschat, heel verfrissend, zoeter dan de Lychee Siren, en het enige puur Europese drankje op de lijst. Verkoop hem."} },
@@ -5075,37 +5598,17 @@ body.cmt-on #root { cursor: crosshair; }
     ["ao-hibiscus","AO","hibiscus","Sun Dried Red Hibiscus Flowers","54377","125 g",125,"g",3.89,""],
     ["ao-butterfly-pea","AO","butterfly-pea","Dried Butterfly Pea","96567","50 g",50,"g",3.15,""],
 
-    /* ---- Albert Heijn ---- */
-    ["ah-maaza-lychee","AH","lychee-juice","Maaza Fruit drink lychee","","330 ml",330,"ml",1.29,""],
-    ["ah-orange-fresh","AH","orange-juice","AH Vers geperst sap sinaasappel","","500 ml",500,"ml",2.49,""],
-    ["ah-viscose","AH","wipes-yellow","AH Viscosedoekjes","","10 stuks",1,"pcs",1.99,""],
-    ["ah-straws","AH","straws-any","AH Rietjes","","10 stuks",1,"pcs",1.29,""],
-    ["ah-oat","AH","oat-milk","AH Terra Plantaardige barista haver","","1 L, premium 10 percent off, was 1.69",1000,"ml",1.52,""],
-    ["ah-sugar","AH","sugar","AH Kristalsuiker","","1 kg",1000,"g",0.75,""],
-    ["ah-maple","AH","maple","Maple Gold Ahornsiroop","","250 ml",250,"ml",6.49,""],
-    ["ah-condensed","AH","condensed-milk","Friesche Vlag Volle melk gecondenseerd","","397 g",397,"ml",2.79,
-     {en:"Priced per ml on the assumption 397 g is about 397 ml.",nl:"Per ml gerekend, aangenomen dat 397 g ongeveer 397 ml is."}],
-    ["ah-gingerbeer","AH","ginger-beer-l","Royal Club Ginger beer 4-pack","","4 x 1 L, 10 percent volume, was 9.96",4000,"ml",8.96,""],
-    ["ah-cranberry","AH","cranberry","Ocean Spray Cranberry classic","","1 L",1000,"ml",2.49,""],
-    ["ah-pineapple","AH","pineapple-juice","AH Ananassap","","1 L",1000,"ml",2.59,""],
-    ["ah-pineapple-chunks","AH","pineapple-chunks","AH Stukjes ananas op sap","","567 g tin",1,"pcs",2.15,""],
-    ["ah-passionfruit-fresh","AH","passionfruit-fresh","AH Passievruchten zak","","6 stuks",6,"pcs",3.99,""],
-    ["ah-pears","AH","pears","AH Conference schaal 2-pack","","2 stuks, 3 percent volume, was 4.98",2,"pcs",4.83,""],
-    ["ah-jalapeno","AH","jalapeno","AH Jalapeno peper groen","","per stuk",1,"pcs",0.59,""],
-    ["ah-thyme","AH","thyme","AH Tijm","","15 g",15,"g",1.25,""],
-    ["ah-rosemary","AH","rosemary","AH Rozemarijn","","15 g",15,"g",1.25,""],
-    ["ah-basil","AH","basil","AH Basilicum","","22 g",22,"g",1.25,""],
-    ["ah-mint","AH","mint","AH Munt grootverpakking","","75 g",75,"g",1.99,""],
-    ["ah-grapes","AH","grapes","AH Pitloze witte druiven","","500 g",500,"g",2.59,""],
-    ["ah-oranges","AH","oranges","AH Handsinaasappelen","","2 kg, on offer, was 3.29",2000,"g",2.49,""],
-    ["ah-lemons","AH","lemons","AH Citroen","","500 g",500,"g",1.59,""],
-    ["ah-limes","AH","limes","AH Limoenen","","4 stuks",4,"pcs",1.29,""],
-    ["ah-applepear-bio","AH","apple-pear","Het sapgilde Appel-perensap bio","","0,75 L, premium 10 percent, was 2.99",750,"ml",2.69,""],
-    ["ah-pear-apple","AH","apple-pear","Van de Boom Peer met appel","","1 L, 2 for 3.99",1000,"ml",2.49,""],
-    ["ah-glitter","AH","gold-glitter","AH Bakfeest glitterspray goud","","4 g",4,"g",3.99,""],
-
-    /* ---- Jumbo ---- */
-    ["jumbo-duo","JUMBO","apple-pear","Jumbo Duo Drank Peer Appel","","1 L",1000,"ml",1.49,""],
+    /* ---- Albert Heijn. Only these three are bought there: the big
+           pineapple chunks for the Pina Colada garnish, the apple-pear juice
+           and the gold glitter spray. Everything else moved to Sligro, and the
+           AH lines that only cluttered the list were taken out on 25.11.26.
+           Jumbo went the same day: its apple-pear drink is no longer stocked. ---- */
+    ["ah-pineapple-chunks","AH","pineapple-chunks","AH Stukjes ananas op sap","","567 g tin, 5.85 per kg as AH lists it",1,"pcs",1.99,"",
+     "https://www.ah.nl/producten/product/wi509290/ah-stukjes-ananas-op-sap"],
+    ["ah-pear-apple","AH","apple-pear","Van de Boom Peer met appel","","1 L, 2 for 3.99",1000,"ml",2.49,"",
+     "https://www.ah.nl/producten/product/wi403960/van-de-boom-peer-met-appel"],
+    ["ah-glitter","AH","gold-glitter","AH Bakfeest glitterspray goud","","4 g",4,"g",3.99,"",
+     "https://www.ah.nl/producten/product/wi583879/ah-bakfeest-glitterspray-goud"],
 
     /* ---- Sligro, Bar Soft Opening list, 29.08.26 ---- */
     ["sl-ginger","Sligro","ginger","Gember","174662","Zak 500 g",500,"g",3.17,""],
@@ -5189,7 +5692,8 @@ body.cmt-on #root { cursor: crosshair; }
     ["sl-container","Sligro","kit","Vershouddoos 1/2 6,5 liter, The FoodCare Company","157658","per stuk",1,"pcs",17.44,"KIT"]
   ].map(function (r) {
     return { id:r[0], sup:r[1], m:r[2], name:r[3], art:r[4], pack:r[5],
-             qty:r[6], u:r[7], price:r[8], note:(r[9] === "KIT" ? "" : r[9]), kit:(r[9] === "KIT") };
+             qty:r[6], u:r[7], price:r[8], note:(r[9] === "KIT" ? "" : r[9]), kit:(r[9] === "KIT"),
+             url:r[10] || "" };
   });
 
   var PB = {};
@@ -5302,9 +5806,8 @@ body.cmt-on #root { cursor: crosshair; }
      The article number is always shown as well, so a line can be found by hand
      if a link ever goes stale. */
   var STORES = {
-    "AH":     { name: "Albert Heijn",     url: function (e) { return "https://www.ah.nl/zoeken?query=" + encodeURIComponent(e.name); } },
+    "AH":     { name: "Albert Heijn",     url: function (e) { return e.url || "https://www.ah.nl/zoeken?query=" + encodeURIComponent(e.name); } },
     "AO":     { name: "Amazing Oriental", url: function (e) { return "https://www.amazingoriental.com/nl/catalogsearch/result/?q=" + encodeURIComponent(e.name); } },
-    "JUMBO":  { name: "Jumbo",            url: function (e) { return "https://www.jumbo.com/zoeken?searchTerms=" + encodeURIComponent(e.name); } },
     "Sligro": { name: "Sligro",           url: function (e) { return "https://www.sligro.nl/zoeken?searchTerm=" + encodeURIComponent(e.art || e.name); } }
   };
 
@@ -5386,6 +5889,30 @@ body.cmt-on #root { cursor: crosshair; }
   }
 
   applyPrices();
+
+  /* 25.11.26: AH was cut to three lines and Jumbo dropped. A saved line still
+     set to buy at either, from a shop that no longer lists it, moves to the
+     shop that does. Once only, so choosing AH again later is not undone. */
+  (function () {
+    var FLAG = "quatro-ah-trim-v1";
+    try { if (localStorage.getItem(FLAG)) return; } catch (x) { return; }
+    var moved = false, seedBy = {};
+    SEED.forEach(function (sd) { seedBy[sd.key] = sd; });
+    ROWS.forEach(function (r) {
+      if (r.supplier !== "AH" && r.supplier !== "JUMBO") return;
+      var key = ROW_PRICE[r.key];
+      if (key && PRICEBOOK.some(function (e) { return e.m === key && e.sup === r.supplier; })) return;
+      var e = rowEntry(r), sd = seedBy[r.key];
+      var to = e ? e.sup : (sd ? sd.supplier : null);
+      if (to && to !== r.supplier) { r.supplier = to; moved = true; }
+    });
+    if (moved) persist();
+    if (SUPS && SUPS.indexOf("JUMBO") !== -1 && !ROWS.some(function (r) { return r.supplier === "JUMBO"; })) {
+      SUPS = SUPS.filter(function (x) { return x !== "JUMBO"; });
+      save(LS_SUPS, SUPS);
+    }
+    try { localStorage.setItem(FLAG, "1"); } catch (x) {}
+  })();
 
   var PBSHOP = "";   /* which shop the price list is narrowed to, blank for all */
   document.addEventListener("click", function (e) {
@@ -6178,6 +6705,7 @@ body.cmt-on #root { cursor: crosshair; }
            language change. */
         document.body.classList.toggle("cmt-on", CMTMODE);
         labelWide();
+        ivPinLayout();
         coffeeMount();
         cmtUI(); cmtLabels(); cmtRenderPanel(); cmtFit();
       } catch (err) {

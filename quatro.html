@@ -678,7 +678,7 @@ var SECTIONS = [
       flavour: { en: "Green and sour, peppery with basil, the most refreshing of the ten",
                  nl: "Groen en zuur, peperig van de basilicum, de meest verfrissende van de tien" },
       build: [
-        { ref: "grapes", ml: 0, in: true, note: { en: "5 to 8 full green grapes, muddled to a puree in the tin. This is flavour, not garnish", nl: "5 tot 8 hele witte druiven, in de tin tot puree gekneusd. Dit is smaak, geen garnering" } },
+        { ref: "grapes", ml: 0, in: true, note: { en: "8 to 10 full green grapes, muddled to a puree in the tin. This is flavour, not garnish", nl: "8 tot 10 hele witte druiven, in de tin tot puree gekneusd. Dit is smaak, geen garnering" } },
         { ref: "basil", ml: 0, in: true, note: { en: "10 BIG leaves, or 2 big stems, pressed ONCE only, in the tin. Any more and it turns bitter", nl: "10 GROTE blaadjes, of 2 grote stelen, EEN keer geperst, in de tin. Meer en hij wordt bitter" } },
         { ref: "applepear", ml: 120, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
         { ref: "lime", ml: 25, pre: { en: "Shaker, fine strained", nl: "Shaker, fijn gezeefd" } },
@@ -687,7 +687,7 @@ var SECTIONS = [
       ],
       bar: { en: [
         "Add ice to the martini coupe to chill it. That is what gives the glass its fogged silhouette.",
-        "Muddle 5 to 8 green grapes until they turn to puree.",
+        "Muddle 8 to 10 green grapes until they turn to puree.",
         "Add 10 big basil leaves, or 2 big stems, and press once only.",
         "Apple and pear juice, lime, simple syrup.",
         "Tip the ice from the coupe into the small tin, cap with the large tin, shake hard 12 seconds or until the ice chips sound smaller.",
@@ -695,7 +695,7 @@ var SECTIONS = [
         "Float the biggest, most beautiful basil leaf on top. Check the basil box."
       ], nl: [
         "Doe ijs in de martini coupe om hem te koelen. Dat geeft het glas zijn beslagen silhouet.",
-        "Kneus 5 tot 8 witte druiven tot ze puree worden.",
+        "Kneus 8 tot 10 witte druiven tot ze puree worden.",
         "Voeg 10 grote basilicumblaadjes toe, of 2 grote stelen, en pers ze een keer.",
         "Appel-perensap, limoen, suikersiroop.",
         "Kiep het ijs uit de coupe in de kleine tin, sluit met de grote tin, shake 12 seconden hard of tot het ijs kleiner klinkt.",
@@ -1615,8 +1615,8 @@ function renderFuture() {
      Eminence Matcha Mojito will need when it arrives, and it lives here. */
   h += '<div class="flag"><strong>' + esc(LANG === "nl" ? "Let op" : "Note") + "</strong>" +
     esc(LANG === "nl"
-      ? "De Eminence Matcha Mojito gaat op dezelfde Jumbo appel-peer als The Hulk en Tropical Velvet. Die twee houden het groene railslot nu al bezet, dus er is geen nieuw slot nodig als deze erbij komt."
-      : "The Eminence Matcha Mojito will take the same Jumbo apple-pear as The Hulk and Tropical Velvet. Those two already hold the green rail slot, so no new slot is needed when this one arrives.") + "</div>";
+      ? "De Eminence Matcha Mojito gaat op hetzelfde appel-perensap als The Hulk en Tropical Velvet. Die twee houden het groene railslot nu al bezet, dus er is geen nieuw slot nodig als deze erbij komt."
+      : "The Eminence Matcha Mojito will take the same apple-pear juice as The Hulk and Tropical Velvet. Those two already hold the green rail slot, so no new slot is needed when this one arrives.") + "</div>";
   SECTIONS.forEach(function (sec) {
     if (!sec.future) return;
     h += sectionHTML(sec);
