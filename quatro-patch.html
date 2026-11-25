@@ -131,6 +131,7 @@ td.buy.ok { color: var(--ink-soft); }
 /* Flex rather than a float: at phone width a floated count lands on top of a
    long category name with no gap between them. */
 .inv-cat td { display: flex; align-items: baseline; gap: 10px; }
+.cat-in { display: flex; align-items: baseline; gap: 10px; width: 100%; }
 .inv-cat .cat-r { margin-left: auto; text-align: right; font-family: var(--body);
   letter-spacing: .04em; text-transform: none; font-size: 11.5px; color: var(--ink-soft); }
 .sup { display: inline-block; font-size: 10px; letter-spacing: .08em; padding: 2px 7px;
@@ -199,59 +200,162 @@ td.buy.ok { color: var(--ink-soft); }
   .prep-t tbody td:nth-child(3)::before { display: inline; margin-right: 5px; }
 }
 
+/* Inventory, Notion style: columns you can drag, rows you can drag. */
+.inv-t th[data-col] { cursor: grab; user-select: none; -webkit-user-select: none; }
+.inv-t th[data-col="item"] { cursor: default; }
+.inv-t th.drag-src { opacity: .45; }
+.inv-t th.drop-l { box-shadow: inset 3px 0 0 var(--gold); }
+.inv-t th.drop-r { box-shadow: inset -3px 0 0 var(--gold); }
+.inv-t tr.drag-src td { opacity: .4; }
+.inv-t tr.drop-a td { box-shadow: inset 0 3px 0 var(--gold); }
+.inv-t tr.drop-b td { box-shadow: inset 0 -3px 0 var(--gold); }
+body.iv-dragging, body.iv-dragging * { cursor: grabbing !important; user-select: none !important; -webkit-user-select: none !important; }
+.iv-grip { display: inline-block; width: 10px; height: 16px; margin: 0 7px 0 -3px; vertical-align: -3px;
+  cursor: grab; touch-action: none; opacity: .3;
+  background-image: radial-gradient(circle, var(--ink) 1.1px, transparent 1.5px); background-size: 5px 5.5px; }
+tr.inv-r:hover .iv-grip, .iv-grip:focus { opacity: .85; }
+.inv-t td.c-item { min-width: 190px; }
+/* Ten columns are wider than the page, so the table scrolls inside its frame
+   the way a Notion table does, and the name stays pinned on the left so you
+   always know which line you are reading across. */
+@media (min-width: 720px) {
+  .inv-t th.c-item, .inv-t td.c-item { position: sticky; left: 0; z-index: 1; background: #fff;
+    box-shadow: inset -1px 0 0 var(--limestone-deep); }
+  .inv-t th.c-item { background: var(--limestone-deep); z-index: 2; }
+  .inv-t tr.par td.c-item { background: #FBF9F5; }
+}
+.inv-t td.c-cat .iv-field { min-width: 0; width: 150px; }
+@media (min-width: 720px) {
+  /* A band has to stay a table cell to span the columns; display:flex on the
+     td quietly turned it into a one-column cell once there were ten. The
+     layout lives on an inner span, pinned left so it stays in view while the
+     table scrolls sideways. */
+  .inv-t tr.inv-cat td { display: table-cell; }
+  .inv-t tr.inv-cat .cat-in { position: sticky; left: 10px; display: inline-flex; align-items: baseline;
+    gap: 10px; max-width: 740px; }
+  .inv-t tr.inv-cat .cat-r { margin-left: 14px; }
+  /* Room for each field on one or two lines, so a row is a row and not a
+     column of stacked bits. */
+  .inv-t td.c-have, .inv-t td.c-need, .inv-t td.c-buy { white-space: nowrap; }
+  .inv-t td.c-cost { min-width: 180px; }
+  .inv-t td.c-where { min-width: 120px; }
+  .inv-t td.c-dot { min-width: 230px; }
+  .inv-t td.c-dot .mk { flex-wrap: wrap; }
+  .inv-t td.c-dot .mk-out { flex: 1 0 100%; }
+  .inv-t td, .inv-t tr.inv-cat td { padding-top: 7px; padding-bottom: 7px; }
+  .inv-t .barlbl { display: none; }
+}
+.inv-t .iv-usel { max-width: 118px; }
+.inv-t td.c-note { min-width: 200px; }
+.inv-t td.c-x { min-width: 120px; }
+.inv-t td.c-item .iv-del { opacity: 0; }
+.inv-t tr.inv-r:hover td.c-item .iv-del { opacity: .45; }
+.inv-t tr.inv-r td.c-item .iv-del:hover { opacity: 1; }
+@media (hover: none) { .iv-grip { opacity: .55; } .inv-t td.c-item .iv-del { opacity: .45; } }
+.c-note .iv-note { margin-top: 0; }
+.iv-x { outline: none; min-height: 20px; border-radius: 4px; padding: 2px 4px; font-size: 13px; }
+.iv-x:focus { background: rgba(168,134,60,.16); }
+.iv-x.empty::before, .iv-name:empty::before { content: attr(data-ph); color: rgba(107,100,89,.55); font-style: italic; }
+.iv-x:focus.empty::before { content: ""; }
+.iv-name:empty { display: inline-block; min-width: 120px; }
+.iv-usel { font: inherit; font-size: 13px; padding: 4px 6px; border: 1px solid var(--gold-pale);
+  border-radius: 6px; background: #fff; max-width: 140px; cursor: pointer; }
+.iv-uadd { display: inline-flex; gap: 5px; align-items: center; }
+.iv-uadd .iv-field { min-width: 0; width: 110px; }
+.iv-uadd button, .iv-add-l button, .iv-ack, .iv-mgr-x { font: inherit; font-size: 12.5px; cursor: pointer;
+  border-radius: 8px; border: 1px solid var(--gold-pale); background: var(--limestone); padding: 5px 11px; color: var(--ink); }
+.inv-t th.c-plus, .inv-t td.c-plus { width: 34px; padding: 4px 6px; }
+#iv-col-plus { font: inherit; font-size: 15px; line-height: 1; padding: 2px 8px; cursor: pointer;
+  border: 1px solid var(--gold-pale); border-radius: 6px; background: #fff; color: var(--gold); }
+tr.inv-new td { padding: 2px 10px; border-bottom: 1px solid var(--limestone-deep); }
+.iv-new { font: inherit; font-size: 12.5px; border: 0; background: none; color: var(--ink-soft); padding: 5px 0; cursor: pointer; }
+.iv-new:hover { color: var(--gold); }
+.inv-filters .iv-mb.on { background: rgba(168,134,60,.18); border-color: var(--gold); }
+.iv-mgr { border: 1px solid var(--gold-pale); border-radius: 10px; background: #fff; padding: 12px 14px; margin: -4px 0 14px; }
+.iv-mgr-h { font-family: 'Marcellus', Georgia, serif; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+.iv-mgr-p { font-size: 12.5px; color: var(--ink-soft); line-height: 1.5; margin: 4px 0 10px; }
+.iv-cl { list-style: none; margin: 0 0 10px; padding: 0; }
+.iv-cr { display: flex; align-items: center; gap: 6px; padding: 5px 0; border-bottom: 1px solid var(--limestone-deep); flex-wrap: wrap; }
+.iv-cr.fixed { color: var(--ink-soft); padding-left: 2px; }
+.iv-cfix { font-size: 11px; font-style: italic; }
+.iv-ca { width: 32px; height: 32px; border: 1px solid var(--gold-pale); border-radius: 6px; background: var(--limestone);
+  cursor: pointer; font-size: 14px; color: var(--ink); }
+.iv-ca:disabled { opacity: .3; cursor: default; }
+.iv-cs { display: inline-flex; align-items: center; gap: 7px; font-size: 13.5px; cursor: pointer; }
+.iv-cs input { width: 18px; height: 18px; accent-color: var(--gold); margin: 0; }
+.iv-cname { min-width: 0; width: 150px; }
+.iv-cdel { font: inherit; font-size: 12px; border: 0; background: none; color: #9E2B3B; cursor: pointer; padding: 3px 6px; }
+.iv-cdel.armed { background: rgba(158,43,59,.1); border-radius: 6px; font-weight: 600; }
+.iv-add-l { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.iv-add-l .iv-field { flex: 1 1 160px; min-width: 0; }
+.iv-add-l .iv-quiet { border: 0; background: none; color: var(--ink-soft); text-decoration: underline; padding: 5px 2px; }
+.iv-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.iv-chip { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; padding: 3px 3px 3px 10px;
+  border-radius: 999px; border: 1px solid var(--gold-pale); background: var(--limestone); }
+.iv-chip-n { font-size: 11px; color: var(--ink-soft); }
+.iv-chip button { border: 0; background: none; cursor: pointer; font-size: 16px; line-height: 1; color: var(--ink-soft);
+  padding: 2px 6px; min-height: 26px; }
+.iv-chip button:hover { color: #9E2B3B; }
+.iv-mgr-msg { font-size: 12.5px; color: #9E2B3B; margin: 8px 0 0; }
+.iv-mgr-x { margin-top: 10px; }
+.iv-ack { margin-left: 8px; vertical-align: baseline; }
+@media print { .iv-grip, tr.inv-new, .iv-mgr, .iv-ack, .c-plus, .iv-unpriced { display: none; } }
 @media (max-width: 719px) {
   .inv-t, .inv-t tbody, .inv-t td { display: block; width: 100%; }
   .inv-t thead { display: none; }
 
-  /* Two lines, not six. The name and the count you are about to change sit
-     on the first line; the numbers you read sit on the second as chips.
-     Anything you only need occasionally is behind the toggle. */
+  /* Two lines, not ten. The name and the count you are about to change sit
+     on the first line; Per week and Still to buy sit on the second as chips.
+     Everything else is behind the toggle, in the order the columns are set. */
   .inv-t tr.inv-r { display: flex; flex-wrap: wrap; align-items: flex-start;
     gap: 3px 12px; border-bottom: 1px solid var(--gold-pale); padding: 9px 0; width: 100%; }
   .inv-t tr.inv-r td { border: 0; padding: 0; display: inline-flex; flex-wrap: wrap;
-    align-items: baseline; gap: 5px; width: auto; }
+    align-items: baseline; gap: 5px; width: auto; min-width: 0; }
   .inv-t tr.inv-r td::before { content: attr(data-l); font-size: 9.5px; letter-spacing: .09em;
     text-transform: uppercase; color: var(--gold); white-space: nowrap; }
 
-  .inv-t tr.inv-r td:nth-child(1) { order: 1; flex: 1 1 calc(100% - 118px);
-    display: block; padding-left: 22px; position: relative; }
-  .inv-t tr.inv-r td:nth-child(1)::before { display: none; }   /* the name needs no label */
-  .inv-t tr.inv-r td:nth-child(3) { order: 2; flex: 0 0 auto; }          /* have  */
-  .inv-t tr.inv-r td:nth-child(2) { order: 3; }                          /* need  */
-  .inv-t tr.inv-r td:nth-child(4) { order: 4; }                          /* buy   */
-  .inv-t tr.inv-r td:nth-child(5) { order: 5; }                          /* cost  */
-  .inv-t tr.inv-r td:nth-child(6) { order: 6; flex: 1 1 100%; }          /* buy at */
+  .inv-t tr.inv-r td.c-item { order: -4; flex: 1 1 calc(100% - 118px);
+    display: block; padding-left: 40px; position: relative; }
+  .inv-t tr.inv-r td.c-item::before { display: none; }   /* the name needs no label */
+  .inv-t tr.inv-r td.c-have { order: -3; flex: 0 0 auto; }
+  .inv-t tr.inv-r td.c-need { order: -2; }
+  .inv-t tr.inv-r td.c-buy  { order: -1; }
   .inv-t tr.inv-r td.num { text-align: left; }
+  /* Scoped to closed cards, so opening one needs no rule strong enough to
+     beat this: the :not() chain outranks any plain .open selector. */
+  .inv-t tr.inv-r:not(.open) td:not(.c-item):not(.c-have):not(.c-need):not(.c-buy),
+  .inv-t tr.inv-r td.c-plus { display: none; }
+  .inv-t tr.inv-r.open td.c-where, .inv-t tr.inv-r.open td.c-dot, .inv-t tr.inv-r.open td.c-cat { flex: 1 1 100%; }
+  .inv-t tr.inv-r.open td.c-note, .inv-t tr.inv-r.open td.c-x { display: block; flex: 1 1 100%; }
+  .inv-t tr.inv-r.open td.c-note::before, .inv-t tr.inv-r.open td.c-x::before { display: block; margin-bottom: 2px; }
+  .inv-t tr.inv-r td.c-cat .iv-field { min-width: 0; flex: 1 1 140px; }
 
-  /* Behind the toggle: cost, where to buy, the day dot and the note. */
-  .inv-t tr.inv-r td:nth-child(5),
-  .inv-t tr.inv-r td:nth-child(6),
-  .inv-t tr.inv-r .mk,
-  .inv-t tr.inv-r .iv-catf,
-  .inv-t tr.inv-r .iv-note { display: none; }
-  .inv-t tr.inv-r.open td:nth-child(5) { display: inline-flex; }
-  .inv-t tr.inv-r.open td:nth-child(6) { display: flex; }
-  .inv-t tr.inv-r.open .mk { display: flex; }
-  .inv-t tr.inv-r.open .iv-catf { display: flex; }
-  .inv-t tr.inv-r.open .iv-note { display: block; }
-
-  .iv-more { display: block; position: absolute; left: -2px; top: 1px; width: 20px; height: 20px;
+  .inv-t tr.inv-r .iv-grip { position: absolute; left: 0; top: 0; width: 14px; height: 22px; margin: 0; }
+  .iv-more { display: block; position: absolute; left: 18px; top: 1px; width: 20px; height: 20px;
     border: 0; background: none; padding: 0; }
   .iv-more::before { content: ""; position: absolute; left: 5px; top: 6px;
     border-left: 5px solid var(--gold); border-top: 4px solid transparent;
     border-bottom: 4px solid transparent; transition: transform 120ms; }
   .inv-r.open .iv-more::before { transform: rotate(90deg); }
+  .inv-t tr.inv-r td.c-item .iv-del { display: none; }
+  .inv-t tr.inv-r.open td.c-item .iv-del { display: inline; opacity: .55; }
 
   /* The editable fields carry margin:0 -3px so the hover pad sits flush with
      the text. Stacked, that bleeds 3px past the container and reintroduces a
      sideways scroll, so drop the pull on a phone. */
   .inv-t tr.inv-r .iv-name, .inv-t tr.inv-r .iv-need { margin-left: 0; margin-right: 0; }
   .inv-t tr.inv-r .inv-qty { width: 62px; }
+  .inv-t td.c-item, .inv-t td.c-note, .inv-t td.c-x { min-width: 0; }
   /* Two class names on purpose: ".inv-t td" above also matches this cell and
      ties on specificity, and a tie is settled by source order, which put the
      count flush against a long category name with no gap. */
   .inv-t tr.inv-cat { display: block; width: 100%; }
   .inv-t tr.inv-cat td { display: flex; width: 100%; }
+  .inv-t tr.inv-new { display: block; }
+  .inv-t tr.inv-new td { display: block; border: 0; padding: 0 0 6px; }
+  .inv-t tr.drop-a { box-shadow: inset 0 3px 0 var(--gold); }
+  .inv-t tr.drop-b { box-shadow: inset 0 -3px 0 var(--gold); }
+  .inv-t tr.inv-r.drag-src { opacity: .4; }
   /* The bar caption says "0 / 11.2 L (0%)", which the per-week and
      still-to-buy chips on the next line already say. The bar itself stays. */
   .inv-t tr.inv-r .barlbl { display: none; }
@@ -1205,7 +1309,11 @@ body.cmt-on #root { cursor: crosshair; }
 
   function INVCOL() {
     return {
-      item:  tt({ en: "Ingredient and note", nl: "Ingredient en notitie" }),
+      item:  tt({ en: "Ingredient",   nl: "Ingredient" }),
+      unit:  tt({ en: "Counted in",   nl: "Geteld in" }),
+      cat:   tt({ en: "Category",     nl: "Categorie" }),
+      note:  tt({ en: "Note",         nl: "Notitie" }),
+      dot:   tt({ en: "Day dot",      nl: "Dagsticker" }),
       need:  tt({ en: "Per week",     nl: "Per week" }),
       have:  tt({ en: "Have",         nl: "Voorraad" }),
       buy:   tt({ en: "Still to buy", nl: "Nog kopen" }),
@@ -1462,100 +1570,258 @@ body.cmt-on #root { cursor: crosshair; }
     return tt({ en: "category", nl: "categorie" });
   }
 
-  function invHTML() {
-    var totNeed = 0, totHave = 0, totBuy = 0, unpriced = 0;
-    var body = ROWS.map(function (r, i) {
-      var c = calcRow(r);
-      var have = c.have, need = c.need, short = c.short, priced = c.priced, pct = c.pct, cls = c.cls;
-      if (need != null && priced) {
-        totNeed += need * r.cost; totHave += Math.min(have, need) * r.cost; totBuy += short * r.cost;
-      }
-      if (!priced) unpriced++;
-      if (FILTER === "short" && cls !== "short") return null;
-      if (FILTER === "covered" && cls !== "covered") return null;
-      if (FILTER === "note" && !hasNote(r)) return null;
-      if (FILTER.indexOf("sup:") === 0 && (r.supplier || "TBD") !== FILTER.slice(4)) return null;
-      var bar = need == null ? "" :
-        '<div class="bar ' + (pct >= 100 ? "" : pct > 0 ? "part" : "none") + '"><span style="width:' + pct + '%"></span></div>' +
-        '<span class="barlbl">' + tidy(have) + " / " + tidy(need) + " " + esc(unitLabel(r.unit)) + "  (" + pct + "%)</span>";
-      var nm = rowName(r), nt = rowNote(r);
-      var L = INVCOL();
-      var html = '<tr class="inv-r ' + cls + (IVOPEN[r.id] ? " open" : "") +
-        '" data-id="' + esc(r.id) + '">' +
-        '<td data-l="' + esc(L.item) + '">' +
-          '<button class="iv-more" type="button" data-more="' + esc(r.id) + '" aria-expanded="' +
+  /* ---------------------------------------------------------------
+     The table works like a Notion database. Every field is its own
+     column; columns can be dragged, hidden and added; rows are dragged
+     by their handle, and dropping one into another group re-files it.
+     Column order and the unit list save to this browser, like the rows.
+     --------------------------------------------------------------- */
+  var LS_COLS = "quatro-inv-cols-v1", LS_UNITS = "quatro-units-v1", LS_ACK = "quatro-inv-ack-v1";
+  var COL_BUILTIN = ["item", "have", "need", "buy", "unit", "cost", "where", "cat", "note", "dot"];
+  var COLS = load(LS_COLS, null);
+  function colsFix() {
+    var out = [], seen = {};
+    (COLS || []).forEach(function (c) {
+      if (!c || !c.id || seen[c.id]) return;
+      if (!c.custom && COL_BUILTIN.indexOf(c.id) === -1) return;
+      seen[c.id] = 1;
+      out.push({ id: c.id, show: c.show !== false, custom: !!c.custom, name: c.name || "" });
+    });
+    COL_BUILTIN.forEach(function (id) {
+      if (!seen[id]) out.push({ id: id, show: true, custom: false, name: "" });
+    });
+    /* The name leads, always: it is what a row is. */
+    var item = out.filter(function (c) { return c.id === "item"; })[0];
+    out = out.filter(function (c) { return c.id !== "item"; });
+    item.show = true;
+    out.unshift(item);
+    COLS = out;
+    return COLS;
+  }
+  colsFix();
+  function colsSave() { save(LS_COLS, COLS); }
+  function visCols() { return COLS.filter(function (c) { return c.show; }); }
+  function colById(id) { return COLS.filter(function (c) { return c.id === id; })[0]; }
+  function colName(c) { return c.custom ? (c.name || tt({ en: "Untitled", nl: "Naamloos" })) : (INVCOL()[c.id] || c.id); }
+
+  /* Units are a list you can add to, like the shops. Stored in English and
+     shown in Dutch through UNIT_NL; a unit someone adds reads as typed. */
+  var UNITLIST = load(LS_UNITS, null);
+  function unitList() {
+    if (!UNITLIST || !UNITLIST.length) {
+      UNITLIST = UNITS.slice();
+      ROWS.forEach(function (r) { if (r.unit && UNITLIST.indexOf(r.unit) === -1) UNITLIST.push(r.unit); });
+      save(LS_UNITS, UNITLIST);
+    }
+    return UNITLIST;
+  }
+  function unitCanon(u) {
+    for (var k in UNIT_NL) if (UNIT_NL[k].toLowerCase() === String(u).toLowerCase()) return k;
+    return u;
+  }
+  function addUnit(u) {
+    u = String(u || "").trim();
+    if (!u) return null;
+    var canon = unitCanon(u), list = unitList();
+    var hit = list.filter(function (x) { return x.toLowerCase() === canon.toLowerCase(); })[0];
+    if (hit) return hit;
+    list.push(canon);
+    save(LS_UNITS, UNITLIST);
+    return canon;
+  }
+  function unitSel(r) {
+    var list = unitList().slice();
+    if (r.unit && list.indexOf(r.unit) === -1) list.push(r.unit);
+    return '<select class="iv-usel" data-unit="' + esc(r.id) + '" aria-label="' +
+      et({ en: "Unit for this line", nl: "Eenheid voor deze regel" }) + '">' +
+      list.map(function (u) {
+        return '<option value="' + esc(u) + '"' + (u === r.unit ? " selected" : "") + ">" + esc(unitLabel(u)) + "</option>";
+      }).join("") +
+      '<option value="__add">' + et({ en: "+ Add a unit…", nl: "+ Eenheid toevoegen…" }) + "</option></select>";
+  }
+
+  /* Which group a row sits in, as stored, so a drop or a new line can file
+     itself without going through the translated label. */
+  function groupVal(r) {
+    if (GROUPBY === "sup") return r.supplier || "TBD";
+    if (GROUPBY === "cat") return r.cat;
+    return "";
+  }
+
+  /* Which of the side panels is open: columns, units, shops, or none. */
+  var MGR = null, MGRMSG = "", CDELARM = null, NEWFOCUS = null;
+  var ACK = load(LS_ACK, {});
+
+  function cellHTML(c, r, k, L) {
+    var id = esc(r.id), u = esc(unitLabel(r.unit));
+    var lab = ' data-l="' + esc(colName(c)) + '"';
+    switch (c.id) {
+      case "item":
+        var nm = rowName(r);
+        var bar = k.need == null ? "" :
+          '<div class="bar ' + (k.pct >= 100 ? "" : k.pct > 0 ? "part" : "none") + '"><span style="width:' + k.pct + '%"></span></div>' +
+          '<span class="barlbl">' + tidy(k.have) + " / " + tidy(k.need) + " " + u + "  (" + k.pct + "%)</span>";
+        return '<td class="c-item"' + lab + '>' +
+          '<span class="iv-grip" data-grip="' + id + '" title="' +
+          et({ en: "Drag to move this line", nl: "Sleep om deze regel te verplaatsen" }) + '"></span>' +
+          '<button class="iv-more" type="button" data-more="' + id + '" aria-expanded="' +
           (IVOPEN[r.id] ? "true" : "false") + '" aria-label="' +
           et({ en: "More about this line", nl: "Meer over deze regel" }) + '"></button>' +
-          '<span class="iv-name" contenteditable="true" data-f="name">' + esc(nm) + "</span>" + bar +
-          '<div class="iv-note' + (nt ? "" : " empty") + '" contenteditable="true" data-f="note" ' +
-          'data-ph="' + et({ en: "Add a note, dated", nl: "Voeg een notitie toe, met datum" }) + '">' +
-          esc(nt) + "</div>" +
-          /* In the item cell rather than a new column: the inventory table
-             rebuilds itself as a stacked card on a phone, and the stack is
-             keyed to the columns it already has. */
-          dateCell("inv-" + r.id, "", { en: "Day dot", nl: "Dagsticker" }) +
-          /* A list-backed input rather than a select: it offers the categories
-             that exist and still accepts one you have just thought of, which
-             is the whole point of being able to re-file a line. */
-          '<div class="iv-catf"><span class="iv-catl">' +
-          et({ en: "Category", nl: "Categorie" }) + "</span>" +
-          '<input class="iv-field iv-cat" list="iv-cats" data-cat="' + esc(r.id) + '" value="' +
-          esc(catLabel(r.cat)) + '" aria-label="' +
-          et({ en: "Category for this line", nl: "Categorie voor deze regel" }) + '">' +
-          '<span class="iv-catl">' + et({ en: "Counted in", nl: "Geteld in" }) + "</span>" +
-          '<input class="iv-field iv-unit" list="iv-units" data-unit="' + esc(r.id) + '" value="' +
-          esc(unitLabel(r.unit)) + '" aria-label="' +
-          et({ en: "Unit for this line", nl: "Eenheid voor deze regel" }) + '"></div></td>' +
-        '<td class="num" data-l="' + esc(L.need) + '"><span class="iv-need" contenteditable="true" data-f="need">' +
-          (need == null ? et(SETPAR) : tidy(need)) + "</span> " + esc(unitLabel(r.unit)) + "</td>" +
-        '<td data-l="' + esc(L.have) + '"><input class="inv-qty" type="text" inputmode="decimal" autocomplete="off" data-id="' + esc(r.id) +
-          '" value="' + (HAVE[r.id] != null ? esc(dec(HAVE[r.id])) : "") + '" aria-label="' + esc(nm) +
-          '"><span class="inv-unit">' + esc(unitLabel(r.unit)) + "</span></td>" +
-        '<td data-c="buy" data-l="' + esc(L.buy) + '" class="buy' + (short === 0 ? " ok" : "") + '">' +
-          (need == null ? et(SETPAR)
-            : short > 0 ? tidy(short) + " " + esc(unitLabel(r.unit))
-            : et({ en: "covered", nl: "gedekt" })) + "</td>" +
-        '<td data-c="cost" class="num" data-l="' + esc(L.cost) + '">' + (!priced ? '<span class="iv-tbd">' +
+          '<span class="iv-name" contenteditable="true" data-f="name" data-ph="' +
+          et({ en: "Name this line", nl: "Geef deze regel een naam" }) + '">' + esc(nm) + "</span>" +
+          '<button class="iv-del" type="button" data-del="' + id + '" title="' +
+          et({ en: "Delete row", nl: "Regel verwijderen" }) + '">&times;</button>' + bar + "</td>";
+      case "have":
+        return '<td class="c-have"' + lab + '><input class="inv-qty" type="text" inputmode="decimal" autocomplete="off" data-id="' + id +
+          '" value="' + (HAVE[r.id] != null ? esc(dec(HAVE[r.id])) : "") + '" aria-label="' + esc(rowName(r)) +
+          '"><span class="inv-unit">' + u + "</span></td>";
+      case "need":
+        return '<td class="c-need num"' + lab + '><span class="iv-need" contenteditable="true" data-f="need">' +
+          (k.need == null ? et(SETPAR) : tidy(k.need)) + "</span> " + u + "</td>";
+      case "buy":
+        return '<td data-c="buy" class="c-buy buy' + (k.short === 0 ? " ok" : "") + '"' + lab + '>' +
+          (k.need == null ? et(SETPAR)
+            : k.short > 0 ? tidy(k.short) + " " + u
+            : et({ en: "covered", nl: "gedekt" })) + "</td>";
+      case "cost":
+        return '<td data-c="cost" class="c-cost num"' + lab + '>' + (!k.priced ? '<span class="iv-tbd">' +
             et({ en: "price TBD", nl: "prijs volgt" }) + "</span>"
-          : short > 0 ? n2(short * r.cost) : "-") + provenance(r) + "</td>" +
-        '<td data-l="' + esc(L.where) + '">' + supTag(r) +
-          '<button class="iv-del" type="button" data-del="' + esc(r.id) + '" title="' +
-          et({ en: "Delete row", nl: "Regel verwijderen" }) + '">&times;</button></td>' +
-        "</tr>";
-      return { key: groupOf(r, cls), html: html, buyCost: (priced && short > 0) ? short * r.cost : 0 };
+          : k.short > 0 ? n2(k.short * r.cost) : "-") + provenance(r) + "</td>";
+      case "where":
+        return '<td class="c-where"' + lab + '>' + supTag(r) + "</td>";
+      case "unit":
+        return '<td class="c-unit"' + lab + '>' + unitSel(r) + "</td>";
+      case "cat":
+        /* A list-backed input rather than a select: it offers the categories
+           that exist and still accepts one you have just thought of. */
+        return '<td class="c-cat"' + lab + '><input class="iv-field iv-cat" list="iv-cats" data-cat="' + id + '" value="' +
+          esc(catLabel(r.cat)) + '" aria-label="' + et({ en: "Category for this line", nl: "Categorie voor deze regel" }) + '"></td>';
+      case "note":
+        var nt = rowNote(r);
+        return '<td class="c-note"' + lab + '><div class="iv-note' + (nt ? "" : " empty") + '" contenteditable="true" data-f="note" ' +
+          'data-ph="' + et({ en: "Add a note, dated", nl: "Voeg een notitie toe, met datum" }) + '">' + esc(nt) + "</div></td>";
+      case "dot":
+        return '<td class="c-dot"' + lab + '>' + dateCell("inv-" + r.id, "", null) + "</td>";
+    }
+    var xv = (r.x && r.x[c.id]) || "";
+    return '<td class="c-x"' + lab + '><div class="iv-x' + (xv ? "" : " empty") + '" contenteditable="true" data-x="' +
+      esc(c.id) + '" data-ph="' + et({ en: "Empty", nl: "Leeg" }) + '">' + esc(xv) + "</div></td>";
+  }
+
+  function mgrHTML() {
+    if (!MGR) return "";
+    var h = '<div class="iv-mgr" data-mgr="' + MGR + '">';
+    if (MGR === "cols") {
+      h += '<div class="iv-mgr-h">' + et({ en: "Columns", nl: "Kolommen" }) + "</div>" +
+        '<p class="iv-mgr-p">' + et({ en: "Move a column with the arrows, or drag its heading on a wide screen. Untick to hide it. On a phone the name, Have, Per week and Still to buy stay at the top of each card, and the rest follow in this order.",
+                                      nl: "Verplaats een kolom met de pijlen, of sleep de kop op een breed scherm. Vink uit om te verbergen. Op een telefoon blijven naam, Voorraad, Per week en Nog kopen bovenaan elke kaart, de rest volgt in deze volgorde." }) + "</p>" +
+        '<ol class="iv-cl">' + COLS.map(function (c, i) {
+          if (c.id === "item") return '<li class="iv-cr fixed"><span class="iv-cn">' + esc(colName(c)) + "</span>" +
+            '<span class="iv-cfix">' + et({ en: "always first", nl: "altijd eerst" }) + "</span></li>";
+          return '<li class="iv-cr" data-cm="' + esc(c.id) + '">' +
+            '<button type="button" class="iv-ca" data-cup="' + esc(c.id) + '"' + (i <= 1 ? " disabled" : "") + ' aria-label="' +
+            et({ en: "Move left", nl: "Naar links" }) + '">&uarr;</button>' +
+            '<button type="button" class="iv-ca" data-cdn="' + esc(c.id) + '"' + (i === COLS.length - 1 ? " disabled" : "") + ' aria-label="' +
+            et({ en: "Move right", nl: "Naar rechts" }) + '">&darr;</button>' +
+            '<label class="iv-cs"><input type="checkbox" data-cshow="' + esc(c.id) + '"' + (c.show ? " checked" : "") + ">" +
+            (c.custom ? "" : '<span class="iv-cn">' + esc(colName(c)) + "</span>") + "</label>" +
+            (c.custom ? '<input class="iv-field iv-cname" data-cname="' + esc(c.id) + '" value="' + esc(c.name) + '" aria-label="' +
+                        et({ en: "Column name", nl: "Kolomnaam" }) + '">' +
+                        '<button type="button" class="iv-cdel' + (CDELARM === c.id ? " armed" : "") + '" data-cdel="' + esc(c.id) + '">' +
+                        (CDELARM === c.id ? et({ en: "Tap again to delete", nl: "Tik nog eens om te verwijderen" })
+                                          : et({ en: "Delete", nl: "Verwijderen" })) + "</button>" : "") +
+            "</li>";
+        }).join("") + "</ol>" +
+        '<div class="iv-add-l"><input class="iv-field" id="iv-col-in" placeholder="' +
+        et({ en: "New column, for example Fridge", nl: "Nieuwe kolom, bijvoorbeeld Koelkast" }) + '">' +
+        '<button type="button" id="iv-col-addbtn">' + et({ en: "Add column", nl: "Kolom toevoegen" }) + "</button>" +
+        '<button type="button" id="iv-col-reset" class="iv-quiet">' +
+        et({ en: "Back to the standard columns", nl: "Terug naar de standaardkolommen" }) + "</button></div>";
+    } else {
+      var units = MGR === "units", list = units ? unitList() : supList(), use = {};
+      ROWS.forEach(function (r) {
+        var v = units ? r.unit : (r.supplier || "TBD");
+        use[v] = (use[v] || 0) + 1;
+      });
+      h += '<div class="iv-mgr-h">' + (units ? et({ en: "Units", nl: "Eenheden" }) : et({ en: "Shops", nl: "Winkels" })) + "</div>" +
+        '<p class="iv-mgr-p">' + (units
+          ? et({ en: "What a line can be counted in. Add cans, boxes, crates or anything else, then pick it on the line. Changing a line's unit relabels its numbers, it does not convert them.",
+                nl: "Waarin een regel geteld kan worden. Voeg blikken, dozen, kratten of iets anders toe en kies het dan op de regel. De eenheid van een regel wijzigen geeft de getallen een ander label, het rekent ze niet om." })
+          : et({ en: "Where things are bought. A shop that lines still buy from cannot be removed until they move.",
+                nl: "Waar dingen gekocht worden. Een winkel waar nog regels kopen kan pas weg als die verplaatst zijn." })) + "</p>" +
+        '<div class="iv-chips">' + list.map(function (v) {
+          return '<span class="iv-chip">' + esc(units ? unitLabel(v) : v) +
+            '<span class="iv-chip-n">' + (use[v] || 0) + "</span>" +
+            '<button type="button" ' + (units ? "data-urm" : "data-srm") + '="' + esc(v) + '" aria-label="' +
+            et({ en: "Remove", nl: "Verwijderen" }) + " " + esc(v) + '">&times;</button></span>';
+        }).join("") + "</div>" +
+        '<div class="iv-add-l"><input class="iv-field" id="' + (units ? "iv-unit-in" : "iv-shop-in") + '" placeholder="' +
+        (units ? et({ en: "crates, boxes, cans…", nl: "kratten, dozen, blikken…" })
+               : et({ en: "Name of the shop", nl: "Naam van de winkel" })) + '">' +
+        '<button type="button" id="' + (units ? "iv-unit-addbtn" : "iv-shop-addbtn") + '">' +
+        (units ? et({ en: "Add unit", nl: "Eenheid toevoegen" }) : et({ en: "Add shop", nl: "Winkel toevoegen" })) + "</button></div>";
+    }
+    if (MGRMSG) h += '<p class="iv-mgr-msg">' + esc(MGRMSG) + "</p>";
+    return h + '<button type="button" class="iv-mgr-x" id="iv-mgr-x">' + et({ en: "Done", nl: "Klaar" }) + "</button></div>";
+  }
+
+  function invHTML() {
+    var totNeed = 0, totHave = 0, totBuy = 0, unpriced = [];
+    var cols = visCols(), span = cols.length + 1;
+    var body = ROWS.map(function (r) {
+      var c = calcRow(r);
+      if (c.need != null && c.priced) {
+        totNeed += c.need * r.cost; totHave += Math.min(c.have, c.need) * r.cost; totBuy += c.short * r.cost;
+      }
+      if (!c.priced) unpriced.push(r.id);
+      if (FILTER === "short" && c.cls !== "short") return null;
+      if (FILTER === "covered" && c.cls !== "covered") return null;
+      if (FILTER === "note" && !hasNote(r)) return null;
+      if (FILTER.indexOf("sup:") === 0 && (r.supplier || "TBD") !== FILTER.slice(4)) return null;
+      var html = '<tr class="inv-r ' + c.cls + (IVOPEN[r.id] ? " open" : "") +
+        '" data-id="' + esc(r.id) + '" data-gval="' + esc(groupVal(r)) + '">' +
+        cols.map(function (col) { return cellHTML(col, r, c); }).join("") +
+        '<td class="c-plus"></td></tr>';
+      return { key: groupOf(r, c.cls), val: groupVal(r), html: html,
+               buyCost: (c.priced && c.short > 0) ? c.short * r.cost : 0 };
     });
 
-    /* Rows come out of the map as objects so they can be grouped; a category
-       band is only drawn if something under it survived the filter. */
+    /* Rows come out of the map as objects so they can be grouped; a band is
+       only drawn if something under it survived the filter. */
     var groups = [], seen = {};
     body.forEach(function (x) {
       if (!x) return;
-      if (!seen[x.key]) { seen[x.key] = { key: x.key, rows: [], buy: 0 }; groups.push(seen[x.key]); }
+      if (!seen[x.key]) { seen[x.key] = { key: x.key, val: x.val, rows: [], buy: 0 }; groups.push(seen[x.key]); }
       seen[x.key].rows.push(x.html);
       seen[x.key].buy += x.buyCost;
     });
     var shown = 0;
     groups.forEach(function (g) { shown += g.rows.length; });
-    var L = INVCOL();
+    var canNew = GROUPBY === "cat" || GROUPBY === "sup";
     var catList = '<datalist id="iv-cats">' +
-      catsInUse().map(function (c) { return '<option value="' + esc(c) + '"></option>'; }).join("") +
-      '</datalist><datalist id="iv-units">' +
-      UNITS.map(function (u) {
-        return '<option value="' + esc(isNl() ? (UNIT_NL[u] || u) : u) + '"></option>';
-      }).join("") + "</datalist>";
+      catsInUse().map(function (c) { return '<option value="' + esc(c) + '"></option>'; }).join("") + "</datalist>";
     var tbody = groups.map(function (g) {
       var n = g.rows.length, shut = !!IVFOLD[g.key];
       var nameCell = GROUPBY === "cat"
-        ? '<span class="cat-nm" contenteditable="true" data-ren="' + esc(g.key) + '">' +
-          esc(g.key) + "</span>"
+        ? '<span class="cat-nm" contenteditable="true" data-ren="' + esc(g.key) + '">' + esc(g.key) + "</span>"
         : '<span class="cat-nm plain">' + esc(g.key) + "</span>";
-      return '<tr class="inv-cat' + (shut ? " shut" : "") + '" data-fold="' + esc(g.key) + '">' +
-        '<td colspan="6"><span class="cat-tw"></span>' + nameCell +
+      return '<tr class="inv-cat' + (shut ? " shut" : "") + '" data-fold="' + esc(g.key) + '" data-gval="' + esc(g.val) + '">' +
+        '<td colspan="' + span + '"><span class="cat-in"><span class="cat-tw"></span>' + nameCell +
         '<span class="cat-r">' + n + " " +
         tt(n === 1 ? { en: "line", nl: "regel" } : { en: "lines", nl: "regels" }) +
         (g.buy > 0 ? "  ·  " + n2(g.buy) + tt({ en: " to buy", nl: " te kopen" }) : "") +
-        "</span></td></tr>" + (shut ? "" : g.rows.join(""));
+        "</span></span></td></tr>" +
+        (shut ? "" : g.rows.join("") +
+          (canNew ? '<tr class="inv-new" data-gval="' + esc(g.val) + '"><td colspan="' + span + '">' +
+            '<button type="button" class="iv-new" data-new-g="' + esc(g.val) + '">' +
+            et({ en: "+ New line", nl: "+ Nieuwe regel" }) + "</button></td></tr>" : ""));
     }).join("");
+
+    /* The unpriced warning is a to-do, not a fixture. Done puts it away until
+       a line with no price turns up that was not on the list when it was
+       dismissed. */
+    var acked = ACK.unpriced || [];
+    var fresh = unpriced.filter(function (id) { return acked.indexOf(id) === -1; });
 
     var FILTERS = [
       ["all",     { en: "All",           nl: "Alles" }],
@@ -1563,13 +1829,17 @@ body.cmt-on #root { cursor: crosshair; }
       ["covered", { en: "Covered",       nl: "Gedekt" }],
       ["note",    { en: "Has a note",    nl: "Heeft een notitie" }]
     ];
+    var mbtn = function (id, key, label) {
+      return '<button type="button" id="' + id + '" class="iv-mb' + (MGR === key ? " on" : "") + '" aria-expanded="' +
+        (MGR === key ? "true" : "false") + '">' + et(label) + "</button>";
+    };
     return '<section class="section"><div class="section-head"><div class="smallcaps">' +
       esc(ui("runsheet")) + "</div><h2>" + esc(ui("inventory")) + "</h2></div>" +
       '<h3 style="font-size:20px;margin-top:8px">' +
       et({ en: "Staff", nl: "Personeel" }) + "</h3>" +
       '<p class="legend">' +
-      et({ en: "Every field on this page is editable. Click a name, a quantity or a note and type. Use Add row for anything new and the cross to delete. Everything saves to this browser and survives a reload.",
-           nl: "Elk veld op deze pagina is aan te passen. Klik op een naam, een aantal of een notitie en typ. Gebruik Regel toevoegen voor iets nieuws en het kruisje om te verwijderen. Alles wordt in deze browser bewaard en blijft na herladen staan." }) + "</p>" +
+      et({ en: "Every cell is editable: tap it and type. Drag a line by its handle to move it, into another group to re-file it. Drag a column heading, or use Columns, to rearrange, hide or add columns. + New line sits at the foot of each group. Everything saves to this browser.",
+           nl: "Elke cel is aan te passen: tik erop en typ. Sleep een regel aan zijn handvat om hem te verplaatsen, naar een andere groep om hem anders in te delen. Sleep een kolomkop, of gebruik Kolommen, om kolommen te verschuiven, te verbergen of toe te voegen. + Nieuwe regel staat onderaan elke groep. Alles wordt in deze browser bewaard." }) + "</p>" +
       dayDotHTML() +
       '<div class="inv-filters"><span class="ivf"><span class="smallcaps">' +
       et({ en: "Show", nl: "Toon" }) + "</span>" +
@@ -1595,10 +1865,12 @@ body.cmt-on #root { cursor: crosshair; }
       et({ en: "Fold all", nl: "Alles inklappen" }) + "</button>" +
       '<button type="button" id="iv-add">' +
       et({ en: "Add row", nl: "Regel toevoegen" }) + "</button>" +
+      mbtn("iv-cols", "cols", { en: "Columns", nl: "Kolommen" }) +
+      mbtn("iv-units-btn", "units", { en: "Units", nl: "Eenheden" }) +
+      mbtn("iv-shops", "shops", { en: "Shops", nl: "Winkels" }) +
       '<button type="button" id="iv-reset">' +
-      et({ en: "Reset to defaults", nl: "Terug naar standaard" }) + "</button>" +
-      '<button type="button" id="iv-shops">' +
-      et({ en: "Shops", nl: "Winkels" }) + "</button></div>" +
+      et({ en: "Reset to defaults", nl: "Terug naar standaard" }) + "</button></div>" +
+      mgrHTML() +
       /* The two controls looked alike and read alike, so it was not obvious
          which did what. This says, in a sentence, what each has just done. */
       '<p class="iv-state' + (FILTER === "all" ? "" : " on") + '">' +
@@ -1612,20 +1884,22 @@ body.cmt-on #root { cursor: crosshair; }
       (FILTER === "all" ? "" :
         ' <button type="button" class="iv-clear" id="iv-all">' +
         et({ en: "Show every line", nl: "Toon alle regels" }) + "</button>") + "</p>" +
-      (unpriced ? '<div class="src-warn" style="margin:0 0 14px"><b>' +
-        (isNl() ? (unpriced === 1 ? "1 regel heeft nog geen prijs." : unpriced + " regels hebben nog geen prijs.")
-                : (unpriced === 1 ? "1 line has no price yet." : unpriced + " lines have no price yet.")) + "</b> " +
+      (fresh.length ? '<div class="src-warn iv-unpriced" style="margin:0 0 14px"><b>' +
+        (isNl() ? (unpriced.length === 1 ? "1 regel heeft nog geen prijs." : unpriced.length + " regels hebben nog geen prijs.")
+                : (unpriced.length === 1 ? "1 line has no price yet." : unpriced.length + " lines have no price yet.")) + "</b> " +
         et({ en: "They are counted in the quantities but not in the money below.",
-             nl: "Ze tellen mee in de aantallen, maar niet in de bedragen hieronder." }) + "</div>" : "") +
+             nl: "Ze tellen mee in de aantallen, maar niet in de bedragen hieronder." }) +
+        ' <button type="button" class="iv-ack" id="iv-ack">' + et({ en: "Done", nl: "Klaar" }) + "</button></div>" : "") +
       '<div class="tablewrap"><table class="inv-t"><thead><tr>' +
-      "<th>" + esc(L.item) + "</th>" +
-      '<th class="num">' + esc(L.need) + "</th>" +
-      "<th>" + esc(L.have) + "</th>" +
-      "<th>" + esc(L.buy) + "</th>" +
-      '<th class="num" title="' + et({ en: "What the missing quantity will cost to order",
-                                       nl: "Wat het ontbrekende aantal kost om te bestellen" }) + '">' +
-      esc(L.cost) + "</th>" +
-      "<th>" + esc(L.where) + "</th>" +
+      cols.map(function (c) {
+        return '<th data-col="' + esc(c.id) + '" class="c-' + (c.custom ? "x" : esc(c.id)) +
+          (c.id === "need" || c.id === "cost" ? " num" : "") + '"' +
+          (c.id === "cost" ? ' title="' + et({ en: "What the missing quantity will cost to order",
+                                               nl: "Wat het ontbrekende aantal kost om te bestellen" }) + '"' : "") + ">" +
+          esc(colName(c)) + "</th>";
+      }).join("") +
+      '<th class="c-plus"><button type="button" id="iv-col-plus" title="' +
+      et({ en: "Add a column", nl: "Kolom toevoegen" }) + '">+</button></th>' +
       "</tr></thead><tbody>" + tbody + "</tbody></table></div>" + catList +
       '<div class="inv-sum"><div><dt>' +
       et({ en: "A full week, if you held nothing", nl: "Een hele week, als je niets had" }) +
@@ -1635,8 +1909,8 @@ body.cmt-on #root { cursor: crosshair; }
       "<div><dt>" + et({ en: "What this week's order costs", nl: "Wat de bestelling van deze week kost" }) +
       '</dt><dd class="hi">' + n2(totBuy) + "</dd></div></div>" +
       '<p class="legend">' +
-      et({ en: "The last figure is the one to act on: it is the cost of everything still short. Lines marked price TBD are counted in quantity but not in money, so the true order is higher until the two Boiron purees are priced.",
-           nl: "Het laatste bedrag is waar je op stuurt: dat is de kostprijs van alles wat nog tekort is. Regels met prijs volgt tellen wel mee in aantal maar niet in geld, dus de echte bestelling valt hoger uit tot de twee Boiron-purees een prijs hebben." }) + "</p>" +
+      et({ en: "The last figure is the one to act on: it is the cost of everything still short. Lines marked price TBD are counted in quantity but not in money, so the true order is higher until they are priced.",
+           nl: "Het laatste bedrag is waar je op stuurt: dat is de kostprijs van alles wat nog tekort is. Regels met prijs volgt tellen wel mee in aantal maar niet in geld, dus de echte bestelling valt hoger uit tot ze een prijs hebben." }) + "</p>" +
       salesHTML() +
       (typeof ownerBlockHTML === "function" ? ownerBlockHTML() : "") +
       "</section>";
@@ -1648,6 +1922,12 @@ body.cmt-on #root { cursor: crosshair; }
     var y = window.scrollY || document.documentElement.scrollTop || 0;
     if (document.getElementById("root")) render();
     window.scrollTo(0, y);
+    /* A line just added opens with its name ready to type. */
+    if (NEWFOCUS) {
+      var nf = document.querySelector('#root tr[data-id="' + CSS.escape(NEWFOCUS) + '"] .iv-name');
+      NEWFOCUS = null;
+      if (nf) { nf.focus(); nf.scrollIntoView({ block: "center" }); }
+    }
   }
 
   /* Typing a stock count repaints only the cells that actually changed. No
@@ -1673,7 +1953,9 @@ body.cmt-on #root { cursor: crosshair; }
 
     var buy = tr.querySelector('[data-c="buy"]');
     if (buy) {
-      buy.className = "buy" + (c.short === 0 ? " ok" : "");
+      /* c-buy names the column. Dropping it took the cell out of the phone
+         card the moment a count was typed. */
+      buy.className = "c-buy buy" + (c.short === 0 ? " ok" : "");
       buy.textContent = c.need == null ? tt(SETPAR)
         : c.short > 0 ? tidy(c.short) + " " + unitLabel(r.unit)
         : tt({ en: "covered", nl: "gedekt" });
@@ -1708,12 +1990,9 @@ body.cmt-on #root { cursor: crosshair; }
       var row = ROWS.filter(function (r) { return r.id === sel.dataset.sup; })[0];
       if (!row) return;
       var pick = sel.value;
-      if (pick === "__add") {
-        var name = window.prompt(tt({ en: "Name of the shop, for example Sligro or AH",
-                                      nl: "Naam van de winkel, bijvoorbeeld Sligro of AH" }));
-        pick = addSup(name);
-        if (!pick) { invRender(); return; }          /* cancelled, put the select back */
-      }
+      /* Typed in place rather than in a pop-up box, which the page may not
+         be allowed to open. */
+      if (pick === "__add") { inlineAdd(sel, "sup"); return; }
       row.supplier = pick;
       var pe = rowEntry(row);
       if (pe) row.cost = costIn(pe, row.unit);
@@ -1721,22 +2000,6 @@ body.cmt-on #root { cursor: crosshair; }
       return;
     }
     if (e.target.id === "iv-filter") { FILTER = e.target.value; invRender(); return; }
-    var uf = e.target.closest && e.target.closest("[data-unit]");
-    if (uf) {
-      var urow = ROWS.filter(function (x) { return x.id === uf.dataset.unit; })[0];
-      var uv = String(uf.value || "").trim();
-      if (urow && uv && uv !== unitLabel(urow.unit)) {
-        /* Stored as typed. Nothing is converted: the figures stay as they
-           are and only their label changes, which is the honest behaviour
-           when nobody has told us how many litres are in a crate. */
-        urow.unit = uv;
-        persist();
-        var y2 = window.scrollY || 0;
-        invRender();
-        window.scrollTo(0, y2);
-      }
-      return;
-    }
     var cf = e.target.closest && e.target.closest("[data-cat]");
     if (cf) {
       var row = ROWS.filter(function (x) { return x.id === cf.dataset.cat; })[0];
@@ -1829,8 +2092,15 @@ body.cmt-on #root { cursor: crosshair; }
       if (nv === row.need) return;
       row.need = nv;
     } else if (el.dataset.f === "name") {
-      if (!val) return;
-      if (isNl()) { if (val === row.nameNl) return; row.nameNl = val; }
+      if (!val) {
+        /* A line added and never named is not a line. */
+        if (row.fresh) { ROWS = ROWS.filter(function (r) { return r !== row; }); persist(); invRender(); }
+        return;
+      }
+      /* A line typed in by hand has one name, and it shows in both
+         languages until someone edits it with the other one on screen. */
+      if (row.fresh) { row.name = val; row.nameNl = val; row.key = val; delete row.fresh; }
+      else if (isNl()) { if (val === row.nameNl) return; row.nameNl = val; }
       else { if (val === row.name) return; row.name = val; }
     } else if (el.dataset.f === "note") {
       if (isNl()) { if (val === (row.noteNl || "")) return; row.noteNl = val; }
@@ -1845,56 +2115,374 @@ body.cmt-on #root { cursor: crosshair; }
              if (window.confirm(tt({ en: "Delete ", nl: "Verwijder " }) + nm + "?")) {
                ROWS = ROWS.filter(function (r) { return r.id !== d.dataset.del; }); persist(); invRender(); }
              return; }
-    if (e.target.id === "iv-add") {
-      var name = window.prompt(tt({ en: "Name of the new item", nl: "Naam van het nieuwe item" }));
-      if (!name) return;
-      var cat = window.prompt(tt({ en: "Category", nl: "Categorie" }),
-                              tt({ en: "Liquids", nl: "Vloeistoffen" })) ||
-                tt({ en: "Uncategorised", nl: "Zonder categorie" });
-      var unit = window.prompt(tt({ en: "Unit, for example L, kg, g, pcs, bottle",
-                                    nl: "Eenheid, bijvoorbeeld L, kg, g, st, fles" }), "L") || "L";
-      /* A row typed in by hand has one name, and it shows in both languages
-         until someone edits it while the other language is on screen. */
-      var where = window.prompt(tt({ en: "Buy at, for example AH, AO, JUMBO, Sligro",
-                                     nl: "Waar te koop, bijvoorbeeld AH, AO, JUMBO, Sligro" }), "TBD") || "TBD";
-      ROWS.push({ id:slug(name) || ("u" + Date.now()), key:name, cat:cat, name:name, nameNl:name,
-                  supplier:where, need:null, unit:unit, cost:null, note:"", noteNl:"", prep:false });
-      persist(); invRender(); return;
-    }
-    if (e.target.id === "iv-shops") {
-      /* Add a shop, or drop one that nothing is bought from any more. */
-      var list = supList();
-      var inUse = {};
-      ROWS.forEach(function (r) { inUse[r.supplier || "TBD"] = (inUse[r.supplier || "TBD"] || 0) + 1; });
-      var lines = list.map(function (s) {
-        return s + " (" + (inUse[s] || 0) + ")";
-      }).join("\n");
-      var ans = window.prompt(
-        tt({ en: "Shops, with how many lines use each:\n\n", nl: "Winkels, met hoeveel regels elk gebruikt:\n\n" }) +
-        lines +
-        tt({ en: "\n\nType a name to ADD it, or type  -Name  to remove one that nothing uses.",
-             nl: "\n\nTyp een naam om die TOE TE VOEGEN, of typ  -Naam  om er een te verwijderen die nergens gebruikt wordt." }), "");
-      if (!ans) return;
-      ans = ans.trim();
-      if (ans.charAt(0) === "-") {
-        var kill = ans.slice(1).trim();
-        var hit = list.filter(function (s) { return s.toLowerCase() === kill.toLowerCase(); })[0];
-        if (!hit) { window.alert(tt({ en: "No shop by that name.", nl: "Geen winkel met die naam." })); return; }
-        if (inUse[hit]) {
-          window.alert(tt({ en: "Cannot remove " + hit + ", " + inUse[hit] + " line(s) still buy from it. Move them first.",
-                            nl: "Kan " + hit + " niet verwijderen, " + inUse[hit] + " regel(s) kopen daar nog. Verplaats die eerst." }));
-          return;
-        }
-        SUPS = list.filter(function (s) { return s !== hit; });
-        save(LS_SUPS, SUPS); invRender(); return;
-      }
-      addSup(ans); invRender(); return;
-    }
     if (e.target.id === "iv-reset") {
       if (window.confirm(tt({ en: "Reset every row and every stock count back to the defaults?",
                               nl: "Alle regels en alle voorraadtellingen terugzetten naar de standaard?" }))) {
         ROWS = SEED.slice(); HAVE = {}; persist(); invRender(); }
       return;
+    }
+  });
+
+  /* ---------------------------------------------------------------
+     Dragging. Pointer events rather than HTML drag and drop, because
+     drag and drop does not fire for a finger on a phone. A row moves by
+     its handle; a column by its heading. Nothing moves until the pointer
+     has travelled a few pixels, so a tap is still a tap.
+     --------------------------------------------------------------- */
+  var DRAG = null, DRAGEND = 0, ASY = 0, ASRAF = 0;
+  function rowById(id) {
+    for (var i = 0; i < ROWS.length; i++) if (ROWS[i].id === id) return ROWS[i];
+    return null;
+  }
+  function dragClear() {
+    var o = document.querySelectorAll(".drop-a, .drop-b, .drop-l, .drop-r");
+    for (var i = 0; i < o.length; i++) o[i].classList.remove("drop-a", "drop-b", "drop-l", "drop-r");
+  }
+  function dragOver(x, y) {
+    dragClear();
+    DRAG.tgt = null;
+    var hit = document.elementFromPoint(x, y);
+    if (!hit || !hit.closest) return;
+    if (DRAG.kind === "row") {
+      var tr = hit.closest("#root .inv-t tbody tr");
+      if (!tr) return;
+      if (tr.classList.contains("inv-r")) {
+        if (tr.getAttribute("data-id") === DRAG.id) return;
+        var rc = tr.getBoundingClientRect();
+        DRAG.after = y > rc.top + rc.height / 2;
+      } else if (tr.classList.contains("inv-cat")) {
+        DRAG.after = true;                 /* a band: drop at the top of its group */
+      } else if (tr.classList.contains("inv-new")) {
+        DRAG.after = false;                /* + New line: drop at the foot of its group */
+      } else return;
+      DRAG.tgt = tr;
+      tr.classList.add(DRAG.after ? "drop-b" : "drop-a");
+    } else {
+      var th = hit.closest("#root .inv-t th[data-col]");
+      if (!th || th.getAttribute("data-col") === DRAG.id) return;
+      var r2 = th.getBoundingClientRect();
+      DRAG.after = th.getAttribute("data-col") === "item" || x > r2.left + r2.width / 2;
+      DRAG.tgt = th;
+      th.classList.add(DRAG.after ? "drop-r" : "drop-l");
+    }
+  }
+  /* Near the top or bottom of the screen the page scrolls under the finger,
+     so a line can be carried further than one screen. The top edge sits
+     under the sticky bar, which is where the finger actually is. */
+  /* A heading dragged to the edge of the table's frame scrolls the frame, so
+     a column can be carried to one that is out of sight. */
+  var ASX = 0, ASW = null;
+  function autoScrollX(x) {
+    ASW = DRAG && DRAG.el.closest(".tablewrap");
+    if (!ASW) return;
+    var r = ASW.getBoundingClientRect();
+    ASX = x < r.left + 40 ? -10 : x > r.right - 40 ? 10 : 0;
+    if (ASX && !ASRAF) ASRAF = requestAnimationFrame(stepScroll);
+  }
+  function autoScroll(y) {
+    var bar = document.querySelector(".topbar");
+    var top = (bar ? Math.max(0, bar.getBoundingClientRect().bottom) : 0) + 48;
+    var bot = window.innerHeight - 48;
+    ASY = y < top ? -Math.ceil((top - y) / 3) : y > bot ? Math.ceil((y - bot) / 3) : 0;
+    if (ASY && !ASRAF) ASRAF = requestAnimationFrame(stepScroll);
+  }
+  function stepScroll() {
+    ASRAF = 0;
+    if (!DRAG || !DRAG.on || !(ASY || ASX)) return;
+    if (ASY) window.scrollBy(0, Math.max(-24, Math.min(24, ASY)));
+    if (ASX && ASW) ASW.scrollLeft += ASX;
+    dragOver(DRAG.lx, DRAG.ly);
+    ASRAF = requestAnimationFrame(stepScroll);
+  }
+  function dragStop() {
+    ASY = 0; ASX = 0;
+    if (ASRAF) { cancelAnimationFrame(ASRAF); ASRAF = 0; }
+    document.body.classList.remove("iv-dragging");
+    var s = document.querySelectorAll(".drag-src");
+    for (var i = 0; i < s.length; i++) s[i].classList.remove("drag-src");
+    dragClear();
+  }
+  function setGroup(row, gval) {
+    if (gval == null) return;
+    if (GROUPBY === "cat" && gval) row.cat = gval;
+    else if (GROUPBY === "sup" && gval) {
+      row.supplier = gval;
+      var pe = rowEntry(row);
+      if (pe) row.cost = costIn(pe, row.unit);
+    }
+  }
+  function dropRow(d) {
+    var row = rowById(d.id);
+    if (!row) return;
+    var tr = d.tgt, gval = tr.getAttribute("data-gval");
+    var rest = ROWS.filter(function (r) { return r !== row; }), at;
+    if (tr.classList.contains("inv-r")) {
+      var t = rowById(tr.getAttribute("data-id"));
+      if (!t) return;
+      at = rest.indexOf(t) + (d.after ? 1 : 0);
+    } else {
+      var members = rest.filter(function (r) { return groupVal(r) === gval; });
+      if (tr.classList.contains("inv-cat")) at = members.length ? rest.indexOf(members[0]) : rest.length;
+      else at = members.length ? rest.indexOf(members[members.length - 1]) + 1 : rest.length;
+    }
+    rest.splice(at, 0, row);
+    ROWS = rest;
+    setGroup(row, gval);
+    persist(); invRender();
+  }
+  function dropCol(d) {
+    var c = colById(d.id), t = d.tgt.getAttribute("data-col");
+    if (!c) return;
+    var rest = COLS.filter(function (x) { return x !== c; });
+    var ti = rest.map(function (x) { return x.id; }).indexOf(t);
+    if (ti < 0) return;
+    rest.splice(ti + (d.after ? 1 : 0), 0, c);
+    COLS = rest; colsFix(); colsSave(); invRender();
+  }
+  document.addEventListener("pointerdown", function (e) {
+    if (e.button > 0 || !e.target.closest) return;
+    var g = e.target.closest("#root [data-grip], #root .inv-t th[data-col]");
+    if (!g) return;
+    var col = g.getAttribute("data-col");
+    if (col === "item") return;
+    DRAG = { kind: col ? "col" : "row", id: col || g.getAttribute("data-grip"), el: g,
+             x0: e.clientX, y0: e.clientY, lx: e.clientX, ly: e.clientY, on: false, pid: e.pointerId, tgt: null };
+    /* Stops the page from starting a scroll or a text selection under the
+       handle. A heading is left alone so a plain click on it still works. */
+    if (!col) e.preventDefault();
+  });
+  document.addEventListener("pointermove", function (e) {
+    if (!DRAG || e.pointerId !== DRAG.pid) return;
+    DRAG.lx = e.clientX; DRAG.ly = e.clientY;
+    if (!DRAG.on) {
+      if (Math.abs(e.clientX - DRAG.x0) + Math.abs(e.clientY - DRAG.y0) < 6) return;
+      DRAG.on = true;
+      try { DRAG.el.setPointerCapture(e.pointerId); } catch (x) {}
+      document.body.classList.add("iv-dragging");
+      var src = DRAG.kind === "row"
+        ? document.querySelector('#root tr.inv-r[data-id="' + CSS.escape(DRAG.id) + '"]') : DRAG.el;
+      if (src) src.classList.add("drag-src");
+    }
+    e.preventDefault();
+    dragOver(e.clientX, e.clientY);
+    if (DRAG.kind === "row") autoScroll(e.clientY); else autoScrollX(e.clientX);
+  });
+  document.addEventListener("pointerup", function (e) {
+    if (!DRAG || e.pointerId !== DRAG.pid) return;
+    var d = DRAG;
+    DRAG = null;
+    dragStop();
+    if (!d.on) return;
+    DRAGEND = Date.now();
+    if (!d.tgt) return;
+    if (d.kind === "row") dropRow(d); else dropCol(d);
+  });
+  document.addEventListener("pointercancel", function () { if (DRAG) { DRAG = null; dragStop(); } });
+  /* The click that ends a drag is not a tap on whatever it lands on. */
+  document.addEventListener("click", function (e) {
+    if (DRAGEND && Date.now() - DRAGEND < 350) { e.stopPropagation(); e.preventDefault(); DRAGEND = 0; }
+  }, true);
+
+  /* A new line, filed into the group it was started from, with its name
+     ready to type. A line left without a name is dropped again on blur. */
+  function newLine(gval) {
+    var first = null;
+    if (gval != null) ROWS.forEach(function (r) { if (!first && groupVal(r) === gval) first = r; });
+    var last = null;
+    ROWS.forEach(function (r) { if (gval != null && groupVal(r) === gval) last = r; });
+    var row = { id: "u" + Date.now().toString(36), key: "", cat: (first && first.cat) || tt({ en: "Uncategorised", nl: "Zonder categorie" }),
+                name: "", nameNl: "", supplier: (first && first.supplier) || "TBD", need: null,
+                unit: (last && last.unit) || "pcs", cost: null, note: "", noteNl: "", prep: false, fresh: true };
+    setGroup(row, gval);
+    var at = last ? ROWS.indexOf(last) + 1 : ROWS.length;
+    ROWS.splice(at, 0, row);
+    if (FILTER !== "all") FILTER = "all";      /* a filter would hide the line you are adding */
+    var gk = groupOf(row, calcRow(row).cls);
+    if (IVFOLD[gk]) delete IVFOLD[gk];
+    IVOPEN[row.id] = true;
+    NEWFOCUS = row.id;
+    persist(); invRender();
+  }
+
+  /* "+ Add a unit…" or "+ Add a shop…" turns the picker into a field in
+     place. Enter, Add or leaving the field keeps it; Escape drops it. */
+  function inlineAdd(sel, kind) {
+    var id = sel.getAttribute(kind === "sup" ? "data-sup" : "data-unit");
+    var w = document.createElement("span");
+    w.className = "iv-uadd";
+    w.innerHTML = '<input class="iv-field iv-unew" data-unew="' + esc(id) + '" data-kind="' + kind + '" placeholder="' +
+      (kind === "sup" ? et({ en: "Name of the shop", nl: "Naam van de winkel" })
+                      : et({ en: "crates, boxes…", nl: "kratten, dozen…" })) +
+      '"><button type="button" data-uok="' + esc(id) + '">' + et({ en: "Add", nl: "Toevoegen" }) + "</button>";
+    sel.parentNode.replaceChild(w, sel);
+    w.querySelector("input").focus();
+  }
+  function unitAddInline(sel) { inlineAdd(sel, "unit"); }
+  function unitAddCommit(id, val, kind) {
+    var row = rowById(id);
+    if (kind === "sup") {
+      var sp = addSup(val);
+      if (row && sp) {
+        row.supplier = sp;
+        var pe = rowEntry(row);
+        if (pe) row.cost = costIn(pe, row.unit);
+        persist();
+      }
+    } else {
+      var u = addUnit(val);
+      if (row && u) { row.unit = u; persist(); }
+    }
+    invRender();
+  }
+  document.addEventListener("keydown", function (e) {
+    var t = e.target;
+    if (!t || !t.getAttribute) return;
+    if (t.getAttribute("data-unew") != null) {
+      if (e.key === "Enter") { e.preventDefault(); t.setAttribute("data-done", "1"); unitAddCommit(t.getAttribute("data-unew"), t.value, t.getAttribute("data-kind")); }
+      else if (e.key === "Escape") { t.setAttribute("data-done", "1"); invRender(); }
+      return;
+    }
+    if (e.key === "Enter" && (t.id === "iv-col-in" || t.id === "iv-unit-in" || t.id === "iv-shop-in")) {
+      e.preventDefault();
+      var b = document.getElementById(t.id.replace("-in", "-addbtn"));
+      if (b) b.click();
+      return;
+    }
+    /* Enter commits a name or a cell rather than starting a second line. */
+    if (e.key === "Enter" && !e.shiftKey && t.closest && t.closest("#root .inv-t [contenteditable]") &&
+        (t.getAttribute("data-f") === "name" || t.getAttribute("data-f") === "need" || t.getAttribute("data-x") != null)) {
+      e.preventDefault(); t.blur();
+    }
+  });
+  document.addEventListener("focusout", function (e) {
+    var t = e.target;
+    if (!t || !t.getAttribute || t.getAttribute("data-unew") == null || t.getAttribute("data-done")) return;
+    t.setAttribute("data-done", "1");
+    var v = t.value;
+    setTimeout(function () { if (v.trim()) unitAddCommit(t.getAttribute("data-unew"), v, t.getAttribute("data-kind")); else invRender(); }, 0);
+  });
+
+  document.addEventListener("change", function (e) {
+    var t = e.target;
+    if (!t || !t.getAttribute) return;
+    var uid = t.getAttribute("data-unit");
+    if (uid != null && t.tagName === "SELECT") {
+      if (t.value === "__add") { unitAddInline(t); return; }
+      var row = rowById(uid);
+      /* Stored as picked. Nothing is converted: the figures stay as they are
+         and only their label changes, which is the honest behaviour when
+         nobody has told us how many litres are in a crate. */
+      if (row && t.value !== row.unit) { row.unit = t.value; persist(); invRender(); }
+      return;
+    }
+    var sh = t.getAttribute("data-cshow");
+    if (sh != null) {
+      var c = colById(sh);
+      if (c) { c.show = t.checked; colsSave(); invRender(); }
+      return;
+    }
+    var cn = t.getAttribute("data-cname");
+    if (cn != null) {
+      var cc = colById(cn), v = String(t.value || "").trim();
+      if (cc && v && v !== cc.name) { cc.name = v; colsSave(); invRender(); }
+    }
+  });
+
+  /* A custom column's cell, committed on blur like the other fields. */
+  document.addEventListener("blur", function (e) {
+    var el = e.target;
+    if (!el || !el.getAttribute || el.getAttribute("data-x") == null) return;
+    var tr = el.closest("tr"), row = tr && rowById(tr.getAttribute("data-id"));
+    if (!row) return;
+    var k = el.getAttribute("data-x"), v = el.textContent.trim();
+    row.x = row.x || {};
+    if ((row.x[k] || "") === v) return;
+    if (v) row.x[k] = v; else delete row.x[k];
+    el.classList.toggle("empty", !v);
+    persist();
+  }, true);
+
+  document.addEventListener("click", function (e) {
+    var t = e.target;
+    if (!t || !t.closest) return;
+    var b = t.closest("button");
+    if (!b || !b.closest("#root")) return;
+    var id = b.id, a;
+    function toggle(k) { MGR = MGR === k ? null : k; MGRMSG = ""; CDELARM = null; invRender(); }
+    if (id === "iv-cols") return toggle("cols");
+    if (id === "iv-units-btn") return toggle("units");
+    if (id === "iv-shops") return toggle("shops");
+    if (id === "iv-mgr-x") { MGR = null; MGRMSG = ""; CDELARM = null; invRender(); return; }
+    if (id === "iv-col-plus") {
+      MGR = "cols"; MGRMSG = ""; invRender();
+      var ci = document.getElementById("iv-col-in");
+      if (ci) { ci.focus(); ci.scrollIntoView({ block: "center" }); }
+      return;
+    }
+    if (id === "iv-ack") {
+      var ids = [];
+      ROWS.forEach(function (r) { if (r.cost == null) ids.push(r.id); });
+      ACK.unpriced = ids; save(LS_ACK, ACK); invRender(); return;
+    }
+    if (id === "iv-add") { newLine(ROWS.length ? groupVal(ROWS[0]) : null); return; }
+    if ((a = b.getAttribute("data-new-g")) != null) { newLine(a); return; }
+    if ((a = b.getAttribute("data-uok")) != null) {
+      var inp = b.parentNode.querySelector("input");
+      /* Pressing Add has already blurred the field, which commits it. */
+      if (inp && !inp.getAttribute("data-done")) { inp.setAttribute("data-done", "1"); unitAddCommit(a, inp.value, inp.getAttribute("data-kind")); }
+      return;
+    }
+    /* columns */
+    if ((a = b.getAttribute("data-cup")) != null || (a = b.getAttribute("data-cdn")) != null) {
+      var up = b.hasAttribute("data-cup"), i = COLS.indexOf(colById(a)), j = up ? i - 1 : i + 1;
+      if (i > 0 && j > 0 && j < COLS.length) {
+        var tmp = COLS[i]; COLS[i] = COLS[j]; COLS[j] = tmp;
+        colsSave(); invRender();
+      }
+      return;
+    }
+    if ((a = b.getAttribute("data-cdel")) != null) {
+      if (CDELARM !== a) { CDELARM = a; invRender(); return; }
+      COLS = COLS.filter(function (c) { return c.id !== a; });
+      ROWS.forEach(function (r) { if (r.x) delete r.x[a]; });
+      CDELARM = null; colsSave(); persist(); invRender(); return;
+    }
+    if (id === "iv-col-addbtn") {
+      var ni = document.getElementById("iv-col-in"), nm = ni ? ni.value.trim() : "";
+      if (!nm) { MGRMSG = tt({ en: "Type a name for the column first.", nl: "Typ eerst een naam voor de kolom." }); invRender(); return; }
+      COLS.push({ id: "x" + Date.now().toString(36), show: true, custom: true, name: nm });
+      MGRMSG = ""; colsSave(); invRender(); return;
+    }
+    if (id === "iv-col-reset") {
+      var keep = COLS.filter(function (c) { return c.custom; });
+      keep.forEach(function (c) { c.show = true; });
+      COLS = null; colsFix(); COLS = COLS.concat(keep);
+      colsSave(); invRender(); return;
+    }
+    /* units and shops */
+    if (id === "iv-unit-addbtn" || id === "iv-shop-addbtn") {
+      var unitsP = id === "iv-unit-addbtn";
+      var fi = document.getElementById(unitsP ? "iv-unit-in" : "iv-shop-in"), val = fi ? fi.value.trim() : "";
+      if (!val) { MGRMSG = tt(unitsP ? { en: "Type a unit first.", nl: "Typ eerst een eenheid." }
+                                     : { en: "Type a shop first.", nl: "Typ eerst een winkel." }); invRender(); return; }
+      if (unitsP) addUnit(val); else addSup(val);
+      MGRMSG = ""; invRender();
+      var again = document.getElementById(unitsP ? "iv-unit-in" : "iv-shop-in");
+      if (again) again.focus();
+      return;
+    }
+    if ((a = b.getAttribute("data-urm")) != null || (a = b.getAttribute("data-srm")) != null) {
+      var isU = b.hasAttribute("data-urm"), n = 0;
+      ROWS.forEach(function (r) { if ((isU ? r.unit : (r.supplier || "TBD")) === a) n++; });
+      var shown = isU ? unitLabel(a) : a;
+      if (n) {
+        MGRMSG = tt({ en: shown + " is still used by " + n + (n === 1 ? " line" : " lines") + ". Move " + (n === 1 ? "it" : "them") + " to something else first.",
+                      nl: shown + " wordt nog door " + n + (n === 1 ? " regel" : " regels") + " gebruikt. Zet " + (n === 1 ? "die" : "ze") + " eerst op iets anders." });
+        invRender(); return;
+      }
+      if (isU) { UNITLIST = unitList().filter(function (u) { return u !== a; }); save(LS_UNITS, UNITLIST); }
+      else { SUPS = supList().filter(function (s) { return s !== a; }); save(LS_SUPS, SUPS); }
+      MGRMSG = ""; invRender(); return;
     }
   });
 
@@ -4014,6 +4602,16 @@ body.cmt-on #root { cursor: crosshair; }
       fill: [6, 145],
       stem: "M24,148 L36,148 L36,152 Q46,154 46,158 L14,158 Q14,154 24,152 Z"
     },
+    /* The coppa is the stemmed goblet the Hibiscus Royale goes in over
+       cubed ice: a deep round bowl on a short stem. It had been drawn as the
+       martini coupe, which is a wide shallow bowl on a long stem, and the two
+       read as the same glass. */
+    coppa: {
+      body: "M11,8 C6,30 3,48 5,66 C8,92 20,106 30,106 C40,106 52,92 55,66 C57,48 54,30 49,8 Z",
+      fill: [9, 105],
+      stem: "M27,106 L33,106 L33,142 Q33,149 43,152 Q49,154 49,158 L11,158 " +
+            "Q11,154 17,152 Q27,149 27,142 Z"
+    },
     coupe: {
       body: "M5,8 C5,8 7,62 30,62 C53,62 55,8 55,8 Z",
       fill: [9, 61],
@@ -4024,7 +4622,8 @@ body.cmt-on #root { cursor: crosshair; }
 
   function glassShape(d) {
     var g = (tt(d.glass) || "").toLowerCase();
-    if (g.indexOf("coupe") > -1 || g.indexOf("coppa") > -1 || g.indexOf("martini") > -1) return "coupe";
+    if (g.indexOf("coppa") > -1) return "coppa";
+    if (g.indexOf("coupe") > -1 || g.indexOf("martini") > -1) return "coupe";
     if (g.indexOf("hurricane") > -1) return "hurricane";
     return "tall";
   }
