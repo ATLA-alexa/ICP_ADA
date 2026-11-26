@@ -2007,6 +2007,9 @@ tr.inv-r:hover .iv-grip, .iv-grip:focus { opacity: .85; }
   /* Room for each field on one or two lines, so a row is a row and not a
      column of stacked bits. */
   .inv-t td.c-have, .inv-t td.c-need, .inv-t td.c-buy { white-space: nowrap; }
+  /* the unit, what one holds and the shop it is counted by, on one line */
+  .inv-t td.c-unit { white-space: nowrap; }
+  .inv-t td.c-unit .iv-per-hint, .inv-t td.c-unit .iv-sync:not(.on) { white-space: normal; }
   .inv-t td.c-cost { min-width: 180px; }
   .inv-t td.c-where { min-width: 120px; }
   .inv-t td.c-dot { min-width: 230px; }
@@ -2034,6 +2037,13 @@ tr.inv-r:hover .iv-grip, .iv-grip:focus { opacity: .85; }
 .iv-per.ask .iv-pq { border-color: #9E2B3B; background: rgba(158,43,59,.06); }
 .iv-per-hint { display: block; font-size: 11.5px; color: #9E2B3B; margin-top: 4px; white-space: normal; max-width: 260px; }
 .iv-eq { font-size: 11.5px; color: var(--ink-soft); white-space: nowrap; }
+.iv-sync { display: inline-block; margin: 4px 0 0 0; font: inherit; font-size: 11.5px; line-height: 1.4; border-radius: 999px; padding: 2px 9px;
+  border: 1px solid var(--gold-pale); background: #fff; color: var(--gold); cursor: pointer; text-align: left; }
+.iv-sync.on { cursor: default; border-style: solid; background: rgba(62,81,64,.08); border-color: rgba(62,81,64,.35); color: #3E5140; }
+.iv-sync.on::before { content: "\21BB  "; }
+.iv-sync.armed { background: rgba(158,43,59,.1); border-color: #9E2B3B; color: #9E2B3B; font-weight: 600; }
+.c-unit .iv-sync.on { margin-left: 6px; vertical-align: middle; }
+.c-unit .iv-sync:not(.on) { display: block; width: fit-content; }
 .iv-usel { font: inherit; font-size: 13px; padding: 4px 6px; border: 1px solid var(--gold-pale);
   border-radius: 6px; background: #fff; max-width: 140px; cursor: pointer; }
 .iv-uadd { display: inline-flex; gap: 5px; align-items: center; }
@@ -2232,6 +2242,8 @@ button.iv-tag.on { font-weight: 600; }
      still-to-buy chips on the next line already say. The bar itself stays. */
   .inv-t tr.inv-r .barlbl { display: none; }
   .inv-t tr.inv-r.open .barlbl { display: block; font-size: 11px; }
+  /* "= 11.2 L" waits for the open card, so a closed one stays two lines */
+  .inv-t tr.inv-r:not(.open) .iv-eq { display: none; }
   .inv-cat td { display: block; }
 }
 /* price book */
@@ -3314,12 +3326,12 @@ body.cmt-on #root { cursor: crosshair; }
   var UNIT_NL = { "pcs":"st", "cans":"blikken", "bottles":"flessen",
                   "jars":"potten", "packs":"pakken", "sets":"sets",
                   "boxes":"dozen", "cartons":"pakken", "crates":"kratten",
-                  "trays":"trays", "cases":"dozen", "rolls":"rollen", "tubs":"bakken" };
+                  "trays":"trays", "cases":"dozen", "rolls":"rollen", "tubs":"bakken", "bags":"zakken", "jerrycans":"jerrycans" };
   /* Offered in the pick list. The field still takes anything you type, and
      nothing here converts: changing L to crates relabels the number, it does
      not recalculate it. */
   var UNITS = ["L", "ml", "kg", "g", "pcs", "cans", "bottles", "jars",
-               "packs", "sets", "boxes", "cartons", "crates", "trays", "cases", "rolls", "tubs"];
+               "packs", "sets", "boxes", "cartons", "crates", "trays", "cases", "rolls", "tubs", "bags"];
   var SETPAR = { en: "set par", nl: "stel par in" };
   function isNl() { return LANG === "nl"; }
   function catLabel(c)  { return isNl() ? (CAT_NL[c] || c) : c; }
@@ -4186,11 +4198,11 @@ body.cmt-on #root { cursor: crosshair; }
           '"><span class="inv-unit">' + u + "</span></td>";
       case "need":
         return '<td class="c-need num"' + lab + '><span class="iv-need" contenteditable="true" data-f="need">' +
-          (k.need == null ? et(SETPAR) : tidy(k.need)) + "</span> " + u + eqSpan(r, k.need) + "</td>";
+          (k.need == null ? et(SETPAR) : tidy(k.need)) + "</span> " + esc(unitN(r.unit, k.need)) + eqSpan(r, k.need) + "</td>";
       case "buy":
         return '<td data-c="buy" class="c-buy buy' + (k.short === 0 ? " ok" : "") + '"' + lab + '>' +
           (k.need == null ? et(SETPAR)
-            : k.short > 0 ? tidy(k.short) + " " + u + eqSpan(r, k.short)
+            : k.short > 0 ? tidy(k.short) + " " + esc(unitN(r.unit, k.short)) + eqSpan(r, k.short)
             : et({ en: "covered", nl: "gedekt" })) + "</td>";
       case "cost":
         return '<td data-c="cost" class="c-cost num"' + lab + '>' + (!k.priced ? '<span class="iv-tbd">' +
@@ -4199,7 +4211,7 @@ body.cmt-on #root { cursor: crosshair; }
       case "where":
         return '<td class="c-where"' + lab + '>' + supTag(r) + "</td>";
       case "unit":
-        return '<td class="c-unit"' + lab + '>' + unitSel(r) + perHTML(r) + "</td>";
+        return '<td class="c-unit"' + lab + '>' + unitSel(r) + perHTML(r) + syncHTML(r) + "</td>";
       case "cat":
         /* A list-backed input rather than a select: it offers the categories
            that exist and still accepts one you have just thought of. */
@@ -4554,7 +4566,7 @@ body.cmt-on #root { cursor: crosshair; }
          card the moment a count was typed. */
       buy.className = "c-buy buy" + (c.short === 0 ? " ok" : "");
       buy.innerHTML = c.need == null ? et(SETPAR)
-        : c.short > 0 ? tidy(c.short) + " " + esc(unitLabel(r.unit)) + eqSpan(r, c.short)
+        : c.short > 0 ? tidy(c.short) + " " + esc(unitN(r.unit, c.short)) + eqSpan(r, c.short)
         : et({ en: "covered", nl: "gedekt" });
     }
     var cost = tr.querySelector('[data-c="cost"]');
@@ -4592,7 +4604,8 @@ body.cmt-on #root { cursor: crosshair; }
       if (pick === "__add") { inlineAdd(sel, "sup"); return; }
       row.supplier = pick;
       var pe = rowEntry(row);
-      if (pe) row.cost = rowCost(pe, row);
+      syncRow(row);
+      repriceRow(row);
       persist(); invRender();
       return;
     }
@@ -4819,7 +4832,8 @@ body.cmt-on #root { cursor: crosshair; }
     else if (GROUPBY === "sup" && gval) {
       row.supplier = gval;
       var pe = rowEntry(row);
-      if (pe) row.cost = rowCost(pe, row);
+      syncRow(row);
+      repriceRow(row);
     }
   }
   function dropRow(d) {
@@ -4954,12 +4968,13 @@ body.cmt-on #root { cursor: crosshair; }
       if (row && sp) {
         row.supplier = sp;
         var pe = rowEntry(row);
-        if (pe) row.cost = rowCost(pe, row);
+        syncRow(row);
+      repriceRow(row);
         persist();
       }
     } else {
       var u = addUnit(val);
-      if (row && u) { changeUnit(row, u); persist(); }
+      if (row && u) { row.sync = false; changeUnit(row, u); persist(); }
     }
     invRender();
   }
@@ -5002,6 +5017,7 @@ body.cmt-on #root { cursor: crosshair; }
          and only their label changes, which is the honest behaviour when
          nobody has told us how many litres are in a crate. */
       if (row && t.value !== row.unit) {
+        row.sync = false;
         changeUnit(row, t.value);
         persist(); invRender();
         if (row.from) { var ask = document.querySelector('#root [data-perq="' + CSS.escape(row.id) + '"]'); if (ask) ask.focus({ preventScroll: true }); }
@@ -6271,7 +6287,7 @@ body.cmt-on #root { cursor: crosshair; }
     "Thyme":"thyme",
     "Jalapenos":"jalapeno-g",
     "Pears, Conference":"pears",
-    "Passion fruit, fresh":"passionfruit-fresh",
+    "Passion fruit, fresh":"passionfruit-g",
     "Fee Foam or aquafaba":"foamer",
     "Fine sea salt":"sea-salt",
     "Alpro Barista oat milk":"oat-milk",
@@ -6347,7 +6363,7 @@ body.cmt-on #root { cursor: crosshair; }
   function rowEntry(r) {
     var key = ROW_PRICE[r.key];
     if (!key) return null;
-    var alts = alternatives(key, rowUnit(r));
+    var alts = altsFor(r);
     if (!alts.length) return null;
     var mine = alts.filter(function (a) { return a.e.sup === r.supplier; })[0];
     return (mine || alts[0]).e;
@@ -6379,11 +6395,11 @@ body.cmt-on #root { cursor: crosshair; }
   function rowCheaper(r) {
     var key = ROW_PRICE[r.key];
     if (!key) return null;
-    var alts = alternatives(key, rowUnit(r));
+    var alts = altsFor(r);
     if (alts.length < 2) return null;
     var used = rowEntry(r), best = alts[0].e;
     if (!used || best.id === used.id) return null;
-    var uc = rowCost(used, r), bc = alts[0].c * rowMul(r);
+    var uc = rowCost(used, r), bc = alts[0].c;
     if (bc >= uc) return null;
     /* Judge the swap on what it saves in a week, not on the per-unit gap. A
        tenth of a cent a gram is noise on 60 g of thyme and real money on 450 g
@@ -6490,17 +6506,40 @@ body.cmt-on #root { cursor: crosshair; }
   function perOf(r) { return r && r.per && r.per.q > 0 && r.per.u ? r.per : null; }
   function rowUnit(r) { var p = perOf(r); return p ? p.u : r.unit; }
   function rowMul(r) { var p = perOf(r); return p ? p.q : 1; }
-  function rowCost(e, r) { var c = costIn(e, rowUnit(r)); return c == null ? null : c * rowMul(r); }
-  function round3(x) { return Math.round(x * 1000) / 1000; }
-  function convertRow(row, f) {
-    if (row.need != null) row.need = round3(Number(row.need) * f);
-    if (HAVE[row.id] != null) HAVE[row.id] = round3(Number(HAVE[row.id]) * f);
+  function rowCost(e, r) {
+    var p = perOf(r);
+    if (p) { var c = costIn(e, p.u); if (c != null) return c * p.q; }
+    return costIn(e, r.unit);
   }
+  /* every entry that can price this line as it is counted, cheapest first */
+  function altsFor(r) {
+    var key = ROW_PRICE[r.key];
+    if (!key) return [];
+    return PRICEBOOK
+      .filter(function (e) { return e.m === key && rowCost(e, r) != null; })
+      .map(function (e) { return { e: e, c: rowCost(e, r) }; })
+      .sort(function (a, b) { return a.c - b.c; });
+  }
+  function round3(x) { return Math.round(x * 1000) / 1000; }
+  function round2(x) { return Math.round(x * 100) / 100; }
+  function convertRow(row, f) {
+    if (row.need != null) row.need = round2(Number(row.need) * f);
+    if (HAVE[row.id] != null) HAVE[row.id] = round2(Number(HAVE[row.id]) * f);
+  }
+  /* 22.4 bottles of 500 ml reads "= 11.2 L", not "= 11200 ml" */
   function eqSpan(r, n) {
     var p = perOf(r);
     if (!p || n == null) return "";
-    return ' <span class="iv-eq">= ' + tidy(n * p.q) + " " + esc(unitLabel(p.u)) + "</span>";
+    var v = n * p.q, u = p.u;
+    if (u === "ml" && v >= 1000) { v = v / 1000; u = "L"; }
+    if (u === "g" && v >= 1000) { v = v / 1000; u = "kg"; }
+    v = v >= 100 ? Math.round(v) : round2(v);
+    return ' <span class="iv-eq">= ' + dec(String(v)) + " " + esc(unitLabel(u)) + "</span>";
   }
+  /* "1 box", not "1 boxes" */
+  var ONE = { bottles: "bottle", cans: "can", cartons: "carton", packs: "pack", boxes: "box", tubs: "tub", bags: "bag",
+              rolls: "roll", crates: "crate", trays: "tray", jars: "jar", sets: "set", cases: "case", jerrycans: "jerrycan" };
+  function unitN(u, n) { return (!isNl() && Number(n) === 1 && ONE[u]) ? ONE[u] : unitLabel(u); }
   function perHTML(r) {
     if (MEAS[r.unit]) return "";
     var p = r.per || {}, q = p.q > 0 ? dec(p.q) : "", pu = p.u || (r.from && MEAS[r.from] ? r.from : "L");
@@ -6555,6 +6594,7 @@ body.cmt-on #root { cursor: crosshair; }
     var cell = t.closest("td") || t.parentNode;
     var qi = cell.querySelector("[data-perq]"), ui = cell.querySelector("[data-peru]");
     var q = parseQty(qi ? qi.value : "");
+    row.sync = false;
     setPer(row, q || 0, ui ? ui.value : "L");
     persist(); invRender();
   });
@@ -6595,6 +6635,136 @@ body.cmt-on #root { cursor: crosshair; }
     if (moved) persist();
     try { localStorage.setItem(FLAG, "1"); } catch (x) {}
   })();
+
+  /* "Count it the way it is sold." The price book already says what a pack
+     is: Krimp 6 blikken x 567 g, Fles 2 l, Bak 200 g. Each inventory line
+     takes its counting unit from the pack it is bought in, and what one
+     holds: cans of 567 g, bottles of 2 L, tubs of 200 g. Change the shop and
+     the unit follows the new pack; the numbers convert where they can. A unit
+     chosen by hand stays as chosen, with a button to match the pack again. */
+  var COUNT_OVERRIDE = {
+    "ah-pear-apple":  { unit: "cartons", per: { q: 1, u: "L" } },
+    "sl-spa-rood-l":  { unit: "L", per: null },
+    "sl-spa-blauw-l": { unit: "L", per: null }
+  };
+  var INNER = { petflessen: "bottles", flessen: "bottles", flesjes: "bottles", blikken: "cans", blikjes: "cans",
+                pakken: "cartons", rollen: "rolls", zakken: "bags", stuks: "pcs" };
+  var OUTER = { Krimp: "packs", Fles: "bottles", Flesje: "bottles", Doos: "boxes", Pak: "packs", Bak: "tubs", Bakje: "tubs",
+                Zak: "bags", Zakje: "bags", Krat: "crates", Tray: "trays", Rol: "rolls", Blister: "packs", Jerrycan: "jerrycans" };
+  function sizeOf(txt) {
+    var m = /(\d+(?:[.,]\d+)?)\s*(cl|ml|l|kg|kilo|gram|g)\b/i.exec(String(txt || ""));
+    if (!m) return null;
+    var v = parseFloat(m[1].replace(",", ".")), u = m[2].toLowerCase();
+    if (u === "cl") return { q: v * 10, u: "ml" };
+    if (u === "l") return { q: v * 1000, u: "ml" };
+    if (u === "ml") return { q: v, u: "ml" };
+    if (u === "kg" || u === "kilo") return { q: v * 1000, u: "g" };
+    return { q: v, u: "g" };
+  }
+  function nicePer(q, u) {
+    if (u === "ml" && q >= 1000) return { q: round3(q / 1000), u: "L" };
+    if (u === "g" && q >= 1000) return { q: round3(q / 1000), u: "kg" };
+    return { q: round3(q), u: u };
+  }
+  /* -> { unit, per, info }: info means the size is only told, because the
+     shop prices it per piece, so the count is converted piece for piece. */
+  function packCount(e) {
+    if (!e) return null;
+    if (COUNT_OVERRIDE[e.id]) {
+      var o = COUNT_OVERRIDE[e.id];
+      return { unit: o.unit, per: o.per, info: false };
+    }
+    var t = String(e.pack || ""), first = t.split(/\s+/)[0];
+    var n = 1, inner = null, m, re = /(\d+)\s*(petflessen|flessen|flesjes|blikken|blikjes|pakken|multipacks|rollen|zakken|stuks)\b/gi;
+    while ((m = re.exec(t))) { n *= parseInt(m[1], 10); if (m[2].toLowerCase() !== "multipacks") inner = m[2].toLowerCase(); }
+    var tail = t.indexOf(" x ") !== -1 ? t.slice(t.lastIndexOf(" x ") + 3) : t;
+    var size = sizeOf(tail);
+    if (e.u === "ml" || e.u === "g") {
+      if (inner && inner !== "stuks" && n > 1) return { unit: INNER[inner], per: nicePer(e.qty / n, e.u), info: false };
+      if ((first === "Doos" || first === "Krat") && e.u === "g") return { unit: "kg", per: null, info: false };
+      var un = first === "Pak" && e.u === "ml" ? "cartons" : first === "Per" ? "packs" : OUTER[first] || (e.u === "g" ? "bags" : "bottles");
+      return { unit: un, per: nicePer(e.qty, e.u), info: false };
+    }
+    /* priced per piece */
+    if (inner && n > 1 && e.qty === n) {
+      if (inner === "stuks") return { unit: "pcs", per: null, info: true };
+      return { unit: INNER[inner], per: size ? nicePer(size.q, size.u) : null, info: true };
+    }
+    var unit = OUTER[first] || (/\btin\b/i.test(t) ? "cans" : "pcs");
+    var lone = !inner || n === 1;
+    return { unit: unit, per: lone && size ? nicePer(size.q, size.u) : null, info: true };
+  }
+  /* The entry a line counts by: the one at its own shop, else the cheapest. */
+  function syncEntry(r) {
+    var key = ROW_PRICE[r.key];
+    if (!key) return null;
+    var all = PRICEBOOK.filter(function (e) { return e.m === key; });
+    return all.filter(function (e) { return e.sup === r.supplier; })[0] || rowEntry(r) || all[0] || null;
+  }
+  function baseQ(u, p, info) {
+    if (MEAS[u]) return unitBase(u);
+    if (!info && p && MEAS[p.u]) return { b: unitBase(p.u).b, f: p.q * unitBase(p.u).f };
+    if (p && p.u === "pcs") return { b: "pcs", f: p.q };
+    return { b: "pcs", f: 1 };
+  }
+  function convFactor(r, pc) {
+    var op = perOf(r);
+    if (r.unit === pc.unit) return 1;
+    var A = baseQ(r.unit, op, !!r.perInfo), B = baseQ(pc.unit, pc.per, pc.info);
+    return A.b === B.b ? A.f / B.f : null;
+  }
+  function samePer(a, b) { return (!a && !b) || (!!a && !!b && a.q === b.q && a.u === b.u); }
+  function syncRow(r, force) {
+    if (r.sync === false && !force) return false;
+    var pc = packCount(syncEntry(r));
+    if (!pc) return false;
+    if (r.unit === pc.unit && samePer(perOf(r), pc.per)) { r.syncOff = null; r.perInfo = pc.info; return false; }
+    var f = convFactor(r, pc);
+    if (f == null) {
+      if (!force && (r.need != null || HAVE[r.id] != null)) { r.syncOff = pc.unit; return false; }
+      r.need = null; delete HAVE[r.id];
+    } else if (f !== 1) convertRow(r, f);
+    r.unit = pc.unit; r.per = pc.per ? { q: pc.per.q, u: pc.per.u } : null; r.perInfo = pc.info;
+    r.from = null; r.syncOff = null;
+    return true;
+  }
+  function syncHTML(r) {
+    var e = syncEntry(r), pc = packCount(e);
+    if (!pc) return "";
+    var what = esc(unitLabel(pc.unit)) + (pc.per ? " = " + tidy(pc.per.q) + " " + esc(unitLabel(pc.per.u)) : "");
+    if (r.sync !== false && !r.syncOff)
+      return '<span class="iv-sync on" title="' + et({ en: "Counted the way " + e.sup + " sells it: " + e.pack, nl: "Geteld zoals " + e.sup + " het verkoopt: " + e.pack }) + '">' +
+        esc(e.sup) + "</span>";
+    var lossy = convFactor(r, pc) == null && (r.need != null || HAVE[r.id] != null);
+    var armed = SYNCARM === r.id;
+    return '<button type="button" class="iv-sync' + (armed ? " armed" : "") + '" data-resync="' + esc(r.id) + '">' +
+      (armed ? et({ en: "Tap again: the count starts over in ", nl: "Tik nog eens: de telling begint opnieuw in " }) + what
+             : et({ en: "Count as " + e.sup + " sells it: ", nl: "Tel zoals " + e.sup + " het verkoopt: " }) + what) + "</button>" +
+      (lossy && !armed ? '<span class="iv-per-hint">' + et({ en: "That cannot be converted from " + unitLabel(r.unit) + ", so the numbers would start over.",
+                                                              nl: "Dat is niet om te rekenen vanuit " + unitLabel(r.unit) + ", dus de getallen beginnen dan opnieuw." }) + "</span>" : "");
+  }
+  var SYNCARM = null;
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest("#root [data-resync]");
+    if (!b) return;
+    var row = rowById(b.getAttribute("data-resync"));
+    if (!row) return;
+    var pc = packCount(syncEntry(row));
+    var lossy = pc && convFactor(row, pc) == null && (row.need != null || HAVE[row.id] != null);
+    if (lossy && SYNCARM !== row.id) { SYNCARM = row.id; invRender(); return; }
+    SYNCARM = null;
+    row.sync = true;
+    syncRow(row, true);
+    repriceRow(row);
+    persist(); invRender();
+  });
+  function syncAll(list) {
+    var moved = false;
+    list.forEach(function (r) { if (syncRow(r)) moved = true; });
+    return moved;
+  }
+  syncAll(SEED);
+  if (syncAll(ROWS)) persist();
 
   applyPrices();
 
