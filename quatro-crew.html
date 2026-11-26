@@ -1773,6 +1773,27 @@ render();
 .src-row { display: grid; grid-template-columns: 86px 1fr; gap: 4px 12px; margin: 0 0 10px; font-size: 14px; line-height: 1.5; }
 .src-row dt { color: var(--gold); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; padding-top: 3px; }
 .src-row dd { margin: 0; }
+/* a Supplier or Made from that leads somewhere */
+.src-row dd.src-link { cursor: pointer; color: var(--ink); text-decoration: underline; text-decoration-color: var(--gold);
+  text-underline-offset: 3px; border-radius: 4px; }
+.src-row dd.src-link::after { content: " \25BE"; color: var(--gold); font-size: 12px; }
+.src-row dd.src-link[aria-expanded="true"]::after { content: " \25B4"; }
+.src-row dd.src-link:hover, .src-row dd.src-link:focus { background: rgba(168,134,60,.10); outline: none; }
+.src-go { margin: -2px 0 12px; padding: 10px 12px; border: 1px solid var(--gold-pale); border-radius: 10px; background: #fff; }
+.src-go-h { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+.src-go-r { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 10px;
+  padding: 6px 0; border-top: 1px solid var(--limestone-deep); }
+.src-go-r:first-of-type { border-top: 0; }
+.src-go-n { font-size: 13.5px; }
+.src-go-a { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.src-go-b { font: inherit; font-size: 12.5px; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--gold-pale);
+  background: var(--limestone); color: var(--ink); text-decoration: none; cursor: pointer; white-space: nowrap; }
+.src-go-b:hover { background: rgba(168,134,60,.16); }
+.src-go-ed { font: inherit; font-size: 12px; border: 0; background: none; color: var(--ink-soft); text-decoration: underline;
+  cursor: pointer; padding: 6px 0 0; }
+@media print { .src-go { display: none; } }
+tr.iv-flash td, .inv-t tr.iv-flash { animation: ivflash 2.4s ease-out; }
+@keyframes ivflash { 0%, 45% { background-color: rgba(168,134,60,.30); } 100% { background-color: transparent; } }
 .src-tag { display: inline-block; font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
   padding: 3px 9px; border-radius: 999px; margin-bottom: 12px; }
 .src-tag.bought { background: rgba(168,134,60,.14); color: var(--gold); }
@@ -2431,7 +2452,7 @@ body.cmt-on #root { cursor: crosshair; }
      house = we make it, shows yield, keep window and where it lives
      Keys are matched loosely against the ingredient name shown in Builds. */
   var SRC = {
-    "lychee juice":        { t:"buy", shop:"Amazing Oriental", pack:"350 ml bottle, 1.45", home:"Rail slot 3, spare carton F1A bottom" },
+    "lychee juice":        { t:"buy", shop:"Sligro 149110", pack:"Maaza, 12 x 50 cl, 20.95", home:"Rail slot 3, spare carton F1A bottom" },
     "lychee cordial":      { t:"house", from:"Amazing Oriental canned lychees, 2.59 a can", yield:"700 ml", keeps:"NOT SET IN THE FILE", home:"F1B top tier, 700 ml bottle",
                              warn:"This has no keep window written anywhere. Write yield, keep time and method before anyone batches it. A day dot with no keep time is a guess with a date on it." },
     "lychee-lime cordial": { t:"house", from:"25 ml lychee cordial squeeze plus 15 ml Boiron lime puree", yield:"40 ml per drink, made to order", keeps:"Made to order, not stored", home:"Built at the station",
@@ -2717,10 +2738,12 @@ body.cmt-on #root { cursor: crosshair; }
   }
   /* Every field is drawn even when it is empty, so a missing pack size or
      shelf can be filled in rather than simply not being there. */
-  function row(label, val, key, field) {
+  function row(label, val, key, field, linked) {
     var shown = srcGet(key, field, val);
     return "<dt>" + esc(tt(label)) + "</dt>" +
-      '<dd class="src-ed' + (shown ? "" : " empty") + '" contenteditable="true" ' +
+      '<dd class="src-ed' + (shown ? "" : " empty") + (linked ? " src-link" : "") + '" ' +
+      (linked ? 'contenteditable="false" data-golink="1" tabindex="0" role="button" aria-expanded="false" aria-controls="src-go" '
+              : 'contenteditable="true" ') +
       'data-srck="' + esc(key) + '" data-srcf="' + esc(field) + '" data-ph="' +
       et({ en: "not recorded, click to add", nl: "niet vastgelegd, klik om toe te voegen" }) +
       '">' + esc(shown) + "</dd>";
@@ -2733,6 +2756,134 @@ body.cmt-on #root { cursor: crosshair; }
     el.classList.toggle("empty", !val);
   }, true);
 
+  /* "Click it and go there." The Supplier on a bought card, and the Made from
+     on a house card, open a short list: each product with its shop page in a
+     new tab, and its line on the Inventory tab. A bought card finds its
+     product by the article number or the product name in its text; a house
+     card lists what it is made from here. */
+  var SRC_FROM = {
+    "lychee cordial":               ["Lychees in syrup, cordial"],
+    "lychee-lime cordial":          ["Lychees in syrup, cordial", "Boiron lime puree, pasteurised"],
+    "bpt-infused coconut water":    ["Coconut water", "Butterfly pea, dried"],
+    "pineapple chunks, big":        ["Pineapple chunks, canned"],
+    "golden glitter lychee":        ["Lychees in syrup, cordial"],
+    "butterfly pea tea":            ["Butterfly pea, dried"],
+    "rosemary-lemon sea salt":      ["Fine sea salt", "Rosemary", "Lemons"],
+    "rosemary-thyme maple cordial": ["Maple syrup, Maple Gold", "Rosemary", "Thyme"],
+    "hibiscus tea":                 ["Hibiscus, dried"],
+    "orange zest":                  ["Oranges"],
+    "fresh mint syrup":             ["Mint", "Monin sugar syrup"],
+    "ice cubes":                    ["Ice cubes"],
+    "ice":                          ["Ice cubes", "Ice, crushed"]
+  };
+  function anyEntry(r) {
+    return rowEntry(r) || PRICEBOOK.filter(function (e) { return e.m === ROW_PRICE[r.key]; })[0] || null;
+  }
+  function srcTargets(key, v) {
+    var out = [], seen = {};
+    function addRow(r) {
+      if (!r || seen[r.id]) return;
+      seen[r.id] = 1;
+      out.push({ row: r, e: anyEntry(r) });
+    }
+    function addEntry(e) {
+      if (!e) return;
+      var rs = ROWS.filter(function (r) { return ROW_PRICE[r.key] === e.m; });
+      if (rs.length) rs.forEach(function (r) { if (!seen[r.id]) { seen[r.id] = 1; out.push({ row: r, e: e }); } });
+      else if (!seen["e:" + e.id]) { seen["e:" + e.id] = 1; out.push({ row: null, e: e }); }
+    }
+    (SRC_FROM[key] || []).forEach(function (k) { addRow(ROWS.filter(function (r) { return r.key === k; })[0]); });
+    var txt = [srcGet(key, "shop", v.shop), srcGet(key, "from", v.from), srcGet(key, "pack", v.pack)].join(" ");
+    var m, re = /\b(\d{5,7})\b/g;
+    while ((m = re.exec(txt))) addEntry(PRICEBOOK.filter(function (e) { return e.art === m[1] && !/-l$/.test(e.id); })[0]);
+    if (!out.length) {
+      /* an AH line carries no article number, only its product name */
+      var low = txt.toLowerCase();
+      PRICEBOOK.forEach(function (e) { if (e.name && low.indexOf(e.name.toLowerCase()) !== -1) addEntry(e); });
+    }
+    if (!out.length) {
+      var kn = String(key).toLowerCase();
+      ROWS.forEach(function (r) {
+        var n = String(r.name || "").toLowerCase();
+        if (n === kn || n.split(",")[0] === kn) addRow(r);
+      });
+    }
+    return out;
+  }
+  function srcGoHTML(tg) {
+    if (!tg.length) return "";
+    return '<div class="src-go" id="src-go" hidden><div class="src-go-h">' +
+      et({ en: "Where to find it", nl: "Waar je het vindt" }) + "</div>" +
+      tg.map(function (t) {
+        var e = t.e, s = e && STORES[e.sup], url = s ? s.url(e) : "";
+        return '<div class="src-go-r"><span class="src-go-n">' + esc(t.row ? rowName(t.row) : e.name) +
+          (e && e.art ? ' <span class="pb-art">' + esc(e.sup + " " + e.art) + "</span>" : "") + "</span>" +
+          '<span class="src-go-a">' +
+          (url ? '<a class="src-go-b" href="' + esc(url) + '" target="_blank" rel="noopener">' +
+                 et({ en: "Open at ", nl: "Open bij " }) + esc(e.sup) + " &#8599;</a>" : "") +
+          (t.row ? '<button type="button" class="src-go-b" data-goinv="' + esc(t.row.id) + '">' +
+                   et({ en: "Show in Inventory", nl: "Toon in Voorraad" }) + " &rarr;</button>" : "") +
+          "</span></div>";
+      }).join("") +
+      '<button type="button" class="src-go-ed" data-goedit="1">' +
+      et({ en: "Edit this text instead", nl: "Deze tekst aanpassen" }) + "</button></div>";
+  }
+
+  /* Close the card, open the Inventory tab, and bring the line into view,
+     unfolded, unfiltered and lit up for a moment so the eye lands on it. */
+  function goInventory(id) {
+    var r = rowById(id);
+    if (!r) return;
+    if (typeof closeSheet === "function") closeSheet();
+    FILTER = "all";
+    var gk = groupOf(r, calcRow(r).cls);
+    if (IVFOLD[gk]) delete IVFOLD[gk];
+    IVOPEN[id] = true;
+    var mb = document.querySelector('#modes button[data-mode="runsheet"]');
+    if (mb) mb.click();
+    var tb = document.querySelector('#subtabs button[data-tab="inventory"]');
+    if (!tb) return;
+    tb.click();
+    setTimeout(function () {
+      var tr = document.querySelector('#root tr.inv-r[data-id="' + CSS.escape(id) + '"]');
+      if (!tr) return;
+      tr.scrollIntoView({ block: "center" });
+      tr.classList.add("iv-flash");
+      setTimeout(function () { tr.classList.remove("iv-flash"); }, 2600);
+    }, 80);
+  }
+  document.addEventListener("click", function (e) {
+    var t = e.target;
+    if (!t || !t.closest || CMTMODE) return;
+    var dd = t.closest("#sheet-body dd[data-golink]");
+    if (dd && dd.getAttribute("contenteditable") !== "true") {
+      var pop = document.getElementById("src-go");
+      if (pop) { pop.hidden = !pop.hidden; dd.setAttribute("aria-expanded", pop.hidden ? "false" : "true"); }
+      return;
+    }
+    var gi = t.closest("#sheet-body [data-goinv]");
+    if (gi) { goInventory(gi.getAttribute("data-goinv")); return; }
+    if (t.closest("#sheet-body [data-goedit]")) {
+      var f = document.querySelector("#sheet-body dd[data-golink]"), p2 = document.getElementById("src-go");
+      if (p2) p2.hidden = true;
+      if (!f) return;
+      f.setAttribute("contenteditable", "true");
+      f.focus();
+      var rg = document.createRange(); rg.selectNodeContents(f); rg.collapse(false);
+      var sl = window.getSelection(); sl.removeAllRanges(); sl.addRange(rg);
+    }
+  });
+  /* once edited, the field goes back to being a link */
+  document.addEventListener("blur", function (e) {
+    var el = e.target;
+    if (el && el.hasAttribute && el.hasAttribute("data-golink")) el.setAttribute("contenteditable", "false");
+  }, true);
+  document.addEventListener("keydown", function (e) {
+    var el = e.target;
+    if ((e.key === "Enter" || e.key === " ") && el && el.hasAttribute && el.hasAttribute("data-golink") &&
+        el.getAttribute("contenteditable") !== "true") { e.preventDefault(); el.click(); }
+  });
+
   var sheet = document.getElementById("sheet"), scrim = document.getElementById("scrim");
   function openSrc(title, v, key) {
     if (!sheet) return;
@@ -2740,14 +2891,15 @@ body.cmt-on #root { cursor: crosshair; }
     var head = v.t === "house"
       ? '<span class="src-tag house">' + esc(tt({ en: "We make this", nl: "Dit maken wij zelf" })) + "</span>"
       : '<span class="src-tag bought">' + esc(tt({ en: "Bought in", nl: "Ingekocht" })) + "</span>";
+    var tg = srcTargets(key, v), lk = tg.length > 0;
     var body = '<dl class="src-row">' +
       (v.t === "house"
-        ? row({ en: "Made from", nl: "Gemaakt van" }, v.from,  key, "from") +
+        ? row({ en: "Made from", nl: "Gemaakt van" }, v.from,  key, "from", lk) +
           row({ en: "Yield",     nl: "Opbrengst" },   v.yield, key, "yield") +
           row({ en: "Keeps",     nl: "Houdbaar" },    v.keeps, key, "keeps")
-        : row({ en: "Supplier",  nl: "Leverancier" }, v.shop,  key, "shop") +
+        : row({ en: "Supplier",  nl: "Leverancier" }, v.shop,  key, "shop", lk) +
           row({ en: "Pack",      nl: "Verpakking" },  v.pack,  key, "pack")) +
-      row({ en: "Lives in", nl: "Staat in" }, v.home, key, "home") + "</dl>";
+      row({ en: "Lives in", nl: "Staat in" }, v.home, key, "home") + "</dl>" + srcGoHTML(tg);
     /* "Click an ingredient and it tells you straight away." The card is what
        opens from every ingredient list, so the dot lives here too. A house
        item carries its own keep window, so the use-by works itself out; a
