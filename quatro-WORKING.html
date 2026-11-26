@@ -1990,6 +1990,7 @@ body.iv-dragging, body.iv-dragging * { cursor: grabbing !important; user-select:
   background-image: radial-gradient(circle, var(--ink) 1.1px, transparent 1.5px); background-size: 5px 5.5px; }
 tr.inv-r:hover .iv-grip, .iv-grip:focus { opacity: .85; }
 .inv-t td.c-item { min-width: 190px; }
+@media (min-width: 720px) { .inv-t td.c-item { min-width: 250px; } }
 /* Ten columns are wider than the page, so the table scrolls inside its frame
    the way a Notion table does, and the name stays pinned on the left so you
    always know which line you are reading across. */
@@ -2202,10 +2203,16 @@ button.iv-tag.on { font-weight: 600; }
   .inv-t tr.inv-r td.c-have { order: -3; flex: 0 0 auto; }
   .inv-t tr.inv-r td.c-need { order: -2; }
   .inv-t tr.inv-r td.c-buy  { order: -1; }
+  .inv-t tr.inv-r td.c-order { order: -1; }
+  /* the brand on one small line over the name, as Sligro prints it; the
+     English name waits for the open card, so a closed one wraps less */
+  .inv-t tr.inv-r .iv-brand { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .inv-t tr.inv-r:not(.open) .iv-gl { display: none; }
+  .inv-t tr.inv-r td.c-order.none { display: none; }
   .inv-t tr.inv-r td.num { text-align: left; }
   /* Scoped to closed cards, so opening one needs no rule strong enough to
      beat this: the :not() chain outranks any plain .open selector. */
-  .inv-t tr.inv-r:not(.open) td:not(.c-item):not(.c-have):not(.c-need):not(.c-buy):not(.c-st),
+  .inv-t tr.inv-r:not(.open) td:not(.c-item):not(.c-have):not(.c-need):not(.c-buy):not(.c-order):not(.c-st),
   .inv-t tr.inv-r td.c-plus { display: none; }
   .inv-t tr.inv-r.open td.c-where, .inv-t tr.inv-r.open td.c-dot, .inv-t tr.inv-r.open td.c-cat { flex: 1 1 100%; }
   .inv-t tr.inv-r.open td.c-note, .inv-t tr.inv-r.open td.c-x { display: block; flex: 1 1 100%; }
@@ -2250,6 +2257,10 @@ button.iv-tag.on { font-weight: 600; }
   /* "= 11.2 L" waits for the open card, so a closed one stays two lines */
   .inv-t tr.inv-r:not(.open) .iv-eq { display: none; }
   .inv-cat td { display: block; }
+  /* Sligro's department sits small above the shelf heading */
+  .inv-t tr.inv-cat .cat-in { flex-wrap: wrap; row-gap: 1px; }
+  .inv-t tr.inv-cat .cat-pa { flex: 1 1 100%; padding-left: 17px; }
+  .inv-t tr.inv-cat .cat-gl { margin-left: 0; }
 }
 /* price book */
 .pb-t { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -2338,6 +2349,30 @@ button.iv-tag.on { font-weight: 600; }
 .pv { display: block; font-size: 10.5px; color: var(--ink-soft); margin-top: 2px; }
 .pv a { color: var(--gold); }
 .pv.cheaper { color: #9E2B3B; }
+/* The Sligro look, on the Inventory and the Prices tab alike: the brand small
+   above the name, the article number, the pack and the price under it. */
+.iv-brand, .pb-brand { display: block; font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-soft); line-height: 1.35; }
+.iv-gl { font-size: 11.5px; color: var(--ink-soft); font-style: italic; margin-left: 6px; }
+.iv-art { display: block; font-size: 11.5px; line-height: 1.45; color: var(--ink-soft); margin-top: 1px; }
+.iv-art .pb-art { font-size: 11px; }
+.iv-art .pb-p { color: var(--ink); }
+.pb-was { color: var(--ink-soft); font-weight: 400; }
+.pb-offer { color: #9E2B3B; }
+.pb-tag { display: inline-block; font-size: 10px; line-height: 1.5; letter-spacing: .03em; padding: 0 7px;
+  border-radius: 999px; white-space: nowrap; vertical-align: 1px; font-style: normal; }
+.pb-tag.offer { background: rgba(158,43,59,.07); color: #9E2B3B; border: 1px solid #E0B3AA; }
+.pb-tag.na { background: rgba(35,32,28,.05); color: var(--ink-soft); border: 1px solid rgba(35,32,28,.2); }
+.pb-tag.kit { background: var(--limestone); color: var(--gold); border: 1px solid var(--gold-pale); }
+.pb-t tr.pb-g td { background: var(--limestone); font-family: 'Marcellus', Georgia, serif; font-size: 12px;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--gold); padding: 8px 10px 6px; }
+.cat-pa { font-size: .78em; letter-spacing: .12em; opacity: .75; }
+.cat-gl { font-family: var(--body); text-transform: none; letter-spacing: 0; font-size: 11.5px;
+  color: var(--ink-soft); font-style: italic; margin-left: 8px; }
+.pb-shop { margin-top: 22px; }
+.c-order { white-space: nowrap; }
+.iv-ord b { font-size: 14px; }
+.iv-ocost { font-size: 11.5px; color: var(--ink-soft); margin-left: 4px; }
 @media (max-width: 719px) {
   .pb-t, .pb-t tbody, .pb-t tr, .pb-t td { display: block; width: 100%; }
   .pb-t thead { display: none; }
@@ -2347,6 +2382,20 @@ button.iv-tag.on { font-weight: 600; }
   .pb-t td::before { content: attr(data-l); font-size: 10px; letter-spacing: .1em;
     text-transform: uppercase; color: var(--gold); }
   .pb-t td.num { text-align: left; }
+  .pb-t tr.pb-g { padding: 0; border: 0; }
+  /* A priced line reads like Sligro's own list on a phone: the brand, the
+     name, then article | pack and the price on one line, no column labels. */
+  .pb-t tr[data-pb] { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; padding: 9px 0 8px; }
+  .pb-t tr[data-pb] td { display: block; width: auto; padding: 0; }
+  .pb-t tr[data-pb] td::before { display: none; }
+  .pb-t tr[data-pb] td.pb-prod { flex: 1 1 100%; }
+  .pb-t tr[data-pb] td.pb-art { margin-right: -4px; }
+  .pb-t tr[data-pb] td.pb-art::after { content: " |"; color: var(--ink-soft); }
+  .pb-t tr[data-pb] td.pb-pack { font-size: 12px; color: var(--ink-soft); }
+  .pb-t tr[data-pb] td.pb-pr { margin-left: auto; font-weight: 600; }
+  .pb-t tr[data-pb] td.pb-u { font-size: 11.5px; color: var(--ink-soft); }
+  .pb-t tr.pb-g td { display: block; padding: 8px 6px 6px; }
+  .pb-t tr.pb-g td::before { display: none; }
 }
 /* editable notes anywhere */
 .qn-wrap { margin-top: 8px; }
@@ -2815,11 +2864,12 @@ body.cmt-on #root { cursor: crosshair; }
      shelf can be filled in rather than simply not being there. */
   function row(label, val, key, field, linked) {
     var shown = srcGet(key, field, val);
+    var def = sv(val) || "";
     return "<dt>" + esc(tt(label)) + "</dt>" +
       '<dd class="src-ed' + (shown ? "" : " empty") + (linked ? " src-link" : "") + '" ' +
       (linked ? 'contenteditable="false" data-golink="1" tabindex="0" role="button" aria-expanded="false" aria-controls="src-go" '
               : 'contenteditable="true" ') +
-      'data-srck="' + esc(key) + '" data-srcf="' + esc(field) + '" data-ph="' +
+      'data-srck="' + esc(key) + '" data-srcf="' + esc(field) + '" data-def="' + esc(def) + '" data-ph="' +
       et({ en: "not recorded, click to add", nl: "niet vastgelegd, klik om toe te voegen" }) +
       '">' + esc(shown) + "</dd>";
   }
@@ -2827,6 +2877,10 @@ body.cmt-on #root { cursor: crosshair; }
     var el = e.target;
     if (!el.dataset || !el.dataset.srck) return;
     var val = el.textContent.trim();
+    /* Left as it was, a field is not saved: the pack and price on a Sligro
+       card come live from the list, and saving them would freeze today's. */
+    var had = srcEdits()[el.dataset.srck], mine = had && had[el.dataset.srcf + "_" + LANG];
+    if (!mine && val === (el.dataset.def || "")) return;
     srcSet(el.dataset.srck, el.dataset.srcf, val);
     el.classList.toggle("empty", !val);
   }, true);
@@ -2891,7 +2945,11 @@ body.cmt-on #root { cursor: crosshair; }
       et({ en: "Where to find it", nl: "Waar je het vindt" }) + "</div>" +
       tg.map(function (t) {
         var e = t.e, s = e && STORES[e.sup], url = s ? s.url(e) : "";
-        return '<div class="src-go-r"><span class="src-go-n">' + esc(t.row ? rowName(t.row) : e.name) +
+        /* named as the shop names it, the English beside it on the English page */
+        var se = t.row ? syncEntry(t.row) : e, gl = t.row ? glossOf(t.row, se) : "";
+        var brand = se && se.sl && se.sl.b && se.sl.b !== "Unbranded" ? se.sl.b + " " : "";
+        return '<div class="src-go-r"><span class="src-go-n">' + esc(brand + (t.row ? rowName(t.row) : e.name)) +
+          (gl ? ' <span class="iv-gl">' + esc(gl) + "</span>" : "") +
           (e && e.art ? ' <span class="pb-art">' + esc(e.sup + " " + e.art) + "</span>" : "") + "</span>" +
           '<span class="src-go-a">' +
           (url ? '<a class="src-go-b" href="' + esc(url) + '" target="_blank" rel="noopener">' +
@@ -2959,6 +3017,29 @@ body.cmt-on #root { cursor: crosshair; }
         el.getAttribute("contenteditable") !== "true") { e.preventDefault(); el.click(); }
   });
 
+  /* A card that names a Sligro article reads its pack and price from the
+     Sligro list, so the card and the Prices tab can never disagree and an
+     offer shows on the card while it runs. */
+  function srcPB(v) {
+    var m = /Sligro (\d{4,7})/.exec(String(sv(v.shop) || ""));
+    if (!m) return null;
+    return PRICEBOOK.filter(function (e) { return e.sup === "Sligro" && e.art === m[1] && !(e.sl && e.sl.dup); })[0] || null;
+  }
+  function livePack(e) {
+    var sl = e.sl || {}, brand = sl.b && sl.b !== "Unbranded" ? sl.b + " " : "";
+    return brand + (sl.t || e.name) + ", " + e.pack + ", " +
+      (e.price == null ? tt({ en: "price TBD", nl: "prijs volgt" }) : n2(priceNow(e))) +
+      (offerOn(e) ? tt({ en: " on offer until ", nl: " in de aanbieding t/m " }) + dayText(sl.pr[1]) +
+                    tt({ en: ", regular ", nl: ", normaal " }) + n2(e.price) : "") +
+      (sl.na ? ", " + tt({ en: "temporarily not deliverable", nl: "tijdelijk niet leverbaar" }) : "");
+  }
+  function liveFrom(t) {
+    return String(t || "").replace(/Sligro (\d{4,7}), (\d+[.,]\d\d)/g, function (all, art) {
+      var e = PRICEBOOK.filter(function (x) { return x.sup === "Sligro" && x.art === art && !(x.sl && x.sl.dup); })[0];
+      return e && e.price != null ? "Sligro " + art + ", " + n2(priceNow(e)) : all;
+    });
+  }
+
   var sheet = document.getElementById("sheet"), scrim = document.getElementById("scrim");
   function openSrc(title, v, key) {
     if (!sheet) return;
@@ -2969,11 +3050,11 @@ body.cmt-on #root { cursor: crosshair; }
     var tg = srcTargets(key, v), lk = tg.length > 0;
     var body = '<dl class="src-row">' +
       (v.t === "house"
-        ? row({ en: "Made from", nl: "Gemaakt van" }, v.from,  key, "from", lk) +
+        ? row({ en: "Made from", nl: "Gemaakt van" }, liveFrom(sv(v.from)), key, "from", lk) +
           row({ en: "Yield",     nl: "Opbrengst" },   v.yield, key, "yield") +
           row({ en: "Keeps",     nl: "Houdbaar" },    v.keeps, key, "keeps")
         : row({ en: "Supplier",  nl: "Leverancier" }, v.shop,  key, "shop", lk) +
-          row({ en: "Pack",      nl: "Verpakking" },  v.pack,  key, "pack")) +
+          row({ en: "Pack",      nl: "Verpakking" },  srcPB(v) ? livePack(srcPB(v)) : v.pack, key, "pack")) +
       row({ en: "Lives in", nl: "Staat in" }, v.home, key, "home") + "</dl>" + srcGoHTML(tg);
     /* "Click an ingredient and it tells you straight away." The card is what
        opens from every ingredient list, so the dot lives here too. A house
@@ -3313,6 +3394,7 @@ body.cmt-on #root { cursor: crosshair; }
     "Coffee and tea": "Koffie en thee",
     "Cleaning and hygiene": "Schoonmaak en hygiene",
     "Bar equipment": "Baruitrusting",
+    "No shop yet": "Nog geen winkel",
     /* Kept so a copy saved before the re-filing still reads in Dutch. */
     "Liquids": "Vloeistoffen",
     "Boiron purees": "Boiron-purees",
@@ -3403,6 +3485,7 @@ body.cmt-on #root { cursor: crosshair; }
       need:  tt({ en: "Per week",     nl: "Per week" }),
       have:  tt({ en: "In stock",     nl: "Voorraad" }),
       buy:   tt({ en: "Still to buy", nl: "Nog kopen" }),
+      order: tt({ en: "Order",        nl: "Bestellen" }),
       cost:  tt({ en: "Cost",         nl: "Kosten" }),
       where: tt({ en: "Buy at",       nl: "Waar" })
     };
@@ -3598,8 +3681,8 @@ body.cmt-on #root { cursor: crosshair; }
       if (c.need != null && c.priced) {
         need += c.need * r.cost;
         have += Math.min(c.have, c.need) * r.cost;
-        buy  += c.short * r.cost;
       }
+      buy += buyCost(r, c);
     });
     return { need: need, have: have, buy: buy };
   }
@@ -3679,7 +3762,7 @@ body.cmt-on #root { cursor: crosshair; }
      in the list or with the arrow keys. */
   var CEXP = null, CTYPE = "text";
   var TYPE_ICON = { text: "Aa", number: "123", status: "&#9679;", tags: "#", check: "&#10003;" };
-  var COL_ICON = { item: "Aa", have: "123", need: "123", buy: "123", cost: "&euro;", unit: "&#9878;",
+  var COL_ICON = { item: "Aa", have: "123", need: "123", buy: "123", order: "&#128722;", cost: "&euro;", unit: "&#9878;",
                    where: "&#8962;", cat: "&#9776;", note: "Aa", dot: "31" };
   function colIcon(c) { return c.custom ? (TYPE_ICON[c.type] || "Aa") : (COL_ICON[c.id] || "Aa"); }
   function eyeSVG(on) {
@@ -3851,6 +3934,7 @@ body.cmt-on #root { cursor: crosshair; }
       case "have":  return HAVE[r.id] == null ? null : Number(HAVE[r.id]);
       case "need":  return k.need;
       case "buy":   return k.short;
+      case "order": var od = orderOf(r, k); return od ? (od.cost != null ? od.cost : od.n) : null;
       case "cost":  return k.priced && k.short != null ? k.short * r.cost : null;
       case "where": return r.supplier || "TBD";
       case "unit":  return unitLabel(r.unit);
@@ -4092,7 +4176,7 @@ body.cmt-on #root { cursor: crosshair; }
      Column order and the unit list save to this browser, like the rows.
      --------------------------------------------------------------- */
   var LS_COLS = "quatro-inv-cols-v1", LS_UNITS = "quatro-units-v1", LS_ACK = "quatro-inv-ack-v1";
-  var COL_BUILTIN = ["item", "have", "need", "buy", "unit", "cost", "where", "cat", "note", "dot"];
+  var COL_BUILTIN = ["item", "have", "need", "buy", "order", "unit", "cost", "where", "cat", "note", "dot"];
   var COLS = load(LS_COLS, null);
   function colsFix() {
     var out = [], seen = {};
@@ -4103,8 +4187,14 @@ body.cmt-on #root { cursor: crosshair; }
       out.push({ id: c.id, show: c.show !== false, custom: !!c.custom, name: c.name || "",
                  type: c.custom ? (c.type || "text") : "", opts: c.opts || [], pin: !!c.pin, fit: !!c.fit });
     });
-    COL_BUILTIN.forEach(function (id) {
-      if (!seen[id]) { seen[id] = 1; out.push({ id: id, show: true, custom: false, name: "", type: "", opts: [], pin: false, fit: false }); }
+    /* A built-in column new since the order was saved lands beside the one
+       it follows, so Order turns up next to Still to buy, not at the far end. */
+    COL_BUILTIN.forEach(function (id, i) {
+      if (seen[id]) return;
+      seen[id] = 1;
+      var nc = { id: id, show: true, custom: false, name: "", type: "", opts: [], pin: false, fit: false };
+      var at = i ? out.map(function (x) { return x.id; }).indexOf(COL_BUILTIN[i - 1]) : -1;
+      if (at < 0) out.push(nc); else out.splice(at + 1, 0, nc);
     });
     /* A ready-made column arrives once, next to Still to buy, unless it has
        been deleted on purpose. */
@@ -4112,7 +4202,8 @@ body.cmt-on #root { cursor: crosshair; }
       if (seen[sd.id] || COLS_GONE.indexOf(sd.id) !== -1) return;
       var c = JSON.parse(JSON.stringify(sd));
       c.show = true; c.pin = false; c.fit = false;
-      var at = out.map(function (x) { return x.id; }).indexOf("buy");
+      var ids = out.map(function (x) { return x.id; }), at = ids.indexOf("order");
+      if (at < 0) at = ids.indexOf("buy");
       out.splice(at < 0 ? out.length : at + 1, 0, c);
     });
     /* The name leads, always: it is what a row is. */
@@ -4183,11 +4274,12 @@ body.cmt-on #root { cursor: crosshair; }
     var lab = ' data-l="' + esc(colName(c)) + '"';
     switch (c.id) {
       case "item":
-        var nm = rowName(r);
+        var nm = rowName(r), se = syncEntry(r), gl = glossOf(r, se);
         var bar = k.need == null ? "" :
           '<div class="bar ' + (k.pct >= 100 ? "" : k.pct > 0 ? "part" : "none") + '"><span style="width:' + k.pct + '%"></span></div>' +
           '<span class="barlbl">' + tidy(k.have) + " / " + tidy(k.need) + " " + u + "  (" + k.pct + "%)</span>";
         return '<td class="c-item"' + lab + '>' +
+          (se && se.sl && se.sl.b && se.sl.b !== "Unbranded" ? '<span class="iv-brand">' + esc(se.sl.b) + "</span>" : "") +
           '<span class="iv-grip" data-grip="' + id + '" title="' +
           et({ en: "Drag to move this line", nl: "Sleep om deze regel te verplaatsen" }) + '"></span>' +
           '<button class="iv-more" type="button" data-more="' + id + '" aria-expanded="' +
@@ -4196,7 +4288,10 @@ body.cmt-on #root { cursor: crosshair; }
           '<span class="iv-name" contenteditable="true" data-f="name" data-ph="' +
           et({ en: "Name this line", nl: "Geef deze regel een naam" }) + '">' + esc(nm) + "</span>" +
           '<button class="iv-del" type="button" data-del="' + id + '" title="' +
-          et({ en: "Delete row", nl: "Regel verwijderen" }) + '">&times;</button>' + bar + "</td>";
+          et({ en: "Delete row", nl: "Regel verwijderen" }) + '">&times;</button>' +
+          (gl ? '<span class="iv-gl">' + esc(gl) + "</span>" : "") +
+          (se ? '<span class="iv-art">' + (se.art ? '<span class="pb-art">' + esc(se.art) + "</span> | " : "") + esc(se.pack) +
+                "  &middot;  " + priceHTML(se) + offerHTML(se) + "</span>" : "") + bar + "</td>";
       case "have":
         return '<td class="c-have"' + lab + '><input class="inv-qty" type="text" inputmode="decimal" autocomplete="off" data-id="' + id +
           '" value="' + (HAVE[r.id] != null ? esc(dec(HAVE[r.id])) : "") + '" aria-label="' + esc(rowName(r)) +
@@ -4209,6 +4304,9 @@ body.cmt-on #root { cursor: crosshair; }
           (k.need == null ? et(SETPAR)
             : k.short > 0 ? tidy(k.short) + " " + esc(unitN(r.unit, k.short)) + eqSpan(r, k.short)
             : et({ en: "covered", nl: "gedekt" })) + "</td>";
+      case "order":
+        var odr = orderOf(r, k);
+        return '<td data-c="order" class="c-order' + (odr ? "" : " none") + '"' + lab + '>' + orderHTML(odr, k) + "</td>";
       case "cost":
         return '<td data-c="cost" class="c-cost num"' + lab + '>' + (!k.priced ? '<span class="iv-tbd">' +
             et({ en: "price TBD", nl: "prijs volgt" }) + "</span>"
@@ -4341,9 +4439,10 @@ body.cmt-on #root { cursor: crosshair; }
     var body = sortRows(ROWS.slice()).map(function (r) {
       var c = calcRow(r);
       if (c.need != null && c.priced) {
-        totNeed += c.need * r.cost; totHave += Math.min(c.have, c.need) * r.cost; totBuy += c.short * r.cost;
+        totNeed += c.need * r.cost; totHave += Math.min(c.have, c.need) * r.cost;
       }
       if (!c.priced) unpriced.push(r.id);
+      totBuy += buyCost(r, c);
       if (FILTER === "short" && c.cls !== "short") return null;
       if (FILTER === "covered" && c.cls !== "covered") return null;
       if (FILTER === "note" && !hasNote(r)) return null;
@@ -4358,7 +4457,7 @@ body.cmt-on #root { cursor: crosshair; }
           'data-k="' + esc(lastPin) + '" class="pin ', 'data-k="' + esc(lastPin) + '" class="pin pin-last ') +
         '<td class="c-plus"></td></tr>';
       return { key: groupOf(r, c.cls), val: groupVal(r), html: html,
-               buyCost: (c.priced && c.short > 0) ? c.short * r.cost : 0 };
+               buyCost: buyCost(r, c) };
     });
 
     /* Rows come out of the map as objects so they can be grouped; a band is
@@ -4379,6 +4478,11 @@ body.cmt-on #root { cursor: crosshair; }
         var ia = a.val ? ov.indexOf(a.val) : 998, ib = b.val ? ov.indexOf(b.val) : 998;
         return (ia < 0 ? 997 : ia) - (ib < 0 ? 997 : ib);
       }
+      /* "Still to buy first" means first, whatever the top line of the list is */
+      if (GROUPBY === "status") {
+        var sb = tt({ en: "Still to buy", nl: "Nog kopen" });
+        return (a.key === sb ? 0 : 1) - (b.key === sb ? 0 : 1);
+      }
       return (order0[a.key] || 0) - (order0[b.key] || 0);
     });
     var shown = 0;
@@ -4388,13 +4492,22 @@ body.cmt-on #root { cursor: crosshair; }
     var stCols = COLS.filter(function (c) { return c.custom && c.type === "status"; });
     var catList = '<datalist id="iv-cats">' +
       catsInUse().map(function (c) { return '<option value="' + esc(c) + '"></option>'; }).join("") + "</datalist>";
+    /* Sligro writes its headings as "Dranken / Siropen": the department
+       small, the shelf it is on as the heading. On a phone the long heading
+       is most of the band, so there a tap on it folds the group, as the rest
+       of the band does; renaming a group is for the wide screen. */
+    var narrow = !!(window.matchMedia && window.matchMedia("(max-width: 719px)").matches);
     var tbody = groups.map(function (g) {
       var n = g.rows.length, shut = !!IVFOLD[g.key];
-      var nameCell = GROUPBY === "cat"
-        ? '<span class="cat-nm" contenteditable="true" data-ren="' + esc(g.key) + '">' + esc(g.key) + "</span>"
-        : '<span class="cat-nm plain">' + esc(g.key) + "</span>";
+      var cut = g.key.indexOf(" / "), sub = cut < 0 ? g.key : g.key.slice(cut + 3);
+      var pa = cut < 0 ? "" : '<span class="cat-pa">' + esc(g.key.slice(0, cut + 3)) + "</span>";
+      var nameCell = GROUPBY === "cat" && !narrow
+        ? '<span class="cat-nm" contenteditable="true" data-ren="' + esc(g.key) + '">' + pa + esc(sub) + "</span>"
+        : '<span class="cat-nm plain">' + (narrow ? "" : pa) + esc(sub) + "</span>";
+      var gl = GROUPBY === "cat" && !isNl() && SL_EN ? SL_EN[g.key] : "";
+      if (gl && gl.toLowerCase() !== sub.toLowerCase()) nameCell += '<span class="cat-gl">' + esc(gl) + "</span>";
       return '<tr class="inv-cat' + (shut ? " shut" : "") + '" data-fold="' + esc(g.key) + '" data-gval="' + esc(g.val) + '">' +
-        '<td colspan="' + span + '"><span class="cat-in"><span class="cat-tw"></span>' + nameCell +
+        '<td colspan="' + span + '"><span class="cat-in">' + (narrow ? pa : "") + '<span class="cat-tw"></span>' + nameCell +
         '<span class="cat-r">' + n + " " +
         tt(n === 1 ? { en: "line", nl: "regel" } : { en: "lines", nl: "regels" }) +
         (g.buy > 0 ? "  ·  " + n2(g.buy) + tt({ en: " to buy", nl: " te kopen" }) : "") +
@@ -4426,6 +4539,8 @@ body.cmt-on #root { cursor: crosshair; }
       '<h3 style="font-size:20px;margin-top:8px">' +
       et({ en: "Staff", nl: "Personeel" }) + "</h3>" +
       '<p class="legend">' +
+      et({ en: "Laid out like the Sligro list: Sligro's headings, in Sligro's order, each line with its brand, Sligro's name, the article number, the pack and today's price, so counting here looks like ordering there. Order says how many packs go in the cart. What comes from another shop follows, under that shop's name. ",
+           nl: "Ingedeeld als de Sligro-lijst: de rubrieken van Sligro, in de volgorde van Sligro, elke regel met het merk, de naam bij Sligro, het artikelnummer, de verpakking en de prijs van vandaag, zodat tellen hier eruitziet als bestellen daar. Bestellen zegt hoeveel verpakkingen in de winkelwagen gaan. Wat uit een andere winkel komt staat daarna, onder de naam van die winkel. " }) +
       et({ en: "Every cell is editable: tap it and type. Drag a line by its handle to move it, into another group to re-file it. Drag a column heading, or use Columns, to rearrange, hide or add columns. + New line sits at the foot of each group. Everything saves to this browser.",
            nl: "Elke cel is aan te passen: tik erop en typ. Sleep een regel aan zijn handvat om hem te verplaatsen, naar een andere groep om hem anders in te delen. Sleep een kolomkop, of gebruik Kolommen, om kolommen te verschuiven, te verbergen of toe te voegen. + Nieuwe regel staat onderaan elke groep. Alles wordt in deze browser bewaard." }) + "</p>" +
       dayDotHTML() +
@@ -4520,11 +4635,11 @@ body.cmt-on #root { cursor: crosshair; }
       "</dt><dd>" + n2(totNeed) + "</dd></div>" +
       "<div><dt>" + et({ en: "Worth of what you already have", nl: "Waarde van wat je al hebt" }) +
       "</dt><dd>" + n2(totHave) + "</dd></div>" +
-      "<div><dt>" + et({ en: "What this week's order costs", nl: "Wat de bestelling van deze week kost" }) +
+      "<div><dt>" + et({ en: "What this week's order costs, in whole packs", nl: "Wat de bestelling van deze week kost, in hele verpakkingen" }) +
       '</dt><dd class="hi">' + n2(totBuy) + "</dd></div></div>" +
       '<p class="legend">' +
-      et({ en: "The last figure is the one to act on: it is the cost of everything still short. Lines marked price TBD are counted in quantity but not in money, so the true order is higher until they are priced.",
-           nl: "Het laatste bedrag is waar je op stuurt: dat is de kostprijs van alles wat nog tekort is. Regels met prijs volgt tellen wel mee in aantal maar niet in geld, dus de echte bestelling valt hoger uit tot ze een prijs hebben." }) + "</p>" +
+      et({ en: "The last figure is the one to act on: everything still short, rounded up to whole packs the way the shop sells them, at today's price, an offer included while it runs. Lines marked price TBD are counted in quantity but not in money, so the true order is higher until they are priced.",
+           nl: "Het laatste bedrag is waar je op stuurt: alles wat nog tekort is, naar boven afgerond op hele verpakkingen zoals de winkel ze verkoopt, tegen de prijs van vandaag, een aanbieding meegerekend zolang die loopt. Regels met prijs volgt tellen wel mee in aantal maar niet in geld, dus de echte bestelling valt hoger uit tot ze een prijs hebben." }) + "</p>" +
       salesHTML() +
       (typeof ownerBlockHTML === "function" ? ownerBlockHTML() : "") +
       "</section>";
@@ -4576,9 +4691,15 @@ body.cmt-on #root { cursor: crosshair; }
     }
     var cost = tr.querySelector('[data-c="cost"]');
     if (cost) {
-      cost.innerHTML = !c.priced
+      cost.innerHTML = (!c.priced
         ? '<span class="iv-tbd">' + et({ en: "price TBD", nl: "prijs volgt" }) + "</span>"
-        : c.short > 0 ? n2(c.short * r.cost) : "-";
+        : c.short > 0 ? n2(c.short * r.cost) : "-") + provenance(r);
+    }
+    var ord = tr.querySelector('[data-c="order"]');
+    if (ord) {
+      var od = orderOf(r, c);
+      ord.className = "c-order" + (od ? "" : " none");
+      ord.innerHTML = orderHTML(od, c);
     }
     refreshTotals();
   }
@@ -4660,7 +4781,7 @@ body.cmt-on #root { cursor: crosshair; }
 
   document.addEventListener("click", function (e) {
     /* Typing in the band name must not fold the group under the caret. */
-    if (e.target.closest && e.target.closest(".cat-nm")) return;
+    if (e.target.closest && e.target.closest('.cat-nm[contenteditable="true"]')) return;
     var m = e.target.closest && e.target.closest("[data-more]");
     if (m) {
       var id = m.dataset.more;
@@ -6026,7 +6147,10 @@ body.cmt-on #root { cursor: crosshair; }
      ================================================================== */
   var SPILL = 0.05;
 
-  /* id, supplier, match, product, article nr, pack as written, qty, unit, price, note */
+  /* id, supplier, match, product, article nr, pack as written, qty, unit, price, note,
+     link, and for Sligro how its list shows the line: b brand, t title,
+     g heading, o place on the list, pr an offer [price, last day], na not
+     deliverable for now. */
   var PRICEBOOK = [
     /* ---- Amazing Oriental. Only these two: the butterfly pea and the
            hibiscus. The rest of the 17.08.26 receipt was a one-off shop, not
@@ -6046,213 +6170,411 @@ body.cmt-on #root { cursor: crosshair; }
     ["ah-glitter","AH","gold-glitter","AH Bakfeest glitterspray goud","","4 g",4,"g",3.99,"",
      "https://www.ah.nl/producten/product/wi583879/ah-bakfeest-glitterspray-goud"],
 
-    /* ---- Sligro: the Bar Inventory list as exported on 25.11.26 at 22:19,
-           93 lines. This list is what the bar buys there, so a Sligro line
-           that is not on it is not carried. The prices are the ones on file
-           from the Soft Opening list of 29.08.26; a line new on the list has
-           no price yet and says TBD rather than carrying a guess. ---- */
-    ["sl-lychee-drink","Sligro","lychee-juice","Maaza Fruitdrank lychee","149110","Krimp 12 petflessen x 50 cl",6000,"ml",20.95,"",
-     "https://www.sligro.nl/p.149110.html/maaza-fruitdrank-lychee-krimp-12-petflessen-x-50-cl.html"],
-    ["sl-orange-fresh","Sligro","orange-juice","Hoogesteger Sinaasappelsap vers","780074","Fles 2 l",2000,"ml",7.65,"",
-     "https://www.sligro.nl/p.780074.html/hoogesteger-sinaasappelsap-vers-fles-2-l.html"],
-    ["sl-pineapple-tidbits","Sligro","pineapple-tidbits","Grand Gérard Ananasstukjes tidbids op lichte siroop","924128","Krimp 6 blikken x 567 g",6,"pcs",10.07,"",
-     "https://www.sligro.nl/p.924128.html/grand-gerard-ananasstukjes-tidbids-op-lichte-siroop-krimp-6-blikken-x-567-g.html"],
-    ["sl-coconut-cream","Sligro","coconut-cream","Kara Zuivere kokosroom","416507","Pak 1 l",1000,"ml",6.06,"",
-     "https://www.sligro.nl/p.416507.html/kara-zuivere-kokosroom-pak-1-l.html"],
-    ["sl-cranberry","Sligro","cranberry","Prominent Cranberrysap","203732","Krimp 6 flessen x 1 l",6000,"ml",19.84,"",
-     "https://www.sligro.nl/p.203732.html/prominent-cranberrysap-krimp-6-flessen-x-1-l.html"],
-    ["sl-straw-puree","Sligro","strawberry-puree","Boiron Fruitpuree aardbei","412540","Per stuk 1 kg",1000,"ml",9.56,{en:"Priced per ml, taking 1 kg of puree as about 1 L.",nl:"Per ml gerekend, 1 kg puree als ongeveer 1 L."},
-     "https://www.sligro.nl/p.412540.html/boiron-fruitpuree-aardbei-per-stuk-1-kg.html"],
-    ["sl-passion-puree","Sligro","passionfruit-puree","Boiron Puree passievrucht","98831","Bak 1 kg",1000,"ml",12.50,{en:"Priced per ml, taking 1 kg of puree as about 1 L.",nl:"Per ml gerekend, 1 kg puree als ongeveer 1 L."},
-     "https://www.sligro.nl/p.98831.html/boiron-puree-passievrucht-bak-1-kg.html"],
-    ["sl-cassis","Sligro","cassis","Boiron Coulis des fruits zwarte bes","148497","Fles 500 g",500,"ml",7.19,{en:"Priced per ml, taking 500 g of coulis as about 500 ml.",nl:"Per ml gerekend, 500 g coulis als ongeveer 500 ml."},
-     "https://www.sligro.nl/p.148497.html/boiron-coulis-des-fruits-zwarte-bes-fles-500-g.html"],
-    ["sl-monin-vanilla","Sligro","monin-vanilla","Monin Vanille siroop","399789","Fles 1 l",1000,"ml",12.69,"",
-     "https://www.sligro.nl/p.399789.html/monin-vanille-siroop-fles-1-l.html"],
-    ["sl-monin-sugar","Sligro","monin-sugar","Monin Rietsuiker siroop","399836","Fles 1 l",1000,"ml",11.06,"",
-     "https://www.sligro.nl/p.399836.html/monin-rietsuiker-siroop-fles-1-l.html"],
-    ["sl-coconut-water","Sligro","coconut-water","Healthy People Kokoswater","57133","Pak 1 l",1000,"ml",2.37,"",
-     "https://www.sligro.nl/p.57133.html/healthy-people-kokoswater-pak-1-l.html"],
-    ["sl-pineapple","Sligro","pineapple-juice","Appelsientje Sap ananas","223812","Doos 8 pakken x 1 l",8000,"ml",20.39,"",
-     "https://www.sligro.nl/p.223812.html/appelsientje-sap-ananas-doos-8-pakken-x-1-l.html"],
-    ["sl-maple","Sligro","maple","Sprague's Maple Farms Siroop ahorn","66308","Flesje 23,7 cl",237,"ml",10.60,"",
-     "https://www.sligro.nl/p.66308.html/sprague-s-maple-farms-siroop-ahorn-flesje-23-7-cl.html"],
-    ["sl-limes","Sligro","limes","Unbranded limoenen","183226","Doos 48 stuks",48,"pcs",14.38,"",
-     "https://www.sligro.nl/p.183226.html/unbranded-limoenen-doos-48-stuks.html"],
-    ["sl-lemon","Sligro","lemons","Unbranded Citroen","668696","Krat 6 kg",6000,"g",19.20,"",
-     "https://www.sligro.nl/p.668696.html/unbranded-citroen-krat-6-kg.html"],
-    ["sl-boiron-lemon","Sligro","boiron-lemon","Boiron Gepasteuriseerde citroen puree","217502","Pak 1 l",1000,"ml",7.49,"",
-     "https://www.sligro.nl/p.217502.html/boiron-gepasteuriseerde-citroen-puree-pak-1-l.html"],
-    ["sl-boiron-lime","Sligro","boiron-lime","Boiron Gepasteuriseerde limoen puree","217504","Pak 1 l",1000,"ml",8.00,"",
-     "https://www.sligro.nl/p.217504.html/boiron-gepasteuriseerde-limoen-puree-pak-1-l.html"],
-    ["sl-oranges","Sligro","oranges","Unbranded Perssinaasappel","676241","Doos 15 kilo",15000,"g",18.30,"",
-     "https://www.sligro.nl/p.676241.html/unbranded-perssinaasappel-doos-15-kilo.html"],
-    ["sl-strawberries","Sligro","strawberries","Hoogstraten Aardbeien","507714","Bakje 500 gram",500,"g",4.32,"",
-     "https://www.sligro.nl/p.507714.html/hoogstraten-aardbeien-bakje-500-gram.html"],
-    ["sl-grapes","Sligro","grapes","Unbranded Druiven wit pitloos","137373","Bak 500 g",500,"g",2.68,"",
-     "https://www.sligro.nl/p.137373.html/unbranded-druiven-wit-pitloos-bak-500-g.html"],
-    ["sl-mint","Sligro","mint","DeliHerbs Munt","185323","Bak 200 g",200,"g",5.05,"",
-     "https://www.sligro.nl/p.185323.html/deliherbs-munt-bak-200-g.html"],
-    ["sl-thyme","Sligro","thyme","DeliHerbs Tijm","514627","Zakje 70 g",70,"g",2.09,"",
-     "https://www.sligro.nl/p.514627.html/deliherbs-tijm-zakje-70-g.html"],
-    ["sl-jalapeno","Sligro","jalapeno-g","Unbranded Jalapeno peper","204506","Bak 200 g",200,"g",3.03,"",
-     "https://www.sligro.nl/p.204506.html/unbranded-jalapeno-peper-bak-200-g.html"],
-    ["sl-passionfruit","Sligro","passionfruit-g","Unbranded Passievrucht","515194","Doos 2 kilo",2000,"g",15.39,"",
-     "https://www.sligro.nl/p.515194.html/unbranded-passievrucht-doos-2-kilo.html"],
-    ["sl-oat","Sligro","oat-milk","Oatly Haverdrank barista lactosevrij","26375","Doos 6 pakken x 1 l",6000,"ml",16.24,"",
-     "https://www.sligro.nl/p.26375.html/oatly-haverdrank-barista-lactosevrij-doos-6-pakken-x-1-l.html"],
+    /* ---- Sligro: the Bar Inventory list, 93 lines, in Sligro's own order and
+           under Sligro's own headings, so counting looks like ordering. Prices
+           from the list as printed on 26.11.26, excluding VAT; an offer price
+           is kept beside the regular one with the day it ends. ---- */
+    ["sl-ginger","Sligro","ginger","Gember","174662","Zak 500 g",500,"g",2.85,"",
+     "https://www.sligro.nl/p.174662.html/unbranded-gember-zak-500-g.html",
+     {"b": "Unbranded", "t": "Gember", "g": "Aardappelen, Groenten & Fruit / Groenten", "o": 0}],
+    ["sl-jalapeno","Sligro","jalapeno-g","Jalapeno peper","204506","Bak 200 g",200,"g",3.03,"",
+     "https://www.sligro.nl/p.204506.html/unbranded-jalapeno-peper-bak-200-g.html",
+     {"b": "Unbranded", "t": "Jalapeno peper", "g": "Aardappelen, Groenten & Fruit / Groenten", "o": 1}],
+    ["sl-strawberries","Sligro","strawberries","Hoogstraten Aardbeien","507714","Bakje 500 gram",500,"g",7.69,"",
+     "https://www.sligro.nl/p.507714.html/hoogstraten-aardbeien-bakje-500-gram.html",
+     {"b": "Hoogstraten", "t": "Aardbeien", "g": "Aardappelen, Groenten & Fruit / Fruit", "o": 2}],
+    ["sl-lemon","Sligro","lemons","Citroen","668696","Krat 6 kg",6000,"g",16.31,"",
+     "https://www.sligro.nl/p.668696.html/unbranded-citroen-krat-6-kg.html",
+     {"b": "Unbranded", "t": "Citroen", "g": "Aardappelen, Groenten & Fruit / Fruit", "o": 3}],
+    ["sl-grapes","Sligro","grapes","Druiven wit pitloos","137373","Bak 500 g",500,"g",3.17,"",
+     "https://www.sligro.nl/p.137373.html/unbranded-druiven-wit-pitloos-bak-500-g.html",
+     {"b": "Unbranded", "t": "Druiven wit pitloos", "g": "Aardappelen, Groenten & Fruit / Fruit", "o": 4}],
+    ["sl-limes","Sligro","limes","Limoenen","183226","Doos 48 stuks",48,"pcs",16.31,"",
+     "https://www.sligro.nl/p.183226.html/unbranded-limoenen-doos-48-stuks.html",
+     {"b": "Unbranded", "t": "Limoenen", "g": "Aardappelen, Groenten & Fruit / Fruit", "o": 5}],
+    ["sl-passionfruit","Sligro","passionfruit-g","Passievrucht","515194","Doos 2 kilo",2000,"g",13.99,"",
+     "https://www.sligro.nl/p.515194.html/unbranded-passievrucht-doos-2-kilo.html",
+     {"b": "Unbranded", "t": "Passievrucht", "g": "Aardappelen, Groenten & Fruit / Fruit", "o": 6}],
+    ["sl-oranges","Sligro","oranges","Perssinaasappel","676241","Doos 15 kilo",15000,"g",19.26,"",
+     "https://www.sligro.nl/p.676241.html/unbranded-perssinaasappel-doos-15-kilo.html",
+     {"b": "Unbranded", "t": "Perssinaasappel", "g": "Aardappelen, Groenten & Fruit / Fruit", "o": 7, "pr": [14.99, "2026-11-28"]}],
+    ["sl-basil","Sligro","basil","DeliHerbs Basilicum","38351","Bak 200 g",200,"g",5.22,"",
+     "https://www.sligro.nl/p.38351.html/deliherbs-basilicum-bak-200-g.html",
+     {"b": "DeliHerbs", "t": "Basilicum", "g": "Aardappelen, Groenten & Fruit / Verse kruiden, cressen & kiemen", "o": 8}],
+    ["sl-mint","Sligro","mint","DeliHerbs Munt","185323","Bak 200 g",200,"g",5.32,"",
+     "https://www.sligro.nl/p.185323.html/deliherbs-munt-bak-200-g.html",
+     {"b": "DeliHerbs", "t": "Munt", "g": "Aardappelen, Groenten & Fruit / Verse kruiden, cressen & kiemen", "o": 9}],
+    ["sl-rosemary","Sligro","rosemary","DeliHerbs Rozemarijn","517366","Zakje 70 g",70,"g",1.99,"",
+     "https://www.sligro.nl/p.517366.html/deliherbs-rozemarijn-zakje-70-g.html",
+     {"b": "DeliHerbs", "t": "Rozemarijn", "g": "Aardappelen, Groenten & Fruit / Verse kruiden, cressen & kiemen", "o": 10}],
+    ["sl-thyme","Sligro","thyme","DeliHerbs Tijm","514627","Zakje 70 g",70,"g",2.19,"",
+     "https://www.sligro.nl/p.514627.html/deliherbs-tijm-zakje-70-g.html",
+     {"b": "DeliHerbs", "t": "Tijm", "g": "Aardappelen, Groenten & Fruit / Verse kruiden, cressen & kiemen", "o": 11}],
+    ["sl-alpro-coconut","Sligro","coconut-milk-barista","Alpro Barista kokosnoot","161132","Doos 8 pakken x 1 l",8000,"ml",22.50,"",
+     "https://www.sligro.nl/p.161132.html/alpro-barista-kokosnoot-doos-8-pakken-x-1-l.html",
+     {"b": "Alpro", "t": "Barista kokosnoot", "g": "Kaas, zuivel & vleeswaren / Melk & yoghurtdranken", "o": 12, "pr": [18.79, "2026-11-30"]}],
+    ["sl-milk","Sligro","milk","Campina Langlekker Volle melk","109347","Doos 12 pakken x 1 l",12000,"ml",20.85,"",
+     "https://www.sligro.nl/p.109347.html/campina-langlekker-volle-melk-doos-12-pakken-x-1-l.html",
+     {"b": "Campina Langlekker", "t": "Volle melk", "g": "Kaas, zuivel & vleeswaren / Melk & yoghurtdranken", "o": 13}],
+    ["sl-oat","Sligro","oat-milk","Oatly Haverdrank barista lactosevrij","26375","Doos 6 pakken x 1 l",6000,"ml",16.25,"",
+     "https://www.sligro.nl/p.26375.html/oatly-haverdrank-barista-lactosevrij-doos-6-pakken-x-1-l.html",
+     {"b": "Oatly", "t": "Haverdrank barista lactosevrij", "g": "Kaas, zuivel & vleeswaren / Melk & yoghurtdranken", "o": 14, "pr": [12.39, "2026-11-30"]}],
+    ["sl-egg-white","Sligro","egg-white","Danaeg Scharrel eiwit","306480","Fles 1 l",1000,"ml",11.36,"",
+     "https://www.sligro.nl/p.306480.html/danaeg-scharrel-eiwit-fles-1-l.html",
+     {"b": "Danaeg", "t": "Scharrel eiwit", "g": "Kaas, zuivel & vleeswaren / Eieren", "o": 15}],
     ["sl-crushed-ice","Sligro","crushed-ice","528 Crushed ice","216777","Zak 2 kg",2000,"g",2.65,"",
-     "https://www.sligro.nl/p.216777.html/528-crushed-ice-zak-2-kg.html"],
-    ["sl-straw-15","Sligro","straws-15","Take Dis Cocktailrietje zwart papier 15cm","118644","Doos 250 stuks",1,"pcs",4.80,"",
-     "https://www.sligro.nl/p.118644.html/take-dis-cocktailrietje-zwart-papier-15cm-doos-250-stuks.html"],
-    ["sl-straw-24","Sligro","straws-24","Take Dis Cocktailrietje zwart papier 24cm 250st","118648","Pak 250 stuks",1,"pcs",5.25,"",
-     "https://www.sligro.nl/p.118648.html/take-dis-cocktailrietje-zwart-papier-24cm-250st-pak-250-stuks.html"],
-    ["sl-gingerbeer","Sligro","ginger-beer-l","Royal Club Ginger beer","155571","Krimp 6 petflessen x 1 l",6000,"ml",8.32,"",
-     "https://www.sligro.nl/p.155571.html/royal-club-ginger-beer-krimp-6-petflessen-x-1-l.html"],
-    ["sl-cola","Sligro","cola","Coca-Cola Cola regular","192603","Krat 24 flesjes x 20 cl",24,"pcs",13.13,"",
-     "https://www.sligro.nl/p.192603.html/coca-cola-cola-regular-krat-24-flesjes-x-20-cl.html"],
-    ["sl-cola-zero","Sligro","cola-zero","Coca-Cola Cola zero sugar","940174","Krat 24 flesjes x 20 cl",24,"pcs",13.13,"",
-     "https://www.sligro.nl/p.940174.html/coca-cola-cola-zero-sugar-krat-24-flesjes-x-20-cl.html"],
-    ["sl-fanta","Sligro","fanta","Fanta Orange","115994","Krat 24 flesjes x 20 cl",24,"pcs",13.13,"",
-     "https://www.sligro.nl/p.115994.html/fanta-orange-krat-24-flesjes-x-20-cl.html"],
-    ["sl-redbull","Sligro","red-bull","Red Bull Energydrink","178786","Tray 24 blikjes x 25 cl",24,"pcs",29.70,"",
-     "https://www.sligro.nl/p.178786.html/red-bull-energydrink-tray-24-blikjes-x-25-cl.html"],
-    ["sl-tonic","Sligro","tonic","Royal Bliss Signature tonic water","195115","Krat 24 flesjes x 20 cl",24,"pcs",14.23,"",
-     "https://www.sligro.nl/p.195115.html/royal-bliss-signature-tonic-water-krat-24-flesjes-x-20-cl.html"],
-    ["sl-icetea-sparkling","Sligro","icetea-sparkling","Lipton Ice Tea Ice Tea Sparkling","935409","Krat 28 flesjes x 20 cl",28,"pcs",17.69,"",
-     "https://www.sligro.nl/p.935409.html/lipton-ice-tea-ice-tea-sparkling-krat-28-flesjes-x-20-cl.html"],
+     "https://www.sligro.nl/p.216777.html/528-crushed-ice-zak-2-kg.html",
+     {"b": "528", "t": "Crushed ice", "g": "Maaltijden, snacks & IJs / IJs", "o": 16}],
+    ["sl-ice-cubes","Sligro","ice-cubes","528 IJsblokjes","215254","Zak 2 kg",2000,"g",2.56,"",
+     "https://www.sligro.nl/p.215254.html/528-ijsblokjes-zak-2-kg.html",
+     {"b": "528", "t": "IJsblokjes", "g": "Maaltijden, snacks & IJs / IJs", "o": 17}],
+    ["sl-coconut-cream","Sligro","coconut-cream","Kara Zuivere kokosroom","416507","Pak 1 l",1000,"ml",6.06,"",
+     "https://www.sligro.nl/p.416507.html/kara-zuivere-kokosroom-pak-1-l.html",
+     {"b": "Kara", "t": "Zuivere kokosroom", "g": "Kruidenierswaren / Sauzen, soepen & dressings", "o": 18, "pr": [4.47, "2026-11-30"]}],
+    ["sl-straw-puree","Sligro","strawberry-puree","Boiron Fruitpuree aardbei","412540","Per stuk 1 kg",1000,"ml",9.56,{en:"Priced per ml, taking 1 kg of puree as about 1 L.",nl:"Per ml gerekend, 1 kg puree als ongeveer 1 L."},
+     "https://www.sligro.nl/p.412540.html/boiron-fruitpuree-aardbei-per-stuk-1-kg.html",
+     {"b": "Boiron", "t": "Fruitpuree aardbei", "g": "Kruidenierswaren / Conserven & tafelzuren", "o": 19}],
+    ["sl-passion-puree","Sligro","passionfruit-puree","Boiron Puree passievrucht","98831","Bak 1 kg",1000,"ml",10.95,{en:"Priced per ml, taking 1 kg of puree as about 1 L.",nl:"Per ml gerekend, 1 kg puree als ongeveer 1 L."},
+     "https://www.sligro.nl/p.98831.html/boiron-puree-passievrucht-bak-1-kg.html",
+     {"b": "Boiron", "t": "Puree passievrucht", "g": "Kruidenierswaren / Conserven & tafelzuren", "o": 20}],
+    ["sl-pineapple-tidbits","Sligro","pineapple-tidbits","Grand Gérard Ananasstukjes tidbids op lichte siroop","924128","Krimp 6 blikken x 567 g",6,"pcs",11.10,"",
+     "https://www.sligro.nl/p.924128.html/grand-gerard-ananasstukjes-tidbids-op-lichte-siroop-krimp-6-blikken-x-567-g.html",
+     {"b": "Grand Gérard", "t": "Ananasstukjes tidbids op lichte siroop", "g": "Kruidenierswaren / Conserven & tafelzuren", "o": 21}],
+    ["sl-lychees","Sligro","lychees-canned","Grand Gérard Lychees op lichte siroop","119699","Krimp 3 blikken x 567 g",1701,"g",6.42,"",
+     "https://www.sligro.nl/p.119699.html/grand-gerard-lychees-op-lichte-siroop-krimp-3-blikken-x-567-g.html",
+     {"b": "Grand Gérard", "t": "Lychees op lichte siroop", "g": "Kruidenierswaren / Conserven & tafelzuren", "o": 22}],
+    ["sl-honey","Sligro","honey-sticks","Alex Meijer Honing sticks","197407","Doos 100 stuks x 8 g",1,"pcs",15.65,"",
+     "https://www.sligro.nl/p.197407.html/alex-meijer-honing-sticks-doos-100-stuks-x-8-g.html",
+     {"b": "Alex Meijer", "t": "Honing sticks", "g": "Kruidenierswaren / Ontbijtgranen & broodbeleg", "o": 23}],
+    ["sl-peppermints","Sligro","peppermints","Wilhelmina Pepermunt","129900","Doos 200 stuks",1,"pcs",10.73,"",
+     "https://www.sligro.nl/p.129900.html/wilhelmina-pepermunt-doos-200-stuks.html",
+     {"b": "Wilhelmina", "t": "Pepermunt", "g": "Kruidenierswaren / Snoep & chocolade", "o": 24}],
+    ["sl-sugar-bags","Sligro","sugar-bags","Alex Meijer Suikerzakjes","188806","Doos 500 stuks x 4 g",1,"pcs",8.97,"",
+     "https://www.sligro.nl/p.188806.html/alex-meijer-suikerzakjes-doos-500-stuks-x-4-g.html",
+     {"b": "Alex Meijer", "t": "Suikerzakjes", "g": "Kruidenierswaren / Bak- & ijsbenodigdheden", "o": 25}],
+    ["sl-cassis","Sligro","cassis","Boiron Coulis des fruits zwarte bes","148497","Fles 500 g",500,"ml",7.19,{en:"Priced per ml, taking 500 g of coulis as about 500 ml.",nl:"Per ml gerekend, 500 g coulis als ongeveer 500 ml."},
+     "https://www.sligro.nl/p.148497.html/boiron-coulis-des-fruits-zwarte-bes-fles-500-g.html",
+     {"b": "Boiron", "t": "Coulis des fruits zwarte bes", "g": "Kruidenierswaren / Bak- & ijsbenodigdheden", "o": 26}],
+    ["sl-cola","Sligro","cola","Coca-Cola Cola regular","192603","Krat 24 flesjes x 20 cl",24,"pcs",13.65,"",
+     "https://www.sligro.nl/p.192603.html/coca-cola-cola-regular-krat-24-flesjes-x-20-cl.html",
+     {"b": "Coca-Cola", "t": "Cola regular", "g": "Dranken / Frisdranken", "o": 27}],
+    ["sl-cola-zero","Sligro","cola-zero","Coca-Cola Cola zero sugar","940174","Krat 24 flesjes x 20 cl",24,"pcs",13.65,"",
+     "https://www.sligro.nl/p.940174.html/coca-cola-cola-zero-sugar-krat-24-flesjes-x-20-cl.html",
+     {"b": "Coca-Cola", "t": "Cola zero sugar", "g": "Dranken / Frisdranken", "o": 28}],
+    ["sl-ginger-ale","Sligro","ginger-ale","Double Dutch Ginger ale","156345","Tray 24 flesjes x 20 cl",24,"pcs",26.72,"",
+     "https://www.sligro.nl/p.156345.html/double-dutch-ginger-ale-tray-24-flesjes-x-20-cl.html",
+     {"b": "Double Dutch", "t": "Ginger ale", "g": "Dranken / Frisdranken", "o": 29}],
+    ["sl-fanta-cassis","Sligro","fanta-cassis","Fanta Cassis","127441","Krat 24 flesjes x 20 cl",24,"pcs",14.75,"",
+     "https://www.sligro.nl/p.127441.html/fanta-cassis-krat-24-flesjes-x-20-cl.html",
+     {"b": "Fanta", "t": "Cassis", "g": "Dranken / Frisdranken", "o": 30}],
+    ["sl-fanta","Sligro","fanta","Fanta Orange","115994","Krat 24 flesjes x 20 cl",24,"pcs",13.65,"",
+     "https://www.sligro.nl/p.115994.html/fanta-orange-krat-24-flesjes-x-20-cl.html",
+     {"b": "Fanta", "t": "Orange", "g": "Dranken / Frisdranken", "o": 31}],
     ["sl-icetea-peach","Sligro","icetea-peach","Lipton Ice Tea Ice Tea Peach","180113","Tray 28 flesjes x 20 cl",28,"pcs",17.69,"",
-     "https://www.sligro.nl/p.180113.html/lipton-ice-tea-ice-tea-peach-tray-28-flesjes-x-20-cl.html"],
+     "https://www.sligro.nl/p.180113.html/lipton-ice-tea-ice-tea-peach-tray-28-flesjes-x-20-cl.html",
+     {"b": "Lipton Ice Tea", "t": "Ice Tea Peach", "g": "Dranken / Frisdranken", "o": 32}],
+    ["sl-icetea-sparkling","Sligro","icetea-sparkling","Lipton Ice Tea Ice Tea Sparkling","935409","Krat 28 flesjes x 20 cl",28,"pcs",17.69,"",
+     "https://www.sligro.nl/p.935409.html/lipton-ice-tea-ice-tea-sparkling-krat-28-flesjes-x-20-cl.html",
+     {"b": "Lipton Ice Tea", "t": "Ice Tea Sparkling", "g": "Dranken / Frisdranken", "o": 33}],
+    ["sl-gingerbeer-small","Sligro","ginger-beer-small","Royal Bliss Ginger beer","195110","Krat 24 flesjes x 20 cl",24,"pcs",14.79,"",
+     "https://www.sligro.nl/p.195110.html/royal-bliss-ginger-beer-krat-24-flesjes-x-20-cl.html",
+     {"b": "Royal Bliss", "t": "Ginger beer", "g": "Dranken / Frisdranken", "o": 34}],
+    ["sl-tonic","Sligro","tonic","Royal Bliss Signature tonic water","195115","Krat 24 flesjes x 20 cl",24,"pcs",14.79,"",
+     "https://www.sligro.nl/p.195115.html/royal-bliss-signature-tonic-water-krat-24-flesjes-x-20-cl.html",
+     {"b": "Royal Bliss", "t": "Signature tonic water", "g": "Dranken / Frisdranken", "o": 35}],
+    ["sl-bitter-lemon","Sligro","bitter-lemon","Royal Club Bitter lemon","275456","Krat 28 flesjes x 20 cl",28,"pcs",17.19,"",
+     "https://www.sligro.nl/p.275456.html/royal-club-bitter-lemon-krat-28-flesjes-x-20-cl.html",
+     {"b": "Royal Club", "t": "Bitter lemon", "g": "Dranken / Frisdranken", "o": 36}],
+    ["sl-gingerbeer","Sligro","ginger-beer-l","Royal Club Ginger beer","155571","Krimp 6 petflessen x 1 l",6000,"ml",8.32,"",
+     "https://www.sligro.nl/p.155571.html/royal-club-ginger-beer-krimp-6-petflessen-x-1-l.html",
+     {"b": "Royal Club", "t": "Ginger beer", "g": "Dranken / Frisdranken", "o": 37}],
+    ["sl-sprite","Sligro","sprite","Sprite Zero sugar","180496","Krat 24 flesjes x 20 cl",24,"pcs",13.65,"",
+     "https://www.sligro.nl/p.180496.html/sprite-zero-sugar-krat-24-flesjes-x-20-cl.html",
+     {"b": "Sprite", "t": "Zero sugar", "g": "Dranken / Frisdranken", "o": 38}],
+    ["sl-acqua-panna","Sligro","acqua-panna","Acqua Panna Mineraalwater Koolzuurvrij","395311","Doos 4 multipacks x 6 flesjes x 25 cl",24,"pcs",14.15,"",
+     "https://www.sligro.nl/p.395311.html/acqua-panna-mineraalwater-koolzuurvrij-doos-4-multipacks-x-6-flesjes-x-25-cl.html",
+     {"b": "Acqua Panna", "t": "Mineraalwater Koolzuurvrij", "g": "Dranken / Bron- en mineraalwater", "o": 39}],
+    ["sl-san-pellegrino","Sligro","san-pellegrino","San Pellegrino Mineraalwater Koolzuurhoudend","798865","Doos 12 flessen x 75 cl",12,"pcs",15.40,"",
+     "https://www.sligro.nl/p.798865.html/san-pellegrino-mineraalwater-koolzuurhoudend-doos-12-flessen-x-75-cl.html",
+     {"b": "San Pellegrino", "t": "Mineraalwater Koolzuurhoudend", "g": "Dranken / Bron- en mineraalwater", "o": 40}],
     ["sl-spa-rood","Sligro","spa-rood","Spa Intense Bruisend natuurlijk mineraalwater","164317","Krat 28 flesjes x 25 cl",28,"pcs",9.27,"",
-     "https://www.sligro.nl/p.164317.html/spa-intense-bruisend-natuurlijk-mineraalwater-krat-28-flesjes-x-25-cl.html"],
+     "https://www.sligro.nl/p.164317.html/spa-intense-bruisend-natuurlijk-mineraalwater-krat-28-flesjes-x-25-cl.html",
+     {"b": "Spa Intense", "t": "Bruisend natuurlijk mineraalwater", "g": "Dranken / Bron- en mineraalwater", "o": 41}],
     ["sl-spa-rood-l","Sligro","spa-rood-l","Spa Intense Bruisend natuurlijk mineraalwater, by the litre","164317","Krat 28 x 25 cl is 7 L",7000,"ml",9.27,
      {en:"Same crate as the bottled line, counted in litres for the bar.",nl:"Zelfde krat als de flessenregel, in liters geteld voor de bar."},
-     "https://www.sligro.nl/p.164317.html/spa-intense-bruisend-natuurlijk-mineraalwater-krat-28-flesjes-x-25-cl.html"],
+     "https://www.sligro.nl/p.164317.html/spa-intense-bruisend-natuurlijk-mineraalwater-krat-28-flesjes-x-25-cl.html",
+     {"b": "Spa Intense", "t": "Bruisend natuurlijk mineraalwater, per liter voor de bar", "g": "Dranken / Bron- en mineraalwater", "o": 41.5, "dup": 1}],
     ["sl-spa-blauw","Sligro","spa-blauw","Spa Reine Natuurlijk mineraalwater koolzuurvrij","164367","Krat 28 flesjes x 25 cl",28,"pcs",9.27,"",
-     "https://www.sligro.nl/p.164367.html/spa-reine-natuurlijk-mineraalwater-koolzuurvrij-krat-28-flesjes-x-25-cl.html"],
+     "https://www.sligro.nl/p.164367.html/spa-reine-natuurlijk-mineraalwater-koolzuurvrij-krat-28-flesjes-x-25-cl.html",
+     {"b": "Spa Reine", "t": "Natuurlijk mineraalwater koolzuurvrij", "g": "Dranken / Bron- en mineraalwater", "o": 42}],
     ["sl-spa-blauw-l","Sligro","spa-blauw-l","Spa Reine Natuurlijk mineraalwater koolzuurvrij, by the litre","164367","Krat 28 x 25 cl is 7 L",7000,"ml",9.27,
      {en:"Same crate as the bottled line, counted in litres for the bar.",nl:"Zelfde krat als de flessenregel, in liters geteld voor de bar."},
-     "https://www.sligro.nl/p.164367.html/spa-reine-natuurlijk-mineraalwater-koolzuurvrij-krat-28-flesjes-x-25-cl.html"],
+     "https://www.sligro.nl/p.164367.html/spa-reine-natuurlijk-mineraalwater-koolzuurvrij-krat-28-flesjes-x-25-cl.html",
+     {"b": "Spa Reine", "t": "Natuurlijk mineraalwater koolzuurvrij, per liter voor de bar", "g": "Dranken / Bron- en mineraalwater", "o": 42.5, "dup": 1}],
+    ["sl-pineapple","Sligro","pineapple-juice","Appelsientje Sap ananas","223812","Doos 8 pakken x 1 l",8000,"ml",20.39,"",
+     "https://www.sligro.nl/p.223812.html/appelsientje-sap-ananas-doos-8-pakken-x-1-l.html",
+     {"b": "Appelsientje", "t": "Sap ananas", "g": "Dranken / Sappen, smoothies & fruitdranken", "o": 43}],
     ["sl-appelaere","Sligro","appelaere","De Appelaere Appelaere appelsap","266614","Krat 24 flesjes x 20 cl",24,"pcs",24.90,"",
-     "https://www.sligro.nl/p.266614.html/de-appelaere-appelaere-appelsap-krat-24-flesjes-x-20-cl.html"],
-    ["sl-milk","Sligro","milk","Campina Langlekker Volle melk","109347","Doos 12 pakken x 1 l",12000,"ml",20.64,"",
-     "https://www.sligro.nl/p.109347.html/campina-langlekker-volle-melk-doos-12-pakken-x-1-l.html"],
-    ["sl-picks","Sligro","picks","Take Dis Prikker bamboe met krul zwart 9cm","204561","Pak 100 stuks",1,"pcs",5.10,"",
-     "https://www.sligro.nl/p.204561.html/take-dis-prikker-bamboe-met-krul-zwart-9cm-pak-100-stuks.html"],
-    ["sl-sprite","Sligro","sprite","Sprite Zero sugar","180496","Krat 24 flesjes x 20 cl",24,"pcs",13.13,"",
-     "https://www.sligro.nl/p.180496.html/sprite-zero-sugar-krat-24-flesjes-x-20-cl.html"],
-    ["sl-ginger","Sligro","ginger","Unbranded Gember","174662","Zak 500 g",500,"g",3.17,"",
-     "https://www.sligro.nl/p.174662.html/unbranded-gember-zak-500-g.html"],
-    ["sl-labels","Sligro","labels","Labellord Etiket koeling / magazijn","955331","Rol 250 stuks",1,"pcs",null,"",
-     "https://www.sligro.nl/p.955331.html/labellord-etiket-koeling-magazijn-rol-250-stuks.html"],
-    ["sl-refresh-wipes","Sligro","refresh-wipes","Take Dis Verfrissingsdoekjes","116926","Pak 240 stuks",1,"pcs",null,"",
-     "https://www.sligro.nl/p.116926.html/take-dis-verfrissingsdoekjes-pak-240-stuks.html"],
-    ["sl-napkins","Sligro","napkins","Take Dis Servetten Airlaid 1/8 vouw","721046","Pak 60 stuks",1,"pcs",null,"",
-     "https://www.sligro.nl/p.721046.html/take-dis-servetten-airlaid-1-8-vouw-pak-60-stuks.html"],
-    ["sl-peppermints","Sligro","peppermints","Wilhelmina Pepermunt","129900","Doos 200 stuks",1,"pcs",null,"",
-     "https://www.sligro.nl/p.129900.html/wilhelmina-pepermunt-doos-200-stuks.html"],
-    ["sl-san-pellegrino","Sligro","san-pellegrino","San Pellegrino Mineraalwater Koolzuurhoudend","798865","Doos 12 flessen x 75 cl",12,"pcs",null,"",
-     "https://www.sligro.nl/p.798865.html/san-pellegrino-mineraalwater-koolzuurhoudend-doos-12-flessen-x-75-cl.html"],
-    ["sl-ice-cubes","Sligro","ice-cubes","528 IJsblokjes","215254","Zak 2 kg",2000,"g",null,"",
-     "https://www.sligro.nl/p.215254.html/528-ijsblokjes-zak-2-kg.html"],
-    ["sl-lychees","Sligro","lychees-canned","Grand Gérard Lychees op lichte siroop","119699","Krimp 3 blikken x 567 g",1701,"g",6.42,"",
-     "https://www.sligro.nl/p.119699.html/grand-gerard-lychees-op-lichte-siroop-krimp-3-blikken-x-567-g.html"],
-    ["sl-alpro-coconut","Sligro","coconut-milk-barista","Alpro Barista kokosnoot","161132","Doos 8 pakken x 1 l",8000,"ml",null,"",
-     "https://www.sligro.nl/p.161132.html/alpro-barista-kokosnoot-doos-8-pakken-x-1-l.html"],
-    ["sl-stampers","Sligro","stampers","Sier Tonic stampers","274421","Doos 100 stuks",1,"pcs",null,"",
-     "https://www.sligro.nl/p.274421.html/sier-tonic-stampers-doos-100-stuks.html"],
-    ["sl-honey","Sligro","honey-sticks","Alex Meijer Honing sticks","197407","Doos 100 stuks x 8 g",1,"pcs",null,"",
-     "https://www.sligro.nl/p.197407.html/alex-meijer-honing-sticks-doos-100-stuks-x-8-g.html"],
-    ["sl-sugar-bags","Sligro","sugar-bags","Alex Meijer Suikerzakjes","188806","Doos 500 stuks x 4 g",1,"pcs",null,"",
-     "https://www.sligro.nl/p.188806.html/alex-meijer-suikerzakjes-doos-500-stuks-x-4-g.html"],
-    ["sl-fanta-cassis","Sligro","fanta-cassis","Fanta Cassis","127441","Krat 24 flesjes x 20 cl",24,"pcs",null,"",
-     "https://www.sligro.nl/p.127441.html/fanta-cassis-krat-24-flesjes-x-20-cl.html"],
-    ["sl-acqua-panna","Sligro","acqua-panna","Acqua Panna Mineraalwater Koolzuurvrij","395311","Doos 4 multipacks x 6 flesjes x 25 cl",24,"pcs",null,"",
-     "https://www.sligro.nl/p.395311.html/acqua-panna-mineraalwater-koolzuurvrij-doos-4-multipacks-x-6-flesjes-x-25-cl.html"],
-    ["sl-tea","Sligro","tea","Lipton Feel Good Selection Assortimentsdoos thee","211553","Doos 108 zakken",1,"pcs",null,"",
-     "https://www.sligro.nl/p.211553.html/lipton-feel-good-selection-assortimentsdoos-thee-doos-108-zakken.html"],
-    ["sl-monin-grenadine","Sligro","grenadine","Monin Grenadine siroop","508396","Fles 70 cl",700,"ml",null,"",
-     "https://www.sligro.nl/p.508396.html/monin-grenadine-siroop-fles-70-cl.html"],
-    ["sl-ajax","Sligro","cleaner","Ajax Allesreiniger limoen","658345","Jerrycan 5 l",1,"pcs",null,"",
-     "https://www.sligro.nl/p.658345.html/ajax-allesreiniger-limoen-jerrycan-5-l.html"],
-    ["sl-detergent","Sligro","detergent","Neutral Wasmiddel vloeibaar kleur","64604","Fles 1 l",1,"pcs",null,"",
-     "https://www.sligro.nl/p.64604.html/neutral-wasmiddel-vloeibaar-kleur-fles-1-l.html"],
-    ["sl-wc","Sligro","wc-cleaner","Felicia Wc reiniger voor frisse geur","198912","Krimp 3 flessen x 75 cl",1,"pcs",null,"",
-     "https://www.sligro.nl/p.198912.html/felicia-wc-reiniger-voor-frisse-geur-krimp-3-flessen-x-75-cl.html"],
-    ["sl-gingerbeer-small","Sligro","ginger-beer-small","Royal Bliss Ginger beer","195110","Krat 24 flesjes x 20 cl",24,"pcs",null,"",
-     "https://www.sligro.nl/p.195110.html/royal-bliss-ginger-beer-krat-24-flesjes-x-20-cl.html"],
-    ["sl-bitter-lemon","Sligro","bitter-lemon","Royal Club Bitter lemon","275456","Krat 28 flesjes x 20 cl",28,"pcs",null,"",
-     "https://www.sligro.nl/p.275456.html/royal-club-bitter-lemon-krat-28-flesjes-x-20-cl.html"],
-    ["sl-ginger-ale","Sligro","ginger-ale","Double Dutch Ginger ale","156345","Tray 24 flesjes x 20 cl",24,"pcs",null,"",
-     "https://www.sligro.nl/p.156345.html/double-dutch-ginger-ale-tray-24-flesjes-x-20-cl.html"],
-    ["sl-gloves-xl","Sligro","gloves-xl","Felicia Handschoenen nitril zwart, ongepoederd, getextureerd, maat XL","27539","Doos 100 stuks",1,"pcs",null,"",
-     "https://www.sligro.nl/p.27539.html/felicia-handschoenen-nitril-zwart-ongepoederd-getextureerd-maat-xl-doos-100-stuks.html"],
-    ["sl-gloves-s","Sligro","gloves-s","Felicia Handschoenen nitril zwart, ongepoederd, getextureerd, maat S","27530","Doos 100 stuks",1,"pcs",null,"",
-     "https://www.sligro.nl/p.27530.html/felicia-handschoenen-nitril-zwart-ongepoederd-getextureerd-maat-s-doos-100-stuks.html"],
-    ["sl-toilet-paper","Sligro","toilet-paper","Propia Toiletpapier 2-laags","99099","Pak 24 rollen",1,"pcs",null,"",
-     "https://www.sligro.nl/p.99099.html/propia-toiletpapier-2-laags-pak-24-rollen.html"],
-    ["sl-passionfruit-juice","Sligro","passionfruit-juice","Maaza Fruitdrank Passievrucht","144652","Doos 6 pakken x 1 l",6000,"ml",null,"",
-     "https://www.sligro.nl/p.144652.html/maaza-fruitdrank-passievrucht-doos-6-pakken-x-1-l.html"],
-    ["sl-toilet-paper-jumbo","Sligro","toilet-paper-jumbo","Propia Toiletpapier jumbo 2-laags","99109","Pak 4 rollen",1,"pcs",null,"",
-     "https://www.sligro.nl/p.99109.html/propia-toiletpapier-jumbo-2-laags-pak-4-rollen.html"],
-    ["sl-spray","Sligro","spray-cleaner","Dubro Allesreiniger spray relax","229270","Fles 65 cl",1,"pcs",null,"",
-     "https://www.sligro.nl/p.229270.html/dubro-allesreiniger-spray-relax-fles-65-cl.html"],
-    ["sl-basil","Sligro","basil","DeliHerbs Basilicum","38351","Bak 200 g",200,"g",null,"",
-     "https://www.sligro.nl/p.38351.html/deliherbs-basilicum-bak-200-g.html"],
-    ["sl-egg-white","Sligro","egg-white","Danaeg Scharrel eiwit","306480","Fles 1 l",1000,"ml",null,"",
-     "https://www.sligro.nl/p.306480.html/danaeg-scharrel-eiwit-fles-1-l.html"],
-    ["sl-markers","Sligro","markers","Edding Permanent marker 3000 zwart","392253","Blister 4 stuks",1,"pcs",null,"",
-     "https://www.sligro.nl/p.392253.html/edding-permanent-marker-3000-zwart-blister-4-stuks.html"],
-    ["sl-bin-bags","Sligro","bin-bags","Dumil Pedaalemmerzakken 3 x 10 stuks 20L 14my, BIO","45454","Krimp 3 stuks",1,"pcs",null,"",
-     "https://www.sligro.nl/p.45454.html/dumil-pedaalemmerzakken-3-x-10-stuks-20l-14my-bio-krimp-3-stuks.html"],
-    ["sl-hygiene-wipes","Sligro","hygiene-wipes","Dubro Hygiene eucalyptus doekjes","218825","Pak 80 stuks",1,"pcs",null,"",
-     "https://www.sligro.nl/p.218825.html/dubro-hygiene-eucalyptus-doekjes-pak-80-stuks.html"],
-    ["sl-cloth-viscose","Sligro","cloths-viscose","Felicia Viscosedoek, groen","108542","Pak 50 stuks",1,"pcs",null,"",
-     "https://www.sligro.nl/p.108542.html/felicia-viscosedoek-groen-pak-50-stuks.html"],
-    ["sl-cloth-micro","Sligro","cloths-microfibre","Felicia Microvezeldoek, blauw","108533","Pak 5 stuks",1,"pcs",null,"",
-     "https://www.sligro.nl/p.108533.html/felicia-microvezeldoek-blauw-pak-5-stuks.html"],
-    ["sl-paper-roll","Sligro","paper-roll","Tork Poetspapier reflex 300m","225862","Zak 6 stuks",1,"pcs",null,"",
-     "https://www.sligro.nl/p.225862.html/tork-poetspapier-reflex-300m-zak-6-stuks.html"],
-    ["sl-rosemary","Sligro","rosemary","DeliHerbs Rozemarijn","517366","Zakje 70 g",70,"g",2.09,"",
-     "https://www.sligro.nl/p.517366.html/deliherbs-rozemarijn-zakje-70-g.html"],
-
-    /* ---- Sligro, one-off equipment on the same list, not a weekly line ---- */
-    ["sl-milkjug","Sligro","sl-milkjug","APS Melkkan 8cm 0,35cl zwart","200742","per stuk",1,"pcs",13.03,"KIT",
-     "https://www.sligro.nl/p.200742.html/aps-melkkan-8cm-0-35cl-zwart-per-stuk.html"],
-    ["sl-container","Sligro","sl-container","The FoodCare Company Vershouddoos 1/2 6.5 liter","157658","per stuk",1,"pcs",17.44,"KIT",
-     "https://www.sligro.nl/p.157658.html/the-foodcare-company-vershouddoos-1-2-6-5-liter-per-stuk.html"],
-    ["sl-icebucket","Sligro","sl-icebucket","Bar Professional Ijsemmer 4 liter","622336","per stuk",1,"pcs",24.78,"KIT",
-     "https://www.sligro.nl/p.622336.html/bar-professional-ijsemmer-4-liter-per-stuk.html"],
-    ["sl-mixingglass","Sligro","sl-mixingglass","Bar Professional Mixing glass","861587","per stuk",1,"pcs",19.88,"KIT",
-     "https://www.sligro.nl/p.861587.html/bar-professional-mixing-glass-per-stuk.html"],
-    ["sl-icescoop","Sligro","sl-icescoop","Bar Professional IJsschep","806024","per stuk",1,"pcs",7.48,"KIT",
-     "https://www.sligro.nl/p.806024.html/bar-professional-ijsschep-per-stuk.html"],
+     "https://www.sligro.nl/p.266614.html/de-appelaere-appelaere-appelsap-krat-24-flesjes-x-20-cl.html",
+     {"b": "De Appelaere", "t": "Appelaere appelsap", "g": "Dranken / Sappen, smoothies & fruitdranken", "o": 44}],
+    ["sl-coconut-water","Sligro","coconut-water","Healthy People Kokoswater","57133","Pak 1 l",1000,"ml",2.37,"",
+     "https://www.sligro.nl/p.57133.html/healthy-people-kokoswater-pak-1-l.html",
+     {"b": "Healthy People", "t": "Kokoswater", "g": "Dranken / Sappen, smoothies & fruitdranken", "o": 45}],
+    ["sl-orange-fresh","Sligro","orange-juice","Hoogesteger Sinaasappelsap vers","780074","Fles 2 l",2000,"ml",7.59,"",
+     "https://www.sligro.nl/p.780074.html/hoogesteger-sinaasappelsap-vers-fles-2-l.html",
+     {"b": "Hoogesteger", "t": "Sinaasappelsap vers", "g": "Dranken / Sappen, smoothies & fruitdranken", "o": 46}],
+    ["sl-lychee-drink","Sligro","lychee-juice","Maaza Fruitdrank lychee","149110","Krimp 12 petflessen x 50 cl",6000,"ml",20.95,"",
+     "https://www.sligro.nl/p.149110.html/maaza-fruitdrank-lychee-krimp-12-petflessen-x-50-cl.html",
+     {"b": "Maaza", "t": "Fruitdrank lychee", "g": "Dranken / Sappen, smoothies & fruitdranken", "o": 47}],
+    ["sl-passionfruit-juice","Sligro","passionfruit-juice","Maaza Fruitdrank Passievrucht","144652","Doos 6 pakken x 1 l",6000,"ml",10.32,"",
+     "https://www.sligro.nl/p.144652.html/maaza-fruitdrank-passievrucht-doos-6-pakken-x-1-l.html",
+     {"b": "Maaza", "t": "Fruitdrank Passievrucht", "g": "Dranken / Sappen, smoothies & fruitdranken", "o": 48}],
+    ["sl-cranberry","Sligro","cranberry","Prominent Cranberrysap","203732","Krimp 6 flessen x 1 l",6000,"ml",19.85,"",
+     "https://www.sligro.nl/p.203732.html/prominent-cranberrysap-krimp-6-flessen-x-1-l.html",
+     {"b": "Prominent", "t": "Cranberrysap", "g": "Dranken / Sappen, smoothies & fruitdranken", "o": 49}],
+    ["sl-tea","Sligro","tea","Lipton Feel Good Selection Assortimentsdoos thee","211553","Doos 108 zakken",1,"pcs",25.87,"",
+     "https://www.sligro.nl/p.211553.html/lipton-feel-good-selection-assortimentsdoos-thee-doos-108-zakken.html",
+     {"b": "Lipton Feel Good Selection", "t": "Assortimentsdoos thee", "g": "Dranken / Koffie, thee & cacao", "o": 50}],
+    ["sl-redbull","Sligro","red-bull","Red Bull Energydrink","178786","Tray 24 blikjes x 25 cl",24,"pcs",29.70,"",
+     "https://www.sligro.nl/p.178786.html/red-bull-energydrink-tray-24-blikjes-x-25-cl.html",
+     {"b": "Red Bull", "t": "Energydrink", "g": "Dranken / Sport- & energiedranken", "o": 51}],
+    ["sl-boiron-lemon","Sligro","boiron-lemon","Boiron Gepasteuriseerde citroen puree","217502","Pak 1 l",1000,"ml",7.49,"",
+     "https://www.sligro.nl/p.217502.html/boiron-gepasteuriseerde-citroen-puree-pak-1-l.html",
+     {"b": "Boiron", "t": "Gepasteuriseerde citroen puree", "g": "Dranken / Cocktails", "o": 52}],
+    ["sl-boiron-lime","Sligro","boiron-lime","Boiron Gepasteuriseerde limoen puree","217504","Pak 1 l",1000,"ml",8.00,"",
+     "https://www.sligro.nl/p.217504.html/boiron-gepasteuriseerde-limoen-puree-pak-1-l.html",
+     {"b": "Boiron", "t": "Gepasteuriseerde limoen puree", "g": "Dranken / Cocktails", "o": 53}],
+    ["sl-monin-grenadine","Sligro","grenadine","Monin Grenadine siroop","508396","Fles 70 cl",700,"ml",8.37,"",
+     "https://www.sligro.nl/p.508396.html/monin-grenadine-siroop-fles-70-cl.html",
+     {"b": "Monin", "t": "Grenadine siroop", "g": "Dranken / Siropen", "o": 54, "pr": [6.47, "2026-11-30"]}],
+    ["sl-monin-sugar","Sligro","monin-sugar","Monin Rietsuiker siroop","399836","Fles 1 l",1000,"ml",11.06,"",
+     "https://www.sligro.nl/p.399836.html/monin-rietsuiker-siroop-fles-1-l.html",
+     {"b": "Monin", "t": "Rietsuiker siroop", "g": "Dranken / Siropen", "o": 55, "pr": [8.55, "2026-11-30"]}],
+    ["sl-monin-vanilla","Sligro","monin-vanilla","Monin Vanille siroop","399789","Fles 1 l",1000,"ml",12.69,"",
+     "https://www.sligro.nl/p.399789.html/monin-vanille-siroop-fles-1-l.html",
+     {"b": "Monin", "t": "Vanille siroop", "g": "Dranken / Siropen", "o": 56, "pr": [9.8, "2026-11-30"]}],
+    ["sl-maple","Sligro","maple","Sprague's Maple Farms Siroop ahorn","66308","Flesje 23,7 cl",237,"ml",10.65,"",
+     "https://www.sligro.nl/p.66308.html/sprague-s-maple-farms-siroop-ahorn-flesje-23-7-cl.html",
+     {"b": "Sprague's Maple Farms", "t": "Siroop ahorn", "g": "Dranken / Siropen", "o": 57, "na": 1}],
+    ["sl-torch","Sligro","sl-torch","Hendi Koksbrander met gasbus","154124","per stuk",1,"pcs",25.35,"KIT",
+     "https://www.sligro.nl/p.154124.html/hendi-koksbrander-met-gasbus-per-stuk.html",
+     {"b": "Hendi", "t": "Koksbrander met gasbus", "g": "Non-food / Bar- & keukenapparatuur", "o": 58}],
     ["sl-barmat","Sligro","sl-barmat","Bar Professional Barmat 45 x 30 cm","950027","per stuk",1,"pcs",14.98,"KIT",
-     "https://www.sligro.nl/p.950027.html/bar-professional-barmat-45-x-30-cm-per-stuk.html"],
+     "https://www.sligro.nl/p.950027.html/bar-professional-barmat-45-x-30-cm-per-stuk.html",
+     {"b": "Bar Professional", "t": "Barmat 45 x 30 cm", "g": "Non-food / Bar- & keukengereedschap", "o": 59}],
+    ["sl-icetray-3","Sligro","sl-icetray-3","Bar Professional Ijsblok tray 3 cm","78113","per stuk",1,"pcs",10.85,"KIT",
+     "https://www.sligro.nl/p.78113.html/bar-professional-ijsblok-tray-3-cm-per-stuk.html",
+     {"b": "Bar Professional", "t": "Ijsblok tray 3 cm", "g": "Non-food / Bar- & keukengereedschap", "o": 60}],
+    ["sl-icetray-4","Sligro","sl-icetray-4","Bar Professional Ijsblok tray 4 cm","78134","per stuk",1,"pcs",10.85,"KIT",
+     "https://www.sligro.nl/p.78134.html/bar-professional-ijsblok-tray-4-cm-per-stuk.html",
+     {"b": "Bar Professional", "t": "Ijsblok tray 4 cm", "g": "Non-food / Bar- & keukengereedschap", "o": 61}],
+    ["sl-icebucket-10","Sligro","sl-icebucket-10","Bar Professional IJsemmer 10 liter","911670","per stuk",1,"pcs",44.40,"KIT",
+     "https://www.sligro.nl/p.911670.html/bar-professional-ijsemmer-10-liter-per-stuk.html",
+     {"b": "Bar Professional", "t": "IJsemmer 10 liter", "g": "Non-food / Bar- & keukengereedschap", "o": 62}],
+    ["sl-icebucket","Sligro","sl-icebucket","Bar Professional Ijsemmer 4 liter","622336","per stuk",1,"pcs",24.78,"KIT",
+     "https://www.sligro.nl/p.622336.html/bar-professional-ijsemmer-4-liter-per-stuk.html",
+     {"b": "Bar Professional", "t": "Ijsemmer 4 liter", "g": "Non-food / Bar- & keukengereedschap", "o": 63}],
+    ["sl-icescoop","Sligro","sl-icescoop","Bar Professional IJsschep","806024","per stuk",1,"pcs",7.48,"KIT",
+     "https://www.sligro.nl/p.806024.html/bar-professional-ijsschep-per-stuk.html",
+     {"b": "Bar Professional", "t": "IJsschep", "g": "Non-food / Bar- & keukengereedschap", "o": 64, "na": 1}],
+    ["sl-mixingglass","Sligro","sl-mixingglass","Bar Professional Mixing glass","861587","per stuk",1,"pcs",19.88,"KIT",
+     "https://www.sligro.nl/p.861587.html/bar-professional-mixing-glass-per-stuk.html",
+     {"b": "Bar Professional", "t": "Mixing glass", "g": "Non-food / Bar- & keukengereedschap", "o": 65}],
     ["sl-muddler","Sligro","sl-muddler","Bar Professional Muddler","260587","per stuk",1,"pcs",6.18,"KIT",
-     "https://www.sligro.nl/p.260587.html/bar-professional-muddler-per-stuk.html"],
+     "https://www.sligro.nl/p.260587.html/bar-professional-muddler-per-stuk.html",
+     {"b": "Bar Professional", "t": "Muddler", "g": "Non-food / Bar- & keukengereedschap", "o": 66}],
     ["sl-pourset","Sligro","sl-pourset","Bar Professional Save pour set","806079","per stuk",1,"pcs",6.97,"KIT",
-     "https://www.sligro.nl/p.806079.html/bar-professional-save-pour-set-per-stuk.html"],
+     "https://www.sligro.nl/p.806079.html/bar-professional-save-pour-set-per-stuk.html",
+     {"b": "Bar Professional", "t": "Save pour set", "g": "Non-food / Bar- & keukengereedschap", "o": 67}],
+    ["sl-milkjug","Sligro","sl-milkjug","APS Melkkan 8cm 0,35cl zwart","200742","per stuk",1,"pcs",13.03,"KIT",
+     "https://www.sligro.nl/p.200742.html/aps-melkkan-8cm-0-35cl-zwart-per-stuk.html",
+     {"b": "APS", "t": "Melkkan 8cm 0,35cl zwart", "g": "Non-food / Serveer- & presenteerbenodigdheden", "o": 68}],
+    ["sl-gloves-s","Sligro","gloves-s","Felicia Handschoenen nitril zwart, ongepoederd, getextureerd, maat S","27530","Doos 100 stuks",1,"pcs",7.40,"",
+     "https://www.sligro.nl/p.27530.html/felicia-handschoenen-nitril-zwart-ongepoederd-getextureerd-maat-s-doos-100-stuks.html",
+     {"b": "Felicia", "t": "Handschoenen nitril zwart, ongepoederd, getextureerd, maat S", "g": "Non-food / Disposables", "o": 69}],
+    ["sl-gloves-xl","Sligro","gloves-xl","Felicia Handschoenen nitril zwart, ongepoederd, getextureerd, maat XL","27539","Doos 100 stuks",1,"pcs",7.40,"",
+     "https://www.sligro.nl/p.27539.html/felicia-handschoenen-nitril-zwart-ongepoederd-getextureerd-maat-xl-doos-100-stuks.html",
+     {"b": "Felicia", "t": "Handschoenen nitril zwart, ongepoederd, getextureerd, maat XL", "g": "Non-food / Disposables", "o": 70}],
+    ["sl-stampers","Sligro","stampers","Sier Tonic stampers","274421","Doos 100 stuks",1,"pcs",4.40,"",
+     "https://www.sligro.nl/p.274421.html/sier-tonic-stampers-doos-100-stuks.html",
+     {"b": "Sier", "t": "Tonic stampers", "g": "Non-food / Disposables", "o": 71}],
+    ["sl-straw-15","Sligro","straws-15","Take Dis Cocktailrietje zwart papier 15cm","118644","Doos 250 stuks",1,"pcs",4.80,"",
+     "https://www.sligro.nl/p.118644.html/take-dis-cocktailrietje-zwart-papier-15cm-doos-250-stuks.html",
+     {"b": "Take Dis", "t": "Cocktailrietje zwart papier 15cm", "g": "Non-food / Disposables", "o": 72, "pr": [4.47, "2026-11-30"]}],
+    ["sl-straw-24","Sligro","straws-24","Take Dis Cocktailrietje zwart papier 24cm 250st","118648","Pak 250 stuks",1,"pcs",5.25,"",
+     "https://www.sligro.nl/p.118648.html/take-dis-cocktailrietje-zwart-papier-24cm-250st-pak-250-stuks.html",
+     {"b": "Take Dis", "t": "Cocktailrietje zwart papier 24cm 250st", "g": "Non-food / Disposables", "o": 73}],
+    ["sl-picks","Sligro","picks","Take Dis Prikker bamboe met krul zwart 9cm","204561","Pak 100 stuks",1,"pcs",5.10,"",
+     "https://www.sligro.nl/p.204561.html/take-dis-prikker-bamboe-met-krul-zwart-9cm-pak-100-stuks.html",
+     {"b": "Take Dis", "t": "Prikker bamboe met krul zwart 9cm", "g": "Non-food / Disposables", "o": 74}],
+    ["sl-napkins","Sligro","napkins","Take Dis Servetten Airlaid 1/8 vouw","721046","Pak 60 stuks",1,"pcs",6.99,"",
+     "https://www.sligro.nl/p.721046.html/take-dis-servetten-airlaid-1-8-vouw-pak-60-stuks.html",
+     {"b": "Take Dis", "t": "Servetten Airlaid 1/8 vouw", "g": "Non-food / Disposables", "o": 75}],
+    ["sl-markers","Sligro","markers","Edding Permanent marker 3000 zwart","392253","Blister 4 stuks",1,"pcs",14.30,"",
+     "https://www.sligro.nl/p.392253.html/edding-permanent-marker-3000-zwart-blister-4-stuks.html",
+     {"b": "Edding", "t": "Permanent marker 3000 zwart", "g": "Non-food / Kantoorbenodigdheden", "o": 76}],
     ["sl-garnish-holder","Sligro","sl-garnish-holder","Bar Professional Garnituur houder 6 delig","543121","per stuk",1,"pcs",35.10,"KIT",
-     "https://www.sligro.nl/p.543121.html/bar-professional-garnituur-houder-6-delig-per-stuk.html"],
-    ["sl-torch","Sligro","sl-torch","Hendi Koksbrander met gasbus","154124","per stuk",1,"pcs",24.78,"KIT",
-     "https://www.sligro.nl/p.154124.html/hendi-koksbrander-met-gasbus-per-stuk.html"],
-    ["sl-icebucket-10","Sligro","sl-icebucket-10","Bar Professional IJsemmer 10 liter","911670","per stuk",1,"pcs",null,"KIT",
-     "https://www.sligro.nl/p.911670.html/bar-professional-ijsemmer-10-liter-per-stuk.html"],
-    ["sl-icetray-4","Sligro","sl-icetray-4","Bar Professional Ijsblok tray 4 cm","78134","per stuk",1,"pcs",null,"KIT",
-     "https://www.sligro.nl/p.78134.html/bar-professional-ijsblok-tray-4-cm-per-stuk.html"],
-    ["sl-icetray-3","Sligro","sl-icetray-3","Bar Professional Ijsblok tray 3 cm","78113","per stuk",1,"pcs",null,"KIT",
-     "https://www.sligro.nl/p.78113.html/bar-professional-ijsblok-tray-3-cm-per-stuk.html"],
-    ["sl-dispenser","Sligro","sl-dispenser","Hendi Dispenser flacon 70 cl dop 70 x 240 mm PP, transparant","106964","per stuk",1,"pcs",null,"KIT",
-     "https://www.sligro.nl/p.106964.html/hendi-dispenser-flacon-70-cl-dop-70-x-240-mm-pp-transparant-per-stuk.html"]
+     "https://www.sligro.nl/p.543121.html/bar-professional-garnituur-houder-6-delig-per-stuk.html",
+     {"b": "Bar Professional", "t": "Garnituur houder 6 delig", "g": "Non-food / Opberging & transport", "o": 77}],
+    ["sl-container","Sligro","sl-container","The FoodCare Company Vershouddoos 1/2 6.5 liter","157658","per stuk",1,"pcs",17.44,"KIT",
+     "https://www.sligro.nl/p.157658.html/the-foodcare-company-vershouddoos-1-2-6-5-liter-per-stuk.html",
+     {"b": "The FoodCare Company", "t": "Vershouddoos 1/2 6.5 liter", "g": "Non-food / Opberging & transport", "o": 78, "pr": [12.66, "2026-11-30"]}],
+    ["sl-bin-bags","Sligro","bin-bags","Dumil Pedaalemmerzakken 3 x 10 stuks 20L 14my, BIO","45454","Krimp 3 stuks",1,"pcs",5.89,"",
+     "https://www.sligro.nl/p.45454.html/dumil-pedaalemmerzakken-3-x-10-stuks-20l-14my-bio-krimp-3-stuks.html",
+     {"b": "Dumil", "t": "Pedaalemmerzakken 3 x 10 stuks 20L 14my, BIO", "g": "Non-food / Schoonmaak, veiligheid & hygiëne", "o": 79}],
+    ["sl-cloth-micro","Sligro","cloths-microfibre","Felicia Microvezeldoek, blauw","108533","Pak 5 stuks",1,"pcs",5.99,"",
+     "https://www.sligro.nl/p.108533.html/felicia-microvezeldoek-blauw-pak-5-stuks.html",
+     {"b": "Felicia", "t": "Microvezeldoek, blauw", "g": "Non-food / Schoonmaak, veiligheid & hygiëne", "o": 80}],
+    ["sl-cloth-viscose","Sligro","cloths-viscose","Felicia Viscosedoek, groen","108542","Pak 50 stuks",1,"pcs",13.44,"",
+     "https://www.sligro.nl/p.108542.html/felicia-viscosedoek-groen-pak-50-stuks.html",
+     {"b": "Felicia", "t": "Viscosedoek, groen", "g": "Non-food / Schoonmaak, veiligheid & hygiëne", "o": 81}],
+    ["sl-labels","Sligro","labels","Labellord Etiket koeling / magazijn","955331","Rol 250 stuks",1,"pcs",4.91,"",
+     "https://www.sligro.nl/p.955331.html/labellord-etiket-koeling-magazijn-rol-250-stuks.html",
+     {"b": "Labellord", "t": "Etiket koeling / magazijn", "g": "Non-food / Schoonmaak, veiligheid & hygiëne", "o": 82}],
+    ["sl-ajax","Sligro","cleaner","Ajax Allesreiniger limoen","658345","Jerrycan 5 l",1,"pcs",9.32,"",
+     "https://www.sligro.nl/p.658345.html/ajax-allesreiniger-limoen-jerrycan-5-l.html",
+     {"b": "Ajax", "t": "Allesreiniger limoen", "g": "Was, reiniging & hygiëne papier / Reinigingsmiddelen", "o": 83}],
+    ["sl-spray","Sligro","spray-cleaner","Dubro Allesreiniger spray relax","229270","Fles 65 cl",1,"pcs",3.41,"",
+     "https://www.sligro.nl/p.229270.html/dubro-allesreiniger-spray-relax-fles-65-cl.html",
+     {"b": "Dubro", "t": "Allesreiniger spray relax", "g": "Was, reiniging & hygiëne papier / Reinigingsmiddelen", "o": 84}],
+    ["sl-hygiene-wipes","Sligro","hygiene-wipes","Dubro Hygiene eucalyptus doekjes","218825","Pak 80 stuks",1,"pcs",4.13,"",
+     "https://www.sligro.nl/p.218825.html/dubro-hygiene-eucalyptus-doekjes-pak-80-stuks.html",
+     {"b": "Dubro", "t": "Hygiene eucalyptus doekjes", "g": "Was, reiniging & hygiëne papier / Reinigingsmiddelen", "o": 85}],
+    ["sl-wc","Sligro","wc-cleaner","Felicia Wc reiniger voor frisse geur","198912","Krimp 3 flessen x 75 cl",1,"pcs",5.16,"",
+     "https://www.sligro.nl/p.198912.html/felicia-wc-reiniger-voor-frisse-geur-krimp-3-flessen-x-75-cl.html",
+     {"b": "Felicia", "t": "Wc reiniger voor frisse geur", "g": "Was, reiniging & hygiëne papier / Reinigingsmiddelen", "o": 86}],
+    ["sl-detergent","Sligro","detergent","Neutral Wasmiddel vloeibaar kleur","64604","Fles 1 l",1,"pcs",7.07,"",
+     "https://www.sligro.nl/p.64604.html/neutral-wasmiddel-vloeibaar-kleur-fles-1-l.html",
+     {"b": "Neutral", "t": "Wasmiddel vloeibaar kleur", "g": "Was, reiniging & hygiëne papier / Wasmiddelen", "o": 87}],
+    ["sl-dispenser","Sligro","sl-dispenser","Hendi Dispenser flacon 70 cl dop 70 x 240 mm PP, transparant","106964","per stuk",1,"pcs",1.55,"KIT",
+     "https://www.sligro.nl/p.106964.html/hendi-dispenser-flacon-70-cl-dop-70-x-240-mm-pp-transparant-per-stuk.html",
+     {"b": "Hendi", "t": "Dispenser flacon 70 cl dop 70 x 240 mm PP, transparant", "g": "Was, reiniging & hygiëne papier / Toilet- & keukenpapier", "o": 88}],
+    ["sl-toilet-paper","Sligro","toilet-paper","Propia Toiletpapier 2-laags","99099","Pak 24 rollen",1,"pcs",9.62,"",
+     "https://www.sligro.nl/p.99099.html/propia-toiletpapier-2-laags-pak-24-rollen.html",
+     {"b": "Propia", "t": "Toiletpapier 2-laags", "g": "Was, reiniging & hygiëne papier / Toilet- & keukenpapier", "o": 89}],
+    ["sl-toilet-paper-jumbo","Sligro","toilet-paper-jumbo","Propia Toiletpapier jumbo 2-laags","99109","Pak 4 rollen",1,"pcs",23.99,"",
+     "https://www.sligro.nl/p.99109.html/propia-toiletpapier-jumbo-2-laags-pak-4-rollen.html",
+     {"b": "Propia", "t": "Toiletpapier jumbo 2-laags", "g": "Was, reiniging & hygiëne papier / Toilet- & keukenpapier", "o": 90}],
+    ["sl-refresh-wipes","Sligro","refresh-wipes","Take Dis Verfrissingsdoekjes","116926","Pak 240 stuks",1,"pcs",10.57,"",
+     "https://www.sligro.nl/p.116926.html/take-dis-verfrissingsdoekjes-pak-240-stuks.html",
+     {"b": "Take Dis", "t": "Verfrissingsdoekjes", "g": "Was, reiniging & hygiëne papier / Toilet- & keukenpapier", "o": 91}],
+    ["sl-paper-roll","Sligro","paper-roll","Tork Poetspapier reflex 300m","225862","Zak 6 stuks",1,"pcs",67.05,"",
+     "https://www.sligro.nl/p.225862.html/tork-poetspapier-reflex-300m-zak-6-stuks.html",
+     {"b": "Tork", "t": "Poetspapier reflex 300m", "g": "Was, reiniging & hygiëne papier / Toilet- & keukenpapier", "o": 92}]
   ].map(function (r) {
     return { id:r[0], sup:r[1], m:r[2], name:r[3], art:r[4], pack:r[5],
              qty:r[6], u:r[7], price:r[8], note:(r[9] === "KIT" ? "" : r[9]), kit:(r[9] === "KIT"),
-             url:r[10] || "" };
+             url:r[10] || "", sl:r[11] || null };
   });
 
   var PB = {};
   PRICEBOOK.forEach(function (e) { PB[e.id] = e; });
+
+  /* ---- The Sligro list as Sligro lays it out ----
+     Its headings in the order it prints them, each with an English line for
+     the English page. The heading itself stays Sligro's Dutch, because that
+     is what the screen says when you order. */
+  var SL_GROUPS = [];
+  PRICEBOOK.forEach(function (e) { if (e.sl && SL_GROUPS.indexOf(e.sl.g) === -1) SL_GROUPS.push(e.sl.g); });
+  var SL_EN = {
+    "Aardappelen, Groenten & Fruit / Groenten": "Vegetables",
+    "Aardappelen, Groenten & Fruit / Fruit": "Fruit",
+    "Aardappelen, Groenten & Fruit / Verse kruiden, cressen & kiemen": "Fresh herbs",
+    "Kaas, zuivel & vleeswaren / Melk & yoghurtdranken": "Milk and milk drinks",
+    "Kaas, zuivel & vleeswaren / Eieren": "Eggs",
+    "Maaltijden, snacks & IJs / IJs": "Ice",
+    "Kruidenierswaren / Sauzen, soepen & dressings": "Sauces",
+    "Kruidenierswaren / Conserven & tafelzuren": "Tins and jars",
+    "Kruidenierswaren / Ontbijtgranen & broodbeleg": "Breakfast and spreads",
+    "Kruidenierswaren / Snoep & chocolade": "Sweets",
+    "Kruidenierswaren / Bak- & ijsbenodigdheden": "Baking and dessert",
+    "Dranken / Frisdranken": "Soft drinks",
+    "Dranken / Bron- en mineraalwater": "Water",
+    "Dranken / Sappen, smoothies & fruitdranken": "Juices",
+    "Dranken / Koffie, thee & cacao": "Coffee and tea",
+    "Dranken / Sport- & energiedranken": "Energy drinks",
+    "Dranken / Cocktails": "Cocktail mixers",
+    "Dranken / Siropen": "Syrups",
+    "Non-food / Bar- & keukenapparatuur": "Bar machines",
+    "Non-food / Bar- & keukengereedschap": "Bar tools",
+    "Non-food / Serveer- & presenteerbenodigdheden": "Serving",
+    "Non-food / Disposables": "Disposables",
+    "Non-food / Kantoorbenodigdheden": "Office",
+    "Non-food / Opberging & transport": "Storage",
+    "Non-food / Schoonmaak, veiligheid & hygiëne": "Cleaning and safety",
+    "Was, reiniging & hygiëne papier / Reinigingsmiddelen": "Cleaning products",
+    "Was, reiniging & hygiëne papier / Wasmiddelen": "Laundry",
+    "Was, reiniging & hygiëne papier / Toilet- & keukenpapier": "Toilet and kitchen paper"
+  };
+
+  /* An offer is good to the end of its last day. Past it, the regular price
+     is the price again without anyone having to touch the file. */
+  function isoToday() {
+    var d = new Date(), p = function (n) { return ("0" + n).slice(-2); };
+    return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate());
+  }
+  function offerOn(e) { return !!(e && e.sl && e.sl.pr && isoToday() <= e.sl.pr[1]); }
+  function priceNow(e) { return offerOn(e) ? e.sl.pr[0] : e.price; }
+  var MON_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  var MON_NL = ["jan", "feb", "mrt", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"];
+  function dayText(iso) { var p = iso.split("-"); return +p[2] + " " + (isNl() ? MON_NL : MON_EN)[+p[1] - 1]; }
+  /* The price as the shop shows it today: an offer with the regular price
+     struck through beside it. */
+  function priceHTML(e) {
+    if (!e || e.price == null) return '<span class="iv-tbd">' + et({ en: "price TBD", nl: "prijs volgt" }) + "</span>";
+    if (!offerOn(e)) return '<span class="pb-p">' + n2(e.price) + "</span>";
+    return '<s class="pb-was">' + n2(e.price) + '</s> <b class="pb-offer">' + n2(e.sl.pr[0]) + "</b>";
+  }
+  function offerHTML(e) {
+    var h = "";
+    if (offerOn(e)) h += ' <span class="pb-tag offer">' + et({ en: "Offer until ", nl: "Aanbieding t/m " }) + esc(dayText(e.sl.pr[1])) + "</span>";
+    if (e && e.sl && e.sl.na) h += ' <span class="pb-tag na">' + et({ en: "Temporarily not deliverable", nl: "Tijdelijk niet leverbaar" }) + "</span>";
+    return h;
+  }
+  /* Sligro's word for the pack, the first word of how it writes the pack:
+     Krat, Doos, Zak, Fles. A line sold per piece is counted in pieces. */
+  function packWord(e) {
+    var t = String(e.pack || "").split(/\s+/), w = t[0];
+    if (/^\d/.test(w)) return (w + " " + (t[1] || "")).replace(/[,\s]+$/, "");   /* AH and AO write "1 L", "50 g" */
+    return /^per$/i.test(w) ? "" : w.charAt(0).toUpperCase() + w.slice(1);
+  }
+  /* Whole packs to put in the cart for what is still short, and what they
+     cost today. Half a crate cannot be ordered, so it rounds up. */
+  function orderOf(r, k) {
+    if (!k || !(k.short > 0)) return null;
+    var e = rowEntry(r);
+    if (!e) return null;
+    var one = {};
+    for (var x in e) one[x] = e[x];
+    one.price = 1;
+    var share = rowCost(one, r);
+    if (share == null || !(share > 0)) return null;
+    var n = Math.max(1, Math.ceil(k.short * share - 1e-6));
+    return { e: e, n: n, cost: e.price == null ? null : n * priceNow(e) };
+  }
+  function orderHTML(od, k) {
+    if (!od) return k && k.need != null && k.short === 0 ? "&ndash;" : "";
+    var w = packWord(od.e);
+    return '<span class="iv-ord"><b>' + od.n + "</b> " +
+      (w ? "&times; " + esc(w) : et(od.n === 1 ? { en: "piece", nl: "stuk" } : { en: "pieces", nl: "stuks" })) + "</span>" +
+      (od.cost != null ? ' <span class="iv-ocost">' + n2(od.cost) + "</span>" : "");
+  }
+  /* What a line adds to the order: its whole packs where the shop's pack is
+     known, the bare shortfall otherwise. */
+  function buyCost(r, c) {
+    var od = orderOf(r, c);
+    if (od && od.cost != null) return od.cost;
+    return c.priced && c.short > 0 ? c.short * r.cost : 0;
+  }
+  /* The English name a line shipped with, kept under Sligro's Dutch one on
+     the English page, while the line still carries Sligro's name. */
+  var GLOSS = {};
+  SEED.forEach(function (sd) { GLOSS[sd.key] = sd.name; });
+  function glossOf(r, e) {
+    if (isNl() || !e || !e.sl || r.name !== e.sl.t) return "";
+    var g = GLOSS[r.key];
+    return g && g !== r.name ? g : "";
+  }
 
   /* Inventory line -> price book match key. A line with no entry here has no
      price on record and says so rather than carrying a guess. */
@@ -6831,6 +7153,54 @@ body.cmt-on #root { cursor: crosshair; }
     try { localStorage.setItem(FLAG, "1"); } catch (x) {}
   })();
 
+  /* 26.11.26: the Inventory reads like the Sligro list. Every line Sligro
+     sells sits under Sligro's heading, in Sligro's order, by Sligro's name;
+     the rest follows under the name of the shop it comes from. The seed is
+     laid out that way every time, a saved copy once, so a line re-filed or
+     renamed by hand after today stays where it was put. */
+  var SHOPCAT = { AH: "Albert Heijn", AO: "Amazing Oriental", TBD: "No shop yet" };
+  function shelfOf(r) {
+    var e = syncEntry(r);
+    if (e && e.sl) return { cat: e.sl.g, o: e.sl.o, name: e.sl.t };
+    var s = r.supplier || "TBD";
+    return { cat: SHOPCAT[s] || s, o: s === "AH" ? 1000 : s === "AO" ? 1100 : s === "TBD" ? 3000 : 2000, name: null };
+  }
+  function shelveSort(list) {
+    var last = 0;
+    return list.map(function (r, i) {
+      var o = GLOSS[r.key] != null ? shelfOf(r).o : last + 0.001;
+      last = o;
+      return { r: r, o: o, i: i };
+    }).sort(function (a, b) { return (a.o - b.o) || (a.i - b.i); }).map(function (x) { return x.r; });
+  }
+  var SEEDNL = {};
+  SEED.forEach(function (sd) {
+    SEEDNL[sd.key] = sd.nameNl;
+    var sh = shelfOf(sd);
+    sd.cat = sh.cat;
+    if (sh.name) { sd.name = sh.name; sd.nameNl = sh.name; }
+  });
+  (function () {
+    var s2 = shelveSort(SEED);
+    SEED.length = 0;
+    s2.forEach(function (x) { SEED.push(x); });
+  })();
+  (function () {
+    var FLAG = "quatro-sligro-order-v1";
+    try { if (localStorage.getItem(FLAG)) return; } catch (x) { return; }
+    ROWS.forEach(function (r) {
+      if (GLOSS[r.key] == null) return;
+      var sh = shelfOf(r), rn = RENAMED[r.key];
+      r.cat = sh.cat;
+      if (!sh.name) return;
+      if (r.name === GLOSS[r.key] || r.name === r.key || (rn && r.name === rn.name)) r.name = sh.name;
+      if (r.nameNl === SEEDNL[r.key] || r.nameNl === r.key || (rn && (r.nameNl === rn.nameNl || r.nameNl === rn.oldNl))) r.nameNl = sh.name;
+    });
+    ROWS = shelveSort(ROWS);
+    persist();
+    try { localStorage.setItem(FLAG, "1"); } catch (x) {}
+  })();
+
   var PBSHOP = "";   /* which shop the price list is narrowed to, blank for all */
   document.addEventListener("click", function (e) {
     var b = e.target.closest && e.target.closest("[data-shop]");
@@ -6851,27 +7221,36 @@ body.cmt-on #root { cursor: crosshair; }
     var h = '<section class="section"><div class="section-head"><div class="smallcaps">' +
       esc(ui("runsheet")) + "</div><h2>" + et({ en: "Prices", nl: "Prijzen" }) + "</h2>" +
       '<p class="section-note">' +
-      et({ en: "Every price the bar has on record, cheapest pack first, with the shop, the article number and the cost per litre, kilo or piece. Tap a shop to see only that shop's list. Costing follows Milo and Jade's sheet: pack price divided by pack size, times the amount a drink needs, plus " + n2(SPILL) + " a drink for consumables and spill.",
-           nl: "Elke prijs die de bar op papier heeft, goedkoopste verpakking eerst, met de winkel, het artikelnummer en de prijs per liter, kilo of stuk. Tik op een winkel om alleen die lijst te zien. De kostprijs volgt het bestand van Milo en Jade: prijs per verpakking gedeeld door de inhoud, maal wat een drankje nodig heeft, plus " + n2(SPILL) + " per drankje voor verbruik en morsen." }) +
+      et({ en: "Every price the bar has on record, shop by shop, each in the order of that shop's own list, with the article number and the cost per litre, kilo or piece. Tap a shop to see only that shop. Costing follows Milo and Jade's sheet: pack price divided by pack size, times the amount a drink needs, plus " + n2(SPILL) + " a drink for consumables and spill.",
+           nl: "Elke prijs die de bar op papier heeft, winkel voor winkel, elk in de volgorde van de eigen lijst van die winkel, met het artikelnummer en de prijs per liter, kilo of stuk. Tik op een winkel om alleen die winkel te zien. De kostprijs volgt het bestand van Milo en Jade: prijs per verpakking gedeeld door de inhoud, maal wat een drankje nodig heeft, plus " + n2(SPILL) + " per drankje voor verbruik en morsen." }) +
       "</p></div>";
 
+    var na = PRICEBOOK.filter(function (e) { return e.sl && e.sl.na && !e.sl.dup; });
+    var offers = PRICEBOOK.filter(function (e) { return offerOn(e) && !e.sl.dup; });
     h += '<div class="qflag" style="margin:0 0 16px">' +
-      et({ en: "The Sligro lines are the bar's Bar Inventory list as exported on 25 November, each linked to its own product page. Lines new on that list have no price on file yet and say price TBD. The AH lines link to their product pages too; the Amazing Oriental ones are searches. The article number is always the real reference.",
-           nl: "De Sligro-regels zijn de lijst Bar Inventory van de bar, geexporteerd op 25 november, elk met een link naar de eigen productpagina. Regels die nieuw zijn op die lijst hebben nog geen prijs en zeggen prijs volgt. De AH-regels linken ook naar hun productpagina; die van Amazing Oriental zijn zoekopdrachten. Het artikelnummer is altijd de echte referentie." }) + "</div>";
+      et({ en: "The Sligro prices are from the Bar Inventory list as printed on 26 November, excluding VAT, laid out the way that list is: Sligro's headings, Sligro's order, brand, name, article number and pack. ",
+           nl: "De Sligro-prijzen komen van de lijst Bar Inventory zoals afgedrukt op 26 november, exclusief btw, ingedeeld zoals die lijst: de rubrieken van Sligro, de volgorde van Sligro, merk, naam, artikelnummer en verpakking. " }) +
+      (offers.length ? et({ en: offers.length + " lines are on offer: the offer price shows beside the regular one, struck through, with the last day it runs. After that day the regular price counts again by itself. ",
+                            nl: offers.length + " regels zijn in de aanbieding: de aanbiedingsprijs staat naast de gewone, doorgestreept, met de laatste dag dat hij loopt. Na die dag telt vanzelf weer de gewone prijs. " }) : "") +
+      (na.length ? et({ en: "Temporarily not deliverable: ", nl: "Tijdelijk niet leverbaar: " }) +
+                   na.map(function (e) { return esc(e.name); }).join(", ") + ". " : "") +
+      et({ en: "Every Sligro and AH line links to its product page; the Amazing Oriental ones are searches. The article number is always the real reference.",
+           nl: "Elke Sligro- en AH-regel linkt naar de eigen productpagina; die van Amazing Oriental zijn zoekopdrachten. Het artikelnummer is altijd de echte referentie." }) + "</div>";
 
-    /* One list, cheapest pack first. The shop is a column rather than a
-       heading, so the whole spend can be read top to bottom and it stays
-       obvious what each line costs and who it comes from. */
-    var shops = {};
+    /* One section per shop, Sligro first and laid out as its own list. The
+       litre line for the bar's soda water is the same crate as the bottled
+       one, so it is counted on the Inventory but not listed twice here. */
+    var listed = function (e) { return !(e.sl && e.sl.dup); };
+    var shops = {}, order = [];
     PRICEBOOK.forEach(function (e) {
-      if (e.kit) return;
-      (shops[e.sup] = shops[e.sup] || { n: 0, sum: 0, tbd: 0 });
+      if (!listed(e)) return;
+      if (!shops[e.sup]) { shops[e.sup] = { n: 0, sum: 0, tbd: 0 }; order.push(e.sup); }
       shops[e.sup].n++;
-      if (e.price == null) shops[e.sup].tbd++; else shops[e.sup].sum += e.price;
+      if (e.price == null) shops[e.sup].tbd++; else shops[e.sup].sum += priceNow(e);
     });
-    h += '<div class="shop-strip">' + Object.keys(shops).sort(function (a, b) {
-      return shops[b].n - shops[a].n;
-    }).map(function (s) {
+    order.sort(function (a, b) { return (a === "Sligro" ? -1 : 0) - (b === "Sligro" ? -1 : 0) || shops[b].n - shops[a].n; });
+    var all = PRICEBOOK.filter(listed).length;
+    h += '<div class="shop-strip">' + order.map(function (s) {
       return '<button type="button" class="shop-b" data-shop="' + esc(s) + '"' +
         (PBSHOP === s ? ' aria-pressed="true"' : ' aria-pressed="false"') + '>' +
         esc(s) + '<span>' + shops[s].n + " " +
@@ -6881,59 +7260,47 @@ body.cmt-on #root { cursor: crosshair; }
     }).join("") +
     '<button type="button" class="shop-b" data-shop=""' +
       (PBSHOP ? ' aria-pressed="false"' : ' aria-pressed="true"') + '>' +
-      et({ en: "All shops", nl: "Alle winkels" }) + "<span>" +
-      PRICEBOOK.filter(function (e) { return !e.kit; }).length + " " +
+      et({ en: "All shops", nl: "Alle winkels" }) + "<span>" + all + " " +
       tt({ en: "lines", nl: "regels" }) + "</span></button></div>";
 
-    var listed = PRICEBOOK
-      .filter(function (e) { return !e.kit && (!PBSHOP || e.sup === PBSHOP); })
-      .slice()
-      .sort(function (a, b) {
-        /* priced first, cheapest first; a line still waiting for a price after */
-        if (a.price == null || b.price == null) return (a.price == null) - (b.price == null);
-        return a.price - b.price;
-      });
-
-    h += '<div class="tablewrap"><table class="pb-t"><thead><tr>' +
-      "<th>" + esc(L.prod) + "</th>" +
-      "<th>" + et({ en: "Shop", nl: "Winkel" }) + "</th>" +
-      "<th>" + esc(L.art) + "</th><th>" + esc(L.pack) + "</th>" +
-      '<th class="num">' + esc(L.price) + '</th><th class="num">' + esc(L.unit) + "</th>" +
-      "<th>" + esc(L.look) + "</th></tr></thead><tbody>" +
-      listed.map(function (e) {
-        return "<tr>" +
-          '<td data-l="' + esc(L.prod) + '"><b>' + esc(e.name) + "</b>" +
-            (e.note ? '<div class="qflag">' + et(e.note) + "</div>" : "") + "</td>" +
-          '<td data-l="' + et({ en: "Shop", nl: "Winkel" }) + '"><span class="sup">' + esc(e.sup) + "</span></td>" +
-          '<td data-l="' + esc(L.art) + '" class="pb-art">' + (e.art ? esc(e.art) : "&mdash;") + "</td>" +
-          '<td data-l="' + esc(L.pack) + '">' + esc(e.pack) + "</td>" +
-          '<td data-l="' + esc(L.price) + '" class="num">' + (e.price == null ? '<span class="iv-tbd">' +
-            et({ en: "price TBD", nl: "prijs volgt" }) + "</span>" : n2(e.price)) + "</td>" +
-          '<td data-l="' + esc(L.unit) + '" class="num">' + esc(unitPriceText(e)) + "</td>" +
-          '<td data-l="' + esc(L.look) + '">' + storeLink(e) + "</td></tr>";
-      }).join("") + "</tbody></table></div>";
-
-    /* one-off kit, kept apart from the weekly shop */
-    var kit = PRICEBOOK.filter(function (e) { return e.kit; })
-      .slice().sort(function (a, b) {
-        if (a.price == null || b.price == null) return (a.price == null) - (b.price == null);
-        return a.price - b.price;
-      });
-    var kitTotal = kit.reduce(function (a, e) { return a + (e.price || 0); }, 0);
-    h += '<h3 class="owner-h">' + et({ en: "One-off kit, not a weekly line", nl: "Eenmalige uitrusting, geen weeklijst" }) +
-      '<span class="cat-r">' + n2(kitTotal) + "</span></h3>" +
-      '<div class="tablewrap"><table class="pb-t"><thead><tr>' +
+    var head = '<div class="tablewrap"><table class="pb-t"><thead><tr>' +
       "<th>" + esc(L.prod) + "</th><th>" + esc(L.art) + "</th><th>" + esc(L.pack) + "</th>" +
-      '<th class="num">' + esc(L.price) + "</th><th>" + esc(L.look) + "</th></tr></thead><tbody>" +
-      kit.map(function (e) {
-        return "<tr>" +
-          '<td data-l="' + esc(L.prod) + '"><b>' + esc(e.name) + "</b></td>" +
-          '<td data-l="' + esc(L.art) + '" class="pb-art">' + esc(e.art) + "</td>" +
-          '<td data-l="' + esc(L.pack) + '">' + esc(e.pack) + "</td>" +
-          '<td data-l="' + esc(L.price) + '" class="num">' + (e.price == null ? '<span class="iv-tbd">' +
-            et({ en: "price TBD", nl: "prijs volgt" }) + "</span>" : n2(e.price)) + "</td>" +
-          '<td data-l="' + esc(L.look) + '">' + storeLink(e) + "</td></tr>";
-      }).join("") + "</tbody></table></div>";
+      '<th class="num">' + esc(L.price) + '</th><th class="num">' + esc(L.unit) + "</th>" +
+      "<th>" + esc(L.look) + "</th></tr></thead><tbody>";
+    var line = function (e) {
+      var sl = e.sl, brand = sl && sl.b && sl.b !== "Unbranded" ? sl.b : "";
+      return '<tr data-pb="' + esc(e.id) + '"' + (sl && sl.na ? ' class="pb-na"' : "") + ">" +
+        '<td data-l="' + esc(L.prod) + '" class="pb-prod">' + (brand ? '<span class="pb-brand">' + esc(brand) + "</span>" : "") +
+          "<b>" + esc(sl ? sl.t : e.name) + "</b>" +
+          (e.kit ? ' <span class="pb-tag kit">' + et({ en: "One-off", nl: "Eenmalig" }) + "</span>" : "") + offerHTML(e) +
+          (e.note ? '<div class="qflag">' + et(e.note) + "</div>" : "") + "</td>" +
+        '<td data-l="' + esc(L.art) + '" class="pb-art">' + (e.art ? esc(e.art) : "&mdash;") + "</td>" +
+        '<td data-l="' + esc(L.pack) + '" class="pb-pack">' + esc(e.pack) + "</td>" +
+        '<td data-l="' + esc(L.price) + '" class="num pb-pr">' + priceHTML(e) + "</td>" +
+        '<td data-l="' + esc(L.unit) + '" class="num pb-u">' + esc(unitPriceText(e)) + "</td>" +
+        '<td data-l="' + esc(L.look) + '" class="pb-lk">' + storeLink(e) + "</td></tr>";
+    };
+    order.filter(function (s) { return !PBSHOP || s === PBSHOP; }).forEach(function (s) {
+      var list = PRICEBOOK.filter(function (e) { return e.sup === s && listed(e); });
+      h += '<h3 class="owner-h pb-shop">' + esc(STORES[s] ? STORES[s].name : s) +
+        '<span class="cat-r">' + list.length + " " + tt(list.length === 1 ? { en: "line", nl: "regel" } : { en: "lines", nl: "regels" }) +
+        "  ·  " + n2(shops[s].sum) + "</span></h3>" + head;
+      if (s === "Sligro") {
+        list.sort(function (a, b) { return a.sl.o - b.sl.o; });
+        var g = null;
+        list.forEach(function (e) {
+          if (e.sl.g !== g) {
+            g = e.sl.g;
+            h += '<tr class="pb-g"><td colspan="6"><span class="pb-gn">' + esc(g) + "</span>" +
+              (!isNl() && SL_EN[g] ? '<span class="cat-gl">' + esc(SL_EN[g]) + "</span>" : "") + "</td></tr>";
+          }
+          h += line(e);
+        });
+      } else {
+        h += list.map(line).join("");
+      }
+      h += "</tbody></table></div>";
+    });
 
     /* the receipt, transcribed */
     RECEIPTS.forEach(function (r) {
