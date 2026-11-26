@@ -2367,6 +2367,13 @@ button.iv-tag.on { font-weight: 600; }
 .isl-w { font-weight: 600; font-size: 14.5px; }
 .isl-s { flex-basis: 100%; font-size: 12px; color: var(--ink-soft); }
 .isl .qgar { margin-left: 0; padding-left: 20px; }
+.isl.st { background: rgba(168,134,60,.06); border: 1px solid rgba(168,134,60,.25); border-radius: 12px; padding: 10px 12px 8px; }
+.isl-n.st { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 999px; background: var(--gold);
+  color: #fff; font-family: var(--body, inherit); font-size: 13px; font-weight: 700; }
+.isl-sub { margin: 4px 0 2px 18px; padding: 0; font-size: 13px; line-height: 1.55; }
+.isl-sub li { margin-bottom: 1px; }
+button.isl-stop { font: inherit; font-size: 12px; background: #fff; cursor: pointer; color: var(--gold); font-weight: 600; }
+button.isl-stop:hover, button.isl-stop:focus { background: rgba(168,134,60,.14); outline: none; }
 .isl-mid { margin-top: var(--s3); padding: 8px 10px; border-radius: 8px; font-size: 13px; line-height: 1.5;
   background: rgba(168,134,60,.08); border: 1px dashed var(--gold-pale); }
 .isl-ph { margin: 8px 0 0; }
@@ -5199,41 +5206,6 @@ body.cmt-on #root { cursor: crosshair; }
   var RAIL_MID = { en:"Then the Monin bottles in the middle, spouted and standing: vanilla, sugar syrup, vanilla",
                    nl:"Dan de Monin-flessen in het midden, met schenktuit en rechtop: vanille, suikersiroop, vanille" };
 
-  var STATION = [
-    [{en:"In front of you, left station",nl:"Recht voor je, linkerstation"},
-     {en:"Gold pineapple, red hibiscus, orange orange juice, black cranberry. This end builds the Pina Colada, Hibiscus Royale and Cosmopolitan, and half of the Ocean Mojito.",
-      nl:"Goud ananas, rood hibiscus, oranje sinaasappelsap, zwart cranberry. Aan dit eind maak je de Pina Colada, Hibiscus Royale en Cosmopolitan, en de helft van de Ocean Mojito."}],
-    [{en:"In the middle",nl:"In het midden"},
-     {en:"The Monin bottles, spouted and standing: vanilla, sugar syrup, vanilla. Two vanillas on purpose, one within reach of each station. They sit BETWEEN the two stations, not off to one side, so either end can reach the sugar syrup.",
-      nl:"De Monin-flessen, met schenktuit en rechtop: vanille, suikersiroop, vanille. Met opzet twee keer vanille, een binnen bereik van elk station. Ze staan TUSSEN de twee stations, niet aan een kant, zodat beide einden bij de suikersiroop kunnen."}],
-    [{en:"Carrying on, right station",nl:"Verder, rechterstation"},
-     {en:"Yellow passionfruit, green apple and pear, lychee juice, blue BPT-coconut mixture. This end builds Tropical Velvet, the Spicy Jalapeno Mule, The Hulk and the Lychee Siren, and the other half of the Ocean Mojito.",
-      nl:"Geel passievrucht, groen appel-peer, lycheesap, blauw BPT-kokosmengsel. Aan dit eind maak je Tropical Velvet, de Spicy Jalapeno Mule, The Hulk en de Lychee Siren, en de andere helft van de Ocean Mojito."}],
-    [{en:"Step forward. The squeeze bottles",nl:"Stap naar voren. De knijpflessen"},
-     {en:"In front of the speed rail and behind the steel condiment holders, left to right: coconut milk and cream, Coco Lopez, strawberry puree, Boiron lemon, egg whites. Then cassis, mint syrup, Spa Rood, pure BPT infusion. Then passionfruit puree, Boiron lime, lychee cordial.",
-      nl:"Voor de speedrail en achter de stalen condimentenhouders, van links naar rechts: kokosmelk en -room, Coco Lopez, aardbeienpuree, Boiron citroen, eiwit. Dan cassis, muntsiroop, Spa Rood, pure BPT-infusie. Dan passievruchtenpuree, Boiron limoen, lycheecordial."},
-     {en:"The four Ocean Mojito bottles, cassis through BPT infusion, sit directly in front of the Monin bottles, so the Mojito is made from the middle and neither station has to give up its own order.",
-      nl:"De vier Ocean Mojito-flessen, van cassis tot BPT-infusie, staan recht voor de Monin-flessen, zodat de Mojito vanuit het midden gemaakt wordt en geen van beide stations zijn eigen volgorde hoeft op te geven."}],
-    [{en:"The steel condiment holders",nl:"De stalen condimentenhouders"},
-     {en:"One bucket per item, left holder then right holder. Full order below.",
-      nl:"Een bakje per item, eerst de linkerhouder, dan de rechter. Volledige volgorde hieronder."}],
-    [{en:"In front of each holder, a bar mat",nl:"Voor elke houder een barmat"},
-     {en:"A black bar mat on each side, L bar and R bar, with at least one 50/30 jigger on each, so both stations can measure without reaching across the other. Each side also has its own Boston shaker, and it has a fixed spot: see the next step.",
-      nl:"Aan elke kant een zwarte barmat, L bar en R bar, met op elk minstens een 50/30-jigger, zodat beide stations kunnen afmeten zonder over het andere heen te reiken. Elke kant heeft ook een eigen Boston shaker, en die heeft een vaste plek: zie de volgende stap."}],
-    /* As photographed on 24 November. The two tins are the big halves of a
-       cobbler shaker nobody shakes with, which is why they hold tools. */
-    [{en:"In the middle, the ice, the tool tins and the shakers",nl:"In het midden, het ijs, de gereedschapstins en de shakers"},
-     {en:"Two white ice buckets, one behind the other. Cubed at the back with the bigger blue scoop, crushed at the front with the metal scoop, so the two never get swapped. Tucked between them, left and right, two big tins holding the instruments. They are the big tins of a cobbler shaker we do not shake with, so they are storage, not shakers. Each one holds a Hawthorne strainer, a fine strainer, a bar spoon and a muddler. In front of each tin stands a Boston shaker, one left and one right of the crushed ice bucket.",
-      nl:"Twee witte ijsbakken, achter elkaar. Ijsblokjes achteraan met de grotere blauwe schep, crushed vooraan met de metalen schep, zodat ze nooit verwisseld worden. Daartussen geklemd, links en rechts, twee grote tins met het gereedschap. Het zijn de grote tins van een cobbler shaker waar we niet mee shaken, dus ze zijn opslag en geen shakers. In elk zit een Hawthorne-zeef, een fijne zeef, een barlepel en een muddler. Voor elke tin staat een Boston shaker, een links en een rechts van de bak met crushed ice."},
-     {en:"The Boston shakers stand in front on purpose: they are what stops the tins of instruments from falling over, so put them back there after every shake. Underneath all of it lie two white mats with raised squares on the surface, so nothing slides.",
-      nl:"De Boston shakers staan er met opzet voor: zij voorkomen dat de tins met gereedschap omvallen, dus zet ze daar na elke shake terug. Onder het geheel liggen twee witte matten met opstaande vierkantjes, zodat niets wegglijdt."}],
-    /* Steps 8 and 9 used to describe the two sides here. They are islands 2
-       and 3 of the bar setup now, written out once in that panel. */
-    [{en:"Either side of the station",nl:"Aan weerszijden van het station"},
-     {en:"On the left, island 2: the straws, the crushed hibiscus garnish and the pineapple box. On the right, island 3: the Forest Fairy and Jalapeno Mule prep, the passion fruit and the third Boston shaker. Both are in Bar setup, clockwise, above.",
-      nl:"Links eiland 2: de rietjes, de verkruimelde hibiscusgarnering en de ananasbak. Rechts eiland 3: de prep voor Forest Fairy en Jalapeno Mule, de passievrucht en de derde Boston shaker. Beide staan hierboven bij Bar-opstelling, met de klok mee."}]
-  ];
-
   /* Left to right along each holder, as walked on 19 November. The cubed ice
      bucket lands in the middle, in front of the Ocean Mojito items, which is
      what makes the two halves separate stations rather than one long bar. */
@@ -5304,7 +5276,7 @@ body.cmt-on #root { cursor: crosshair; }
         [{ en: "A coppa glass of short straws", nl: "Een coppaglas met korte rietjes" }],
         [{ en: "A hurricane glass of long straws", nl: "Een hurricaneglas met lange rietjes" }],
         [{ en: "In front of the straws, a copper mug of crushed hibiscus garnish", nl: "Voor de rietjes een koperen beker met verkruimelde hibiscusgarnering" }],
-        [{ en: "The pineapple box, with a tablespoon in it", nl: "De ananasbak, met een eetlepel erin" },
+        [{ en: "The pineapple box: ONE box with both sizes in it, and a tablespoon", nl: "De ananasbak: EEN bak met beide maten erin, en een eetlepel" },
          { en: "Small chunks at the front of the box, for the Pina Colada build. Big chunks at the back, for the garnish: 3 big chunks on a garnish stick.",
            nl: "Kleine stukjes voorin de bak, voor de Pina Colada. Grote stukken achterin, voor de garnering: 3 grote stukken op een garneerprikker." }],
         [{ en: "The 75 ml jigger for the Pina Colada, at the left end of the left holder", nl: "De 75 ml-jigger voor de Pina Colada, aan het linkereind van de linkerhouder" }]
@@ -5356,47 +5328,131 @@ body.cmt-on #root { cursor: crosshair; }
     return ISLIMG[String(n)] || "";
   }
 
+  /* The three stations, walked between island 2 and island 3, as photographed
+     on 26 November. Each item is [what, why, sub-list]; the holder buckets are
+     read from HOLDER so they are written down once. */
+  var STATIONS = [
+    { n: "L", tag: "L", st: true,
+      where: { en: "Left station", nl: "Linkerstation" },
+      span:  { en: "Builds the Pina Colada, Hibiscus Royale and Cosmopolitan, and half of the Ocean Mojito.",
+               nl: "Maakt de Pina Colada, Hibiscus Royale en Cosmopolitan, en de helft van de Ocean Mojito." },
+      items: [
+        [{ en: "On the rail, left to right: pineapple juice, hibiscus tea, orange juice, cranberry juice",
+           nl: "In de speedrail, van links naar rechts: ananassap, hibiscusthee, sinaasappelsap, cranberrysap" },
+         { en: "Gold, red, orange and black caps.", nl: "Gouden, rode, oranje en zwarte doppen." }],
+        [{ en: "In front of the rail, the squeeze bottles: coconut milk and cream, Coco Lopez, strawberry puree, Boiron lemon, egg whites",
+           nl: "Voor de speedrail de knijpflessen: kokosmelk en -room, Coco Lopez, aardbeienpuree, Boiron citroen, eiwit" }],
+        [{ en: "The left holder, one bucket per item, left to right", nl: "De linkerhouder, een bakje per item, van links naar rechts" }, null, "left"],
+        [{ en: "Toward the middle, the tool tin: the big tin of a cobbler shaker, holding a Hawthorne strainer, a muddler, a fine strainer and a bar spoon. The jigger stands beside it",
+           nl: "Richting het midden de gereedschapstin: de grote tin van een cobbler shaker, met een Hawthorne-zeef, een muddler, een fijne zeef en een barlepel. De jigger staat ernaast" },
+         { en: "Nobody shakes with the cobbler; its big tin is only storage.", nl: "Met de cobbler wordt niet geshaket; de grote tin is alleen opslag." }],
+        [{ en: "In front of the tin, the Boston shaker", nl: "Voor de tin de Boston shaker" },
+         { en: "It keeps the tin of tools from falling over, so it goes back there after every shake.",
+           nl: "Hij houdt de tin met gereedschap overeind, dus hij gaat na elke shake daar terug." }],
+        [{ en: "In front of you, the black bar mat", nl: "Recht voor je de zwarte barmat" },
+         { en: "With at least one 50/30 jigger on it, so this station measures without reaching across the other.",
+           nl: "Met minstens een 50/30-jigger erop, zodat dit station kan afmeten zonder over het andere heen te reiken." }]
+      ] },
+    { n: "M", tag: "M", st: true,
+      where: { en: "Middle station", nl: "Middenstation" },
+      span:  { en: "Shared by both: the syrups, the Ocean Mojito bottles and the ice.",
+               nl: "Van allebei: de siropen, de Ocean Mojito-flessen en het ijs." },
+      items: [
+        [{ en: "At the back, the Monin syrups, spouted and standing: vanilla, cane sugar, vanilla",
+           nl: "Achteraan de Monin-siropen, met schenktuit en rechtop: vanille, rietsuiker, vanille" },
+         { en: "Two vanillas on purpose, one within reach of each station. They stand between the stations so either end reaches the cane sugar.",
+           nl: "Met opzet twee keer vanille, een binnen bereik van elk station. Ze staan tussen de stations zodat beide einden bij de rietsuiker kunnen." }],
+        [{ en: "In front of them, the Ocean Mojito bottles: cassis, mint syrup, sparkling water, BPT infusion",
+           nl: "Daarvoor de Ocean Mojito-flessen: cassis, muntsiroop, bruiswater, BPT-infusie" },
+         { en: "Straight in front of the syrups, so the Mojito is made from the middle and neither station gives up its own order.",
+           nl: "Recht voor de siropen, zodat de Mojito vanuit het midden gemaakt wordt en geen van beide stations zijn eigen volgorde opgeeft." }],
+        [{ en: "The cubed ice bucket, at the back, with the blue scoop", nl: "De bak met ijsblokjes, achteraan, met de blauwe schep" }],
+        [{ en: "The crushed ice bucket, at the front, with the silver metal scoop", nl: "De bak met crushed ice, vooraan, met de zilveren metalen schep" },
+         { en: "Each bucket keeps its own scoop, so the two never get swapped.", nl: "Elke bak houdt zijn eigen schep, zodat ze nooit verwisseld worden." }],
+        [{ en: "Underneath the ice and both tool tins, two white mats with raised squares", nl: "Onder het ijs en beide gereedschapstins twee witte matten met opstaande vierkantjes" },
+         { en: "So nothing slides.", nl: "Zodat niets wegglijdt." }]
+      ] },
+    { n: "R", tag: "R", st: true,
+      where: { en: "Right station", nl: "Rechterstation" },
+      span:  { en: "Builds the Tropical Velvet, Spicy Jalapeno Mule, The Hulk and Lychee Siren, and the other half of the Ocean Mojito.",
+               nl: "Maakt de Tropical Velvet, Spicy Jalapeno Mule, The Hulk en Lychee Siren, en de andere helft van de Ocean Mojito." },
+      items: [
+        [{ en: "On the rail, left to right: apple-pear juice, passion fruit juice, lychee juice, butterfly pea coconut water",
+           nl: "In de speedrail, van links naar rechts: appel-perensap, passievruchtensap, lycheesap, kokoswater met vlindererwt" },
+         { en: "Green, yellow, white and blue caps.", nl: "Groene, gele, witte en blauwe doppen." }],
+        [{ en: "In front of the rail, the squeeze bottles: passionfruit puree, Boiron lime, lychee cordial",
+           nl: "Voor de speedrail de knijpflessen: passievruchtenpuree, Boiron limoen, lycheecordial" }],
+        [{ en: "The right holder, one bucket per item, left to right", nl: "De rechterhouder, een bakje per item, van links naar rechts" }, null, "right"],
+        [{ en: "Toward the middle, the tool tin: the big cobbler tin, holding a Hawthorne strainer, a fine strainer, a bar spoon and a muddler. The jigger stands beside it",
+           nl: "Richting het midden de gereedschapstin: de grote cobbler-tin, met een Hawthorne-zeef, een fijne zeef, een barlepel en een muddler. De jigger staat ernaast" }],
+        [{ en: "In front of the tin, the Boston shaker", nl: "Voor de tin de Boston shaker" },
+         { en: "Back there after every shake, it keeps the tin standing.", nl: "Na elke shake terug op zijn plek, dan blijft de tin staan." }],
+        [{ en: "In front of you, the black bar mat", nl: "Recht voor je de zwarte barmat" },
+         { en: "With its own 50/30 jigger.", nl: "Met een eigen 50/30-jigger." }]
+      ] }
+  ];
+  function holderList(side) {
+    var g = HOLDER.filter(function (h) { return tt(h[0]) === tt(side === "left" ? { en: "Left holder", nl: "Linkerhouder" } : { en: "Right holder", nl: "Rechterhouder" }); })[0];
+    return g ? g[1] : [];
+  }
+
   function islandsHTML() {
-    var stop = function (label, on) {
-      return '<span class="isl-stop' + (on ? " on" : "") + '">' + label + "</span>";
+    var stop = function (label, go) {
+      return go ? '<button type="button" class="isl-stop on" data-isl-go="' + go + '">' + label + "</button>"
+                : '<span class="isl-stop">' + label + "</span>";
     };
     var route = [
-      stop(et({ en: "Sink", nl: "Spoelbak" })), stop("1", 1),
-      stop(et({ en: "Ticket printer", nl: "Bonprinter" })), stop("2", 1),
-      stop(et({ en: "The station", nl: "Het station" })), stop("3", 1),
+      stop(et({ en: "Sink", nl: "Spoelbak" })), stop("1", "1"),
+      stop(et({ en: "Ticket printer", nl: "Bonprinter" })), stop("2", "2"),
+      stop(et({ en: "Left station", nl: "Linkerstation" }), "L"),
+      stop(et({ en: "Middle station", nl: "Middenstation" }), "M"),
+      stop(et({ en: "Right station", nl: "Rechterstation" }), "R"), stop("3", "3"),
       stop(et({ en: "Glassware", nl: "Glaswerk" })), "&hellip;",
-      stop(et({ en: "Blender", nl: "Blender" })), stop("4", 1),
+      stop(et({ en: "Blender", nl: "Blender" })), stop("4", "4"),
       stop(et({ en: "Coffee machine", nl: "Koffiemachine" }))
     ].join('<span aria-hidden="true">&rsaquo;</span>');
     function island(isl) {
       var n = isl.n, open = !!ISLPH[n], src = open ? islPhoto(n) : "";
-      return '<div class="isl" data-isl="' + n + '"><div class="isl-h">' +
-        '<span class="isl-n">&#8470;&thinsp;' + n + "</span>" +
+      return '<div class="isl' + (isl.st ? " st" : "") + '" data-isl="' + n + '"><div class="isl-h">' +
+        (isl.st ? '<span class="isl-n st" aria-hidden="true">' + isl.tag + "</span>" : '<span class="isl-n">&#8470;&thinsp;' + n + "</span>") +
         '<span class="isl-w">' + et(isl.where) + "</span>" +
         '<span class="isl-s">' + et(isl.span) + "</span></div>" +
         '<ul class="qgar">' + isl.items.map(function (it) {
-          return "<li>" + et(it[0]) + (it[1] ? '<span class="qstep-why">' + et(it[1]) + "</span>" : "") + "</li>";
+          return "<li>" + et(it[0]) + (it[1] ? '<span class="qstep-why">' + et(it[1]) + "</span>" : "") +
+            (it[2] ? '<ol class="isl-sub">' + holderList(it[2]).map(function (x) { return "<li>" + et(x) + "</li>"; }).join("") + "</ol>" : "") +
+            "</li>";
         }).join("") + "</ul>" +
         '<details class="isl-ph" data-isl-ph="' + n + '"' + (open ? " open" : "") + "><summary>" +
-        et({ en: "Photo of island " + n, nl: "Foto van eiland " + n }) + "</summary>" +
+        (isl.st ? et({ en: "Photo of the " + tt(isl.where).toLowerCase(), nl: "Foto van het " + tt(isl.where).toLowerCase() })
+                : et({ en: "Photo of island " + n, nl: "Foto van eiland " + n })) + "</summary>" +
         (open && !src ? '<p class="qdash">' + et({ en: "The photo is not in this copy of the file.", nl: "De foto zit niet in deze versie van het bestand." }) + "</p>"
-                      : '<img alt="' + et({ en: "Island " + n + ", as set up", nl: "Eiland " + n + ", zoals opgesteld" }) + '"' +
+                      : '<img alt="' + (isl.st ? et({ en: tt(isl.where) + ", as set up", nl: tt(isl.where) + ", zoals opgesteld" })
+                                             : et({ en: "Island " + n + ", as set up", nl: "Eiland " + n + ", zoals opgesteld" })) + '"' +
                         (src ? ' src="' + src + '"' : "") + ">") +
         "</details></div>";
     }
     return '<div class="panel" id="q-islands"><h3>' +
       et({ en: "Bar setup, clockwise", nl: "Bar-opstelling, met de klok mee" }) + "</h3>" +
       '<p class="legend" style="margin:0 0 6px">' +
-      et({ en: "Four islands around the station, from the sink round to the coffee machine. The station itself is the next panel.",
-           nl: "Vier eilanden rond het station, van de spoelbak tot de koffiemachine. Het station zelf staat in het volgende paneel." }) + "</p>" +
+      et({ en: "From the sink round to the coffee machine: islands 1 and 2, then the left, middle and right station, then islands 3 and 4. Tap a stop to jump to it.",
+           nl: "Van de spoelbak tot de koffiemachine: eilanden 1 en 2, dan het linker-, midden- en rechterstation, dan eilanden 3 en 4. Tik op een halte om ernaartoe te gaan." }) + "</p>" +
       '<div class="isl-route">' + route + "</div>" +
       island(ISLANDS[0]) + island(ISLANDS[1]) +
-      '<div class="isl-mid"><b>' + et({ en: "Then the station.", nl: "Dan het station." }) + "</b> " +
-      et({ en: "The speed rail, the squeeze bottles, the holders, the ice and the tools, left station to right station. Walked through in the next panel.",
-           nl: "De speedrail, de knijpflessen, de houders, het ijs en het gereedschap, van linkerstation tot rechterstation. Uitgelegd in het volgende paneel." }) + "</div>" +
+      island(STATIONS[0]) + island(STATIONS[1]) + island(STATIONS[2]) +
       island(ISLANDS[2]) + island(ISLANDS[3]) +
       "</div>";
   }
+
+  /* A stop in the route line takes you to it, landing just under the sticky
+     bar rather than behind it. */
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest("#root [data-isl-go]");
+    if (!b) return;
+    var el = document.querySelector('#root [data-isl="' + CSS.escape(b.getAttribute("data-isl-go")) + '"]');
+    if (!el) return;
+    var bar = document.querySelector(".topbar"), off = bar ? Math.max(0, bar.getBoundingClientRect().bottom) : 0;
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - off - 8, behavior: "smooth" });
+  });
 
   /* toggle does not bubble, so listen in the capture phase. The photo is only
      decoded when someone opens it. */
@@ -5462,20 +5518,6 @@ body.cmt-on #root { cursor: crosshair; }
       et({ en: "Passionfruit and pineapple both read yellow in the photo. They are written here as yellow and gold so they can be told apart on this page. The bottles themselves will be labelled, so two distinct cap colours are not needed.",
            nl: "Passievrucht en ananas lezen allebei als geel op de foto. Ze staan hier als geel en goud zodat ze op deze pagina uit elkaar te houden zijn. De flessen worden zelf gelabeld, dus twee verschillende dopkleuren zijn niet nodig." }) + "</div>" +
       islandsHTML() +
-      '<div class="panel" id="q-station"><h3>' +
-      et({ en: "The station, clockwise", nl: "Het station, met de klok mee" }) + "</h3>" +
-      '<ol class="qsteps">' + STATION.map(function (s) {
-        return "<li><b>" + et(s[0]) + ".</b> " + et(s[1]) +
-          (s[2] ? '<span class="qstep-why">' + et(s[2]) + "</span>" : "") + "</li>";
-      }).join("") + "</ol>" +
-      '<h4 class="qsub">' +
-      et({ en: "The holders, left to right, one bucket per item",
-           nl: "De houders, van links naar rechts, een bakje per item" }) + "</h4>" +
-      HOLDER.map(function (g) {
-        return '<div class="qhold"><span class="qhold-h">' + et(g[0]) + "</span><ul class=\"qgar\">" +
-          g[1].map(function (x) { return "<li>" + et(x) + "</li>"; }).join("") + "</ul></div>";
-      }).join("") +
-      "</div>" +
       noteBox("rail-1", { en: "Rail notes. Anything that changes at the station, type it here.",
                           nl: "Notities over de speedrail. Alles wat aan het station verandert, typ je hier." }) +
       noteBox("rail-2", { en: "Syrup and Monin notes.", nl: "Notities over siroop en Monin." }) +
