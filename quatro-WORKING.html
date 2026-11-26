@@ -2030,6 +2030,12 @@ tr.inv-r:hover .iv-grip, .iv-grip:focus { opacity: .85; }
 .iv-x.empty::before, .iv-name:empty::before { content: attr(data-ph); color: rgba(107,100,89,.55); font-style: italic; }
 .iv-x:focus.empty::before { content: ""; }
 .iv-name:empty { display: inline-block; min-width: 120px; }
+.iv-per { display: inline-flex; align-items: center; gap: 4px; margin-left: 6px; font-size: 13px; color: var(--ink-soft); white-space: nowrap; }
+.iv-pq { width: 52px; font: inherit; font-size: 13px; padding: 4px 6px; border: 1px solid var(--gold-pale); border-radius: 6px; text-align: right; }
+.iv-pu { font: inherit; font-size: 13px; padding: 4px 4px; border: 1px solid var(--gold-pale); border-radius: 6px; background: #fff; }
+.iv-per.ask .iv-pq { border-color: #9E2B3B; background: rgba(158,43,59,.06); }
+.iv-per-hint { display: block; font-size: 11.5px; color: #9E2B3B; margin-top: 4px; white-space: normal; max-width: 260px; }
+.iv-eq { font-size: 11.5px; color: var(--ink-soft); white-space: nowrap; }
 .iv-usel { font: inherit; font-size: 13px; padding: 4px 6px; border: 1px solid var(--gold-pale);
   border-radius: 6px; background: #fff; max-width: 140px; cursor: pointer; }
 .iv-uadd { display: inline-flex; gap: 5px; align-items: center; }
@@ -2060,7 +2066,8 @@ tr.inv-new td { padding: 2px 10px; border-bottom: 1px solid var(--limestone-deep
 .iv-cdel.armed { background: rgba(158,43,59,.1); border-radius: 6px; font-weight: 600; }
 .iv-add-l { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .iv-add-l .iv-field { flex: 1 1 160px; min-width: 0; }
-.iv-add-l .iv-quiet { border: 0; background: none; color: var(--ink-soft); text-decoration: underline; padding: 5px 2px; }
+.iv-add-l .iv-quiet, .iv-mgr .iv-quiet { font: inherit; font-size: 12.5px; border: 0; background: none; color: var(--ink-soft);
+  text-decoration: underline; padding: 10px 2px 0; cursor: pointer; display: block; }
 .iv-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
 .iv-chip { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; padding: 3px 3px 3px 10px;
   border-radius: 999px; border: 1px solid var(--gold-pale); background: var(--limestone); }
@@ -2071,6 +2078,50 @@ tr.inv-new td { padding: 2px 10px; border-bottom: 1px solid var(--limestone-deep
 .iv-mgr-msg { font-size: 12.5px; color: #9E2B3B; margin: 8px 0 0; }
 .iv-mgr-x { margin-top: 10px; }
 .iv-ack { margin-left: 8px; vertical-align: baseline; }
+/* columns panel */
+.iv-cg-h { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); margin: 14px 0 6px; }
+.iv-cg-h span { display: inline-block; min-width: 20px; padding: 0 6px; margin-left: 4px; border-radius: 999px;
+  background: var(--limestone); color: var(--ink); font-size: 11px; letter-spacing: 0; text-align: center; }
+.iv-cl { list-style: none; margin: 0; padding: 0; border: 1px solid var(--limestone-deep); border-radius: 10px; overflow: hidden; }
+.iv-cr { display: flex; align-items: center; gap: 10px; padding: 6px 8px; min-height: 44px; border-top: 1px solid var(--limestone-deep);
+  background: #fff; flex-wrap: wrap; }
+.iv-cr:first-child { border-top: 0; }
+.iv-cl.hid .iv-cr { background: var(--limestone); color: var(--ink-soft); }
+.iv-cr.none { font-size: 12.5px; font-style: italic; justify-content: center; }
+.iv-cr.drop-a { box-shadow: inset 0 3px 0 var(--gold); }
+.iv-cr.drop-b { box-shadow: inset 0 -3px 0 var(--gold); }
+.iv-cr.drag-src { opacity: .45; }
+.iv-cgrip { width: 22px; height: 30px; flex: none; border: 0; padding: 0; cursor: grab; touch-action: none; border-radius: 6px;
+  background-color: transparent; background-image: radial-gradient(circle, var(--ink) 1.3px, transparent 1.7px);
+  background-size: 7px 7px; background-position: 4px 4px; opacity: .45; }
+.iv-cgrip:hover, .iv-cgrip:focus { opacity: 1; background-color: rgba(168,134,60,.12); outline: none; }
+.iv-cgrip.off { background-image: none; cursor: default; }
+.iv-ck { flex: none; width: 34px; height: 24px; display: inline-grid; place-items: center; border-radius: 6px;
+  background: var(--limestone); color: var(--gold); font-size: 11px; font-weight: 600; letter-spacing: 0; }
+.iv-cn { flex: 1 1 auto; font-size: 14px; min-width: 0; }
+.iv-cn-b { font: inherit; font-size: 14px; text-align: left; border: 0; background: none; padding: 4px 0; cursor: pointer; color: var(--ink);
+  display: flex; align-items: baseline; gap: 8px; }
+.iv-cn-b::after { content: "\25BE"; color: var(--gold); font-size: 11px; }
+.iv-cr.open .iv-cn-b::after { content: "\25B4"; }
+.iv-cn-k { font-size: 11px; color: var(--ink-soft); }
+.iv-eye { flex: none; width: 40px; height: 34px; border-radius: 8px; border: 1px solid var(--gold-pale); background: #fff;
+  color: var(--gold); cursor: pointer; display: inline-grid; place-items: center; padding: 0; }
+.iv-eye:not(.on) { color: var(--ink-soft); background: transparent; border-style: dashed; }
+.iv-clock { flex: none; display: inline-flex; align-items: center; gap: 5px; color: var(--ink-soft); font-size: 11.5px; font-style: italic; }
+.iv-cx { flex: 1 1 100%; display: flex; flex-direction: column; gap: 8px; padding: 6px 0 4px 66px; }
+.iv-cx-l { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); display: flex; align-items: center; gap: 8px; }
+.iv-cx .iv-opts { padding: 0; }
+.iv-cx .iv-cdel { align-self: flex-start; }
+.iv-add-c { display: flex; flex-direction: column; gap: 8px; }
+.iv-add-c .iv-field { width: 100%; min-width: 0; box-sizing: border-box; }
+.iv-ktypes { display: flex; flex-wrap: wrap; gap: 6px; }
+.iv-ktype { font: inherit; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 4px;
+  border-radius: 999px; border: 1px solid var(--gold-pale); background: #fff; cursor: pointer; color: var(--ink); }
+.iv-ktype .iv-ck { width: 30px; height: 22px; }
+.iv-ktype.on { border-color: var(--gold); background: rgba(168,134,60,.16); font-weight: 600; }
+.iv-add-go { align-self: flex-start; font: inherit; font-size: 13px; padding: 7px 14px; border-radius: 8px; cursor: pointer;
+  border: 1px solid var(--gold); background: var(--gold); color: #fff; }
+@media (max-width: 719px) { .iv-cx { padding-left: 0; } .iv-clock-t { display: none; } }
 /* column menu, sorting, pinning, sizing */
 .inv-t th[data-col] { padding-right: 22px; }
 /* Not on the name or a pinned column: those are sticky, and position:relative
@@ -3328,7 +3379,7 @@ body.cmt-on #root { cursor: crosshair; }
       note:  tt({ en: "Note",         nl: "Notitie" }),
       dot:   tt({ en: "Day dot",      nl: "Dagsticker" }),
       need:  tt({ en: "Per week",     nl: "Per week" }),
-      have:  tt({ en: "Have",         nl: "Voorraad" }),
+      have:  tt({ en: "In stock",     nl: "Voorraad" }),
       buy:   tt({ en: "Still to buy", nl: "Nog kopen" }),
       cost:  tt({ en: "Cost",         nl: "Kosten" }),
       where: tt({ en: "Buy at",       nl: "Waar" })
@@ -3601,6 +3652,77 @@ body.cmt-on #root { cursor: crosshair; }
     if (GROUPBY === "status") return tt({ en: "what is left to buy", nl: "wat er nog te kopen is" });
     return tt({ en: "category", nl: "categorie" });
   }
+
+  /* Columns panel: icons, the eye, and moving a column by dragging its dots
+     in the list or with the arrow keys. */
+  var CEXP = null, CTYPE = "text";
+  var TYPE_ICON = { text: "Aa", number: "123", status: "&#9679;", tags: "#", check: "&#10003;" };
+  var COL_ICON = { item: "Aa", have: "123", need: "123", buy: "123", cost: "&euro;", unit: "&#9878;",
+                   where: "&#8962;", cat: "&#9776;", note: "Aa", dot: "31" };
+  function colIcon(c) { return c.custom ? (TYPE_ICON[c.type] || "Aa") : (COL_ICON[c.id] || "Aa"); }
+  function eyeSVG(on) {
+    return '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/>' +
+      '<circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/>' +
+      (on ? "" : '<path d="M4 20L20 4" stroke="currentColor" stroke-width="1.8"/>') + "</svg>";
+  }
+  function lockSVG() {
+    return '<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" focusable="false"><rect x="5" y="11" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/>' +
+      '<path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>';
+  }
+  function moveCol(id, toId, after) {
+    var c = colById(id);
+    if (!c || id === toId) return;
+    var rest = COLS.filter(function (x) { return x !== c; });
+    var ti = rest.map(function (x) { return x.id; }).indexOf(toId);
+    if (ti < 0) return;
+    rest.splice(ti + (after ? 1 : 0), 0, c);
+    COLS = rest; colsFix(); colsSave();
+  }
+  document.addEventListener("click", function (e) {
+    var t = e.target;
+    if (!t || !t.closest) return;
+    var b = t.closest("#root .iv-mgr button");
+    if (!b) return;
+    var a;
+    if ((a = b.getAttribute("data-ceye")) != null) {
+      var c = colById(a);
+      if (!c) return;
+      c.show = !c.show;
+      /* shown again, it joins the end of the table rather than where it was */
+      if (c.show) {
+        var lastShown = COLS.filter(function (x) { return x.show && x !== c; }).pop();
+        if (lastShown) moveCol(c.id, lastShown.id, true);
+      }
+      colsSave(); invRender();
+      var back = document.querySelector('#root [data-ceye="' + CSS.escape(a) + '"]');
+      if (back) back.focus({ preventScroll: true });
+      return;
+    }
+    if ((a = b.getAttribute("data-cexp")) != null) { CEXP = CEXP === a ? null : a; CDELARM = null; invRender(); return; }
+    if ((a = b.getAttribute("data-ctype")) != null) {
+      CTYPE = a;
+      var ks = document.querySelectorAll("#root [data-ctype]");
+      for (var i = 0; i < ks.length; i++) {
+        var on = ks[i].getAttribute("data-ctype") === a;
+        ks[i].classList.toggle("on", on); ks[i].setAttribute("aria-checked", on ? "true" : "false");
+      }
+      return;
+    }
+  });
+  document.addEventListener("keydown", function (e) {
+    var g = e.target;
+    if (!g || !g.getAttribute || g.getAttribute("data-cgrip") == null) return;
+    if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
+    e.preventDefault();
+    var id = g.getAttribute("data-cgrip");
+    var shown = COLS.filter(function (c) { return c.show && c.id !== "item"; });
+    var i = shown.map(function (c) { return c.id; }).indexOf(id), j = e.key === "ArrowUp" ? i - 1 : i + 1;
+    if (j < 0 || j >= shown.length) return;
+    moveCol(id, shown[j].id, e.key === "ArrowDown");
+    invRender();
+    var again = document.querySelector('#root [data-cgrip="' + CSS.escape(id) + '"]');
+    if (again) again.focus({ preventScroll: true });
+  });
 
   /* Column types beyond plain text: a number, a status picked from a short
      list, tags (several from a list), and a tick box. Options live on the
@@ -4059,11 +4181,11 @@ body.cmt-on #root { cursor: crosshair; }
           '"><span class="inv-unit">' + u + "</span></td>";
       case "need":
         return '<td class="c-need num"' + lab + '><span class="iv-need" contenteditable="true" data-f="need">' +
-          (k.need == null ? et(SETPAR) : tidy(k.need)) + "</span> " + u + "</td>";
+          (k.need == null ? et(SETPAR) : tidy(k.need)) + "</span> " + u + eqSpan(r, k.need) + "</td>";
       case "buy":
         return '<td data-c="buy" class="c-buy buy' + (k.short === 0 ? " ok" : "") + '"' + lab + '>' +
           (k.need == null ? et(SETPAR)
-            : k.short > 0 ? tidy(k.short) + " " + u
+            : k.short > 0 ? tidy(k.short) + " " + u + eqSpan(r, k.short)
             : et({ en: "covered", nl: "gedekt" })) + "</td>";
       case "cost":
         return '<td data-c="cost" class="c-cost num"' + lab + '>' + (!k.priced ? '<span class="iv-tbd">' +
@@ -4072,7 +4194,7 @@ body.cmt-on #root { cursor: crosshair; }
       case "where":
         return '<td class="c-where"' + lab + '>' + supTag(r) + "</td>";
       case "unit":
-        return '<td class="c-unit"' + lab + '>' + unitSel(r) + "</td>";
+        return '<td class="c-unit"' + lab + '>' + unitSel(r) + perHTML(r) + "</td>";
       case "cat":
         /* A list-backed input rather than a select: it offers the categories
            that exist and still accepts one you have just thought of. */
@@ -4098,42 +4220,66 @@ body.cmt-on #root { cursor: crosshair; }
     if (!MGR) return "";
     var h = '<div class="iv-mgr" data-mgr="' + MGR + '">';
     if (MGR === "cols") {
+      /* Two plain lists, the columns on the table and the hidden ones. A
+         handle to drag, an eye to show or hide, and nothing else on a row
+         until you open one of your own columns to rename or edit it. */
+      var shownC = COLS.filter(function (c) { return c.show && c.id !== "item"; });
+      var hidC = COLS.filter(function (c) { return !c.show && c.id !== "item"; });
+      var crow = function (c, on) {
+        var open = c.custom && CEXP === c.id;
+        return '<li class="iv-cr' + (open ? " open" : "") + '" data-cm="' + esc(c.id) + '">' +
+          (on ? '<button type="button" class="iv-cgrip" data-cgrip="' + esc(c.id) + '" aria-label="' +
+                et({ en: "Move " + colName(c) + ". Drag it, or use the arrow keys.", nl: "Verplaats " + colName(c) + ". Sleep, of gebruik de pijltjestoetsen." }) + '"></button>'
+              : '<span class="iv-cgrip off" aria-hidden="true"></span>') +
+          '<span class="iv-ck" aria-hidden="true">' + colIcon(c) + "</span>" +
+          (c.custom ? '<button type="button" class="iv-cn iv-cn-b" data-cexp="' + esc(c.id) + '" aria-expanded="' + open + '">' +
+                      esc(colName(c)) + (typeLabel(c.type) === colName(c) ? "" : '<span class="iv-cn-k">' + esc(typeLabel(c.type)) + "</span>") + "</button>"
+                    : '<span class="iv-cn">' + esc(colName(c)) + "</span>") +
+          '<button type="button" class="iv-eye' + (on ? " on" : "") + '" data-ceye="' + esc(c.id) + '" aria-pressed="' + on + '" aria-label="' +
+            (on ? et({ en: "Hide " + colName(c), nl: "Verberg " + colName(c) }) : et({ en: "Show " + colName(c), nl: "Toon " + colName(c) })) + '">' +
+            eyeSVG(on) + "</button>" +
+          (open ? '<div class="iv-cx">' +
+              '<label class="iv-cx-l">' + et({ en: "Name", nl: "Naam" }) +
+              ' <input class="iv-field iv-cname" data-cname="' + esc(c.id) + '" value="' + esc(c.name) + '"></label>' +
+              ((c.type === "status" || c.type === "tags") ?
+                '<div class="iv-opts"><span class="iv-cx-l">' + et({ en: "Options", nl: "Opties" }) + "</span>" + (c.opts || []).map(function (o) {
+                  return '<span class="iv-chip" style="' + chipStyle(PAL[o.c % PAL.length]) + '">' + esc(optLabel(o.v)) +
+                    '<button type="button" data-orm="' + esc(c.id + "|" + o.v) + '" aria-label="' + et({ en: "Remove", nl: "Verwijderen" }) + " " + esc(o.v) + '">&times;</button></span>';
+                }).join("") +
+                '<span class="iv-uadd"><input class="iv-field" data-onew="' + esc(c.id) + '" placeholder="' +
+                et({ en: "New option", nl: "Nieuwe optie" }) + '"><button type="button" data-ook="' + esc(c.id) + '">' +
+                et({ en: "Add", nl: "Toevoegen" }) + "</button></span></div>" : "") +
+              '<button type="button" class="iv-cdel' + (CDELARM === c.id ? " armed" : "") + '" data-cdel="' + esc(c.id) + '">' +
+                (CDELARM === c.id ? et({ en: "Tap again to delete this column", nl: "Tik nog eens om deze kolom te verwijderen" })
+                                  : et({ en: "Delete this column", nl: "Deze kolom verwijderen" })) + "</button>" +
+            "</div>" : "") +
+          "</li>";
+      };
       h += '<div class="iv-mgr-h">' + et({ en: "Columns", nl: "Kolommen" }) + "</div>" +
-        '<p class="iv-mgr-p">' + et({ en: "Move a column with the arrows, or drag its heading on a wide screen. Untick to hide it. On a phone the name, Have, Per week and Still to buy stay at the top of each card, and the rest follow in this order.",
-                                      nl: "Verplaats een kolom met de pijlen, of sleep de kop op een breed scherm. Vink uit om te verbergen. Op een telefoon blijven naam, Voorraad, Per week en Nog kopen bovenaan elke kaart, de rest volgt in deze volgorde." }) + "</p>" +
-        '<ol class="iv-cl">' + COLS.map(function (c, i) {
-          if (c.id === "item") return '<li class="iv-cr fixed"><span class="iv-cn">' + esc(colName(c)) + "</span>" +
-            '<span class="iv-cfix">' + et({ en: "always first", nl: "altijd eerst" }) + "</span></li>";
-          return '<li class="iv-cr" data-cm="' + esc(c.id) + '">' +
-            '<button type="button" class="iv-ca" data-cup="' + esc(c.id) + '"' + (i <= 1 ? " disabled" : "") + ' aria-label="' +
-            et({ en: "Move left", nl: "Naar links" }) + '">&uarr;</button>' +
-            '<button type="button" class="iv-ca" data-cdn="' + esc(c.id) + '"' + (i === COLS.length - 1 ? " disabled" : "") + ' aria-label="' +
-            et({ en: "Move right", nl: "Naar rechts" }) + '">&darr;</button>' +
-            '<label class="iv-cs"><input type="checkbox" data-cshow="' + esc(c.id) + '"' + (c.show ? " checked" : "") + ">" +
-            (c.custom ? "" : '<span class="iv-cn">' + esc(colName(c)) + "</span>") + "</label>" +
-            (c.custom ? '<input class="iv-field iv-cname" data-cname="' + esc(c.id) + '" value="' + esc(c.name) + '" aria-label="' +
-                        et({ en: "Column name", nl: "Kolomnaam" }) + '">' +
-                        '<span class="iv-ctype">' + esc(typeLabel(c.type)) + "</span>" +
-                        '<button type="button" class="iv-cdel' + (CDELARM === c.id ? " armed" : "") + '" data-cdel="' + esc(c.id) + '">' +
-                        (CDELARM === c.id ? et({ en: "Tap again to delete", nl: "Tik nog eens om te verwijderen" })
-                                          : et({ en: "Delete", nl: "Verwijderen" })) + "</button>" : "") +
-            ((c.type === "status" || c.type === "tags") ?
-              '<div class="iv-opts">' + (c.opts || []).map(function (o) {
-                return '<span class="iv-chip" style="' + chipStyle(PAL[o.c % PAL.length]) + '">' + esc(optLabel(o.v)) +
-                  '<button type="button" data-orm="' + esc(c.id + "|" + o.v) + '" aria-label="' + et({ en: "Remove", nl: "Verwijderen" }) + " " + esc(o.v) + '">&times;</button></span>';
-              }).join("") +
-              '<span class="iv-uadd"><input class="iv-field" data-onew="' + esc(c.id) + '" placeholder="' +
-              et({ en: "New option", nl: "Nieuwe optie" }) + '"><button type="button" data-ook="' + esc(c.id) + '">' +
-              et({ en: "Add", nl: "Toevoegen" }) + "</button></span></div>" : "") +
-            "</li>";
-        }).join("") + "</ol>" +
-        '<div class="iv-add-l"><input class="iv-field" id="iv-col-in" placeholder="' +
-        et({ en: "New column, for example Fridge", nl: "Nieuwe kolom, bijvoorbeeld Koelkast" }) + '">' +
-        '<select id="iv-col-type" class="iv-usel" aria-label="' + et({ en: "Kind of column", nl: "Soort kolom" }) + '">' +
-        COL_TYPES.map(function (k) { return '<option value="' + k[0] + '">' + et(k[1]) + "</option>"; }).join("") + "</select>" +
-        '<button type="button" id="iv-col-addbtn">' + et({ en: "Add column", nl: "Kolom toevoegen" }) + "</button>" +
+        '<p class="iv-mgr-p">' + et({ en: "Drag the dots to change the order. Tap the eye to show or hide a column. The table changes straight away.",
+                                      nl: "Sleep de puntjes om de volgorde te veranderen. Tik op het oog om een kolom te tonen of te verbergen. De tabel verandert meteen." }) + "</p>" +
+        '<div class="iv-cg-h">' + et({ en: "On the table", nl: "In de tabel" }) + " <span>" + (shownC.length + 1) + "</span></div>" +
+        '<ul class="iv-cl shown">' +
+          '<li class="iv-cr lock"><span class="iv-cgrip off" aria-hidden="true"></span><span class="iv-ck" aria-hidden="true">Aa</span>' +
+          '<span class="iv-cn">' + esc(colName(COLS[0])) + "</span>" +
+          '<span class="iv-clock" title="' + et({ en: "The name always sits on the left", nl: "De naam staat altijd links" }) + '">' +
+          lockSVG() + '<span class="iv-clock-t">' + et({ en: "stays on the left", nl: "blijft links" }) + "</span></span></li>" +
+          shownC.map(function (c) { return crow(c, true); }).join("") + "</ul>" +
+        '<div class="iv-cg-h">' + et({ en: "Hidden", nl: "Verborgen" }) + " <span>" + hidC.length + "</span></div>" +
+        '<ul class="iv-cl hid">' + (hidC.length ? hidC.map(function (c) { return crow(c, false); }).join("")
+          : '<li class="iv-cr none">' + et({ en: "Nothing hidden. Tap an eye above to hide a column.", nl: "Niets verborgen. Tik hierboven op een oog om een kolom te verbergen." }) + "</li>") + "</ul>" +
+        '<div class="iv-cg-h">' + et({ en: "Add a column", nl: "Kolom toevoegen" }) + "</div>" +
+        '<div class="iv-add-c"><input class="iv-field" id="iv-col-in" placeholder="' +
+          et({ en: "Name, for example Fridge", nl: "Naam, bijvoorbeeld Koelkast" }) + '">' +
+          '<div class="iv-ktypes" role="radiogroup" aria-label="' + et({ en: "Kind of column", nl: "Soort kolom" }) + '">' +
+          COL_TYPES.map(function (k) {
+            var on = (CTYPE || "text") === k[0];
+            return '<button type="button" role="radio" aria-checked="' + on + '" class="iv-ktype' + (on ? " on" : "") + '" data-ctype="' + k[0] + '">' +
+              '<span class="iv-ck" aria-hidden="true">' + TYPE_ICON[k[0]] + "</span>" + et(k[1]) + "</button>";
+          }).join("") + "</div>" +
+          '<button type="button" id="iv-col-addbtn" class="iv-add-go">' + et({ en: "Add column", nl: "Kolom toevoegen" }) + "</button></div>" +
         '<button type="button" id="iv-col-reset" class="iv-quiet">' +
-        et({ en: "Back to the standard columns", nl: "Terug naar de standaardkolommen" }) + "</button></div>";
+          et({ en: "Back to the standard columns", nl: "Terug naar de standaardkolommen" }) + "</button>";
     } else {
       var units = MGR === "units", list = units ? unitList() : supList(), use = {};
       ROWS.forEach(function (r) {
@@ -4402,9 +4548,9 @@ body.cmt-on #root { cursor: crosshair; }
       /* c-buy names the column. Dropping it took the cell out of the phone
          card the moment a count was typed. */
       buy.className = "c-buy buy" + (c.short === 0 ? " ok" : "");
-      buy.textContent = c.need == null ? tt(SETPAR)
-        : c.short > 0 ? tidy(c.short) + " " + unitLabel(r.unit)
-        : tt({ en: "covered", nl: "gedekt" });
+      buy.innerHTML = c.need == null ? et(SETPAR)
+        : c.short > 0 ? tidy(c.short) + " " + esc(unitLabel(r.unit)) + eqSpan(r, c.short)
+        : et({ en: "covered", nl: "gedekt" });
     }
     var cost = tr.querySelector('[data-c="cost"]');
     if (cost) {
@@ -4441,7 +4587,7 @@ body.cmt-on #root { cursor: crosshair; }
       if (pick === "__add") { inlineAdd(sel, "sup"); return; }
       row.supplier = pick;
       var pe = rowEntry(row);
-      if (pe) row.cost = costIn(pe, row.unit);
+      if (pe) row.cost = rowCost(pe, row);
       persist(); invRender();
       return;
     }
@@ -4589,6 +4735,15 @@ body.cmt-on #root { cursor: crosshair; }
     DRAG.tgt = null;
     var hit = document.elementFromPoint(x, y);
     if (!hit || !hit.closest) return;
+    if (DRAG.kind === "pcol") {
+      var li = hit.closest("#root .iv-cl.shown li[data-cm]");
+      if (!li || li.getAttribute("data-cm") === DRAG.id) return;
+      var lr = li.getBoundingClientRect();
+      DRAG.after = y > lr.top + lr.height / 2;
+      DRAG.tgt = li;
+      li.classList.add(DRAG.after ? "drop-b" : "drop-a");
+      return;
+    }
     if (DRAG.kind === "row") {
       var tr = hit.closest("#root .inv-t tbody tr");
       if (!tr) return;
@@ -4659,7 +4814,7 @@ body.cmt-on #root { cursor: crosshair; }
     else if (GROUPBY === "sup" && gval) {
       row.supplier = gval;
       var pe = rowEntry(row);
-      if (pe) row.cost = costIn(pe, row.unit);
+      if (pe) row.cost = rowCost(pe, row);
     }
   }
   function dropRow(d) {
@@ -4692,8 +4847,14 @@ body.cmt-on #root { cursor: crosshair; }
   }
   document.addEventListener("pointerdown", function (e) {
     if (e.button > 0 || !e.target.closest) return;
-    var g = e.target.closest("#root [data-grip], #root .inv-t th[data-col]");
+    var g = e.target.closest("#root [data-grip], #root .inv-t th[data-col], #root [data-cgrip]");
     if (!g) return;
+    if (g.hasAttribute("data-cgrip")) {
+      DRAG = { kind: "pcol", id: g.getAttribute("data-cgrip"), el: g, x0: e.clientX, y0: e.clientY,
+               lx: e.clientX, ly: e.clientY, on: false, pid: e.pointerId, tgt: null };
+      e.preventDefault();
+      return;
+    }
     var col = g.getAttribute("data-col");
     if (col === "item") return;
     if (!col && SORT) return;          /* a sorted list has no order of its own to drag in */
@@ -4712,7 +4873,8 @@ body.cmt-on #root { cursor: crosshair; }
       try { DRAG.el.setPointerCapture(e.pointerId); } catch (x) {}
       document.body.classList.add("iv-dragging");
       var src = DRAG.kind === "row"
-        ? document.querySelector('#root tr.inv-r[data-id="' + CSS.escape(DRAG.id) + '"]') : DRAG.el;
+        ? document.querySelector('#root tr.inv-r[data-id="' + CSS.escape(DRAG.id) + '"]')
+        : DRAG.kind === "pcol" ? DRAG.el.closest("li") : DRAG.el;
       if (src) src.classList.add("drag-src");
     }
     e.preventDefault();
@@ -4727,7 +4889,9 @@ body.cmt-on #root { cursor: crosshair; }
     if (!d.on) return;
     DRAGEND = Date.now();
     if (!d.tgt) return;
-    if (d.kind === "row") dropRow(d); else dropCol(d);
+    if (d.kind === "row") dropRow(d);
+    else if (d.kind === "pcol") { moveCol(d.id, d.tgt.getAttribute("data-cm"), d.after); invRender(); }
+    else dropCol(d);
   });
   document.addEventListener("pointercancel", function () { if (DRAG) { DRAG = null; dragStop(); } });
   /* The click that ends a drag is not a tap on whatever it lands on. */
@@ -4785,12 +4949,12 @@ body.cmt-on #root { cursor: crosshair; }
       if (row && sp) {
         row.supplier = sp;
         var pe = rowEntry(row);
-        if (pe) row.cost = costIn(pe, row.unit);
+        if (pe) row.cost = rowCost(pe, row);
         persist();
       }
     } else {
       var u = addUnit(val);
-      if (row && u) { row.unit = u; persist(); }
+      if (row && u) { changeUnit(row, u); persist(); }
     }
     invRender();
   }
@@ -4832,7 +4996,11 @@ body.cmt-on #root { cursor: crosshair; }
       /* Stored as picked. Nothing is converted: the figures stay as they are
          and only their label changes, which is the honest behaviour when
          nobody has told us how many litres are in a crate. */
-      if (row && t.value !== row.unit) { row.unit = t.value; persist(); invRender(); }
+      if (row && t.value !== row.unit) {
+        changeUnit(row, t.value);
+        persist(); invRender();
+        if (row.from) { var ask = document.querySelector('#root [data-perq="' + CSS.escape(row.id) + '"]'); if (ask) ask.focus({ preventScroll: true }); }
+      }
       return;
     }
     var sh = t.getAttribute("data-cshow");
@@ -4921,7 +5089,8 @@ body.cmt-on #root { cursor: crosshair; }
     if (id === "iv-col-addbtn") {
       var ni = document.getElementById("iv-col-in"), nm = ni ? ni.value.trim() : "";
       if (!nm) { MGRMSG = tt({ en: "Type a name for the column first.", nl: "Typ eerst een naam voor de kolom." }); invRender(); return; }
-      var tp = (document.getElementById("iv-col-type") || {}).value || "text";
+      var tp = CTYPE || "text";
+      CTYPE = "text";
       COLS.push({ id: "x" + Date.now().toString(36), show: true, custom: true, name: nm, type: tp, opts: [], pin: false, fit: false });
       MGRMSG = ""; colsSave(); invRender(); return;
     }
@@ -5072,8 +5241,8 @@ body.cmt-on #root { cursor: crosshair; }
      what makes the two halves separate stations rather than one long bar. */
   var HOLDER = [
     [{en:"Before the left holder, on its own",nl:"Voor de linkerhouder, apart"},[
-      {en:"The pineapple box. Small chunks at the front, Grand Gerard from Sligro, for the Pina Colada build. Big chunks at the back, for the garnish. A separate box, NOT a bucket in the holder. See island 2",
-       nl:"De ananasbak. Kleine stukjes voorin, Grand Gerard van Sligro, voor de Pina Colada. Grote stukken achterin, voor de garnering. Een aparte bak, GEEN bakje in de houder. Zie eiland 2"}
+      {en:"The pineapple box: ONE box with both in it. The small chunks at the front, Grand Gerard from Sligro, for the Pina Colada build. The big garnish chunks at the back. It stands on its own beside the holder, not in a bucket. See island 2",
+       nl:"De ananasbak: EEN bak met allebei erin. De kleine stukjes voorin, Grand Gerard van Sligro, voor de Pina Colada. De grote garneerstukken achterin. Hij staat los naast de houder, niet in een bakje. Zie eiland 2"}
     ]],
     [{en:"Left holder",nl:"Linkerhouder"},[
       {en:"Orange zests",nl:"Sinaasappelzestes"},
@@ -5251,13 +5420,8 @@ body.cmt-on #root { cursor: crosshair; }
   function railHTML() {
     return '<section class="section"><div class="section-head"><div class="smallcaps">' +
       esc(ui("runsheet")) + "</div><h2>" + esc(ui("rail")) + "</h2></div>" +
-      '<div class="src-warn" style="margin:0 0 16px"><b>' +
-      et({ en: "Lime and lemon are not on the rail.",
-           nl: "Limoen en citroen staan niet in de speedrail." }) + "</b> " +
-      et({ en: "Both are Boiron pasteurised puree and both live in squeeze bottles on the tray. Nothing on the rail is hand squeezed.",
-           nl: "Beide zijn gepasteuriseerde Boiron-puree en staan in knijpflessen op het blad. Niets in de speedrail wordt met de hand geperst." }) +
-      '<div style="margin-top:9px"><b>' + et(DAYDOT.lead) + "</b> " + et(DAYDOT.body) +
-      " <b>" + et(DAYDOT.days) + "</b>. " + et(DAYDOT.fifo) + "</div></div>" +
+      '<div class="src-warn" style="margin:0 0 16px"><b>' + et(DAYDOT.lead) + "</b> " + et(DAYDOT.body) +
+      " <b>" + et(DAYDOT.days) + "</b>. " + et(DAYDOT.fifo) + "</div>" +
       '<p class="legend" style="margin:0 0 8px">' +
       et({ en: "Left to right, as it stands. Tap any slot to see why it sits there.",
            nl: "Van links naar rechts, zoals hij staat. Tik op een slot om te zien waarom hij daar staat." }) + "</p>" +
@@ -5313,9 +5477,7 @@ body.cmt-on #root { cursor: crosshair; }
         return '<div class="qhold"><span class="qhold-h">' + et(g[0]) + "</span><ul class=\"qgar\">" +
           g[1].map(function (x) { return "<li>" + et(x) + "</li>"; }).join("") + "</ul></div>";
       }).join("") +
-      '<div class="qflag">' +
-      et({ en: "One bucket from the old layout is not in this order and has no home yet: pears, thinly sliced. Say where it goes, or whether it is gone. The passion fruit has its home now, halved in its own box on island 3.",
-           nl: "Een bakje uit de oude indeling staat niet in deze volgorde en heeft nog geen plek: dun gesneden peren. Zeg waar het hoort, of dat het weg is. De passievrucht heeft nu een plek, gehalveerd in een eigen bak op eiland 3." }) + "</div></div>" +
+      "</div>" +
       noteBox("rail-1", { en: "Rail notes. Anything that changes at the station, type it here.",
                           nl: "Notities over de speedrail. Alles wat aan het station verandert, typ je hier." }) +
       noteBox("rail-2", { en: "Syrup and Monin notes.", nl: "Notities over siroop en Monin." }) +
@@ -5422,7 +5584,7 @@ body.cmt-on #root { cursor: crosshair; }
      {en:"The eight: butterfly pea tea, coconut water and lychee juice, orange juice, passionfruit juice, pineapple juice, apple and pear juice, cranberry juice, hibiscus tea.",
       nl:"De acht: vlindererwtthee, kokoswater en lycheesap, sinaasappelsap, passievruchtensap, ananassap, appel-perensap, cranberrysap, hibiscusthee."},
      ""],
-    [{en:"Cut garnish, caramelised pear, jalapeno slices",nl:"Gesneden garnering, gekaramelliseerde peer, jalapenoschijfjes"},
+    [{en:"Cut garnish and jalapeno slices",nl:"Gesneden garnering en jalapenoschijfjes"},
      {en:"Tubs",nl:"Bakjes"},
      {en:"Leaves and strawberries 24 hours if not same day. Lime wedges, pineapple chunks, grapes, jalapenos and orange zest 48 hours. Peeled lychees 2 to 3 days in a sealed airtight box. In the end it is about discarding whatever no longer looks right.",
       nl:"Blaadjes en aardbeien 24 uur als ze niet dezelfde dag op gaan. Limoenpartjes, ananasstukjes, druiven, jalapenos en sinaasappelzeste 48 uur. Gepelde lychees 2 tot 3 dagen in een goed afgesloten luchtdichte bak. Uiteindelijk gaat het erom alles weg te gooien wat er niet meer goed uitziet."},
@@ -5595,6 +5757,11 @@ body.cmt-on #root { cursor: crosshair; }
       }
     });
     if (moved) save(LS_NOTES, NOTES);
+    /* The pear garnish is gone, and with it the pear in this line's name. A
+       note or day dot written against the old name follows it. */
+    var was = "prep-cut-garnish-caramelised-pear-jalapeno-slices", now = "prep-cut-garnish-and-jalapeno-slices";
+    if (NOTES[was] != null && NOTES[now] == null) { NOTES[now] = NOTES[was]; delete NOTES[was]; save(LS_NOTES, NOTES); }
+    if (MADE[was] != null && MADE[now] == null) { MADE[now] = MADE[was]; delete MADE[was]; save(LS_MADE, MADE); }
   })();
 
   function prepHTML() {
@@ -6062,7 +6229,7 @@ body.cmt-on #root { cursor: crosshair; }
     "Basil":"basil",
     "Rosemary":"rosemary",
     "Thyme":"thyme",
-    "Jalapenos":"jalapeno",
+    "Jalapenos":"jalapeno-g",
     "Pears, Conference":"pears",
     "Passion fruit, fresh":"passionfruit-fresh",
     "Fee Foam or aquafaba":"foamer",
@@ -6140,7 +6307,7 @@ body.cmt-on #root { cursor: crosshair; }
   function rowEntry(r) {
     var key = ROW_PRICE[r.key];
     if (!key) return null;
-    var alts = alternatives(key, r.unit);
+    var alts = alternatives(key, rowUnit(r));
     if (!alts.length) return null;
     var mine = alts.filter(function (a) { return a.e.sup === r.supplier; })[0];
     return (mine || alts[0]).e;
@@ -6159,12 +6326,12 @@ body.cmt-on #root { cursor: crosshair; }
   function applyPrices() {
     SEED.forEach(function (row) {
       var e = rowEntry(row);
-      if (e) { row.supplier = e.sup; row.cost = costIn(e, row.unit); }
+      if (e) { row.supplier = e.sup; row.cost = rowCost(e, row); }
       else if (listedUnpriced(row)) row.cost = null;
     });
     ROWS.forEach(function (row) {
       var e = rowEntry(row);
-      if (e) row.cost = costIn(e, row.unit);
+      if (e) row.cost = rowCost(e, row);
       else if (listedUnpriced(row)) row.cost = null;
     });
   }
@@ -6172,11 +6339,11 @@ body.cmt-on #root { cursor: crosshair; }
   function rowCheaper(r) {
     var key = ROW_PRICE[r.key];
     if (!key) return null;
-    var alts = alternatives(key, r.unit);
+    var alts = alternatives(key, rowUnit(r));
     if (alts.length < 2) return null;
     var used = rowEntry(r), best = alts[0].e;
     if (!used || best.id === used.id) return null;
-    var uc = costIn(used, r.unit), bc = alts[0].c;
+    var uc = rowCost(used, r), bc = alts[0].c * rowMul(r);
     if (bc >= uc) return null;
     /* Judge the swap on what it saves in a week, not on the per-unit gap. A
        tenth of a cent a gram is noise on 60 g of thyme and real money on 450 g
@@ -6273,6 +6440,122 @@ body.cmt-on #root { cursor: crosshair; }
     return nUnit(per * 1000) + " / kg";
   }
 
+  /* "One box is 1 litre, one bottle of orange juice is 2 litres, one box of
+     jalapenos is 200 grams." A line counted in boxes or bottles can say what
+     one holds. The price is then worked out per box, the week's need shows in
+     litres or grams beside the count, and switching between litres and
+     bottles converts the numbers instead of just relabelling them. */
+  var MEAS = { L: 1, ml: 1, kg: 1, g: 1 };
+  var PER_UNITS = ["L", "ml", "kg", "g", "pcs"];
+  function perOf(r) { return r && r.per && r.per.q > 0 && r.per.u ? r.per : null; }
+  function rowUnit(r) { var p = perOf(r); return p ? p.u : r.unit; }
+  function rowMul(r) { var p = perOf(r); return p ? p.q : 1; }
+  function rowCost(e, r) { var c = costIn(e, rowUnit(r)); return c == null ? null : c * rowMul(r); }
+  function round3(x) { return Math.round(x * 1000) / 1000; }
+  function convertRow(row, f) {
+    if (row.need != null) row.need = round3(Number(row.need) * f);
+    if (HAVE[row.id] != null) HAVE[row.id] = round3(Number(HAVE[row.id]) * f);
+  }
+  function eqSpan(r, n) {
+    var p = perOf(r);
+    if (!p || n == null) return "";
+    return ' <span class="iv-eq">= ' + tidy(n * p.q) + " " + esc(unitLabel(p.u)) + "</span>";
+  }
+  function perHTML(r) {
+    if (MEAS[r.unit]) return "";
+    var p = r.per || {}, q = p.q > 0 ? dec(p.q) : "", pu = p.u || (r.from && MEAS[r.from] ? r.from : "L");
+    return '<span class="iv-per' + (r.from ? " ask" : "") + '">= ' +
+      '<input class="iv-pq" type="text" inputmode="decimal" autocomplete="off" data-perq="' + esc(r.id) + '" value="' + esc(q) +
+      '" placeholder="?" aria-label="' + et({ en: "How much one " + unitLabel(r.unit) + " holds", nl: "Hoeveel er in een " + unitLabel(r.unit) + " zit" }) + '">' +
+      '<select class="iv-pu" data-peru="' + esc(r.id) + '" aria-label="' + et({ en: "In what", nl: "Waarin" }) + '">' +
+      PER_UNITS.map(function (u) { return '<option value="' + u + '"' + (u === pu ? " selected" : "") + ">" + esc(unitLabel(u)) + "</option>"; }).join("") +
+      "</select></span>" +
+      (r.from ? '<span class="iv-per-hint">' + et({ en: "How much is one? Fill it in and the numbers convert from " + unitLabel(r.from) + ".",
+                                                     nl: "Hoeveel zit er in een? Vul het in en de getallen worden omgerekend vanuit " + unitLabel(r.from) + "." }) + "</span>" : "");
+  }
+  function repriceRow(row) {
+    var e = rowEntry(row);
+    if (e) row.cost = rowCost(e, row);
+    else if (listedUnpriced(row)) row.cost = null;
+  }
+  /* A new count unit. Litres to millilitres, or bottles back to litres with
+     a known size, converts. Litres to bottles waits for the size of a bottle. */
+  function changeUnit(row, nu) {
+    var old = row.unit, p = perOf(row);
+    if (MEAS[old] && MEAS[nu] && unitBase(old).b === unitBase(nu).b) {
+      convertRow(row, unitBase(old).f / unitBase(nu).f);
+      row.from = null;
+    } else if (MEAS[old] && !MEAS[nu]) {
+      row.from = old;
+      row.per = row.per && row.per.u ? { q: 0, u: row.per.u } : null;
+    } else if (!MEAS[old] && MEAS[nu] && p && unitBase(p.u).b === unitBase(nu).b) {
+      convertRow(row, p.q * unitBase(p.u).f / unitBase(nu).f);
+      row.per = null; row.from = null;
+    } else if (MEAS[nu]) {
+      row.per = null; row.from = null;
+    }
+    row.unit = nu;
+    repriceRow(row);
+  }
+  function setPer(row, q, u) {
+    row.per = { q: q > 0 ? q : 0, u: u };
+    if (q > 0 && row.from && MEAS[row.from] && unitBase(row.from).b === unitBase(u).b) {
+      convertRow(row, unitBase(row.from).f / (q * unitBase(u).f));
+    }
+    if (q > 0) row.from = null;
+    repriceRow(row);
+  }
+  document.addEventListener("change", function (e) {
+    var t = e.target;
+    if (!t || !t.getAttribute) return;
+    var a = t.getAttribute("data-perq"), b = t.getAttribute("data-peru");
+    if (a == null && b == null) return;
+    var row = rowById(a != null ? a : b);
+    if (!row) return;
+    var cell = t.closest("td") || t.parentNode;
+    var qi = cell.querySelector("[data-perq]"), ui = cell.querySelector("[data-peru]");
+    var q = parseQty(qi ? qi.value : "");
+    setPer(row, q || 0, ui ? ui.value : "L");
+    persist(); invRender();
+  });
+
+  /* The three the bar named, set up that way. Applied to a saved copy once,
+     and only where the line is still counted as it shipped. */
+  var SEED_PER = {
+    "Orange juice, fresh with pulp": { unit: "bottles", per: { q: 2, u: "L" }, was: "L" },
+    "Coconut milk, Alpro Barista":   { unit: "boxes",   per: { q: 1, u: "L" }, was: "L" },
+    "Jalapenos":                     { unit: "boxes",   per: { q: 200, u: "g" }, was: "pcs",
+      note: "Seeds out as standard. Was counted as 10 pieces a week: set the weekly amount in boxes.",
+      noteNl: "Standaard zonder zaadjes. Werd geteld als 10 stuks per week: vul de weekhoeveelheid in dozen in." }
+  };
+  SEED.forEach(function (sd) {
+    var x = SEED_PER[sd.key];
+    if (!x) return;
+    if (MEAS[x.was] && unitBase(x.was).b === unitBase(x.per.u).b && sd.need != null)
+      sd.need = round3(sd.need * unitBase(x.was).f / (x.per.q * unitBase(x.per.u).f));
+    else if (!MEAS[x.was]) sd.need = null;
+    sd.unit = x.unit; sd.per = { q: x.per.q, u: x.per.u };
+    if (x.note) { sd.note = x.note; sd.noteNl = x.noteNl; }
+  });
+  (function () {
+    var FLAG = "quatro-per-v1";
+    try { if (localStorage.getItem(FLAG)) return; } catch (x) { return; }
+    var moved = false;
+    ROWS.forEach(function (r) {
+      var x = SEED_PER[r.key];
+      if (!x || r.per || r.unit !== x.was) return;
+      if (MEAS[x.was]) { r.from = x.was; setPer(r, x.per.q, x.per.u); r.unit = x.unit; }
+      else {
+        /* pieces cannot become grams, so the count starts again in boxes */
+        r.unit = x.unit; r.per = { q: x.per.q, u: x.per.u }; r.need = null; delete HAVE[r.id];
+        if (/^Seeds out as standard\.?$/.test(r.note || "")) { r.note = x.note; r.noteNl = x.noteNl; }
+      }
+      moved = true;
+    });
+    if (moved) persist();
+    try { localStorage.setItem(FLAG, "1"); } catch (x) {}
+  })();
+
   applyPrices();
 
   /* 25.11.26: AH was cut to three lines and Jumbo dropped. A saved line still
@@ -6327,7 +6610,7 @@ body.cmt-on #root { cursor: crosshair; }
       if (!stocks && sd.supplier === "TBD" && r.supplier === "AH") { r.supplier = "TBD"; moved = true; }
       if (RECAT[r.key] && r.cat === RECAT[r.key]) { r.cat = sd.cat; moved = true; }
       if (OLDNOTE[r.key] && r.note === OLDNOTE[r.key]) { r.note = sd.note; r.noteNl = sd.noteNl; moved = true; }
-      if (e) { var c = costIn(e, r.unit); if (c !== r.cost) { r.cost = c; moved = true; } }
+      if (e) { var c = rowCost(e, r); if (c !== r.cost) { r.cost = c; moved = true; } }
     });
     if (moved) persist();
     try { localStorage.setItem(FLAG, "1"); } catch (x) {}
@@ -6588,7 +6871,6 @@ body.cmt-on #root { cursor: crosshair; }
     [{en:"Rosemary",nl:"Rozemarijn"},               {en:"a few sprigs",nl:"een paar takjes"},    {en:"4 to 5",nl:"4 tot 5"}],
     [{en:"Thyme",nl:"Tijm"},                        {en:"a few sprigs",nl:"een paar takjes"},    {en:"4 to 5",nl:"4 tot 5"}],
     [{en:"Jalapenos",nl:"Jalapenos"},               {en:"2 pieces",nl:"2 stuks"},            ""],
-    [{en:"Pears, Conference",nl:"Peren, Conference"}, {en:"1 piece",nl:"1 stuk"},            ""],
     [{en:"Passion fruit, fresh",nl:"Passievrucht, vers"}, {en:"1 piece",nl:"1 stuk"},        ""],
     [{en:"Lychees, from the can",nl:"Lychees, uit blik"}, {en:"6 pieces",nl:"6 stuks"},      ""]
   ];
