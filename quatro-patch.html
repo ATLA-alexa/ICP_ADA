@@ -556,7 +556,10 @@ button.iv-tag.on { font-weight: 600; }
 .ops-c ul { margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.6; }
 .ops-c.lead { border-color: var(--gold); box-shadow: inset 3px 0 0 var(--gold); }
 /* a shelf map: each shelf left to right, as you face it */
-.dry { display: grid; gap: 10px; margin-top: 10px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+.dry-top { margin-top: 10px; padding: 6px 12px; border-radius: 10px 10px 4px 4px; border: 1px dashed var(--gold-pale);
+  font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-soft); text-align: center; }
+.dry-note { font-family: var(--body); text-transform: none; letter-spacing: 0; font-size: 11.5px; color: var(--ink-soft); font-style: italic; }
+.dry { display: grid; gap: 10px; margin-top: 6px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
 .dry-c { border: 1px solid var(--limestone-deep); border-radius: 10px; padding: 10px 12px; background: var(--limestone); }
 .dry-n { font-family: 'Marcellus', Georgia, serif; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
 .dry-s + .dry-s { margin-top: 6px; }
@@ -5772,22 +5775,10 @@ body.cmt-on #root { cursor: crosshair; }
          {en:"Purees, every squeeze bottle, and the open cans",
           nl:"Purees, alle knijpflessen, en de aangebroken blikken"}]
   ];
-  /* The two dry compartments under the bar, as the bar described them on
-     27.11.26, each shelf left to right. */
+  /* The two dry compartments under the glassware, as the bar described
+     them on 27.11.26: left on the left, right on the right, as you face
+     them, each with its top shelf over its bottom shelf. */
   var DRY = [
-    { name: { en: "Right dry compartment", nl: "Rechter droogvak" },
-      shelves: [
-        [{ en: "Top shelf, left to right", nl: "Bovenste plank, van links naar rechts" },
-         [{ en: "Grand Gérard pineapple", nl: "Grand Gérard ananas" }, { en: "AH pineapple chunks", nl: "AH ananasstukjes" },
-          { en: "Grand Gérard lychees", nl: "Grand Gérard lychees" }, { en: "pitchers", nl: "kannen" },
-          { en: "cranberry, glass bottles", nl: "cranberry, glazen flessen" }, { en: "lychee, plastic bottles", nl: "lychee, plastic flessen" }]],
-        [{ en: "Bottom shelf", nl: "Onderste plank" },
-         [{ en: "pineapple juice", nl: "ananassap" }, { en: "coconut milk and cream", nl: "kokosmelk en kokosroom" },
-          { en: "passion fruit", nl: "passievrucht" }, { en: "Van de Boom pear-apple", nl: "Van de Boom peer-appel" }],
-         { en: "More to be added.", nl: "Er komt nog meer bij." }],
-        [{ en: "Underneath", nl: "Eronder" },
-         [{ en: "glassware", nl: "glaswerk" }, { en: "new boxes and crates", nl: "nieuwe dozen en kratten" }]]
-      ] },
     { name: { en: "Left dry compartment", nl: "Linker droogvak" },
       shelves: [
         [{ en: "Top shelf, left to right", nl: "Bovenste plank, van links naar rechts" },
@@ -5797,13 +5788,26 @@ body.cmt-on #root { cursor: crosshair; }
           { en: "speedrail necks", nl: "speedrailhalzen" }]],
         [{ en: "Bottom shelf, left to right", nl: "Onderste plank, van links naar rechts" },
          [{ en: "extra mugs and glasses", nl: "extra mokken en glazen" }, { en: "tonic stampers", nl: "tonicstampers" },
-          { en: "short and long straws", nl: "korte en lange rietjes" }, { en: "garnish sticks", nl: "garneerprikkers" }]],
-        [{ en: "Underneath", nl: "Eronder" }, [{ en: "glassware", nl: "glaswerk" }]]
+          { en: "short and long straws", nl: "korte en lange rietjes" }, { en: "garnish sticks", nl: "garneerprikkers" }]]
+      ] },
+    { name: { en: "Right dry compartment", nl: "Rechter droogvak" },
+      note: { en: "New boxes and crates", nl: "Nieuwe dozen en kratten" },
+      shelves: [
+        [{ en: "Top shelf, left to right", nl: "Bovenste plank, van links naar rechts" },
+         [{ en: "Grand Gérard pineapple", nl: "Grand Gérard ananas" }, { en: "AH pineapple chunks", nl: "AH ananasstukjes" },
+          { en: "Grand Gérard lychees", nl: "Grand Gérard lychees" }, { en: "pitchers", nl: "kannen" },
+          { en: "cranberry, glass bottles", nl: "cranberry, glazen flessen" }, { en: "lychee, plastic bottles", nl: "lychee, plastic flessen" }]],
+        [{ en: "Bottom shelf", nl: "Onderste plank" },
+         [{ en: "pineapple juice", nl: "ananassap" }, { en: "coconut milk and cream", nl: "kokosmelk en kokosroom" },
+          { en: "passion fruit", nl: "passievrucht" }, { en: "Van de Boom pear-apple", nl: "Van de Boom peer-appel" }],
+         { en: "More to be added.", nl: "Er komt nog meer bij." }]
       ] }
   ];
   function dryHTML() {
-    return '<div class="dry">' + DRY.map(function (c) {
-      return '<div class="dry-c"><div class="dry-n">' + et(c.name) + "</div>" + c.shelves.map(function (sh) {
+    return '<div class="dry-top">' + et({ en: "Glassware, above both compartments", nl: "Glaswerk, boven beide vakken" }) + "</div>" +
+      '<div class="dry">' + DRY.map(function (c) {
+      return '<div class="dry-c"><div class="dry-n">' + et(c.name) +
+        (c.note ? ' <span class="dry-note">' + et(c.note) + "</span>" : "") + "</div>" + c.shelves.map(function (sh) {
         return '<div class="dry-s"><span class="dry-l">' + et(sh[0]) + "</span>" +
           '<span class="dry-r">' + sh[1].map(function (x) { return '<span class="dry-i">' + et(x) + "</span>"; })
             .join(/left to right|links naar rechts|^Bottom shelf$|^Onderste plank$/.test(tt(sh[0])) ? '<span class="dry-a" aria-hidden="true">&rsaquo;</span>' : " ") +
@@ -5963,12 +5967,12 @@ body.cmt-on #root { cursor: crosshair; }
           items: {
             en: ["Take the rail refills out of FR1A, middle shelf.",
                  "Refill from the open cartons and boxes first: FR1B, bottom shelf.",
-                 "Then from the right dry compartment, shelf by shelf as below. New boxes and crates are underneath it, with the glassware.",
+                 "Then from the right dry compartment, under the glassware, where the new boxes and crates are. Shelf by shelf as below.",
                  "Check the dishwasher crate holder.",
                  "Then the left dry compartment, as below."],
             nl: ["Haal de bijvulling voor de speedrail uit FR1A, middelste plank.",
                  "Vul eerst bij uit de aangebroken pakken en dozen: FR1B, onderste plank.",
-                 "Dan uit het rechter droogvak, plank voor plank zoals hieronder. Nieuwe dozen en kratten staan eronder, bij het glaswerk.",
+                 "Dan uit het rechter droogvak, onder het glaswerk, waar de nieuwe dozen en kratten staan. Plank voor plank zoals hieronder.",
                  "Controleer de kratrek van de vaatwasser.",
                  "Dan het linker droogvak, zoals hieronder."] },
           extra: function () { return dryHTML(); } },
