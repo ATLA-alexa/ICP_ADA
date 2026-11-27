@@ -2316,6 +2316,8 @@ button.iv-tag.on { font-weight: 600; }
 .ops-go-t { color: var(--ink-soft); }
 .ops-back { display: flex; width: fit-content; margin-top: 8px; }
 .prep-t tr.q-hi td { background: rgba(168,134,60,.10); }
+.prep-lbl.q-hi { outline: 2px solid var(--gold); outline-offset: 4px; border-radius: 6px; background: rgba(168,134,60,.08); }
+.prep-lbl .ops-back { margin: 0 0 10px; }
 .prep-t tr.q-hi { outline: 2px solid var(--gold); outline-offset: -2px; }
 /* stacked on a phone the row is a card: tint the gaps too, and keep the
    text clear of the frame */
@@ -5978,6 +5980,12 @@ body.cmt-on #root { cursor: crosshair; }
   function prepHTML() {
     return '<section class="section"><div class="section-head"><div class="smallcaps">' +
       esc(ui("runsheet")) + "</div><h2>" + esc(ui("prep")) + "</h2></div>" +
+      (function () {
+        var hi = typeof PREPHI !== "undefined" && PREPHI === "prep-labels";
+        return '<div class="prep-lbl' + (hi ? " q-hi" : "") + '" data-prep="prep-labels">' +
+          (hi ? '<button type="button" class="ops-back" data-backops="prep-labels">&larr; ' +
+                et({ en: "Back to Order of operations", nl: "Terug naar Volgorde van werken" }) + "</button>" : "");
+      })() +
       '<div class="warn"><strong>' +
       et({ en: "Label standard", nl: "Labelstandaard" }) + "</strong>" +
       et({ en: "Every container carries a day dot plus tape with NAME and USE BY, written as the weekday then the date:",
@@ -5985,7 +5993,7 @@ body.cmt-on #root { cursor: crosshair; }
       " " + et(DAYDOT.days) + ". " +
       et({ en: "New stock goes in front, the old one marked with an X. Anything past date is binned at open.",
            nl: "Nieuwe voorraad gaat vooraan, de oude wordt met een X gemarkeerd. Alles over datum gaat bij opening weg." }) + "</div>" +
-      dayDotHTML() +
+      dayDotHTML() + "</div>" +
       '<div class="tablewrap"><table class="wide prep-t"><thead><tr>' +
       "<th>" + et({ en: "Item", nl: "Item" }) + "</th>" +
       "<th>" + et({ en: "Yield", nl: "Opbrengst" }) + "</th>" +
@@ -7560,7 +7568,8 @@ body.cmt-on #root { cursor: crosshair; }
                  "Zet de espressomachine aan.",
                  "Controleer of elke speedrailfles vol is. Bijvullen staat op de volgende kaart.",
                  "Elke bak draagt een dagsticker plus tape met NAAM en THT, geschreven als de weekdag en dan de datum: MA / DI / WO / DO / VR / ZA / ZO DD.MM.JJ. Nieuwe voorraad gaat vooraan, de oude krijgt een X.",
-                 "Alles over datum gaat bij opening weg, niet later."] } },
+                 "Alles over datum gaat bij opening weg, niet later."] },
+          go: [null, null, null, { id: "prep-labels", label: { en: "Labels and day dots", nl: "Labels en dagstickers" } }, null] },
         /* 27.11.26, the refill round as the bar walks it */
         { title: { en: "Refill the rail", nl: "De speedrail bijvullen" },
           items: {
@@ -7704,10 +7713,10 @@ body.cmt-on #root { cursor: crosshair; }
       '<div class="ops-grid">' + s.cards.map(function (c) {
         return '<div class="ops-c' + (c.lead ? " lead" : "") + '"><h4>' + et(c.title) + "</h4><ul>" +
           t(c.items).map(function (it, i) {
-            var go = c.go && c.go[i];
+            var g = c.go && c.go[i], go = g && (g.id || g);
             return "<li" + (go ? ' data-opsgo="' + esc(go) + '"' : "") + ">" + esc(it) + (go
               ? '<button type="button" class="ops-go" data-goprep="' + esc(go) + '">' +
-                et({ en: "How to make it", nl: "Zo maak je het" }) + '<span class="ops-go-t"> &middot; ' + esc(ui("prep")) + "</span> &rarr;</button>"
+                et(g.label || { en: "How to make it", nl: "Zo maak je het" }) + '<span class="ops-go-t"> &middot; ' + esc(ui("prep")) + "</span> &rarr;</button>"
               : "") + "</li>";
           }).join("") + "</ul>" +
           (c.extra ? c.extra() : "") + "</div>";
@@ -7743,7 +7752,7 @@ body.cmt-on #root { cursor: crosshair; }
   function goPrep(id) {
     PREPHI = id; OPSFROM = OPSTEP;
     if (!openTab("prep")) return;
-    setTimeout(function () { flash(document.querySelector('#root tr[data-prep="' + CSS.escape(id) + '"]')); }, 80);
+    setTimeout(function () { flash(document.querySelector('#root [data-prep="' + CSS.escape(id) + '"]')); }, 80);
   }
   function backToOps(id) {
     PREPHI = null;
