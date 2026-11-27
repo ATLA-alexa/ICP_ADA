@@ -2423,6 +2423,9 @@ button.iv-tag.on { font-weight: 600; }
 .pb-tag { display: inline-block; font-size: 10px; line-height: 1.5; letter-spacing: .03em; padding: 0 7px;
   border-radius: 999px; white-space: nowrap; vertical-align: 1px; font-style: normal; }
 .pb-tag.offer { background: rgba(158,43,59,.07); color: #9E2B3B; border: 1px solid #E0B3AA; }
+.pb-x { font: inherit; font-size: 13px; line-height: 1; border: 0; background: none; color: inherit; cursor: pointer;
+  padding: 0 0 0 6px; margin: 0; opacity: .7; }
+.pb-x:hover { opacity: 1; }
 .pb-tag.na { background: rgba(35,32,28,.05); color: var(--ink-soft); border: 1px solid rgba(35,32,28,.2); }
 .pb-tag.kit { background: var(--limestone); color: var(--gold); border: 1px solid var(--gold-pale); }
 .pb-t tr.pb-g td { background: var(--limestone); font-family: 'Marcellus', Georgia, serif; font-size: 12px;
@@ -6698,7 +6701,13 @@ body.cmt-on #root { cursor: crosshair; }
     var d = new Date(), p = function (n) { return ("0" + n).slice(-2); };
     return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate());
   }
-  function offerOn(e) { return !!(e && e.sl && e.sl.pr && isoToday() <= e.sl.pr[1]); }
+  /* An offer can also be taken off by hand, say when Sligro ends it early.
+     Kept in this browser; it comes back only if the file brings a new one. */
+  var LS_OFFOFF = "quatro-offers-off-v1";
+  var OFFOFF = load(LS_OFFOFF, {});
+  function offerOn(e) {
+    return !!(e && e.sl && e.sl.pr && isoToday() <= e.sl.pr[1] && OFFOFF[e.id] !== e.sl.pr.join("|"));
+  }
   function priceNow(e) { return offerOn(e) ? e.sl.pr[0] : e.price; }
   var MON_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   var MON_NL = ["jan", "feb", "mrt", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"];
@@ -6712,7 +6721,10 @@ body.cmt-on #root { cursor: crosshair; }
   }
   function offerHTML(e) {
     var h = "";
-    if (offerOn(e)) h += ' <span class="pb-tag offer">' + et({ en: "Offer until ", nl: "Aanbieding t/m " }) + esc(dayText(e.sl.pr[1])) + "</span>";
+    if (offerOn(e)) h += ' <span class="pb-tag offer">' + et({ en: "Offer until ", nl: "Aanbieding t/m " }) + esc(dayText(e.sl.pr[1])) +
+      '<button type="button" class="pb-x" data-offoff="' + esc(e.id) + '" aria-label="' +
+      et({ en: "Take this offer off", nl: "Deze aanbieding weghalen" }) + '" title="' +
+      et({ en: "Take this offer off. It also goes by itself after its last day.", nl: "Deze aanbieding weghalen. Na de laatste dag gaat hij ook vanzelf weg." }) + '">&times;</button></span>';
     if (e && e.sl && e.sl.na) h += ' <span class="pb-tag na">' + et({ en: "Temporarily not deliverable", nl: "Tijdelijk niet leverbaar" }) + "</span>";
     return h;
   }
@@ -7405,6 +7417,19 @@ body.cmt-on #root { cursor: crosshair; }
     persist();
     try { localStorage.setItem(FLAG, "1"); } catch (x) {}
   })();
+
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest("[data-offoff]");
+    if (!b) return;
+    e.preventDefault(); e.stopPropagation();
+    var pe = PB[b.getAttribute("data-offoff")];
+    if (!pe || !pe.sl || !pe.sl.pr) return;
+    OFFOFF[pe.id] = pe.sl.pr.join("|");
+    save(LS_OFFOFF, OFFOFF);
+    var y = window.scrollY || 0;
+    if (typeof render === "function") render();
+    window.scrollTo(0, y);
+  }, true);
 
   var PBSHOP = "";   /* which shop the price list is narrowed to, blank for all */
   document.addEventListener("click", function (e) {
