@@ -5733,58 +5733,13 @@ body.cmt-on #root { cursor: crosshair; }
          nl: "Per dag, op 140 porties per drankje per week. Heel fruit in FR2 A, gesneden fruit in FR2 B bovenste plank in gelabelde bakjes." }) + "</div>";
   }
 
+  /* Opening, Closing, Production, in that order (27.11.26). The keys stay
+     as they were, so the notes kept under each part are not lost. */
   var OPS = [
-    { key: "night",
-      label: { en: "Night before", nl: "Avond ervoor" },
-      desc:  { en: "Set the next shift up so it can just open. All of this happens the evening before.",
-               nl: "Zorg dat de volgende dienst gewoon open kan. Dit gebeurt allemaal de avond ervoor." },
-      cards: [
-        /* The butterfly pea and the hibiscus moved to Between drinks on
-           27.11.26: they run out during service, so they are kept up there. */
-        { title: { en: "Batch the syrups and cordials", nl: "Siropen en cordials maken" },
-          items: {
-            en: ["Pre-batch 1 L rosemary-thyme maple cordial (RT-M) if needed. There are always 2 x 700 ml squeeze bottles of it in the fridge, FR1C top shelf.",
-                 "Pre-batch Jade's mint syrup if needed. There are always 4 x 700 ml squeeze bottles of it in the fridge, FR1C top shelf.",
-                 "Lychee cordial, decanted from the can.",
-                 "Rosemary-lemon salt rim mix if it is running low."],
-            nl: ["Prebatch 1 L rozemarijn-tijm-ahornsiroop (RT-M) als het nodig is. Er staan altijd 2 knijpflessen van 700 ml van in de koeling, FR1C bovenste plank.",
-                 "Prebatch muntsiroop van Jade als het nodig is. Er staan altijd 4 knijpflessen van 700 ml van in de koeling, FR1C bovenste plank.",
-                 "Lycheecordial, afgetapt uit blik.",
-                 "Rozemarijn-citroen-zoutrand als die bijna op is."] },
-          go: ["prep-rosemary-thyme-maple-cordial", "prep-jade-s-homemade-mint-syrup", "prep-lychee-cordial", "prep-rosemary-lemon-sea-salt-rim-mix"],
-          extra: function () {
-            return '<div class="ops-x">' +
-              et({ en: "Salt rim: microwave the rosemary 4 x 30 seconds until it crumbles but is still green, then mix 3 teaspoons with the sea salt and a whole lemon zest.",
-                   nl: "Zoutrand: rozemarijn 4 x 30 seconden in de magnetron tot hij verkruimelt maar nog groen is, meng dan 3 theelepels met het zeezout en een hele citroenzeste." }) + "</div>";
-          } },
-        { title: { en: "Set the station up", nl: "Station opruimen en klaarzetten" },
-          items: {
-            en: ["Wash the two white ice buckets and leave them to dry overnight.",
-                 "Check there is enough crushed ice in the kitchen freezer.",
-                 "Dishwasher station: sink cleared of rests and garnish, bin bag renewed.",
-                 "Sort the empties: Coca-Cola in its own crate, Appelaere in its own crate, SPA red and blue in theirs.",
-                 "Dishwasher: clean the filter under the spinning arm, take the separating surfaces out and clean them.",
-                 "Speedrail bay: take the pour sets down, neck part into the dishwasher, check the label date and bin anything overdue.",
-                 "Into the dishwasher: multilevel jigger, pour sets, bar spoons, muddler, cutting board, bar mats.",
-                 "Wipe the whole surface down. Pico bello.",
-                 "Coffee station: press rinse and the leftmost button on all three, clean the espresso holders. The rubber handle does NOT go in the chemical water.",
-                 "Mop the floor."],
-            nl: ["Was de twee witte ijsbakken en laat ze een nacht drogen.",
-                 "Controleer of er genoeg crushed ice in de vriezer van de keuken ligt.",
-                 "Afwasstation: spoelbak vrij van resten en garnering, vuilniszak vernieuwd.",
-                 "Sorteer het leeggoed: Coca-Cola in het eigen krat, Appelaere in het eigen krat, SPA rood en blauw in die van hen.",
-                 "Afwasmachine: maak het filter onder de draaiarm schoon, haal de scheidingsvlakken eruit en maak ze schoon.",
-                 "Speedrail-bay: haal de pour sets eraf, het halsdeel gaat in de vaatwasser, controleer de labeldatum en gooi weg wat over datum is.",
-                 "In de vaatwasser: multilevel jigger, pour sets, barlepels, muddler, snijplank, barmats.",
-                 "Veeg het hele oppervlak af. Pico bello.",
-                 "Koffiestation: druk op rinse en de meest linkse knop bij alle drie, maak de espressohouders schoon. Het rubberen handvat gaat NIET in het chemische water.",
-                 "Dweil de vloer."] } }
-      ] },
-
     { key: "arrival",
-      label: { en: "On arrival", nl: "Bij aankomst" },
-      desc:  { en: "First things when you walk in, in this order.",
-               nl: "Het eerste als je binnenkomt, in deze volgorde." },
+      label: { en: "Opening", nl: "Opening" },
+      desc:  { en: "On arrival. First things when you walk in, in this order.",
+               nl: "Bij aankomst. Het eerste als je binnenkomt, in deze volgorde." },
       cards: [
         { title: { en: "Open and check", nl: "Openen en controleren" },
           items: {
@@ -5811,6 +5766,24 @@ body.cmt-on #root { cursor: crosshair; }
                  "Halveer de passievruchten, open de ananasstukjes.",
                  "Heel fruit in FR2 A, gesneden fruit in FR2 B bovenste plank in gelabelde bakjes."] },
           extra: fruitHTML },
+        /* Made at opening since 27.11.26. The butterfly pea and the hibiscus
+           went to Production the same day: they run out during service. */
+        { title: { en: "Batch the syrups and cordials", nl: "Siropen en cordials maken" },
+          items: {
+            en: ["Pre-batch 1 L rosemary-thyme maple cordial (RT-M) if needed. There are always 2 x 700 ml squeeze bottles of it in the fridge, FR1C top shelf.",
+                 "Pre-batch Jade's mint syrup if needed. There are always 4 x 700 ml squeeze bottles of it in the fridge, FR1C top shelf.",
+                 "Lychee cordial, decanted from the can.",
+                 "Rosemary-lemon salt rim mix if it is running low."],
+            nl: ["Prebatch 1 L rozemarijn-tijm-ahornsiroop (RT-M) als het nodig is. Er staan altijd 2 knijpflessen van 700 ml van in de koeling, FR1C bovenste plank.",
+                 "Prebatch muntsiroop van Jade als het nodig is. Er staan altijd 4 knijpflessen van 700 ml van in de koeling, FR1C bovenste plank.",
+                 "Lycheecordial, afgetapt uit blik.",
+                 "Rozemarijn-citroen-zoutrand als die bijna op is."] },
+          go: ["prep-rosemary-thyme-maple-cordial", "prep-jade-s-homemade-mint-syrup", "prep-lychee-cordial", "prep-rosemary-lemon-sea-salt-rim-mix"],
+          extra: function () {
+            return '<div class="ops-x">' +
+              et({ en: "Salt rim: microwave the rosemary 4 x 30 seconds until it crumbles but is still green, then mix 3 teaspoons with the sea salt and a whole lemon zest.",
+                   nl: "Zoutrand: rozemarijn 4 x 30 seconden in de magnetron tot hij verkruimelt maar nog groen is, meng dan 3 theelepels met het zeezout en een hele citroenzeste." }) + "</div>";
+          } },
         { title: { en: "Ice and glassware", nl: "IJs en glaswerk" },
           items: {
             en: ["Fill the insulated bins: one cubed from the machine, one crushed. Spare bags are in the kitchen fridge.",
@@ -5819,10 +5792,39 @@ body.cmt-on #root { cursor: crosshair; }
                  "Glaswerk staat al klaar op station 2."] } }
       ] },
 
+    { key: "night",
+      label: { en: "Closing", nl: "Sluiting" },
+      desc:  { en: "The night before. Set the next shift up so it can just open.",
+               nl: "De avond ervoor. Zorg dat de volgende dienst gewoon open kan." },
+      cards: [
+        { title: { en: "Set the station up", nl: "Station opruimen en klaarzetten" },
+          items: {
+            en: ["Wash the two white ice buckets and leave them to dry overnight.",
+                 "Check there is enough crushed ice in the kitchen freezer.",
+                 "Dishwasher station: sink cleared of rests and garnish, bin bag renewed.",
+                 "Sort the empties: Coca-Cola in its own crate, Appelaere in its own crate, SPA red and blue in theirs.",
+                 "Dishwasher: clean the filter under the spinning arm, take the separating surfaces out and clean them.",
+                 "Speedrail bay: take the pour sets down, neck part into the dishwasher, check the label date and bin anything overdue.",
+                 "Into the dishwasher: multilevel jigger, pour sets, bar spoons, muddler, cutting board, bar mats.",
+                 "Wipe the whole surface down. Pico bello.",
+                 "Coffee station: press rinse and the leftmost button on all three, clean the espresso holders. The rubber handle does NOT go in the chemical water.",
+                 "Mop the floor."],
+            nl: ["Was de twee witte ijsbakken en laat ze een nacht drogen.",
+                 "Controleer of er genoeg crushed ice in de vriezer van de keuken ligt.",
+                 "Afwasstation: spoelbak vrij van resten en garnering, vuilniszak vernieuwd.",
+                 "Sorteer het leeggoed: Coca-Cola in het eigen krat, Appelaere in het eigen krat, SPA rood en blauw in die van hen.",
+                 "Afwasmachine: maak het filter onder de draaiarm schoon, haal de scheidingsvlakken eruit en maak ze schoon.",
+                 "Speedrail-bay: haal de pour sets eraf, het halsdeel gaat in de vaatwasser, controleer de labeldatum en gooi weg wat over datum is.",
+                 "In de vaatwasser: multilevel jigger, pour sets, barlepels, muddler, snijplank, barmats.",
+                 "Veeg het hele oppervlak af. Pico bello.",
+                 "Koffiestation: druk op rinse en de meest linkse knop bij alle drie, maak de espressohouders schoon. Het rubberen handvat gaat NIET in het chemische water.",
+                 "Dweil de vloer."] } }
+      ] },
+
     { key: "between",
-      label: { en: "Between drinks", nl: "Tussen de drankjes" },
-      desc:  { en: "Keep the station clean and stocked. Speed is nothing without consistency.",
-               nl: "Houd het station schoon en gevuld. Snelheid is niets zonder consistentie." },
+      label: { en: "Production", nl: "Productie" },
+      desc:  { en: "Between drinks. Keep the station clean and stocked. Speed is nothing without consistency.",
+               nl: "Tussen de drankjes. Houd het station schoon en gevuld. Snelheid is niets zonder consistentie." },
       cards: [
         { title: { en: "Butterfly pea and hibiscus tea", nl: "Vlindererwt- en hibiscusthee" },
           lead: true,
