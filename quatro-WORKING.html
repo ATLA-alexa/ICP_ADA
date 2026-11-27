@@ -2092,6 +2092,13 @@ tr.inv-new td { padding: 2px 10px; border-bottom: 1px solid var(--limestone-deep
 .iv-mgr-msg { font-size: 12.5px; color: #9E2B3B; margin: 8px 0 0; }
 .iv-mgr-x { margin-top: 10px; }
 .iv-ack { margin-left: 8px; vertical-align: baseline; }
+.iv-nopri { font: inherit; font-weight: 700; color: inherit; background: none; border: 0; padding: 0; cursor: pointer;
+  text-decoration: underline; text-underline-offset: 3px; }
+.iv-nopri[aria-pressed="true"] { text-decoration-style: double; }
+.iv-np-list { display: inline-flex; flex-wrap: wrap; gap: 5px; margin: 0 4px; vertical-align: middle; }
+.iv-np { font: inherit; font-size: 12.5px; padding: 2px 10px; border-radius: 999px; border: 1px solid #E0B3AA;
+  background: #fff; color: #9E2B3B; cursor: pointer; }
+.iv-np:hover { background: rgba(158,43,59,.06); }
 /* columns panel */
 .iv-cg-h { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); margin: 14px 0 6px; }
 .iv-cg-h span { display: inline-block; min-width: 20px; padding: 0 6px; margin-left: 4px; border-radius: 999px;
@@ -3800,6 +3807,7 @@ body.cmt-on #root { cursor: crosshair; }
     if (FILTER === "short")   return tt({ en: "still to buy", nl: "nog te kopen" });
     if (FILTER === "covered") return tt({ en: "covered",      nl: "gedekte" });
     if (FILTER === "note")    return tt({ en: "with a note",  nl: "met een notitie" });
+    if (FILTER === "nopri")   return tt({ en: "no price yet", nl: "zonder prijs" });
     if (FILTER.indexOf("sup:") === 0) return tt({ en: "bought at ", nl: "gekocht bij " }) + FILTER.slice(4);
     if (FILTER.indexOf("xs:") === 0) return optLabel(FILTER.split(":").slice(2).join(":"));
     return tt({ en: "all", nl: "alle" });
@@ -4499,6 +4507,7 @@ body.cmt-on #root { cursor: crosshair; }
       if (FILTER === "short" && c.cls !== "short") return null;
       if (FILTER === "covered" && c.cls !== "covered") return null;
       if (FILTER === "note" && !hasNote(r)) return null;
+      if (FILTER === "nopri" && c.priced) return null;
       if (FILTER.indexOf("sup:") === 0 && (r.supplier || "TBD") !== FILTER.slice(4)) return null;
       if (FILTER.indexOf("xs:") === 0) {
         var fp = FILTER.split(":");
@@ -4581,7 +4590,8 @@ body.cmt-on #root { cursor: crosshair; }
       ["all",     { en: "All",           nl: "Alles" }],
       ["short",   { en: "Still to buy",  nl: "Nog kopen" }],
       ["covered", { en: "Covered",       nl: "Gedekt" }],
-      ["note",    { en: "Has a note",    nl: "Heeft een notitie" }]
+      ["note",    { en: "Has a note",    nl: "Heeft een notitie" }],
+      ["nopri",   { en: "No price yet",  nl: "Nog geen prijs" }]
     ];
     var mbtn = function (id, key, label) {
       return '<button type="button" id="' + id + '" class="iv-mb' + (MGR === key ? " on" : "") + '" aria-expanded="' +
@@ -4663,11 +4673,19 @@ body.cmt-on #root { cursor: crosshair; }
         et({ en: "Lines cannot be dragged while sorted.", nl: "Regels slepen kan niet zolang er gesorteerd is." }) +
         ' <button type="button" class="iv-clear" id="iv-sortclr">' + et({ en: "Clear sort", nl: "Sortering wissen" }) + "</button>" : "") +
       "</p>" +
-      (fresh.length ? '<div class="src-warn iv-unpriced" style="margin:0 0 14px"><b>' +
+      /* The count is a button: tap it and only those lines show. Each line
+         is named underneath, and a tap on a name goes straight to it. */
+      (fresh.length ? '<div class="src-warn iv-unpriced" style="margin:0 0 14px">' +
+        '<button type="button" class="iv-nopri" id="iv-nopri" aria-pressed="' + (FILTER === "nopri") + '">' +
         (isNl() ? (unpriced.length === 1 ? "1 regel heeft nog geen prijs." : unpriced.length + " regels hebben nog geen prijs.")
-                : (unpriced.length === 1 ? "1 line has no price yet." : unpriced.length + " lines have no price yet.")) + "</b> " +
+                : (unpriced.length === 1 ? "1 line has no price yet." : unpriced.length + " lines have no price yet.")) + "</button> " +
+        '<span class="iv-np-list">' + unpriced.map(function (id) {
+          var r = rowById(id);
+          return r ? '<button type="button" class="iv-np" data-ivjump="' + esc(id) + '">' + esc(rowName(r)) + "</button>" : "";
+        }).join("") + "</span> " +
         et({ en: "They are counted in the quantities but not in the money below.",
              nl: "Ze tellen mee in de aantallen, maar niet in de bedragen hieronder." }) +
+        (FILTER === "nopri" ? "" : ' <button type="button" class="iv-ack" id="iv-only">' + et({ en: "Show only these", nl: "Toon alleen deze" }) + "</button>") +
         ' <button type="button" class="iv-ack" id="iv-ack">' + et({ en: "Done", nl: "Klaar" }) + "</button></div>" : "") +
       '<div class="tablewrap"><table class="inv-t' + (sortC ? " sorted" : "") + '"><thead><tr>' +
       cols.map(function (c) {
@@ -5253,6 +5271,11 @@ body.cmt-on #root { cursor: crosshair; }
       if (ci) { ci.focus(); ci.scrollIntoView({ block: "center" }); }
       return;
     }
+    if (id === "iv-nopri" || id === "iv-only") {
+      FILTER = (id === "iv-nopri" && FILTER === "nopri") ? "all" : "nopri";
+      invRender(); return;
+    }
+    if ((a = b.getAttribute("data-ivjump")) != null) { goInventory(a); return; }
     if (id === "iv-ack") {
       var ids = [];
       ROWS.forEach(function (r) { if (r.cost == null) ids.push(r.id); });
