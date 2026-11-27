@@ -7562,15 +7562,17 @@ body.cmt-on #root { cursor: crosshair; }
           items: {
             en: ["First, turn the dishwasher on: push all three buttons, from left to right.",
                  "Turn on the espresso machine.",
+                 "Take the ready cobbler tins off the black tray and put them straight onto the station.",
                  "Check every speedrail bottle is full. Refilling is the next card.",
                  "Every container carries a day dot plus tape with NAME and USE BY, written as the weekday then the date: MO / TU / WED / THU / FR / SAT / SUN DD.MM.YY. New stock goes in front, the old one gets an X.",
                  "Anything past its date is binned at open, not later."],
             nl: ["Eerst de vaatwasser aanzetten: druk alle drie de knoppen in, van links naar rechts.",
                  "Zet de espressomachine aan.",
+                 "Pak de klaargezette cobbler-tins van het zwarte dienblad en zet ze zo op het station.",
                  "Controleer of elke speedrailfles vol is. Bijvullen staat op de volgende kaart.",
                  "Elke bak draagt een dagsticker plus tape met NAAM en THT, geschreven als de weekdag en dan de datum: MA / DI / WO / DO / VR / ZA / ZO DD.MM.JJ. Nieuwe voorraad gaat vooraan, de oude krijgt een X.",
                  "Alles over datum gaat bij opening weg, niet later."] },
-          go: [null, null, null, { id: "prep-labels", label: { en: "Labels and day dots", nl: "Labels en dagstickers" } }, null] },
+          go: [null, null, null, null, { id: "prep-labels", label: { en: "Labels and day dots", nl: "Labels en dagstickers" } }, null] },
         /* 27.11.26, the refill round as the bar walks it */
         { title: { en: "Refill the rail", nl: "De speedrail bijvullen" },
           items: {
@@ -7649,28 +7651,46 @@ body.cmt-on #root { cursor: crosshair; }
                  "Dek de aangebroken knijpflessen af met plasticfolie en daarop de gewassen dop, zodat ze vers blijven en niet lekken als er een omvalt in de koeling.",
                  "Zodra er geen mocktails meer de deur uit gaan, gaan de afgedekte knijpflessen in FR1C, onderste plank.",
                  "De gewassen speedrailhalzen drogen een nacht in het kratrek van de vaatwasser. Zijn ze al droog, dan gaan ze in het linker droogvak."] } },
-        { title: { en: "Set the station up", nl: "Station opruimen en klaarzetten" },
+        /* 27.11.26: the official closing starts with the mats and the tools */
+        { title: { en: "Official closing: set the station up", nl: "Officiële sluiting: station opruimen en klaarzetten" },
           items: {
-            en: ["Wash the two white ice buckets and leave them to dry overnight.",
+            en: ["Bar mats, white mats and jiggers go through the dishwasher once, with the pour sets, bar spoons, muddlers and the cutting board. Then dry everything properly.",
+                 "Lay all the instruments on a clean black tray, as below. Then at opening the cobbler tins are ready to go straight onto the station.",
+                 "The tray goes in the bag on the left of the phone charging station, which is on the left of the blender.",
+                 "Wash the two white ice buckets and leave them to dry overnight.",
                  "Check there is enough crushed ice in the kitchen freezer.",
                  "Dishwasher station: sink cleared of rests and garnish, bin bag renewed.",
                  "Sort the empties: Coca-Cola in its own crate, Appelaere in its own crate, SPA red and blue in theirs.",
                  "Dishwasher: clean the filter under the spinning arm, take the separating surfaces out and clean them.",
                  "Speedrail bay: take the pour sets down, neck part into the dishwasher, check the label date and bin anything overdue.",
-                 "Into the dishwasher: multilevel jigger, pour sets, bar spoons, muddler, cutting board, bar mats.",
                  "Wipe the whole surface down. Pico bello.",
                  "Coffee station: press rinse and the leftmost button on all three, clean the espresso holders. The rubber handle does NOT go in the chemical water.",
                  "Mop the floor."],
-            nl: ["Was de twee witte ijsbakken en laat ze een nacht drogen.",
+            nl: ["Barmats, witte matten en jiggers gaan een keer door de vaatwasser, met de pour sets, barlepels, muddlers en de snijplank. Daarna alles goed drogen.",
+                 "Leg alle instrumenten op een schoon zwart dienblad, zoals hieronder. Dan staan de cobbler-tins bij opening klaar om zo op het station te zetten.",
+                 "Het dienblad gaat in de tas links van het oplaadstation voor de telefoons, dat links van de blender staat.",
+                 "Was de twee witte ijsbakken en laat ze een nacht drogen.",
                  "Controleer of er genoeg crushed ice in de vriezer van de keuken ligt.",
                  "Afwasstation: spoelbak vrij van resten en garnering, vuilniszak vernieuwd.",
                  "Sorteer het leeggoed: Coca-Cola in het eigen krat, Appelaere in het eigen krat, SPA rood en blauw in die van hen.",
                  "Afwasmachine: maak het filter onder de draaiarm schoon, haal de scheidingsvlakken eruit en maak ze schoon.",
                  "Speedrail-bay: haal de pour sets eraf, het halsdeel gaat in de vaatwasser, controleer de labeldatum en gooi weg wat over datum is.",
-                 "In de vaatwasser: multilevel jigger, pour sets, barlepels, muddler, snijplank, barmats.",
                  "Veeg het hele oppervlak af. Pico bello.",
                  "Koffiestation: druk op rinse en de meest linkse knop bij alle drie, maak de espressohouders schoon. Het rubberen handvat gaat NIET in het chemische water.",
-                 "Dweil de vloer."] } }
+                 "Dweil de vloer."] },
+          extra: function () {
+            var TRAY = [
+              { en: "The 2 big cobbler tins, with the Hawthorne strainer, fine strainer, muddler and bar spoon", nl: "De 2 grote cobbler-tins, met de Hawthorne-zeef, fijne zeef, muddler en barlepel" },
+              { en: "3 Boston shakers", nl: "3 Boston shakers" },
+              { en: "Cutting knife", nl: "Snijmes" },
+              { en: "Glass mixing vessel and julep strainer", nl: "Glazen mengglas en julepzeef" },
+              { en: "The 3rd, longer muddler", nl: "De derde, langere muddler" },
+              { en: "Bar spoons: 2 silver, 1 blue", nl: "Barlepels: 2 zilveren, 1 blauwe" }
+            ];
+            return '<div class="dry"><div class="dry-c"><div class="dry-n">' +
+              et({ en: "On the clean black tray", nl: "Op het schone zwarte dienblad" }) + "</div>" +
+              '<div class="dry-r">' + TRAY.map(function (x) { return '<span class="dry-i">' + et(x) + "</span>"; }).join(" ") + "</div></div></div>";
+          } }
       ] },
 
     { key: "between",
