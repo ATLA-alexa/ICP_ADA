@@ -4379,9 +4379,7 @@ body.cmt-on #root { cursor: crosshair; }
         var odr = orderOf(r, k);
         return '<td data-c="order" class="c-order' + (odr ? "" : " none") + '"' + lab + '>' + orderHTML(odr, k) + "</td>";
       case "cost":
-        return '<td data-c="cost" class="c-cost num"' + lab + '>' + (!k.priced ? '<span class="iv-tbd">' +
-            et({ en: "price TBD", nl: "prijs volgt" }) + "</span>"
-          : k.short > 0 ? n2(k.short * r.cost) : "-") + provenance(r) + "</td>";
+        return '<td data-c="cost" class="c-cost num"' + lab + '>' + costHTML(r, k) + "</td>";
       case "where":
         return '<td class="c-where"' + lab + '>' + supTag(r) + "</td>";
       case "unit":
@@ -4512,12 +4510,12 @@ body.cmt-on #root { cursor: crosshair; }
       if (c.need != null && c.priced) {
         totNeed += c.need * r.cost; totHave += Math.min(c.have, c.need) * r.cost;
       }
-      if (!c.priced) unpriced.push(r.id);
+      if (!c.priced && !packPriced(r)) unpriced.push(r.id);
       totBuy += buyCost(r, c);
       if (FILTER === "short" && c.cls !== "short") return null;
       if (FILTER === "covered" && c.cls !== "covered") return null;
       if (FILTER === "note" && !hasNote(r)) return null;
-      if (FILTER === "nopri" && c.priced) return null;
+      if (FILTER === "nopri" && (c.priced || packPriced(r))) return null;
       if (FILTER.indexOf("sup:") === 0 && (r.supplier || "TBD") !== FILTER.slice(4)) return null;
       if (FILTER.indexOf("xs:") === 0) {
         var fp = FILTER.split(":");
@@ -4771,11 +4769,7 @@ body.cmt-on #root { cursor: crosshair; }
         : et({ en: "covered", nl: "gedekt" });
     }
     var cost = tr.querySelector('[data-c="cost"]');
-    if (cost) {
-      cost.innerHTML = (!c.priced
-        ? '<span class="iv-tbd">' + et({ en: "price TBD", nl: "prijs volgt" }) + "</span>"
-        : c.short > 0 ? n2(c.short * r.cost) : "-") + provenance(r);
-    }
+    if (cost) cost.innerHTML = costHTML(r, c);
     var ord = tr.querySelector('[data-c="order"]');
     if (ord) {
       var od = orderOf(r, c);
@@ -5288,7 +5282,7 @@ body.cmt-on #root { cursor: crosshair; }
     if ((a = b.getAttribute("data-ivjump")) != null) { goInventory(a); return; }
     if (id === "iv-ack") {
       var ids = [];
-      ROWS.forEach(function (r) { if (r.cost == null) ids.push(r.id); });
+      ROWS.forEach(function (r) { if (r.cost == null && !packPriced(r)) ids.push(r.id); });
       ACK.unpriced = ids; save(LS_ACK, ACK); invRender(); return;
     }
     if (id === "iv-add") { newLine(ROWS.length ? groupVal(ROWS[0]) : null); return; }
@@ -6727,6 +6721,26 @@ body.cmt-on #root { cursor: crosshair; }
     if (/^\d/.test(w)) return (w + " " + (t[1] || "")).replace(/[,\s]+$/, "");   /* AH and AO write "1 L", "50 g" */
     return /^per$/i.test(w) ? "" : w.charAt(0).toUpperCase() + w.slice(1);
   }
+  /* A line can have a shop price and still no cost per counted unit: the
+     passion fruit is counted in pieces and sold in 2 kg boxes, the lychees
+     counted in litres and sold in 567 g cans. That is not "no price". The
+     price shows, and the line says what it takes to put it in the totals. */
+  function packPriced(r) {
+    if (r.cost != null) return false;
+    var e = syncEntry(r);
+    return !!(e && e.price != null);
+  }
+  function costHTML(r, k) {
+    if (k.priced) return (k.short > 0 ? n2(k.short * r.cost) : "-") + provenance(r);
+    if (packPriced(r)) {
+      var e = syncEntry(r), w = packWord(e) || tt({ en: "piece", nl: "stuk" });
+      return '<span class="iv-pk">' + priceHTML(e) + " / " + esc(w) + "</span>" +
+        '<span class="pv">' + et({ en: "Counted in " + unitLabel(r.unit) + ", sold per " + w + ". Count it as Sligro sells it and the cost goes into the totals.",
+                                   nl: "Geteld in " + unitLabel(r.unit) + ", verkocht per " + w + ". Tel het zoals Sligro het verkoopt en de kosten gaan mee in de totalen." }) + "</span>";
+    }
+    return '<span class="iv-tbd">' + et({ en: "price TBD", nl: "prijs volgt" }) + "</span>" + provenance(r);
+  }
+
   /* Whole packs to put in the cart for what is still short, and what they
      cost today. Half a crate cannot be ordered, so it rounds up. */
   function orderOf(r, k) {
