@@ -2679,7 +2679,7 @@ body.cmt-on #root { cursor: crosshair; }
     "hibiscus tea":        { t:"house", from:"Amazing Oriental dried hibiscus, 3.89 per 125 g", yield:"2 L strong", keeps:"5 days", home:"FR1A bottom shelf, 3 L pitcher" },
     "strawberries":        { t:"buy", shop:"Sligro 507714", pack:"500 g punnet, 4.32", home:"Strawberry box, FR1 B/C top and middle shelves",
                              note:"Open question: check Sligro for a dried strawberry line as a fallback when fresh is out of season." },
-    "strawberry puree":    { t:"buy", shop:"Boiron, via Sligro 412540", pack:"1 kg, 9.56", home:"Tub in F1C bottom, squeeze bottle in F1C top",
+    "strawberry puree":    { t:"buy", shop:"Boiron, via Sligro 412540", pack:"1 kg, 9.56", home:"Frozen in the kitchen freezer at the baking station, thawed in FR1C middle; squeeze bottle in FR1C bottom",
                              warn:"Once decanted into a squeeze bottle it keeps 2 DAYS, not a week. Day dot it and bin it on day three." },
     "foam drops":          { t:"buy", shop:"EKOPLAZA", pack:"Fee Foam, 250 g, 3.19", home:"Station 3 dry store",
                              note:"Plant foamer. No eggs are stocked, so this is the foam in every drink that calls for one." },
@@ -2690,8 +2690,8 @@ body.cmt-on #root { cursor: crosshair; }
                              note:"Seeds out as standard. Ask the guest before leaving them in." },
     "ginger beer":         { t:"buy", shop:"Sligro 155571", pack:"Royal Club, 6 x 1 L, 8.32", home:"F1B bottom tier, laid on their side",
                              note:"A 1 L bottle is 300 mm and will not stand under a 297 mm shelf. Lay it down, it is sealed." },
-    "mint":                { t:"buy", shop:"Sligro 185323", pack:"DeliHerbs, 200 g tub, 5.05", home:"Mint box, FR1 B/C top and middle shelves" },
-    "cassis syrup":        { t:"buy", shop:"Boiron, via Sligro 148497", pack:"Coulis, 500 g, 7.19", home:"Tub in F1C bottom, squeeze bottle in F1C top",
+    "mint":                { t:"buy", shop:"Sligro 185323", pack:"DeliHerbs, 200 g tub, 5.05", home:"Mint box, FR1 bottom shelf above the 2 L orange juices, laid flat" },
+    "cassis syrup":        { t:"buy", shop:"Boiron, via Sligro 148497", pack:"Coulis, 500 g, 7.19", home:"Frozen in the kitchen freezer at the baking station, thawed in FR1C middle; squeeze bottle in FR1C bottom",
                              warn:"STAINS. This squeeze bottle is dedicated for life and never rotated onto another product." },
     "fresh mint syrup":    { t:"house", from:"Jade's recipe, blanched mint and simple syrup", yield:"500 ml", keeps:"1 week", home:"FR1C top shelf, 4 x 700 ml squeeze bottles",
                              note:"Blanch 100 g mint 30 seconds, shock in ice water, pat dry, blend with 500 ml 1:1 syrup, strain fine." },
@@ -2699,7 +2699,7 @@ body.cmt-on #root { cursor: crosshair; }
     "grenadine":           { t:"buy", shop:"Sligro 508396", pack:"Monin Grenadine, 70 cl, price TBD", home:"DRY shelf 4, squeeze bottle in F1C top",
                              warn:"Now the 70 cl bottle. The 1 L one was 320 mm and fit no shelf in the cabinet, so check this one stands before moving it out of dry store. STAINS, dedicated squeeze bottle." },
     "passionfruit juice":  { t:"buy", shop:"Sligro 144652", pack:"Maaza Passievrucht, 6 x 1 L, price TBD", home:"F1A bottom tier" },
-    "passionfruit puree":  { t:"buy", shop:"Boiron, via Sligro 98831", pack:"1 kg, 12.50", home:"Tub in F1C bottom, squeeze bottle in F1C top" },
+    "passionfruit puree":  { t:"buy", shop:"Boiron, via Sligro 98831", pack:"1 kg, 12.50", home:"Frozen in the kitchen freezer at the baking station, thawed in FR1C middle; squeeze bottle in FR1C bottom" },
     "fresh passion fruit": { t:"buy", shop:"Sligro 515194", pack:"2 kg box, 15.39", home:"Bar box, big kitchen fridge", note:"Garnish only. Never juiced." },
     "pineapple juice":     { t:"buy", shop:"Sligro 223812", pack:"Appelsientje, 8 x 1 L, 20.39", home:"F1A bottom tier" },
     "coconut cream":       { t:"buy", shop:"Sligro 416507", pack:"Kara, 1 L, 6.06", home:"Open can F1C bottom tier",
@@ -2845,7 +2845,8 @@ body.cmt-on #root { cursor: crosshair; }
     "Grape tub, FR1 B/C top and middle shelves": "Druivenbak, FR1 B/C bovenste en middelste plank",
     "Basil box, FR1 B/C top and middle shelves": "Basilicumbak, FR1 B/C bovenste en middelste plank",
     "Strawberry box, FR1 B/C top and middle shelves": "Aardbeienbak, FR1 B/C bovenste en middelste plank",
-    "Mint box, FR1 B/C top and middle shelves": "Muntbak, FR1 B/C bovenste en middelste plank",
+    "Mint box, FR1 bottom shelf above the 2 L orange juices, laid flat": "Muntbak, FR1 onderste plank boven de sinaasappelsap van 2 L, plat gelegd",
+    "Frozen in the kitchen freezer at the baking station, thawed in FR1C middle; squeeze bottle in FR1C bottom": "Bevroren in de vriezer bij het bakstation in de keuken, ontdooid in FR1C midden; knijpfles in FR1C onder",
     "Open can F1C bottom tier": "Aangebroken blik F1C onderste plank",
     "Open jar, F1C bottom tier": "Aangebroken pot, F1C onderste plank",
     "Rail slot 3, spare carton F1A bottom": "Speedrail slot 3, reservepak F1A onderin",
@@ -5815,14 +5816,14 @@ body.cmt-on #root { cursor: crosshair; }
     [{en:"Boiron strawberry puree",nl:"Boiron aardbeienpuree"},
      {en:"Squeeze bottle",nl:"Knijpfles"},
      {en:"8 days once opened",nl:"8 dagen na openen"},
-     {en:"Tub FR1 door C. Big squeeze bottle between the condiment holders.",
-      nl:"Emmer FR1 deur C. Grote knijpfles tussen de condimentenhouders."},
+     {en:"Frozen in the kitchen freezer at the baking station, thawed in FR1 door C, middle shelf. Big squeeze bottle between the condiment holders.",
+      nl:"Bevroren in de vriezer bij het bakstation in de keuken, ontdooid in FR1 deur C, middelste plank. Grote knijpfles tussen de condimentenhouders."},
      "",""],
     [{en:"Boiron passionfruit puree",nl:"Boiron passievruchtenpuree"},
      {en:"Squeeze bottle",nl:"Knijpfles"},
      {en:"8 days once opened",nl:"8 dagen na openen"},
-     {en:"Tub FR1 door C. Big squeeze bottle between the condiment holders.",
-      nl:"Emmer FR1 deur C. Grote knijpfles tussen de condimentenhouders."},
+     {en:"Frozen in the kitchen freezer at the baking station, thawed in FR1 door C, middle shelf. Big squeeze bottle between the condiment holders.",
+      nl:"Bevroren in de vriezer bij het bakstation in de keuken, ontdooid in FR1 deur C, middelste plank. Grote knijpfles tussen de condimentenhouders."},
      "",""],
     [{en:"Jade's homemade mint syrup",nl:"Zelfgemaakte muntsiroop van Jade"},
      {en:"About 1.5 L a batch. Always 4 x 700 ml squeeze bottles in the fridge.",nl:"Ongeveer 1,5 L per batch. Altijd 4 knijpflessen van 700 ml in de koeling."},
@@ -7546,12 +7547,22 @@ body.cmt-on #root { cursor: crosshair; }
     ["B",{en:"Middle",nl:"Midden"},
          {en:"The two condiment boxes",nl:"De twee condimentenbakken"}],
     ["B/C",{en:"Top and middle",nl:"Boven en midden"},
-         {en:"The strawberry box, the grape tub, the basil box and the mint box",nl:"De aardbeienbak, de druivenbak, de basilicumbak en de muntbak"}],
+         {en:"The strawberry box, the grape tub and the basil box",nl:"De aardbeienbak, de druivenbak en de basilicumbak"}],
     ["B",{en:"Bottom",nl:"Onder"},
          {en:"Open cartons and boxes, used first when the rail is refilled",nl:"Aangebroken pakken en dozen, die als eerste gebruikt worden bij het bijvullen van de speedrail"}],
-    ["C",{en:"All shelves",nl:"Alle planken"},
-         {en:"Purees, every squeeze bottle, and the open cans",
-          nl:"Purees, alle knijpflessen, en de aangebroken blikken"}]
+    /* FR1C is a hybrid, as the bar described it on 27.11.26 */
+    ["C",{en:"Top",nl:"Boven"},
+         {en:"Experimental squeeze bottles for new drinks, plus the RT-M (2 x 700 ml) and Jade's mint syrup (4 x 700 ml). A backup when the bottom shelf runs out; otherwise leave it alone",
+          nl:"Experimentele knijpflessen voor nieuwe drankjes, plus de RT-M (2 x 700 ml) en de muntsiroop van Jade (4 x 700 ml). Reserve als de onderste plank op is; laat het verder met rust"}],
+    ["C",{en:"Middle",nl:"Midden"},
+         {en:"The Boiron passion fruit and strawberry purees, thawed from the kitchen freezer at the baking station",
+          nl:"De Boiron passievruchten- en aardbeienpuree, ontdooid uit de vriezer bij het bakstation in de keuken"}],
+    ["C",{en:"Bottom",nl:"Onder"},
+         {en:"The squeeze bottles used in production. The covered ones go here at close",
+          nl:"De knijpflessen die in de productie gebruikt worden. De afgedekte gaan hier bij sluiting in"}],
+    ["?",{en:"Bottom, above the 2 L orange juices",nl:"Onder, boven de sinaasappelsap van 2 L"},
+         {en:"The mint box and the ginger box, and only those. Lay them flat, not standing, or the door will not close",
+          nl:"De muntbak en de gemberbak, en alleen die. Plat leggen, niet rechtop, anders gaat de deur niet dicht"}]
   ];
   /* The two dry compartments under the glassware, as the bar described
      them on 27.11.26: left on the left, right on the right, as you face
@@ -7592,8 +7603,9 @@ body.cmt-on #root { cursor: crosshair; }
     { name: { en: "FR1 B and C, top and middle shelves", nl: "FR1 B en C, bovenste en middelste plank" },
       items: [{ en: "at least 1 tub of strawberries, in the strawberry box", nl: "minstens 1 bak aardbeien, in de aardbeienbak" },
               { en: "1 tub of grapes, from Sligro", nl: "1 bak druiven, van Sligro" },
-              { en: "the 200 g basil, in its own basil box", nl: "de 200 g basilicum, in een eigen basilicumbak" },
-              { en: "200 g mint, for the mint box", nl: "200 g munt, voor de muntbak" }] }
+              { en: "the 200 g basil, in its own basil box", nl: "de 200 g basilicum, in een eigen basilicumbak" }] },
+    { name: { en: "FR1 bottom shelf, above the 2 L orange juices, laid flat", nl: "FR1 onderste plank, boven de sinaasappelsap van 2 L, plat gelegd" },
+      items: [{ en: "the mint box, with 200 g mint", nl: "de muntbak, met 200 g munt" }, { en: "the ginger box", nl: "de gemberbak" }] }
   ];
   function minHTML() {
     return '<div class="dry">' + MINSTOCK.map(function (c) {
@@ -7627,7 +7639,7 @@ body.cmt-on #root { cursor: crosshair; }
       "<th>" + et({ en: "Shelf", nl: "Plank" }) + "</th>" +
       "<th>" + et({ en: "What lives there", nl: "Wat daar staat" }) + "</th></tr></thead><tbody>" +
       F1.map(function (r) {
-        return "<tr><td><b>F1" + r[0] + "</b></td><td>" + et(r[1]) + "</td><td>" + et(r[2]) + "</td></tr>";
+        return "<tr><td><b>F1" + (r[0] === "?" ? "" : r[0]) + "</b></td><td>" + et(r[1]) + "</td><td>" + et(r[2]) + "</td></tr>";
       }).join("") + "</tbody></table></div></div>" +
       '<div class="panel"><h3>' +
       et({ en: "Bottled soft drinks", nl: "Frisdrank op fles" }) + "</h3><p>" +
@@ -7638,9 +7650,14 @@ body.cmt-on #root { cursor: crosshair; }
       minHTML() + "</div>" +
       '<div class="panel"><h3>' + et({ en: "Dry compartments under the bar", nl: "Droogvakken onder de bar" }) + "</h3>" +
       dryHTML() + "</div>" +
+      '<div class="panel"><h3>' + et({ en: "Kitchen freezer, at the baking station", nl: "Vriezer in de keuken, bij het bakstation" }) + "</h3><p>" +
+      et({ en: "Underneath where Liam stands: the crushed ice, the cubed ice, and all the Boiron purees, the cassis one included. The passion fruit and strawberry purees are thawed from here into FR1C, middle shelf.",
+           nl: "Onder de plek waar Liam staat: het crushed ice, de ijsblokjes, en alle Boiron-purees, de cassis ook. De passievruchten- en aardbeienpuree worden hieruit ontdooid naar FR1C, middelste plank." }) +
+      "</p></div>" +
       '<div class="panel"><h3>' + et({ en: "Ice", nl: "IJs" }) + "</h3><p>" +
       et({ en: "Crushed bucket then cubed bucket, behind the condiment holders at the station. Filled at open and again at the midpoint.",
-           nl: "Bak met crushed ice, dan de bak met ijsblokjes, achter de condimentenhouders op het station. Gevuld bij opening en nog een keer halverwege." }) +
+           nl: "Bak met crushed ice, dan de bak met ijsblokjes, achter de condimentenhouders op het station. Gevuld bij opening en nog een keer halverwege." }) + " " +
+      et({ en: "Spare bags are in the kitchen freezer at the baking station.", nl: "Reservezakken liggen in de vriezer bij het bakstation in de keuken." }) +
       "</p></div>" +
       noteBox("storage-1", { en: "Storage notes.", nl: "Notities over de opslag." }) +
       "</section>";
@@ -7784,13 +7801,13 @@ body.cmt-on #root { cursor: crosshair; }
                  "Slice the jalapenos, seeds out as standard.",
                  "Fill the garnish tubs: mint, basil, grapes, strawberries.",
                  "Halve the passion fruit, open the pineapple chunks.",
-                 "Whole fruit, ginger, jalapenos, rosemary and thyme come from the bar box in the big kitchen fridge. The strawberry, grape, basil and mint boxes are in FR1 B and C, top and middle shelves. What each must always hold is below."],
+                 "Whole fruit, ginger, jalapenos, rosemary and thyme come from the bar box in the big kitchen fridge. The strawberry, grape and basil boxes are in FR1 B and C, top and middle shelves; the mint and ginger boxes lie flat on the FR1 bottom shelf, above the 2 L orange juices. What each must always hold is below."],
             nl: ["Controleer de hoeveelheden voor de dag, hieronder.",
                  "Snijd limoenpartjes, citroenpartjes, sinaasappelzestes.",
                  "Snijd de jalapenos, standaard zonder zaadjes.",
                  "Vul de garneringsbakjes: munt, basilicum, druiven, aardbeien.",
                  "Halveer de passievruchten, open de ananasstukjes.",
-                 "Heel fruit, gember, jalapenos, rozemarijn en tijm komen uit de barbak in de grote koeling in de keuken. De aardbeien-, druiven-, basilicum- en muntbak staan in FR1 B en C, bovenste en middelste plank. Wat er altijd minstens in moet, staat hieronder."] },
+                 "Heel fruit, gember, jalapenos, rozemarijn en tijm komen uit de barbak in de grote koeling in de keuken. De aardbeien-, druiven- en basilicumbak staan in FR1 B en C, bovenste en middelste plank; de munt- en gemberbak liggen plat op de onderste plank van FR1, boven de sinaasappelsap van 2 L. Wat er altijd minstens in moet, staat hieronder."] },
           extra: function () { return minHTML() + fruitHTML(); } },
         /* Made at opening since 27.11.26. The butterfly pea and the hibiscus
            went to Production the same day: they run out during service. */
@@ -7814,9 +7831,9 @@ body.cmt-on #root { cursor: crosshair; }
           } },
         { title: { en: "Ice and glassware", nl: "IJs en glaswerk" },
           items: {
-            en: ["Fill the insulated bins: one cubed from the machine, one crushed. Spare bags are in the kitchen fridge.",
+            en: ["Fill the insulated bins: one cubed from the machine, one crushed. Spare bags are in the kitchen freezer at the baking station.",
                  "Glassware is already set up at station 2."],
-            nl: ["Vul de geisoleerde bakken: een met blokjes uit de machine, een met crushed. Reservezakken liggen in de keukenkoeling.",
+            nl: ["Vul de geisoleerde bakken: een met blokjes uit de machine, een met crushed. Reservezakken liggen in de vriezer bij het bakstation in de keuken.",
                  "Glaswerk staat al klaar op station 2."] } }
       ] },
 
@@ -7851,7 +7868,8 @@ body.cmt-on #root { cursor: crosshair; }
                  "The tray goes in the bag on the left of the phone charging station, which is on the left of the blender.",
                  "Check the 3 L pitchers of butterfly pea and hibiscus tea, FR1A bottom shelf, and make what is needed for tomorrow.",
                  "Wash the two white ice buckets and leave them to dry overnight.",
-                 "Check there is enough crushed ice in the kitchen freezer.",
+                 "Check there is enough crushed ice in the kitchen freezer at the baking station.",
+                 "The mint box and the ginger box go into FR1, bottom shelf, above the 2 L orange juices. Lay them flat, not standing, or the door will not close.",
                  "Dishwasher station: sink cleared of rests and garnish, bin bag renewed.",
                  "Sort the empties: Coca-Cola in its own crate, Appelaere in its own crate, SPA red and blue in theirs.",
                  "Dishwasher: clean the filter under the spinning arm, take the separating surfaces out and clean them.",
@@ -7864,7 +7882,8 @@ body.cmt-on #root { cursor: crosshair; }
                  "Het dienblad gaat in de tas links van het oplaadstation voor de telefoons, dat links van de blender staat.",
                  "Controleer de kannen van 3 L vlindererwt- en hibiscusthee, FR1A onderste plank, en maak wat er voor morgen nodig is.",
                  "Was de twee witte ijsbakken en laat ze een nacht drogen.",
-                 "Controleer of er genoeg crushed ice in de vriezer van de keuken ligt.",
+                 "Controleer of er genoeg crushed ice in de vriezer bij het bakstation in de keuken ligt.",
+                 "De muntbak en de gemberbak gaan in FR1, onderste plank, boven de sinaasappelsap van 2 L. Plat leggen, niet rechtop, anders gaat de deur niet dicht.",
                  "Afwasstation: spoelbak vrij van resten en garnering, vuilniszak vernieuwd.",
                  "Sorteer het leeggoed: Coca-Cola in het eigen krat, Appelaere in het eigen krat, SPA rood en blauw in die van hen.",
                  "Afwasmachine: maak het filter onder de draaiarm schoon, haal de scheidingsvlakken eruit en maak ze schoon.",
@@ -7916,11 +7935,11 @@ body.cmt-on #root { cursor: crosshair; }
             en: ["Speedrail bottles: top up as they go down.",
                  "Squeeze bottles: lime, lemon, the cordials.",
                  "Garnish tubs: keep them fresh, top them up.",
-                 "Ice: refill the bin at the midpoint, spare bags from the kitchen fridge."],
+                 "Ice: refill the bin at the midpoint, spare bags from the kitchen freezer at the baking station."],
             nl: ["Speedrailflessen: bijvullen zodra ze zakken.",
                  "Knijpflessen: limoen, citroen, de cordials.",
                  "Garneringsbakjes: vers houden, bijvullen.",
-                 "IJs: de bak halverwege bijvullen, reservezakken uit de keukenkoeling."] } },
+                 "IJs: de bak halverwege bijvullen, reservezakken uit de vriezer bij het bakstation in de keuken."] } },
         { title: { en: "FIFO and waste", nl: "FIFO en afval" },
           items: {
             en: ["Date everything. New stock goes behind the old.",
