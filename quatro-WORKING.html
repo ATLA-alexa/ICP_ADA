@@ -2321,6 +2321,23 @@ button.iv-tag.on { font-weight: 600; }
 .ops-go-t { color: var(--ink-soft); }
 .ops-back { display: flex; width: fit-content; margin-top: 8px; }
 .prep-t tr.q-hi td { background: rgba(168,134,60,.10); }
+/* Prep and FIFO: sort and kind */
+.prep-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin: 14px 0 10px; }
+.prep-kinds { display: flex; flex-wrap: wrap; gap: 6px; }
+.prep-tools .ivf { display: inline-flex; align-items: center; gap: 8px; }
+.prep-tools select { font: inherit; font-size: 13px; padding: 6px 10px; min-height: 34px; border: 1px solid var(--gold-pale);
+  border-radius: 999px; background: #fff; color: var(--ink); cursor: pointer; }
+.prep-tools select.on { border-color: var(--gold); background: var(--limestone); font-weight: 600; }
+.prep-kb { font: inherit; font-size: 12.5px; padding: 5px 11px; border-radius: 999px; border: 1px solid var(--gold-pale);
+  background: #fff; color: var(--ink); cursor: pointer; }
+.prep-kb[aria-pressed="true"] { background: var(--ink); color: var(--limestone); border-color: var(--ink); }
+.prep-kn { font-size: 11px; opacity: .65; }
+.prep-k { display: block; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); margin-top: 2px; }
+.th-sort { font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+.th-sort:hover { color: var(--gold); }
+.prep-t tr.prep-g td { background: var(--limestone-deep); font-family: 'Marcellus', Georgia, serif; font-size: 12px;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--gold); padding: 8px 10px; }
+@media (max-width: 719px) { .prep-t tbody tr.prep-g { display: block; padding: 0; } .prep-t tbody tr.prep-g td { display: block; } }
 .prep-lbl.q-hi { outline: 2px solid var(--gold); outline-offset: 4px; border-radius: 6px; background: rgba(168,134,60,.08); }
 .prep-lbl .ops-back { margin: 0 0 10px; }
 .prep-t tr.q-hi { outline: 2px solid var(--gold); outline-offset: -2px; }
@@ -5982,6 +5999,91 @@ body.cmt-on #root { cursor: crosshair; }
     if (MADE[was] != null && MADE[now] == null) { MADE[now] = MADE[was]; delete MADE[was]; save(LS_MADE, MADE); }
   })();
 
+  /* Prep and FIFO can be sorted A to Z or Z to A, laid out by kind, or
+     narrowed to one kind (27.11.26). The view is remembered in this
+     browser; it is a way of looking, not a change to the list. */
+  var PREP_KINDS = [
+    ["syrup", { en: "Syrups and cordials", nl: "Siropen en cordials" }],
+    ["tea",   { en: "Teas", nl: "Thee" }],
+    ["fruit", { en: "Fruit and garnish", nl: "Fruit en garnering" }],
+    ["puree", { en: "Purees", nl: "Purees" }],
+    ["juice", { en: "Juices", nl: "Sappen" }],
+    ["cream", { en: "Creams and milk", nl: "Room en melk" }]
+  ];
+  var PREP_KIND = {
+    "prep-butterfly-pea-tea": "tea", "prep-hibiscus-tea-strong": "tea",
+    "prep-rosemary-thyme-maple-cordial": "syrup", "prep-lychee-cordial": "syrup",
+    "prep-lychee-lime-cordial": "syrup", "prep-jade-s-homemade-mint-syrup": "syrup",
+    "prep-coconut-cream-from-the-can": "cream", "prep-condensed-milk-decanted": "cream",
+    "prep-boiron-lemon-puree": "puree", "prep-boiron-lime-puree": "puree",
+    "prep-boiron-strawberry-puree": "puree", "prep-boiron-passionfruit-puree": "puree",
+    "prep-all-speedrail-juices-juiced-or-decanted-at-open": "juice",
+    "prep-cut-garnish-and-jalapeno-slices": "fruit", "prep-rosemary-lemon-sea-salt-rim-mix": "fruit"
+  };
+  var LS_PREPVIEW = "quatro-prep-view-v1";
+  var PVIEW = load(LS_PREPVIEW, null) || { s: "own", k: "all" };
+  function kindOf(r) { return PREP_KIND[prepId(r)] || "other"; }
+  function kindLabel(k) {
+    var hit = PREP_KINDS.filter(function (x) { return x[0] === k; })[0];
+    return hit ? et(hit[1]) : et({ en: "Other", nl: "Overig" });
+  }
+  /* a jump from Order of operations must land on a row that is showing */
+  function prepShow(id) {
+    var r = PREP2.filter(function (x) { return prepId(x) === id; })[0];
+    if (r && PVIEW.k !== "all" && kindOf(r) !== PVIEW.k) { PVIEW.k = "all"; save(LS_PREPVIEW, PVIEW); }
+  }
+  function prepRows() {
+    var rows = PREP2.map(function (r, i) { return { r: r, i: i, k: kindOf(r) }; })
+      .filter(function (x) { return PVIEW.k === "all" || x.k === PVIEW.k; });
+    var name = function (x) { return tt(x.r[0]).toLowerCase(); };
+    if (PVIEW.s === "az" || PVIEW.s === "za") {
+      var d = PVIEW.s === "za" ? -1 : 1;
+      rows.sort(function (a, b) { return d * name(a).localeCompare(name(b), isNl() ? "nl" : "en"); });
+    } else if (PVIEW.s === "kind") {
+      var ord = PREP_KINDS.map(function (x) { return x[0]; });
+      rows.sort(function (a, b) {
+        var ka = ord.indexOf(a.k), kb = ord.indexOf(b.k);
+        return ((ka < 0 ? 99 : ka) - (kb < 0 ? 99 : kb)) || (a.i - b.i);
+      });
+    }
+    return rows;
+  }
+  function prepToolsHTML() {
+    var n = {};
+    PREP2.forEach(function (r) { var k = kindOf(r); n[k] = (n[k] || 0) + 1; });
+    var chip = function (k, label, count) {
+      return '<button type="button" class="prep-kb" data-pkind="' + k + '" aria-pressed="' + (PVIEW.k === k) + '">' +
+        label + ' <span class="prep-kn">' + count + "</span></button>";
+    };
+    return '<div class="prep-tools"><span class="ivf"><span class="smallcaps">' + et({ en: "Sort", nl: "Sorteer" }) + "</span>" +
+      '<select id="prep-sort"' + (PVIEW.s === "own" ? "" : ' class="on"') + ">" +
+      [["own", { en: "Own order", nl: "Eigen volgorde" }], ["az", { en: "A to Z", nl: "A tot Z" }],
+       ["za", { en: "Z to A", nl: "Z tot A" }], ["kind", { en: "By kind", nl: "Per soort" }]].map(function (o) {
+        return '<option value="' + o[0] + '"' + (PVIEW.s === o[0] ? " selected" : "") + ">" + et(o[1]) + "</option>";
+      }).join("") + "</select></span>" +
+      '<div class="prep-kinds" role="group" aria-label="' + et({ en: "Show one kind", nl: "Toon een soort" }) + '">' +
+      chip("all", et({ en: "All", nl: "Alles" }), PREP2.length) +
+      PREP_KINDS.filter(function (x) { return n[x[0]]; }).map(function (x) { return chip(x[0], et(x[1]), n[x[0]]); }).join("") +
+      "</div></div>";
+  }
+  document.addEventListener("change", function (e) {
+    if (!e.target || e.target.id !== "prep-sort") return;
+    PVIEW.s = e.target.value; save(LS_PREPVIEW, PVIEW);
+    var y = window.scrollY || 0; render(); window.scrollTo(0, y);
+  });
+  document.addEventListener("click", function (e) {
+    var t = e.target && e.target.closest ? e.target : null;
+    if (!t) return;
+    var kb = t.closest("[data-pkind]");
+    var hs = t.closest("[data-psorth]");
+    if (!kb && !hs) return;
+    if (kb) PVIEW.k = kb.getAttribute("data-pkind");
+    /* the Item heading flips A to Z, Z to A, then back to your own order */
+    if (hs) PVIEW.s = PVIEW.s === "az" ? "za" : PVIEW.s === "za" ? "own" : "az";
+    save(LS_PREPVIEW, PVIEW);
+    var y = window.scrollY || 0; render(); window.scrollTo(0, y);
+  });
+
   function prepHTML() {
     return '<section class="section"><div class="section-head"><div class="smallcaps">' +
       esc(ui("runsheet")) + "</div><h2>" + esc(ui("prep")) + "</h2></div>" +
@@ -5999,16 +6101,24 @@ body.cmt-on #root { cursor: crosshair; }
       et({ en: "New stock goes in front, the old one marked with an X. Anything past date is binned at open.",
            nl: "Nieuwe voorraad gaat vooraan, de oude wordt met een X gemarkeerd. Alles over datum gaat bij opening weg." }) + "</div>" +
       dayDotHTML() + "</div>" +
+      prepToolsHTML() +
       '<div class="tablewrap"><table class="wide prep-t"><thead><tr>' +
-      "<th>" + et({ en: "Item", nl: "Item" }) + "</th>" +
+      '<th><button type="button" class="th-sort" data-psorth="1" title="' +
+      et({ en: "Sort A to Z, Z to A, or your own order", nl: "Sorteer A tot Z, Z tot A, of je eigen volgorde" }) + '">' +
+      et({ en: "Item", nl: "Item" }) + (PVIEW.s === "az" ? " &uarr;" : PVIEW.s === "za" ? " &darr;" : "") + "</button></th>" +
       "<th>" + et({ en: "Yield", nl: "Opbrengst" }) + "</th>" +
       "<th>" + et({ en: "Keeps", nl: "Houdbaar" }) + "</th>" +
       "<th>" + et({ en: "Home", nl: "Plek" }) + "</th>" +
       "<th>" + et({ en: "Date made and use by", nl: "Gemaakt op en THT" }) + "</th>" +
       "<th>" + et({ en: "Pre-batch instructions", nl: "Voorbereiding vooraf" }) + "</th></tr></thead><tbody>" +
-      PREP2.map(function (r) {
-        var id = prepId(r), hi = typeof PREPHI !== "undefined" && PREPHI === id;
-        return '<tr data-prep="' + esc(id) + '"' + (hi ? ' class="q-hi"' : "") + "><td><b>" + et(r[0]) + "</b>" +
+      (function () {
+        var last = null;
+        return prepRows().map(function (x) {
+          var r = x.r, id = prepId(r), hi = typeof PREPHI !== "undefined" && PREPHI === id;
+          var band = PVIEW.s === "kind" && x.k !== last ? '<tr class="prep-g"><td colspan="6">' + kindLabel(x.k) + "</td></tr>" : "";
+          last = x.k;
+          return band + '<tr data-prep="' + esc(id) + '" data-kind="' + x.k + '"' + (hi ? ' class="q-hi"' : "") + "><td><b>" + et(r[0]) + "</b>" +
+          (PVIEW.s === "kind" ? "" : '<span class="prep-k">' + kindLabel(x.k) + "</span>") +
           (hi ? '<button type="button" class="ops-back" data-backops="' + esc(id) + '">&larr; ' +
                 et({ en: "Back to Order of operations", nl: "Terug naar Volgorde van werken" }) + "</button>" : "") +
           "</td><td>" + et(r[1]) + "</td>" +
@@ -6019,7 +6129,8 @@ body.cmt-on #root { cursor: crosshair; }
           (tt(r[5]) ? '<div class="qflag">' + et(r[5]) + "</div>" : "") +
           noteBox(id, { en: "Note for " + tt(r[0]) + ".", nl: "Notitie voor " + tt(r[0]) + "." }) +
           "</td></tr>";
-      }).join("") + "</tbody></table></div>" +
+        }).join("");
+      })() + "</tbody></table></div>" +
       '<div class="panel"><h3>' +
       et({ en: "Shelf lives, settled", nl: "Houdbaarheid, vastgesteld" }) +
       '</h3><ul class="qgar" style="columns:1">' +
@@ -7796,6 +7907,7 @@ body.cmt-on #root { cursor: crosshair; }
   }
   function goPrep(id) {
     PREPHI = id; OPSFROM = OPSTEP;
+    if (typeof prepShow === "function") prepShow(id);
     if (!openTab("prep")) return;
     setTimeout(function () { flash(document.querySelector('#root [data-prep="' + CSS.escape(id) + '"]')); }, 80);
   }
