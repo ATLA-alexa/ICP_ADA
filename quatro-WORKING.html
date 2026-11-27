@@ -2291,14 +2291,19 @@ button.iv-tag.on { font-weight: 600; }
 .ops-tabs button[aria-pressed="true"] .ops-n { background: rgba(255,255,255,.18); color: #fff; }
 .ops-h { font-family: 'Marcellus', Georgia, serif; font-size: 24px; margin: 0 0 4px; }
 .ops-d { margin: 0 0 16px; font-size: 14px; color: var(--ink-soft); }
-.ops-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-@media (max-width: 719px) { .ops-grid { grid-template-columns: 1fr; } }
+/* One column on every screen, top to bottom in the order the steps are
+   done. Two columns put a tall card beside a short one and the order was
+   lost; minmax(0, 1fr) stops a wide table forcing the column wider. */
+.ops-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+.ops-c h4 .ops-step { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px;
+  margin-right: 8px; border-radius: 50%; background: var(--gold); color: #fff; font-family: var(--body);
+  font-size: 12px; font-weight: 600; vertical-align: 2px; }
 .ops-c { background: #fff; border: 1px solid var(--limestone-deep); border-radius: var(--arch); padding: 16px 18px; }
 .ops-c h4 { font-family: 'Marcellus', Georgia, serif; font-size: 16px; color: var(--gold); margin: 0 0 8px; }
 .ops-c ul { margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.6; }
 .ops-c.lead { border-color: var(--gold); box-shadow: inset 3px 0 0 var(--gold); }
 /* a shelf map: each shelf left to right, as you face it */
-.dry { display: grid; gap: 10px; margin-top: 10px; }
+.dry { display: grid; gap: 10px; margin-top: 10px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
 .dry-c { border: 1px solid var(--limestone-deep); border-radius: 10px; padding: 10px 12px; background: var(--limestone); }
 .dry-n { font-family: 'Marcellus', Georgia, serif; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
 .dry-s + .dry-s { margin-top: 6px; }
@@ -7553,6 +7558,7 @@ body.cmt-on #root { cursor: crosshair; }
      as they were, so the notes kept under each part are not lost. */
   var OPS = [
     { key: "arrival",
+      ordered: true,
       label: { en: "Opening", nl: "Opening" },
       desc:  { en: "On arrival. First things when you walk in, in this order.",
                nl: "Bij aankomst. Het eerste als je binnenkomt, in deze volgorde." },
@@ -7710,8 +7716,9 @@ body.cmt-on #root { cursor: crosshair; }
       }).join("") + "</div>" +
       '<h3 class="ops-h">' + et(s.label) + "</h3>" +
       '<p class="ops-d">' + et(s.desc) + "</p>" +
-      '<div class="ops-grid">' + s.cards.map(function (c) {
-        return '<div class="ops-c' + (c.lead ? " lead" : "") + '"><h4>' + et(c.title) + "</h4><ul>" +
+      '<div class="ops-grid">' + s.cards.map(function (c, ci) {
+        return '<div class="ops-c' + (c.lead ? " lead" : "") + '"><h4>' +
+          (s.ordered ? '<span class="ops-step" aria-hidden="true">' + (ci + 1) + "</span>" : "") + et(c.title) + "</h4><ul>" +
           t(c.items).map(function (it, i) {
             var g = c.go && c.go[i], go = g && (g.id || g);
             return "<li" + (go ? ' data-opsgo="' + esc(go) + '"' : "") + ">" + esc(it) + (go
