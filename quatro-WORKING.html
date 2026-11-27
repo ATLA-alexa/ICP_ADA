@@ -2327,6 +2327,7 @@ button.iv-tag.on { font-weight: 600; }
   padding: 4px 11px; border-radius: 999px; border: 1px solid var(--gold-pale); background: var(--limestone);
   color: var(--ink); cursor: pointer; line-height: 1.4; }
 .ops-go { display: flex; width: fit-content; }
+.ops-gos { display: flex; flex-wrap: wrap; gap: 0 8px; }
 .ops-go:hover, .ops-back:hover { background: rgba(168,134,60,.16); }
 .ops-go-t { color: var(--ink-soft); }
 .ops-back { display: flex; width: fit-content; margin-top: 8px; }
@@ -7793,17 +7794,19 @@ body.cmt-on #root { cursor: crosshair; }
           extra: function () { return minHTML() + fruitHTML(); } },
         /* Made at opening since 27.11.26. The butterfly pea and the hibiscus
            went to Production the same day: they run out during service. */
-        { title: { en: "Batch the syrups and cordials", nl: "Siropen en cordials maken" },
+        { title: { en: "Batch the teas, syrups and cordials", nl: "Thee, siropen en cordials maken" },
           items: {
-            en: ["Pre-batch 1 L rosemary-thyme maple cordial (RT-M) if needed. There are always 2 x 700 ml squeeze bottles of it in the fridge, FR1C top shelf.",
+            en: ["Check the 3 L pitchers of butterfly pea and hibiscus tea, FR1A bottom shelf. If one needs making, make it now.",
+                 "Pre-batch 1 L rosemary-thyme maple cordial (RT-M) if needed. There are always 2 x 700 ml squeeze bottles of it in the fridge, FR1C top shelf.",
                  "Pre-batch Jade's mint syrup if needed. There are always 4 x 700 ml squeeze bottles of it in the fridge, FR1C top shelf.",
                  "Lychee cordial, decanted from the can.",
                  "Rosemary-lemon salt rim mix if it is running low."],
-            nl: ["Prebatch 1 L rozemarijn-tijm-ahornsiroop (RT-M) als het nodig is. Er staan altijd 2 knijpflessen van 700 ml van in de koeling, FR1C bovenste plank.",
+            nl: ["Controleer de kannen van 3 L vlindererwt- en hibiscusthee, FR1A onderste plank. Moet er een gemaakt worden, maak hem dan nu.",
+                 "Prebatch 1 L rozemarijn-tijm-ahornsiroop (RT-M) als het nodig is. Er staan altijd 2 knijpflessen van 700 ml van in de koeling, FR1C bovenste plank.",
                  "Prebatch muntsiroop van Jade als het nodig is. Er staan altijd 4 knijpflessen van 700 ml van in de koeling, FR1C bovenste plank.",
                  "Lycheecordial, afgetapt uit blik.",
                  "Rozemarijn-citroen-zoutrand als die bijna op is."] },
-          go: ["prep-rosemary-thyme-maple-cordial", "prep-jade-s-homemade-mint-syrup", "prep-lychee-cordial", "prep-rosemary-lemon-sea-salt-rim-mix"],
+          go: [[{ id: "prep-butterfly-pea-tea", label: { en: "Butterfly pea tea", nl: "Vlindererwtthee" } }, { id: "prep-hibiscus-tea-strong", label: { en: "Hibiscus tea", nl: "Hibiscusthee" } }], "prep-rosemary-thyme-maple-cordial", "prep-jade-s-homemade-mint-syrup", "prep-lychee-cordial", "prep-rosemary-lemon-sea-salt-rim-mix"],
           extra: function () {
             return '<div class="ops-x">' +
               et({ en: "Salt rim: microwave the rosemary 4 x 30 seconds until it crumbles but is still green, then mix 3 teaspoons with the sea salt and a whole lemon zest.",
@@ -7846,6 +7849,7 @@ body.cmt-on #root { cursor: crosshair; }
             en: ["Bar mats, white mats and jiggers go through the dishwasher once, with the pour sets, bar spoons, muddlers and the cutting board. Then dry everything properly.",
                  "Lay all the instruments on a clean black tray, as below. Then at opening the cobbler tins are ready to go straight onto the station.",
                  "The tray goes in the bag on the left of the phone charging station, which is on the left of the blender.",
+                 "Check the 3 L pitchers of butterfly pea and hibiscus tea, FR1A bottom shelf, and make what is needed for tomorrow.",
                  "Wash the two white ice buckets and leave them to dry overnight.",
                  "Check there is enough crushed ice in the kitchen freezer.",
                  "Dishwasher station: sink cleared of rests and garnish, bin bag renewed.",
@@ -7858,6 +7862,7 @@ body.cmt-on #root { cursor: crosshair; }
             nl: ["Barmats, witte matten en jiggers gaan een keer door de vaatwasser, met de pour sets, barlepels, muddlers en de snijplank. Daarna alles goed drogen.",
                  "Leg alle instrumenten op een schoon zwart dienblad, zoals hieronder. Dan staan de cobbler-tins bij opening klaar om zo op het station te zetten.",
                  "Het dienblad gaat in de tas links van het oplaadstation voor de telefoons, dat links van de blender staat.",
+                 "Controleer de kannen van 3 L vlindererwt- en hibiscusthee, FR1A onderste plank, en maak wat er voor morgen nodig is.",
                  "Was de twee witte ijsbakken en laat ze een nacht drogen.",
                  "Controleer of er genoeg crushed ice in de vriezer van de keuken ligt.",
                  "Afwasstation: spoelbak vrij van resten en garnering, vuilniszak vernieuwd.",
@@ -7867,6 +7872,7 @@ body.cmt-on #root { cursor: crosshair; }
                  "Veeg het hele oppervlak af. Pico bello.",
                  "Koffiestation: druk op rinse en de meest linkse knop bij alle drie, maak de espressohouders schoon. Het rubberen handvat gaat NIET in het chemische water.",
                  "Dweil de vloer."] },
+          go: [null, null, null, [{ id: "prep-butterfly-pea-tea", label: { en: "Butterfly pea tea", nl: "Vlindererwtthee" } }, { id: "prep-hibiscus-tea-strong", label: { en: "Hibiscus tea", nl: "Hibiscusthee" } }]],
           extra: function () {
             var TRAY = [
               { en: "The 2 big cobbler tins, with the Hawthorne strainer, fine strainer, muddler and bar spoon", nl: "De 2 grote cobbler-tins, met de Hawthorne-zeef, fijne zeef, muddler en barlepel" },
@@ -7942,11 +7948,15 @@ body.cmt-on #root { cursor: crosshair; }
         return '<div class="ops-c' + (c.lead ? " lead" : "") + '"><h4>' +
           (s.ordered ? '<span class="ops-step" aria-hidden="true">' + (ci + 1) + "</span>" : "") + et(c.title) + "</h4><ul>" +
           t(c.items).map(function (it, i) {
-            var g = c.go && c.go[i], go = g && (g.id || g);
-            return "<li" + (go ? ' data-opsgo="' + esc(go) + '"' : "") + ">" + esc(it) + (go
-              ? '<button type="button" class="ops-go" data-goprep="' + esc(go) + '">' +
-                et(g.label || { en: "How to make it", nl: "Zo maak je het" }) + '<span class="ops-go-t"> &middot; ' + esc(ui("prep")) + "</span> &rarr;</button>"
-              : "") + "</li>";
+            var g = c.go && c.go[i];
+            var gs = !g ? [] : Array.isArray(g) ? g : [g];
+            var ids = gs.map(function (x) { return x.id || x; });
+            return "<li" + (ids.length ? ' data-opsgo="' + esc(ids.join(" ")) + '"' : "") + ">" + esc(it) +
+              (ids.length > 1 ? '<span class="ops-gos">' : "") +
+              gs.map(function (x, j) {
+                return '<button type="button" class="ops-go" data-goprep="' + esc(ids[j]) + '">' +
+                  et(x.label || { en: "How to make it", nl: "Zo maak je het" }) + '<span class="ops-go-t"> &middot; ' + esc(ui("prep")) + "</span> &rarr;</button>";
+              }).join("") + (ids.length > 1 ? "</span>" : "") + "</li>";
           }).join("") + "</ul>" +
           (c.extra ? c.extra() : "") + "</div>";
       }).join("") + "</div>" +
@@ -7988,7 +7998,7 @@ body.cmt-on #root { cursor: crosshair; }
     PREPHI = null;
     if (OPSFROM != null) OPSTEP = OPSFROM;
     if (!openTab("ops")) return;
-    setTimeout(function () { flash(document.querySelector('#root [data-opsgo="' + CSS.escape(id) + '"]')); }, 80);
+    setTimeout(function () { flash(document.querySelector('#root [data-opsgo~="' + CSS.escape(id) + '"]')); }, 80);
   }
   document.addEventListener("click", function (e) {
     var t = e.target;
