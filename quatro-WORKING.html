@@ -2297,6 +2297,16 @@ button.iv-tag.on { font-weight: 600; }
 .ops-c h4 { font-family: 'Marcellus', Georgia, serif; font-size: 16px; color: var(--gold); margin: 0 0 8px; }
 .ops-c ul { margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.6; }
 .ops-c.lead { border-color: var(--gold); box-shadow: inset 3px 0 0 var(--gold); }
+/* a shelf map: each shelf left to right, as you face it */
+.dry { display: grid; gap: 10px; margin-top: 10px; }
+.dry-c { border: 1px solid var(--limestone-deep); border-radius: 10px; padding: 10px 12px; background: var(--limestone); }
+.dry-n { font-family: 'Marcellus', Georgia, serif; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+.dry-s + .dry-s { margin-top: 6px; }
+.dry-l { display: block; font-size: 10px; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 2px; }
+.dry-r { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 5px; font-size: 13px; line-height: 1.4; }
+.dry-i { padding: 1px 8px; border-radius: 999px; border: 1px solid var(--gold-pale); background: #fff; }
+.dry-a { color: var(--gold); }
+.dry-m { font-size: 12px; color: var(--ink-soft); font-style: italic; }
 .ops-c li + li { margin-top: 4px; }
 .ops-go, .ops-back { display: inline-flex; align-items: center; gap: 2px; margin: 4px 0 2px; font: inherit; font-size: 12.5px;
   padding: 4px 11px; border-radius: 999px; border: 1px solid var(--gold-pale); background: var(--limestone);
@@ -7363,10 +7373,52 @@ body.cmt-on #root { cursor: crosshair; }
          {en:"Open cartons and bottles, and the 3 L pitchers of butterfly pea and hibiscus tea",nl:"Aangebroken pakken en flessen, en de kannen van 3 L vlindererwt- en hibiscusthee"}],
     ["B",{en:"Middle",nl:"Midden"},
          {en:"The two condiment boxes",nl:"De twee condimentenbakken"}],
+    ["B",{en:"Bottom",nl:"Onder"},
+         {en:"Open cartons and boxes, used first when the rail is refilled",nl:"Aangebroken pakken en dozen, die als eerste gebruikt worden bij het bijvullen van de speedrail"}],
     ["C",{en:"All shelves",nl:"Alle planken"},
          {en:"Purees, every squeeze bottle, and the open cans",
           nl:"Purees, alle knijpflessen, en de aangebroken blikken"}]
   ];
+  /* The two dry compartments under the bar, as the bar described them on
+     27.11.26, each shelf left to right. */
+  var DRY = [
+    { name: { en: "Right dry compartment", nl: "Rechter droogvak" },
+      shelves: [
+        [{ en: "Top shelf, left to right", nl: "Bovenste plank, van links naar rechts" },
+         [{ en: "Grand Gérard pineapple", nl: "Grand Gérard ananas" }, { en: "AH pineapple chunks", nl: "AH ananasstukjes" },
+          { en: "Grand Gérard lychees", nl: "Grand Gérard lychees" }, { en: "pitchers", nl: "kannen" },
+          { en: "cranberry, glass bottles", nl: "cranberry, glazen flessen" }, { en: "lychee, plastic bottles", nl: "lychee, plastic flessen" }]],
+        [{ en: "Bottom shelf", nl: "Onderste plank" },
+         [{ en: "pineapple juice", nl: "ananassap" }, { en: "coconut milk and cream", nl: "kokosmelk en kokosroom" },
+          { en: "passion fruit", nl: "passievrucht" }, { en: "Van de Boom pear-apple", nl: "Van de Boom peer-appel" }],
+         { en: "More to be added.", nl: "Er komt nog meer bij." }],
+        [{ en: "Underneath", nl: "Eronder" },
+         [{ en: "glassware", nl: "glaswerk" }, { en: "new boxes and crates", nl: "nieuwe dozen en kratten" }]]
+      ] },
+    { name: { en: "Left dry compartment", nl: "Linker droogvak" },
+      shelves: [
+        [{ en: "Top shelf, left to right", nl: "Bovenste plank, van links naar rechts" },
+         [{ en: "butterfly pea flowers box", nl: "doos vlindererwtbloemen" }, { en: "hibiscus flowers box", nl: "doos hibiscusbloemen" },
+          { en: "Monin grenadine, cane sugar and vanilla", nl: "Monin grenadine, rietsuiker en vanille" },
+          { en: "box for squeeze bottles", nl: "doos voor knijpflessen" }, { en: "box for rail bodies", nl: "doos voor speedrailflessen" },
+          { en: "speedrail necks", nl: "speedrailhalzen" }]],
+        [{ en: "Bottom shelf, left to right", nl: "Onderste plank, van links naar rechts" },
+         [{ en: "extra mugs and glasses", nl: "extra mokken en glazen" }, { en: "tonic stampers", nl: "tonicstampers" },
+          { en: "short and long straws", nl: "korte en lange rietjes" }, { en: "garnish sticks", nl: "garneerprikkers" }]],
+        [{ en: "Underneath", nl: "Eronder" }, [{ en: "glassware", nl: "glaswerk" }]]
+      ] }
+  ];
+  function dryHTML() {
+    return '<div class="dry">' + DRY.map(function (c) {
+      return '<div class="dry-c"><div class="dry-n">' + et(c.name) + "</div>" + c.shelves.map(function (sh) {
+        return '<div class="dry-s"><span class="dry-l">' + et(sh[0]) + "</span>" +
+          '<span class="dry-r">' + sh[1].map(function (x) { return '<span class="dry-i">' + et(x) + "</span>"; })
+            .join(/left to right|links naar rechts|^Bottom shelf$|^Onderste plank$/.test(tt(sh[0])) ? '<span class="dry-a" aria-hidden="true">&rsaquo;</span>' : " ") +
+          (sh[2] ? ' <span class="dry-m">' + et(sh[2]) + "</span>" : "") + "</span></div>";
+      }).join("") + "</div>";
+    }).join("") + "</div>";
+  }
+
   function storageHTML() {
     var byDoor = {};
     F1.forEach(function (r) { (byDoor[r[0]] = byDoor[r[0]] || []).push(r); });
@@ -7386,6 +7438,8 @@ body.cmt-on #root { cursor: crosshair; }
       et({ en: "F2C, and F3 doors A, B and C. The twelve bottled lines live there, not in Fridge 1. Fridge 1 is mocktail liquids only.",
            nl: "F2C, en F3 deuren A, B en C. De twaalf flessenlijnen staan daar, niet in Koeling 1. Koeling 1 is alleen voor mocktailvloeistoffen." }) +
       "</p></div>" +
+      '<div class="panel"><h3>' + et({ en: "Dry compartments under the bar", nl: "Droogvakken onder de bar" }) + "</h3>" +
+      dryHTML() + "</div>" +
       '<div class="panel"><h3>' + et({ en: "Ice", nl: "IJs" }) + "</h3><p>" +
       et({ en: "Crushed bucket then cubed bucket, behind the condiment holders at the station. Filled at open and again at the midpoint.",
            nl: "Bak met crushed ice, dan de bak met ijsblokjes, achter de condimentenhouders op het station. Gevuld bij opening en nog een keer halverwege." }) +
@@ -7499,14 +7553,28 @@ body.cmt-on #root { cursor: crosshair; }
           items: {
             en: ["First, turn the dishwasher on: push all three buttons, from left to right.",
                  "Turn on the espresso machine.",
-                 "Check every speedrail bottle is full.",
+                 "Check every speedrail bottle is full. Refilling is the next card.",
                  "Every container carries a day dot plus tape with NAME and USE BY, written as the weekday then the date: MO / TU / WED / THU / FR / SAT / SUN DD.MM.YY. New stock goes in front, the old one gets an X.",
                  "Anything past its date is binned at open, not later."],
             nl: ["Eerst de vaatwasser aanzetten: druk alle drie de knoppen in, van links naar rechts.",
                  "Zet de espressomachine aan.",
-                 "Controleer of elke speedrailfles vol is.",
+                 "Controleer of elke speedrailfles vol is. Bijvullen staat op de volgende kaart.",
                  "Elke bak draagt een dagsticker plus tape met NAAM en THT, geschreven als de weekdag en dan de datum: MA / DI / WO / DO / VR / ZA / ZO DD.MM.JJ. Nieuwe voorraad gaat vooraan, de oude krijgt een X.",
                  "Alles over datum gaat bij opening weg, niet later."] } },
+        /* 27.11.26, the refill round as the bar walks it */
+        { title: { en: "Refill the rail", nl: "De speedrail bijvullen" },
+          items: {
+            en: ["Take the rail refills out of FR1A, middle shelf.",
+                 "Refill from the open cartons and boxes first: FR1B, bottom shelf.",
+                 "Then from the right dry compartment, shelf by shelf as below. New boxes and crates are underneath it, with the glassware.",
+                 "Check the dishwasher crate holder.",
+                 "Then the left dry compartment, as below."],
+            nl: ["Haal de bijvulling voor de speedrail uit FR1A, middelste plank.",
+                 "Vul eerst bij uit de aangebroken pakken en dozen: FR1B, onderste plank.",
+                 "Dan uit het rechter droogvak, plank voor plank zoals hieronder. Nieuwe dozen en kratten staan eronder, bij het glaswerk.",
+                 "Controleer de kratrek van de vaatwasser.",
+                 "Dan het linker droogvak, zoals hieronder."] },
+          extra: function () { return dryHTML(); } },
         { title: { en: "Fruit for today", nl: "Fruit voor vandaag" },
           items: {
             en: ["Check the quantities for the day, listed below.",
