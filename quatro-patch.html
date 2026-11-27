@@ -542,6 +542,22 @@ button.iv-tag.on { font-weight: 600; }
 .ops-c { background: #fff; border: 1px solid var(--limestone-deep); border-radius: var(--arch); padding: 16px 18px; }
 .ops-c h4 { font-family: 'Marcellus', Georgia, serif; font-size: 16px; color: var(--gold); margin: 0 0 8px; }
 .ops-c ul { margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.6; }
+.ops-c.lead { border-color: var(--gold); box-shadow: inset 3px 0 0 var(--gold); }
+.ops-c li + li { margin-top: 4px; }
+.ops-go, .ops-back { display: inline-flex; align-items: center; gap: 2px; margin: 4px 0 2px; font: inherit; font-size: 12.5px;
+  padding: 4px 11px; border-radius: 999px; border: 1px solid var(--gold-pale); background: var(--limestone);
+  color: var(--ink); cursor: pointer; line-height: 1.4; }
+.ops-go { display: flex; width: fit-content; }
+.ops-go:hover, .ops-back:hover { background: rgba(168,134,60,.16); }
+.ops-go-t { color: var(--ink-soft); }
+.ops-back { display: flex; width: fit-content; margin-top: 8px; }
+.prep-t tr.q-hi td { background: rgba(168,134,60,.10); }
+.prep-t tr.q-hi { outline: 2px solid var(--gold); outline-offset: -2px; }
+/* stacked on a phone the row is a card: tint the gaps too, and keep the
+   text clear of the frame */
+@media (max-width: 719px) { .prep-t tr.q-hi { background: rgba(168,134,60,.10); padding-left: 10px; padding-right: 10px; }
+  .prep-t tr.q-hi td { background: transparent; } }
+@media print { .ops-go, .ops-back { display: none; } }
 .ops-c li { margin-bottom: 6px; }
 .ops-x { margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--gold-pale);
   font-size: 13px; line-height: 1.55; color: var(--ink-soft); }
@@ -4211,8 +4227,11 @@ body.cmt-on #root { cursor: crosshair; }
       "<th>" + et({ en: "Date made and use by", nl: "Gemaakt op en THT" }) + "</th>" +
       "<th>" + et({ en: "Pre-batch instructions", nl: "Voorbereiding vooraf" }) + "</th></tr></thead><tbody>" +
       PREP2.map(function (r) {
-        var id = prepId(r);
-        return "<tr><td><b>" + et(r[0]) + "</b></td><td>" + et(r[1]) + "</td>" +
+        var id = prepId(r), hi = typeof PREPHI !== "undefined" && PREPHI === id;
+        return '<tr data-prep="' + esc(id) + '"' + (hi ? ' class="q-hi"' : "") + "><td><b>" + et(r[0]) + "</b>" +
+          (hi ? '<button type="button" class="ops-back" data-backops="' + esc(id) + '">&larr; ' +
+                et({ en: "Back to Order of operations", nl: "Terug naar Volgorde van werken" }) + "</button>" : "") +
+          "</td><td>" + et(r[1]) + "</td>" +
           "<td>" + et(r[2]) + "</td><td>" + et(r[3]) + "</td>" +
           "<td>" + madeCell(id, r[2]) + "</td>" +
           '<td class="qmethod">' + (tt(r[4]) ? et(r[4])
@@ -5717,20 +5736,19 @@ body.cmt-on #root { cursor: crosshair; }
       desc:  { en: "Set the next shift up so it can just open. All of this happens the evening before.",
                nl: "Zorg dat de volgende dienst gewoon open kan. Dit gebeurt allemaal de avond ervoor." },
       cards: [
-        { title: { en: "Batch the teas and syrups", nl: "Thee en siropen maken" },
+        /* The butterfly pea and the hibiscus moved to Between drinks on
+           27.11.26: they run out during service, so they are kept up there. */
+        { title: { en: "Batch the syrups and cordials", nl: "Siropen en cordials maken" },
           items: {
-            en: ["Butterfly pea tea. 2.5 L, boiled water, up to 10 g or a loose handful, steep 20 minutes, then drain into one prebatch bottle and one large squeeze bottle.",
-                 "Hibiscus tea. Two 2.5 L pitchers, 10 g each, 5 L in all. WARM water, not hot, left to macerate overnight so it does not draw bitter.",
-                 "Pre-batch 1 L rosemary-thyme maple cordial if needed. There always has to be one big squeeze bottle ready for the next day.",
+            en: ["Pre-batch 1 L rosemary-thyme maple cordial if needed. There always has to be one big squeeze bottle ready for the next day.",
                  "Pre-batch 1 L of Jade's mint syrup on the same rule.",
                  "Lychee cordial, decanted from the can.",
                  "Rosemary-lemon salt rim mix if it is running low."],
-            nl: ["Vlindererwtthee. 2,5 L, gekookt water, tot 10 g of een losse handvol, 20 minuten laten trekken, dan afgieten in een prebatchfles en een grote knijpfles.",
-                 "Hibiscusthee. Twee kannen van 2,5 L, 10 g per kan, 5 L in totaal. WARM water, niet heet, een nacht laten macereren zodat hij niet bitter trekt.",
-                 "Prebatch 1 L rozemarijn-tijm-ahornsiroop als het nodig is. Er moet altijd een grote knijpfles klaarstaan voor de volgende dag.",
+            nl: ["Prebatch 1 L rozemarijn-tijm-ahornsiroop als het nodig is. Er moet altijd een grote knijpfles klaarstaan voor de volgende dag.",
                  "Prebatch 1 L muntsiroop van Jade, zelfde regel.",
                  "Lycheecordial, afgetapt uit blik.",
                  "Rozemarijn-citroen-zoutrand als die bijna op is."] },
+          go: ["prep-rosemary-thyme-maple-cordial", "prep-jade-s-homemade-mint-syrup", "prep-lychee-cordial", "prep-rosemary-lemon-sea-salt-rim-mix"],
           extra: function () {
             return '<div class="ops-x">' +
               et({ en: "Salt rim: microwave the rosemary 4 x 30 seconds until it crumbles but is still green, then mix 3 teaspoons with the sea salt and a whole lemon zest.",
@@ -5803,6 +5821,16 @@ body.cmt-on #root { cursor: crosshair; }
       desc:  { en: "Keep the station clean and stocked. Speed is nothing without consistency.",
                nl: "Houd het station schoon en gevuld. Snelheid is niets zonder consistentie." },
       cards: [
+        { title: { en: "Butterfly pea and hibiscus tea", nl: "Vlindererwt- en hibiscusthee" },
+          lead: true,
+          items: {
+            en: ["There is always a 3 L pitcher of each, butterfly pea and hibiscus. Both often run out during service, so check them between drinks.",
+                 "Butterfly pea tea. 2.5 L, boiled water, up to 10 g or a loose handful, steep 20 minutes, then drain into one prebatch bottle and one large squeeze bottle.",
+                 "Hibiscus tea. Two 2.5 L pitchers, 10 g each, 5 L in all. WARM water, not hot, left to macerate overnight so it does not draw bitter."],
+            nl: ["Er staat altijd een kan van 3 L van allebei, vlindererwt en hibiscus. Ze raken tijdens de service vaak op, dus controleer ze tussen de drankjes door.",
+                 "Vlindererwtthee. 2,5 L, gekookt water, tot 10 g of een losse handvol, 20 minuten laten trekken, dan afgieten in een prebatchfles en een grote knijpfles.",
+                 "Hibiscusthee. Twee kannen van 2,5 L, 10 g per kan, 5 L in totaal. WARM water, niet heet, een nacht laten macereren zodat hij niet bitter trekt."] },
+          go: [null, "prep-butterfly-pea-tea", "prep-hibiscus-tea-strong"] },
         { title: { en: "Clean as you go", nl: "Schoonhouden tijdens de service" },
           items: {
             en: ["Wipe the station down after every drink.",
@@ -5845,8 +5873,14 @@ body.cmt-on #root { cursor: crosshair; }
       '<h3 class="ops-h">' + et(s.label) + "</h3>" +
       '<p class="ops-d">' + et(s.desc) + "</p>" +
       '<div class="ops-grid">' + s.cards.map(function (c) {
-        return '<div class="ops-c"><h4>' + et(c.title) + "</h4><ul>" +
-          t(c.items).map(function (it) { return "<li>" + esc(it) + "</li>"; }).join("") + "</ul>" +
+        return '<div class="ops-c' + (c.lead ? " lead" : "") + '"><h4>' + et(c.title) + "</h4><ul>" +
+          t(c.items).map(function (it, i) {
+            var go = c.go && c.go[i];
+            return "<li" + (go ? ' data-opsgo="' + esc(go) + '"' : "") + ">" + esc(it) + (go
+              ? '<button type="button" class="ops-go" data-goprep="' + esc(go) + '">' +
+                et({ en: "How to make it", nl: "Zo maak je het" }) + '<span class="ops-go-t"> &middot; ' + esc(ui("prep")) + "</span> &rarr;</button>"
+              : "") + "</li>";
+          }).join("") + "</ul>" +
           (c.extra ? c.extra() : "") + "</div>";
       }).join("") + "</div>" +
       noteBox("ops-" + s.key, { en: "Notes for this part of the shift.",
@@ -5859,6 +5893,46 @@ body.cmt-on #root { cursor: crosshair; }
     OPSTEP = Number(b.dataset.ops) || 0;
     if (typeof render === "function") render();
   });
+
+  /* "How to make it" on a step opens Prep and FIFO on that recipe, lit up,
+     with a way straight back to the step it came from. The light stays on
+     while you are there, so the eye does not have to find it again. */
+  var PREPHI = null, OPSFROM = null;
+  function flash(el) {
+    if (!el) return;
+    el.scrollIntoView({ block: "center" });
+    el.classList.add("iv-flash");
+    setTimeout(function () { el.classList.remove("iv-flash"); }, 2600);
+  }
+  function openTab(key) {
+    var mb = document.querySelector('#modes button[data-mode="runsheet"]');
+    if (mb && mb.offsetParent && mb.getAttribute("aria-pressed") !== "true") mb.click();
+    var tb = document.querySelector('#subtabs button[data-tab="' + key + '"]');
+    if (tb) tb.click();
+    return !!tb;
+  }
+  function goPrep(id) {
+    PREPHI = id; OPSFROM = OPSTEP;
+    if (!openTab("prep")) return;
+    setTimeout(function () { flash(document.querySelector('#root tr[data-prep="' + CSS.escape(id) + '"]')); }, 80);
+  }
+  function backToOps(id) {
+    PREPHI = null;
+    if (OPSFROM != null) OPSTEP = OPSFROM;
+    if (!openTab("ops")) return;
+    setTimeout(function () { flash(document.querySelector('#root [data-opsgo="' + CSS.escape(id) + '"]')); }, 80);
+  }
+  document.addEventListener("click", function (e) {
+    var t = e.target;
+    if (!t || !t.closest || CMTMODE) return;
+    var g = t.closest("[data-goprep]");
+    if (g) { goPrep(g.getAttribute("data-goprep")); return; }
+    var k = t.closest("[data-backops]");
+    if (k) { backToOps(k.getAttribute("data-backops")); return; }
+    /* leaving Prep and FIFO any other way puts the light out */
+    var tab = t.closest("#subtabs [data-tab]");
+    if (tab && tab.getAttribute("data-tab") !== "prep") PREPHI = null;
+  }, true);
 
   if (typeof TABS !== "undefined" && TABS) {
     TABS.storage = storageHTML;
