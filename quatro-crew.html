@@ -8449,81 +8449,275 @@ body.cmt-on #root { cursor: crosshair; }
     };
   })();
 
-  /* ---------------- 11. the coffee ratio chart ----------------
-     House ratios as given on 24 November. Drawn bottom to top the way the
-     cup fills: espresso at the bottom, milk or water above it, foam last. */
+  /* ---------------- 11. coffee: the house cheat sheet ----------------
+     The house recipes for the Conti X-One TCI Evo as written on 28.11.26:
+     each drink in its own cup, drawn to scale and layered bottom to top,
+     with the shot, the pitcher and the steps. Tap a cup, or the drink on
+     the list above it, for the card. */
   var CBITS = {
-    esp:  { col: "#3B2416", en: "Espresso",     nl: "Espresso" },
-    milk: { col: "#F0E2CB", en: "Steamed milk", nl: "Gestoomde melk" },
-    foam: { col: "#FBF5EA", en: "Milk foam",    nl: "Melkschuim" },
-    water:{ col: "#E6EEF2", en: "Hot water",    nl: "Heet water" },
-    choc: { col: "#6B3F24", en: "Chocolate",    nl: "Chocolade" }
+    esp:   { col: "#3B2416", en: "Espresso",          nl: "Espresso" },
+    crema: { col: "#C68A4E", en: "Crema",             nl: "Crema" },
+    milk:  { col: "#F0E2CB", en: "Steamed milk",      nl: "Gestoomde melk" },
+    micro: { col: "#F6EAD6", en: "Microfoam",         nl: "Microschuim" },
+    foam:  { col: "#FBF5EA", en: "Milk foam",         nl: "Melkschuim" },
+    water: { col: "#E6EEF2", en: "Hot water",         nl: "Heet water" },
+    choc:  { col: "#6B3F24", en: "Chocolate",         nl: "Chocolade" }
   };
-  /* Each list runs bottom of the cup first. */
-  var COFFEE = [
-    ["Espresso",   [["esp", 100]]],
-    ["Americano",  [["esp", 20], ["water", 80]]],
-    ["Macchiato",  [["esp", 90], ["foam", 10]]],
-    ["Cortado",    [["esp", 70], ["milk", 30]]],
-    ["Cappuccino", [["esp", 10], ["milk", 30], ["foam", 60]]],
-    ["Flat white", [["esp", 20], ["milk", 80]]],
-    ["Latte",      [["esp", 10], ["milk", 90]]],
-    ["Mocha",      [["esp", 20], ["choc", 20], ["milk", 60]]]
+  var CUPS = {
+    small:  { ml: 65,  shape: "cup",   en: "Small cup, 65 ml",   nl: "Klein kopje, 65 ml" },
+    medium: { ml: 140, shape: "cup",   en: "Medium cup, 140 ml", nl: "Middelgrote kop, 140 ml" },
+    large:  { ml: 190, shape: "cup",   en: "Large cup, 190 ml",  nl: "Grote kop, 190 ml" },
+    tall:   { ml: 270, shape: "glass", en: "Tall glass, 270 ml", nl: "Hoog glas, 270 ml" }
+  };
+  var SHOT = {
+    single: { en: "1 single: 8.5 to 9 g in, 17 to 18 g out (about 25 to 30 ml), 25 to 28 s",
+              nl: "1 enkele: 8,5 tot 9 g erin, 17 tot 18 g eruit (ongeveer 25 tot 30 ml), 25 tot 28 s" },
+    double: { en: "1 double: 17 to 18 g in, 34 to 36 g out (about 50 to 60 ml), 26 to 30 s",
+              nl: "1 dubbele: 17 tot 18 g erin, 34 tot 36 g eruit (ongeveer 50 tot 60 ml), 26 tot 30 s" }
+  };
+  var G1 = { en: "Left grinder (house blend), button 1, 3.40 s, into the single-spout portafilter",
+             nl: "Linker molen (huismelange), knop 1, 3,40 s, in de portafilter met een uitloop" };
+  var G2 = { en: "Left grinder (house blend), button 2, 6.70 s, into a double-spout portafilter",
+             nl: "Linker molen (huismelange), knop 2, 6,70 s, in een portafilter met twee uitlopen" };
+  /* Bottom of the cup first. */
+  var COFFEE2 = [
+    { id: "espresso", name: "Espresso", cup: "small", shot: { en: "1 single, or 1 double", nl: "1 enkele, of 1 dubbele" },
+      milk: { en: "None", nl: "Geen" },
+      layers: [["esp", 80, { en: "dark and syrupy", nl: "donker en stroperig" }],
+               ["crema", 20, { en: "tiger-striped, 3 to 5 mm", nl: "tijgerstrepen, 3 tot 5 mm" }]],
+      steps: [{ en: "A small cup, 65 ml.", nl: "Een klein kopje, 65 ml." },
+              { en: "A single: left grinder button 1 (3.40 s) into the single-spout. A double: button 2 (6.70 s) into a double-spout, cup centred.",
+                nl: "Een enkele: linker molen knop 1 (3,40 s) in de portafilter met een uitloop. Een dubbele: knop 2 (6,70 s) in een met twee uitlopen, kopje in het midden." },
+              { en: "Lock it in and press button 1 for a single, button 2 for a double.", nl: "Vastzetten en op knop 1 drukken voor een enkele, knop 2 voor een dubbele." },
+              { en: "A single is 17 to 18 g out in 25 to 28 s; a double 34 to 36 g in 26 to 30 s. Trust the scale: crema makes 18 g look like 25 to 30 ml.",
+                nl: "Een enkele is 17 tot 18 g eruit in 25 tot 28 s; een dubbele 34 tot 36 g in 26 tot 30 s. Vertrouw de weegschaal: door de crema lijkt 18 g op 25 tot 30 ml." },
+              { en: "Serve it with the crema on top.", nl: "Serveer met de crema erop." }] },
+    { id: "americano", name: "Americano", cup: "medium", shot: { en: "1 double", nl: "1 dubbele" },
+      milk: { en: "None. 80 to 90 ml hot water", nl: "Geen. 80 tot 90 ml heet water" },
+      layers: [["water", 60, { en: "80 to 90 ml, in first", nl: "80 tot 90 ml, eerst erin" }],
+               ["esp", 35, { en: "the double, pulled on top", nl: "de dubbele, erbovenop" }],
+               ["crema", 5, { en: "kept", nl: "blijft heel" }]],
+      steps: [{ en: "A medium cup, 140 ml.", nl: "Een middelgrote kop, 140 ml." },
+              { en: "Hot water first: 80 to 90 ml.", nl: "Eerst heet water: 80 tot 90 ml." },
+              { en: "Left grinder button 2 (6.70 s) into a double-spout.", nl: "Linker molen knop 2 (6,70 s) in een portafilter met twee uitlopen." },
+              { en: "The cup centred under both spouts, button 2: 34 to 36 g out in 26 to 30 s.", nl: "Kop in het midden onder beide uitlopen, knop 2: 34 tot 36 g eruit in 26 tot 30 s." },
+              { en: "The espresso lands on the water, so the crema stays on top.", nl: "De espresso valt op het water, dus de crema blijft bovenop." }] },
+    { id: "cortado", name: "Cortado", cup: "medium", shot: { en: "1 double", nl: "1 dubbele" },
+      milk: { en: "Black 350 ml pitcher: 80 ml in, 60 to 70 ml poured", nl: "Zwarte kan van 350 ml: 80 ml erin, 60 tot 70 ml geschonken" },
+      layers: [["esp", 50, { en: "the double, 50 to 60 ml", nl: "de dubbele, 50 tot 60 ml" }],
+               ["milk", 45, { en: "warm, lightly textured", nl: "warm, licht getextureerd" }],
+               ["foam", 5, { en: "very thin, about 0.3 cm", nl: "heel dun, ongeveer 0,3 cm" }]],
+      steps: [{ en: "A medium cup, 140 ml.", nl: "Een middelgrote kop, 140 ml." },
+              { en: "Left grinder button 2 (6.70 s) into a double-spout, cup centred, button 2: 34 to 36 g out in 26 to 30 s.",
+                nl: "Linker molen knop 2 (6,70 s) in een portafilter met twee uitlopen, kop in het midden, knop 2: 34 tot 36 g eruit in 26 tot 30 s." },
+              { en: "Black 350 ml pitcher: 80 ml cold milk. That much keeps the wand under while it steams.",
+                nl: "Zwarte kan van 350 ml: 80 ml koude melk. Zoveel houdt de stoompijp onder tijdens het stomen." },
+              { en: "Pour 60 to 70 ml onto the espresso, 1 to 1, with a very thin foam on top, about 0.3 cm. The little that is left goes.",
+                nl: "Schenk 60 tot 70 ml op de espresso, 1 op 1, met een heel dun schuimlaagje, ongeveer 0,3 cm. Het beetje dat overblijft gaat weg." }] },
+    { id: "flat-white", name: "Flat white", cup: "medium", shot: { en: "1 single", nl: "1 enkele" },
+      milk: { en: "Black 350 ml pitcher: 100 to 110 ml. Two: silver 500 ml, 200 to 220 ml", nl: "Zwarte kan van 350 ml: 100 tot 110 ml. Twee: zilveren kan van 500 ml, 200 tot 220 ml" },
+      layers: [["esp", 20, { en: "the single", nl: "de enkele" }],
+               ["micro", 75, { en: "glossy, worked in", nl: "glanzend, erdoorheen" }],
+               ["foam", 5, { en: "thin and glossy, about 0.5 cm", nl: "dun en glanzend, ongeveer 0,5 cm" }]],
+      steps: [{ en: "A medium cup, 140 ml.", nl: "Een middelgrote kop, 140 ml." },
+              { en: "Left grinder button 1 (3.40 s) into the single-spout, button 1: 17 to 18 g out in 25 to 28 s.",
+                nl: "Linker molen knop 1 (3,40 s) in de portafilter met een uitloop, knop 1: 17 tot 18 g eruit in 25 tot 28 s." },
+              { en: "Black 350 ml pitcher: 100 to 110 ml cold milk. Steam it glossy, with very little air.",
+                nl: "Zwarte kan van 350 ml: 100 tot 110 ml koude melk. Glanzend stomen, met heel weinig lucht." },
+              { en: "Pour it through the espresso so it stays glossy, finishing with a thin layer, about 0.5 cm.",
+                nl: "Schenk het door de espresso zodat het glanzend blijft, en eindig met een dun laagje, ongeveer 0,5 cm." }],
+      two: { en: "A double-spout, one cup under each spout, as two singles. The silver 500 ml pitcher with 200 to 220 ml.",
+             nl: "Een portafilter met twee uitlopen, onder elke uitloop een kop, als twee enkele. De zilveren kan van 500 ml met 200 tot 220 ml." } },
+    { id: "cappuccino", name: "Cappuccino", cup: "large", shot: { en: "1 single", nl: "1 enkele" },
+      milk: { en: "Black 350 ml pitcher: 130 to 140 ml. Two: silver 500 ml, 260 to 280 ml", nl: "Zwarte kan van 350 ml: 130 tot 140 ml. Twee: zilveren kan van 500 ml, 260 tot 280 ml" },
+      layers: [["esp", 15, { en: "the single, 25 to 30 ml", nl: "de enkele, 25 tot 30 ml" }],
+               ["milk", 60, { en: "silky, about 110 ml", nl: "zijdezacht, ongeveer 110 ml" }],
+               ["foam", 25, { en: "velvety microfoam, 1.5 to 2 cm, with a golden crema ring", nl: "fluweelzacht microschuim, 1,5 tot 2 cm, met een gouden cremarand" }]],
+      steps: [{ en: "A large cup, 190 ml.", nl: "Een grote kop, 190 ml." },
+              { en: "Left grinder button 1 (3.40 s) into the single-spout, button 1: 17 to 18 g out in 25 to 28 s.",
+                nl: "Linker molen knop 1 (3,40 s) in de portafilter met een uitloop, knop 1: 17 tot 18 g eruit in 25 tot 28 s." },
+              { en: "Black 350 ml pitcher: 130 to 140 ml cold milk. Steam it silky, with a velvety microfoam.",
+                nl: "Zwarte kan van 350 ml: 130 tot 140 ml koude melk. Zijdezacht stomen, met fluweelzacht microschuim." },
+              { en: "Pour about 110 ml of milk, then finish with 1.5 to 2 cm of microfoam, keeping the golden crema ring.",
+                nl: "Schenk ongeveer 110 ml melk en eindig met 1,5 tot 2 cm microschuim, met de gouden cremarand erin." }],
+      two: { en: "A double-spout, one cup under each spout, as two singles. The silver 500 ml pitcher with 260 to 280 ml.",
+             nl: "Een portafilter met twee uitlopen, onder elke uitloop een kop, als twee enkele. De zilveren kan van 500 ml met 260 tot 280 ml." } },
+    { id: "latte-macchiato", name: "Latte macchiato", cup: "tall", shot: { en: "1 single", nl: "1 enkele" },
+      milk: { en: "Silver 500 ml pitcher: 190 to 210 ml", nl: "Zilveren kan van 500 ml: 190 tot 210 ml" },
+      layers: [["milk", 70, { en: "warm, about 180 ml", nl: "warm, ongeveer 180 ml" }],
+               ["esp", 10, { en: "poured slowly through the foam: the dark stained ring", nl: "langzaam door het schuim geschonken: de donkere vlekring" }],
+               ["foam", 20, { en: "a thick, airy crown, 2.5 to 3 cm", nl: "een dikke, luchtige kroon, 2,5 tot 3 cm" }]],
+      steps: [{ en: "A tall glass, 270 ml.", nl: "Een hoog glas, 270 ml." },
+              { en: "Silver 500 ml pitcher: 190 to 210 ml cold milk. Steam it warm, with a thick, airy foam.",
+                nl: "Zilveren kan van 500 ml: 190 tot 210 ml koude melk. Warm stomen, met dik, luchtig schuim." },
+              { en: "Pour about 180 ml of milk into the glass and let the foam crown sit on top, 2.5 to 3 cm.",
+                nl: "Schenk ongeveer 180 ml melk in het glas en laat de schuimkroon erop staan, 2,5 tot 3 cm." },
+              { en: "Left grinder button 1 (3.40 s) into the single-spout, button 1: 17 to 18 g out in 25 to 28 s.",
+                nl: "Linker molen knop 1 (3,40 s) in de portafilter met een uitloop, knop 1: 17 tot 18 g eruit in 25 tot 28 s." },
+              { en: "Pour the espresso slowly through the foam. It settles between the milk and the foam: the stained ring.",
+                nl: "Schenk de espresso langzaam door het schuim. Hij zakt tussen de melk en het schuim: de vlekring." }],
+      two: { en: "A double-spout, one glass under each spout, as two singles.",
+             nl: "Een portafilter met twee uitlopen, onder elke uitloop een glas, als twee enkele." } }
   ];
+  /* On the menu but not on the cheat sheet: kept at the ratios of 24.11.26,
+     with no cup or steps until they are given. */
+  var COFFEE_OLD = [
+    ["Latte", [["esp", 10], ["milk", 90]]],
+    ["Mocha", [["esp", 20], ["choc", 20], ["milk", 60]]]
+  ];
+  function coffeeById(id) { return COFFEE2.filter(function (c) { return c.id === id; })[0] || null; }
+  function coffeeByName(n) {
+    n = String(n || "").trim().toLowerCase();
+    return COFFEE2.filter(function (c) { return c.name.toLowerCase() === n; })[0] || null;
+  }
 
-  /* Its own counter: the glance block keeps UID inside a nested closure of
-     its own, so it is not shared. */
   var CUID = 0;
-
-  function cupSVG(parts) {
-    /* A tapered cup. The fill is clipped to it so the bands follow the taper
-       instead of sitting in a rectangle behind it. */
-    var id = "cup" + (++CUID);
-    var body = "M9,6 L51,6 L45,52 Q44,58 38,58 L22,58 Q16,58 15,52 Z";
-    var y = 6, H = 52, rects = "", i;
-    for (i = parts.length - 1; i >= 0; i--) {        /* top of the cup first */
-      var h = H * (parts[i][1] / 100);
-      rects += '<rect x="0" y="' + y.toFixed(2) + '" width="60" height="' +
-               (h + 0.4).toFixed(2) + '" fill="' + CBITS[parts[i][0]].col + '"/>';
-      y += h;
+  /* Drawn to scale against each other: the cups grow with the cube root of
+     what they hold, the tall glass is its own narrow shape. The base line is
+     shared, so they stand side by side as they would on the bar. */
+  function cup2SVG(c, px) {
+    var cup = CUPS[c.cup], id = "cup" + (++CUID), body, top, bot, k = Math.cbrt(cup.ml / 270);
+    if (cup.shape === "glass") {
+      body = "M32,8 L58,8 L56,84 Q56,88 52,88 L38,88 Q34,88 34,84 Z"; top = 10; bot = 88;
+    } else {
+      var w = 54 * k, h = 44 * k, x0 = 45 - w / 2, x1 = 45 + w / 2, y0 = 88 - h;
+      body = "M" + x0.toFixed(1) + "," + y0.toFixed(1) + " L" + x1.toFixed(1) + "," + y0.toFixed(1) +
+        " L" + (x1 - w * 0.12).toFixed(1) + ",84 Q" + (x1 - w * 0.14).toFixed(1) + ",88 " + (x1 - w * 0.24).toFixed(1) + ",88" +
+        " L" + (x0 + w * 0.24).toFixed(1) + ",88 Q" + (x0 + w * 0.14).toFixed(1) + ",88 " + (x0 + w * 0.12).toFixed(1) + ",84 Z";
+      top = y0 + 1.5; bot = 88;
     }
-    return '<svg class="cof-cup" viewBox="0 0 68 68" width="68" height="68" ' +
-      'role="img" aria-hidden="true" focusable="false">' +
+    var H = bot - top, y = top, rects = "", i;
+    for (i = c.layers.length - 1; i >= 0; i--) {
+      var hh = H * (c.layers[i][1] / 100);
+      rects += '<rect x="0" y="' + y.toFixed(2) + '" width="90" height="' + (hh + 0.4).toFixed(2) + '" fill="' + CBITS[c.layers[i][0]].col + '"/>';
+      y += hh;
+    }
+    var handle = "";
+    if (cup.shape === "cup") {
+      var hx = 45 + 54 * k / 2, hy = 88 - 44 * k;
+      handle = '<path d="M' + (hx - 2).toFixed(1) + "," + (hy + 8 * k).toFixed(1) + " Q" + (hx + 10 * k).toFixed(1) + "," + (hy + 9 * k).toFixed(1) + " " +
+        (hx + 8 * k).toFixed(1) + "," + (hy + 19 * k).toFixed(1) + " Q" + (hx + 6 * k).toFixed(1) + "," + (hy + 28 * k).toFixed(1) + " " +
+        (hx - 6 * k).toFixed(1) + "," + (hy + 29 * k).toFixed(1) + '" fill="none" stroke="rgba(35,32,28,0.44)" stroke-width="1.7"/>';
+    }
+    return '<svg class="cof-cup" viewBox="0 0 90 94" width="' + (px || 76) + '" height="' + Math.round((px || 76) * 94 / 90) + '" role="img" aria-hidden="true" focusable="false">' +
       '<defs><clipPath id="' + id + '"><path d="' + body + '"/></clipPath></defs>' +
-      '<path d="' + body + '" fill="#fff"/>' +
-      '<g clip-path="url(#' + id + ')">' + rects + "</g>" +
-      '<path d="' + body + '" fill="none" stroke="rgba(35,32,28,0.44)" stroke-width="1.7" stroke-linejoin="round"/>' +
-      /* the handle */
-      '<path d="M51,16 Q61,17 60,25 Q59,33 47,34" fill="none" stroke="rgba(35,32,28,0.44)" stroke-width="1.7"/>' +
-      '<path d="M20,62 L40,62" stroke="rgba(35,32,28,0.30)" stroke-width="2" stroke-linecap="round"/>' +
-      "</svg>";
+      '<path d="' + body + '" fill="#fff"/><g clip-path="url(#' + id + ')">' + rects + "</g>" +
+      '<path d="' + body + '" fill="none" stroke="rgba(35,32,28,0.44)" stroke-width="1.7" stroke-linejoin="round"/>' + handle +
+      '<path d="M' + (cup.shape === "glass" ? "30,91 L60,91" : "22,91 L68,91") + '" stroke="rgba(35,32,28,0.30)" stroke-width="2" stroke-linecap="round"/></svg>';
+  }
+  function cupSVG(parts) {
+    return cup2SVG({ cup: "medium", layers: parts }, 76);
   }
 
   function coffeeChart() {
     return '<div class="panel cof-panel"><h3>' +
       et({ en: "What is in each one", nl: "Wat er in elke kop zit" }) + "</h3>" +
       '<p class="legend">' +
-      et({ en: "House ratios. Drawn the way the cup fills, espresso at the bottom and foam last.",
-           nl: "Huisverhoudingen. Getekend zoals de kop vult, espresso onderin en schuim als laatste." }) + "</p>" +
-      '<div class="cof-grid">' + COFFEE.map(function (c) {
-        var parts = c[1];
-        return '<div class="cof-one">' + cupSVG(parts) +
-          '<span class="cof-nm">' + esc(c[0]) + "</span><ul class=\"cof-bits\">" +
-          parts.slice().reverse().map(function (b) {
-            return '<li><i style="background:' + CBITS[b[0]].col + '"></i>' +
-                   b[1] + "% " + esc(tt({ en: CBITS[b[0]].en, nl: CBITS[b[0]].nl })) + "</li>";
-          }).join("") + "</ul></div>";
+      et({ en: "The house recipes, each in its own cup and drawn to scale, bottom of the cup first. Tap one for the cup, the shot, the pitcher and the steps.",
+           nl: "De huisrecepten, elk in een eigen kop en op schaal getekend, onderkant van de kop eerst. Tik er een aan voor de kop, de shot, de kan en de stappen." }) + "</p>" +
+      '<div class="cof-grid">' + COFFEE2.map(function (c) {
+        return '<button type="button" class="cof-one" data-coffee="' + c.id + '">' + cup2SVG(c, 76) +
+          '<span class="cof-nm">' + esc(c.name) + '</span><span class="cof-cs">' + et(CUPS[c.cup]) + "</span>" +
+          '<ul class="cof-bits">' + c.layers.slice().reverse().map(function (b) {
+            return '<li><i style="background:' + CBITS[b[0]].col + '"></i>' + b[1] + "% " + esc(tt({ en: CBITS[b[0]].en, nl: CBITS[b[0]].nl })) + "</li>";
+          }).join("") + "</ul></button>";
       }).join("") + "</div>" +
-      '<div class="qflag">' +
-      et({ en: "The menu above lists a Latte macchiato; the chart shows the espresso Macchiato, which is a different drink. Say which you serve and I will make them agree.",
-           nl: "De kaart hierboven noemt een Latte macchiato; het schema toont de espresso Macchiato, een ander drankje. Zeg welke jullie schenken en ik laat ze overeenkomen." }) +
-      "</div></div>";
+      '<p class="legend cof-old">' + et({ en: "Not on the house sheet yet, so still at the ratios of 24 November, with no cup or steps:",
+                                          nl: "Nog niet op het huisblad, dus nog volgens de verhoudingen van 24 november, zonder kop of stappen:" }) + " " +
+      COFFEE_OLD.map(function (o) {
+        return "<b>" + esc(o[0]) + "</b> " + o[1].slice().reverse().map(function (b) { return b[1] + "% " + esc(tt({ en: CBITS[b[0]].en, nl: CBITS[b[0]].nl })).toLowerCase(); }).join(", ");
+      }).join(" · ") + "</p>" + stationHTML() + "</div>";
   }
 
-  /* Put it under the coffee list every time the menu is drawn. */
+  /* The station half of the cheat sheet, folded away under the cups. */
+  function stationHTML() {
+    var row = function (a, b, c, d, e) { return "<tr><td><b>" + a + "</b></td><td>" + b + "</td><td>" + c + "</td><td>" + d + "</td><td>" + e + "</td></tr>"; };
+    return '<details class="cof-st"><summary>' + et({ en: "The coffee station: machine, grinders, shots, pitchers", nl: "Het koffiestation: machine, molens, shots, kannen" }) + "</summary>" +
+      '<div class="cof-st-b">' +
+      '<div class="ag-sec">' + et({ en: "Machine", nl: "Machine" }) + "</div><p>" +
+      et({ en: "Conti X-One TCI Evo, 3 groups, steam boiler 119 °C. Button 1 single, 2 double, 3 long, 4 continuous.",
+           nl: "Conti X-One TCI Evo, 3 groepen, stoomketel 119 °C. Knop 1 enkele, 2 dubbele, 3 lang, 4 doorlopend." }) + "</p>" +
+      '<div class="ag-sec">' + et({ en: "Portafilters", nl: "Portafilters" }) + "</div><ul class=\"ag-x\"><li>" +
+      et({ en: "1 single-spout, about a 9 g basket: one single for one drink.", nl: "1 met een uitloop, mandje van ongeveer 9 g: een enkele voor een drankje." }) + "</li><li>" +
+      et({ en: "3 double-spout, about an 18 g basket: one cup centred is a double; two cups, one under each spout, are two singles at once.",
+           nl: "3 met twee uitlopen, mandje van ongeveer 18 g: een kop in het midden is een dubbele; twee koppen, onder elke uitloop een, zijn twee enkele tegelijk." }) + "</li></ul>" +
+      '<div class="ag-sec">' + et({ en: "Grinders, 2 × Eureka Atom Excellence 65, timed", nl: "Molens, 2 × Eureka Atom Excellence 65, op tijd" }) + "</div><ul class=\"ag-x\"><li>" +
+      et({ en: "Left, house blend (Costadoro 100% Arabica): 1 = 3.40 s, 2 = 6.70 s.", nl: "Links, huismelange (Costadoro 100% arabica): 1 = 3,40 s, 2 = 6,70 s." }) + "</li><li>" +
+      et({ en: "Right, second bean or decaf: 1 = 2.35 s, 2 = 4.70 s, coarser dial about 7.5. Weigh a 1 and a 2 before service and retime if they miss about 9 g and 18 g.",
+           nl: "Rechts, tweede boon of cafeinevrij: 1 = 2,35 s, 2 = 4,70 s, grovere stand ongeveer 7,5. Weeg een 1 en een 2 voor de service en stel de tijd bij als ze ongeveer 9 g en 18 g missen." }) + "</li></ul>" +
+      '<div class="ag-sec">' + et({ en: "House shots", nl: "Huisshots" }) + '</div><div class="tablewrap"><table class="wide cof-sh"><thead><tr><th>' +
+      et({ en: "Shot", nl: "Shot" }) + "</th><th>" + et({ en: "Portafilter", nl: "Portafilter" }) + "</th><th>" + et({ en: "In", nl: "Erin" }) + "</th><th>" +
+      et({ en: "Out", nl: "Eruit" }) + "</th><th>" + et({ en: "Time", nl: "Tijd" }) + "</th></tr></thead><tbody>" +
+      row(et({ en: "Single", nl: "Enkele" }), et({ en: "Single-spout", nl: "Een uitloop" }), "8.5–9 g", "17–18 g (~25–30 ml)", "25–28 s") +
+      row(et({ en: "Double", nl: "Dubbele" }), et({ en: "Double-spout, 1 cup", nl: "Twee uitlopen, 1 kop" }), "17–18 g", "34–36 g (~50–60 ml)", "26–30 s") +
+      row(et({ en: "Split double", nl: "Gesplitste dubbele" }), et({ en: "Double-spout, 2 cups", nl: "Twee uitlopen, 2 koppen" }), "17–18 g", et({ en: "~17–18 g a cup", nl: "~17–18 g per kop" }), "26–30 s") +
+      row("Ristretto", et({ en: "Double-spout", nl: "Twee uitlopen" }), "17–18 g", "25–28 g (~35–40 ml)", "22–25 s") +
+      "</tbody></table></div>" +
+      '<p class="legend">' + et({ en: "Trust the scale: crema makes 18 g look like 25 to 30 ml in the cup.", nl: "Vertrouw de weegschaal: door de crema lijkt 18 g op 25 tot 30 ml in de kop." }) + "</p>" +
+      '<div class="ag-sec">' + et({ en: "Pitchers", nl: "Kannen" }) + "</div><ul class=\"ag-x\"><li>" +
+      et({ en: "Black 350 ml: any one drink, a cappuccino, flat white or cortado.", nl: "Zwart 350 ml: elk los drankje, een cappuccino, flat white of cortado." }) + "</li><li>" +
+      et({ en: "Silver 500 ml: a latte macchiato, or two drinks at once.", nl: "Zilver 500 ml: een latte macchiato, of twee drankjes tegelijk." }) + "</li><li>" +
+      et({ en: "Fill only a third to half, just below the spout indent.", nl: "Vul maar een derde tot de helft, net onder de inkeping van de tuit." }) + "</li><li>" +
+      et({ en: "Two cappuccinos, flat whites or latte macchiatos: a double-spout, two cups, pulled as two singles.",
+           nl: "Twee cappuccino's, flat whites of latte macchiato's: twee uitlopen, twee koppen, als twee enkele." }) + "</li></ul></div></details>";
+  }
+
+  /* The card, like the mocktails': cup, shot, pitcher, the layers, the steps. */
+  function coffeeCardHTML(c) {
+    var h = '<div class="ag cof-card">' +
+      '<div class="ag-facts"><div><span class="ag-k">' + et({ en: "Cup", nl: "Kop" }) + '</span><span class="ag-v">' + et(CUPS[c.cup]) + "</span></div>" +
+      '<div><span class="ag-k">' + et({ en: "Shot", nl: "Shot" }) + '</span><span class="ag-v">' + et(c.shot) + "</span></div>" +
+      '<div><span class="ag-k">' + et({ en: "Milk", nl: "Melk" }) + '</span><span class="ag-v">' + et(c.milk) + "</span></div></div>" +
+      '<div class="ag-viz">' + cup2SVG(c, 96) + '<ol class="ag-leg">' + c.layers.slice().reverse().map(function (b) {
+        return '<li><i style="background:' + CBITS[b[0]].col + '"></i><span class="ag-nm">' + esc(tt({ en: CBITS[b[0]].en, nl: CBITS[b[0]].nl })) + "</span>" +
+          '<span class="ag-ml">' + b[1] + "%</span>" + (b[2] ? '<span class="ag-no">' + et(b[2]) + "</span>" : "") + "</li>";
+      }).join("") + "</ol></div>" +
+      '<p class="ag-tot">' + et({ en: "Drawn to scale against the other cups, bottom of the cup first.", nl: "Op schaal tegenover de andere koppen getekend, onderkant van de kop eerst." }) + "</p>" +
+      '<div class="ag-sec">' + et({ en: "How to make it", nl: "Zo maak je hem" }) + '</div><ol class="cof-steps">' +
+      c.steps.map(function (s) { return "<li>" + et(s) + "</li>"; }).join("") + "</ol>" +
+      (c.two ? '<div class="ag-sec">' + et({ en: "Two at once", nl: "Twee tegelijk" }) + '</div><p class="cof-two">' + et(c.two) + "</p>" : "") +
+      '<div class="ag-sec">' + et({ en: "What you need", nl: "Wat je nodig hebt" }) + '</div><div class="ag-kit">' +
+      [et(CUPS[c.cup]), /double/.test(c.shot.en) ? et({ en: "Double-spout portafilter", nl: "Portafilter met twee uitlopen" }) : et({ en: "Single-spout portafilter", nl: "Portafilter met een uitloop" }),
+       et({ en: "Left grinder", nl: "Linker molen" }), et({ en: "Scale", nl: "Weegschaal" })]
+        .concat(/Black/.test(c.milk.en) ? [et({ en: "Black 350 ml pitcher", nl: "Zwarte kan, 350 ml" })] : [])
+        .concat(/Silver/.test(c.milk.en) ? [et({ en: "Silver 500 ml pitcher", nl: "Zilveren kan, 500 ml" })] : [])
+        .map(function (x) { return '<span class="ag-tool">' + x + "</span>"; }).join("") + "</div></div>";
+    return h;
+  }
+  function openCoffee(id) {
+    var c = coffeeById(id), sh = document.getElementById("sheet"), sc = document.getElementById("scrim");
+    if (!c || !sh) return;
+    var sw = document.getElementById("sheet-swatch");
+    if (sw) sw.style.background = CBITS.esp.col;
+    document.getElementById("sheet-name").textContent = c.name;
+    document.getElementById("sheet-body").innerHTML = coffeeCardHTML(c);
+    sh.hidden = false;
+    requestAnimationFrame(function () { sh.classList.add("open"); if (sc) sc.classList.add("open"); });
+    var x = document.getElementById("sheet-close"); if (x) x.focus();
+  }
+  document.addEventListener("click", function (e) {
+    var t = e.target && e.target.closest ? e.target.closest("[data-coffee]") : null;
+    if (!t || (typeof CMTMODE !== "undefined" && CMTMODE)) return;
+    openCoffee(t.getAttribute("data-coffee"));
+  });
+  document.addEventListener("keydown", function (e) {
+    var t = e.target;
+    if ((e.key === "Enter" || e.key === " ") && t && t.matches && t.matches(".row[data-coffee]")) { e.preventDefault(); openCoffee(t.getAttribute("data-coffee")); }
+  });
+
+  /* Put it under the coffee list every time the menu is drawn, and make the
+     drinks on the list that have a house recipe open their card. */
   function coffeeMount() {
     var sec = document.getElementById("sec-coffee");
-    if (!sec || sec.querySelector(".cof-panel")) return;
+    if (!sec) return;
+    Array.prototype.forEach.call(sec.querySelectorAll(".row"), function (r) {
+      var c = coffeeByName((r.querySelector(".row-name") || {}).textContent);
+      if (c && !r.getAttribute("data-coffee")) {
+        r.setAttribute("data-coffee", c.id); r.setAttribute("role", "button"); r.setAttribute("tabindex", "0");
+        r.classList.add("row-tap");
+      }
+    });
+    if (sec.querySelector(".cof-panel")) return;
     var rows = sec.querySelector(".rows");
     if (rows) rows.insertAdjacentHTML("afterend", coffeeChart());
   }
@@ -8922,7 +9116,7 @@ body.cmt-on #root { cursor: crosshair; }
 .ag-leg li { display: grid; grid-template-columns: 12px 1fr auto; gap: 8px; align-items: baseline; font-size: 14px; line-height: 1.35; }
 .ag-leg i { width: 12px; height: 12px; border-radius: 3px; border: 1px solid rgba(35,32,28,0.22); align-self: center; }
 .cof-panel .legend { margin: 0 0 var(--s3); }
-.cof-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--s4); }
+.cof-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--s3); }
 .cof-one { display: grid; grid-template-columns: 68px 1fr; grid-template-rows: auto 1fr;
   column-gap: 10px; align-items: start; }
 .cof-cup { grid-row: 1 / 3; }
@@ -8932,6 +9126,22 @@ body.cmt-on #root { cursor: crosshair; }
 .cof-bits i { width: 9px; height: 9px; border-radius: 2px; flex: 0 0 auto;
   box-shadow: inset 0 0 0 1px rgba(35,32,28,0.25); }
 @media (max-width: 420px) { .cof-grid { grid-template-columns: 1fr; } }
+button.cof-one { font: inherit; color: inherit; text-align: left; background: #fff; border: 1px solid var(--limestone-deep);
+  border-radius: 12px; padding: 10px; cursor: pointer; grid-template-columns: 76px 1fr; grid-template-rows: auto auto 1fr; }
+button.cof-one:hover { border-color: var(--gold-pale); }
+.cof-one .cof-cup { grid-row: 1 / 4; }
+.cof-cs { font-size: 11px; color: var(--ink-soft); letter-spacing: .02em; }
+.cof-old { margin-top: var(--s3); font-size: 12.5px; }
+.cof-st { margin-top: var(--s4); border-top: 1px solid var(--gold-pale); padding-top: var(--s3); }
+.cof-st summary { cursor: pointer; font-family: 'Marcellus', Georgia, serif; font-size: 16px; color: var(--gold); }
+.cof-st-b p { margin: 6px 0 0; font-size: 14px; }
+.cof-sh td, .cof-sh th { font-size: 13px; }
+.cof-steps { margin: 6px 0 0; padding-left: 20px; font-size: 14px; line-height: 1.55; }
+.cof-steps li + li { margin-top: 4px; }
+.cof-two { margin: 6px 0 0; font-size: 14px; }
+.cof-card .cof-cup { flex: 0 0 96px; }
+#sec-coffee .row-tap { cursor: pointer; }
+#sec-coffee .row-tap .row-name::after { content: " \203A"; color: var(--gold); }
 /* The parts of a mixture, in proportion and in their own colours, so an
    ingredient stays visible inside the thing it was mixed into. */
 .ag-strip { grid-column: 2 / -1; display: flex; height: 9px; border-radius: 3px;
